@@ -23,11 +23,11 @@ extern "C" {
 #define QINDEX_RANGE (MAXQ - MINQ + 1)
 #define QINDEX_BITS 8
 
-int16_t vp9_dc_quant(int qindex, int delta, vpx_bit_depth_t bit_depth);
-int16_t vp9_ac_quant(int qindex, int delta, vpx_bit_depth_t bit_depth);
+int16_t vp9_dc_quant ( int qindex, int delta, vpx_bit_depth_t bit_depth );
+int16_t vp9_ac_quant ( int qindex, int delta, vpx_bit_depth_t bit_depth );
 
-int vp9_get_qindex(const struct segmentation *seg, int segment_id,
-                   int base_qindex);
+int vp9_get_qindex ( const struct segmentation *seg, int segment_id,
+                     int base_qindex );
 
 #ifdef __cplusplus
 }  // extern "C"

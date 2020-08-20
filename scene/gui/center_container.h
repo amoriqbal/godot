@@ -33,22 +33,23 @@
 
 #include "scene/gui/container.h"
 
-class CenterContainer : public Container {
-	GDCLASS(CenterContainer, Container);
+class CenterContainer : public Container
+{
+    GDCLASS ( CenterContainer, Container );
 
-	bool use_top_left;
+    bool use_top_left;
 
 protected:
-	void _notification(int p_what);
-	static void _bind_methods();
+    void _notification ( int p_what );
+    static void _bind_methods();
 
 public:
-	void set_use_top_left(bool p_enable);
-	bool is_using_top_left() const;
+    void set_use_top_left ( bool p_enable );
+    bool is_using_top_left() const;
 
-	virtual Size2 get_minimum_size() const override;
+    virtual Size2 get_minimum_size() const override;
 
-	CenterContainer();
+    CenterContainer();
 };
 
 #endif // CENTER_CONTAINER_H

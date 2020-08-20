@@ -1,19 +1,23 @@
 #pragma once
 
-namespace Javelin {
+namespace Javelin
+{
 
 template<typename T>
-class Interval {
+class Interval
+{
 public:
     T min;
     T max;
 
-    Interval() {
+    Interval()
+    {
     }
 
-    Interval<T> &operator|=(const T &x) {
-        min.SetMin(x); 
-        max.SetMax(x);
+    Interval<T> &operator|= ( const T &x )
+    {
+        min.SetMin ( x );
+        max.SetMax ( x );
         return *this;
     }
 };

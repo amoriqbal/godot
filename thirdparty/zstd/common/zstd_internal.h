@@ -154,12 +154,14 @@ static const U32 LL_bits[MaxLL+1] = { 0, 0, 0, 0, 0, 0, 0, 0,
                                       0, 0, 0, 0, 0, 0, 0, 0,
                                       1, 1, 1, 1, 2, 2, 3, 3,
                                       4, 6, 7, 8, 9,10,11,12,
-                                     13,14,15,16 };
+                                      13,14,15,16
+                                    };
 static const S16 LL_defaultNorm[MaxLL+1] = { 4, 3, 2, 2, 2, 2, 2, 2,
                                              2, 2, 2, 2, 2, 1, 1, 1,
                                              2, 2, 2, 2, 2, 2, 2, 2,
                                              2, 3, 2, 1, 1, 1, 1, 1,
-                                            -1,-1,-1,-1 };
+                                             -1,-1,-1,-1
+                                           };
 #define LL_DEFAULTNORMLOG 6  /* for static allocation */
 static const U32 LL_defaultNormLog = LL_DEFAULTNORMLOG;
 
@@ -169,21 +171,24 @@ static const U32 ML_bits[MaxML+1] = { 0, 0, 0, 0, 0, 0, 0, 0,
                                       0, 0, 0, 0, 0, 0, 0, 0,
                                       1, 1, 1, 1, 2, 2, 3, 3,
                                       4, 4, 5, 7, 8, 9,10,11,
-                                     12,13,14,15,16 };
+                                      12,13,14,15,16
+                                    };
 static const S16 ML_defaultNorm[MaxML+1] = { 1, 4, 3, 2, 2, 2, 2, 2,
                                              2, 1, 1, 1, 1, 1, 1, 1,
                                              1, 1, 1, 1, 1, 1, 1, 1,
                                              1, 1, 1, 1, 1, 1, 1, 1,
                                              1, 1, 1, 1, 1, 1, 1, 1,
                                              1, 1, 1, 1, 1, 1,-1,-1,
-                                            -1,-1,-1,-1,-1 };
+                                             -1,-1,-1,-1,-1
+                                           };
 #define ML_DEFAULTNORMLOG 6  /* for static allocation */
 static const U32 ML_defaultNormLog = ML_DEFAULTNORMLOG;
 
 static const S16 OF_defaultNorm[DefaultMaxOff+1] = { 1, 1, 1, 1, 1, 1, 2, 2,
                                                      2, 1, 1, 1, 1, 1, 1, 1,
                                                      1, 1, 1, 1, 1, 1, 1, 1,
-                                                    -1,-1,-1,-1,-1 };
+                                                     -1,-1,-1,-1,-1
+                                                   };
 #define OF_DEFAULTNORMLOG 5  /* for static allocation */
 static const U32 OF_defaultNormLog = OF_DEFAULTNORMLOG;
 
@@ -191,10 +196,16 @@ static const U32 OF_defaultNormLog = OF_DEFAULTNORMLOG;
 /*-*******************************************
 *  Shared functions to include for inlining
 *********************************************/
-static void ZSTD_copy8(void* dst, const void* src) { memcpy(dst, src, 8); }
+static void ZSTD_copy8 ( void* dst, const void* src )
+{
+    memcpy ( dst, src, 8 );
+}
 
 #define COPY8(d,s) { ZSTD_copy8(d,s); d+=8; s+=8; }
-static void ZSTD_copy16(void* dst, const void* src) { memcpy(dst, src, 16); }
+static void ZSTD_copy16 ( void* dst, const void* src )
+{
+    memcpy ( dst, src, 16 );
+}
 #define COPY16(d,s) { ZSTD_copy16(d,s); d+=16; s+=16; }
 
 #define WILDCOPY_OVERLENGTH 32
@@ -214,36 +225,37 @@ typedef enum {
  *           The src buffer must be before the dst buffer.
  */
 MEM_STATIC FORCE_INLINE_ATTR DONT_VECTORIZE
-void ZSTD_wildcopy(void* dst, const void* src, ptrdiff_t length, ZSTD_overlap_e const ovtype)
+void ZSTD_wildcopy ( void* dst, const void* src, ptrdiff_t length, ZSTD_overlap_e const ovtype )
 {
-    ptrdiff_t diff = (BYTE*)dst - (const BYTE*)src;
-    const BYTE* ip = (const BYTE*)src;
-    BYTE* op = (BYTE*)dst;
+    ptrdiff_t diff = ( BYTE* ) dst - ( const BYTE* ) src;
+    const BYTE* ip = ( const BYTE* ) src;
+    BYTE* op = ( BYTE* ) dst;
     BYTE* const oend = op + length;
 
-    assert(diff >= 8 || (ovtype == ZSTD_no_overlap && diff <= -WILDCOPY_VECLEN));
+    assert ( diff >= 8 || ( ovtype == ZSTD_no_overlap && diff <= -WILDCOPY_VECLEN ) );
 
-    if (ovtype == ZSTD_overlap_src_before_dst && diff < WILDCOPY_VECLEN) {
+    if ( ovtype == ZSTD_overlap_src_before_dst && diff < WILDCOPY_VECLEN ) {
         /* Handle short offset copies. */
         do {
-            COPY8(op, ip)
-        } while (op < oend);
+            COPY8 ( op, ip )
+        } while ( op < oend );
     } else {
-        assert(diff >= WILDCOPY_VECLEN || diff <= -WILDCOPY_VECLEN);
+        assert ( diff >= WILDCOPY_VECLEN || diff <= -WILDCOPY_VECLEN );
         /* Separate out the first two COPY16() calls because the copy length is
          * almost certain to be short, so the branches have different
          * probabilities.
          * On gcc-9 unrolling once is +1.6%, twice is +2%, thrice is +1.8%.
          * On clang-8 unrolling once is +1.4%, twice is +3.3%, thrice is +3%.
          */
-        COPY16(op, ip);
-        COPY16(op, ip);
-        if (op >= oend) return;
-        do {
-            COPY16(op, ip);
-            COPY16(op, ip);
+        COPY16 ( op, ip );
+        COPY16 ( op, ip );
+        if ( op >= oend ) {
+            return;
         }
-        while (op < oend);
+        do {
+            COPY16 ( op, ip );
+            COPY16 ( op, ip );
+        } while ( op < oend );
     }
 }
 
@@ -282,27 +294,27 @@ typedef struct {
     unsigned long long decompressedBound;
 } ZSTD_frameSizeInfo;   /* decompress & legacy */
 
-const seqStore_t* ZSTD_getSeqStore(const ZSTD_CCtx* ctx);   /* compress & dictBuilder */
-void ZSTD_seqToCodes(const seqStore_t* seqStorePtr);   /* compress, dictBuilder, decodeCorpus (shouldn't get its definition from here) */
+const seqStore_t* ZSTD_getSeqStore ( const ZSTD_CCtx* ctx ); /* compress & dictBuilder */
+void ZSTD_seqToCodes ( const seqStore_t* seqStorePtr ); /* compress, dictBuilder, decodeCorpus (shouldn't get its definition from here) */
 
 /* custom memory allocation functions */
-void* ZSTD_malloc(size_t size, ZSTD_customMem customMem);
-void* ZSTD_calloc(size_t size, ZSTD_customMem customMem);
-void ZSTD_free(void* ptr, ZSTD_customMem customMem);
+void* ZSTD_malloc ( size_t size, ZSTD_customMem customMem );
+void* ZSTD_calloc ( size_t size, ZSTD_customMem customMem );
+void ZSTD_free ( void* ptr, ZSTD_customMem customMem );
 
 
-MEM_STATIC U32 ZSTD_highbit32(U32 val)   /* compress, dictBuilder, decodeCorpus */
+MEM_STATIC U32 ZSTD_highbit32 ( U32 val ) /* compress, dictBuilder, decodeCorpus */
 {
-    assert(val != 0);
+    assert ( val != 0 );
     {
 #   if defined(_MSC_VER)   /* Visual */
         unsigned long r=0;
-        _BitScanReverse(&r, val);
-        return (unsigned)r;
+        _BitScanReverse ( &r, val );
+        return ( unsigned ) r;
 #   elif defined(__GNUC__) && (__GNUC__ >= 3)   /* GCC Intrinsic */
-        return __builtin_clz (val) ^ 31;
+        return __builtin_clz ( val ) ^ 31;
 #   elif defined(__ICCARM__)    /* IAR Intrinsic */
-        return 31 - __CLZ(val);
+        return 31 - __CLZ ( val );
 #   else   /* Software version */
         static const U32 DeBruijnClz[32] = { 0, 9, 1, 10, 13, 21, 2, 29, 11, 14, 16, 18, 22, 25, 3, 30, 8, 12, 20, 28, 15, 17, 24, 7, 19, 27, 23, 6, 26, 5, 4, 31 };
         U32 v = val;
@@ -311,7 +323,7 @@ MEM_STATIC U32 ZSTD_highbit32(U32 val)   /* compress, dictBuilder, decodeCorpus 
         v |= v >> 4;
         v |= v >> 8;
         v |= v >> 16;
-        return DeBruijnClz[(v * 0x07C4ACDDU) >> 27];
+        return DeBruijnClz[ ( v * 0x07C4ACDDU ) >> 27];
 #   endif
     }
 }
@@ -321,7 +333,7 @@ MEM_STATIC U32 ZSTD_highbit32(U32 val)   /* compress, dictBuilder, decodeCorpus 
  * ensures next compression will not use repcodes from previous block.
  * Note : only works with regular variant;
  *        do not use with extDict variant ! */
-void ZSTD_invalidateRepCodes(ZSTD_CCtx* cctx);   /* zstdmt, adaptive_compression (shouldn't get this definition from here) */
+void ZSTD_invalidateRepCodes ( ZSTD_CCtx* cctx ); /* zstdmt, adaptive_compression (shouldn't get this definition from here) */
 
 
 typedef struct {
@@ -333,14 +345,14 @@ typedef struct {
 /*! ZSTD_getcBlockSize() :
  *  Provides the size of compressed block from block header `src` */
 /* Used by: decompress, fullbench (does not get its definition from here) */
-size_t ZSTD_getcBlockSize(const void* src, size_t srcSize,
-                          blockProperties_t* bpPtr);
+size_t ZSTD_getcBlockSize ( const void* src, size_t srcSize,
+                            blockProperties_t* bpPtr );
 
 /*! ZSTD_decodeSeqHeaders() :
  *  decode sequence header from src */
 /* Used by: decompress, fullbench (does not get its definition from here) */
-size_t ZSTD_decodeSeqHeaders(ZSTD_DCtx* dctx, int* nbSeqPtr,
-                       const void* src, size_t srcSize);
+size_t ZSTD_decodeSeqHeaders ( ZSTD_DCtx* dctx, int* nbSeqPtr,
+                               const void* src, size_t srcSize );
 
 
 #if defined (__cplusplus)

@@ -15,5 +15,5 @@
 
 void vp8_rtcd()
 {
-    once(setup_rtcd_internal);
+    once ( setup_rtcd_internal );
 }

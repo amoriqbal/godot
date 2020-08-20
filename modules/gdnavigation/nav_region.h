@@ -44,46 +44,52 @@
 class NavMap;
 class NavRegion;
 
-class NavRegion : public NavRid {
-	NavMap *map = nullptr;
-	Transform transform;
-	Ref<NavigationMesh> mesh;
+class NavRegion : public NavRid
+{
+    NavMap *map = nullptr;
+    Transform transform;
+    Ref<NavigationMesh> mesh;
 
-	bool polygons_dirty = true;
+    bool polygons_dirty = true;
 
-	/// Cache
-	std::vector<gd::Polygon> polygons;
+    /// Cache
+    std::vector<gd::Polygon> polygons;
 
 public:
-	NavRegion() {}
+    NavRegion() {}
 
-	void scratch_polygons() {
-		polygons_dirty = true;
-	}
+    void scratch_polygons()
+    {
+        polygons_dirty = true;
+    }
 
-	void set_map(NavMap *p_map);
-	NavMap *get_map() const {
-		return map;
-	}
+    void set_map ( NavMap *p_map );
+    NavMap *get_map() const
+    {
+        return map;
+    }
 
-	void set_transform(Transform transform);
-	const Transform &get_transform() const {
-		return transform;
-	}
+    void set_transform ( Transform transform );
+    const Transform &get_transform() const
+    {
+        return transform;
+    }
 
-	void set_mesh(Ref<NavigationMesh> p_mesh);
-	const Ref<NavigationMesh> get_mesh() const {
-		return mesh;
-	}
+    void set_mesh ( Ref<NavigationMesh> p_mesh );
+    const Ref<NavigationMesh> get_mesh() const
+    {
+        return mesh;
+    }
 
-	std::vector<gd::Polygon> const &get_polygons() const {
-		return polygons;
-	}
+    std::vector<gd::Polygon> const &get_polygons() const
+    {
+        return polygons;
+    }
 
-	bool sync();
+    bool sync();
 
 private:
-	void update_polygons();
+    void update_polygons();
 };
 
 #endif // NAV_REGION_H

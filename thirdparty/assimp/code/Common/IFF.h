@@ -7,14 +7,15 @@
 
 #include <assimp/ByteSwapper.h>
 
-namespace Assimp    {
-namespace IFF       {
+namespace Assimp
+{
+namespace IFF
+{
 
 /////////////////////////////////////////////////////////////////////////////////
 //! Describes an IFF chunk header
 /////////////////////////////////////////////////////////////////////////////////
-struct ChunkHeader
-{
+struct ChunkHeader {
     //! Type of the chunk header - FourCC
     uint32_t type;
 
@@ -26,8 +27,7 @@ struct ChunkHeader
 /////////////////////////////////////////////////////////////////////////////////
 //! Describes an IFF sub chunk header
 /////////////////////////////////////////////////////////////////////////////////
-struct SubChunkHeader
-{
+struct SubChunkHeader {
     //! Type of the chunk header - FourCC
     uint32_t type;
 
@@ -48,15 +48,15 @@ struct SubChunkHeader
 //! @param outFile Pointer to the file data - points to the chunk data afterwards
 //! @return Copy of the chunk header
 /////////////////////////////////////////////////////////////////////////////////
-inline ChunkHeader LoadChunk(uint8_t*& outFile)
+inline ChunkHeader LoadChunk ( uint8_t*& outFile )
 {
     ChunkHeader head;
-    ::memcpy(&head.type, outFile, 4);
+    ::memcpy ( &head.type, outFile, 4 );
     outFile += 4;
-    ::memcpy(&head.length, outFile, 4);
+    ::memcpy ( &head.length, outFile, 4 );
     outFile += 4;
-    AI_LSWAP4(head.length);
-    AI_LSWAP4(head.type);
+    AI_LSWAP4 ( head.length );
+    AI_LSWAP4 ( head.type );
     return head;
 }
 
@@ -65,15 +65,15 @@ inline ChunkHeader LoadChunk(uint8_t*& outFile)
 //! @param outFile Pointer to the file data - points to the chunk data afterwards
 //! @return Copy of the sub chunk header
 /////////////////////////////////////////////////////////////////////////////////
-inline SubChunkHeader LoadSubChunk(uint8_t*& outFile)
+inline SubChunkHeader LoadSubChunk ( uint8_t*& outFile )
 {
     SubChunkHeader head;
-    ::memcpy(&head.type, outFile, 4);
+    ::memcpy ( &head.type, outFile, 4 );
     outFile += 4;
-    ::memcpy(&head.length, outFile, 2);
+    ::memcpy ( &head.length, outFile, 2 );
     outFile += 2;
-    AI_LSWAP2(head.length);
-    AI_LSWAP4(head.type);
+    AI_LSWAP2 ( head.length );
+    AI_LSWAP4 ( head.type );
     return head;
 }
 
@@ -84,19 +84,19 @@ inline SubChunkHeader LoadSubChunk(uint8_t*& outFile)
 //! @param fileType Receives the type of the file
 //! @return 0 if everything was OK, otherwise an error message
 /////////////////////////////////////////////////////////////////////////////////
-inline const char* ReadHeader(uint8_t* outFile, uint32_t& fileType)
+inline const char* ReadHeader ( uint8_t* outFile, uint32_t& fileType )
 {
-    ChunkHeader head = LoadChunk(outFile);
-    if(AI_IFF_FOURCC_FORM != head.type)
-    {
+    ChunkHeader head = LoadChunk ( outFile );
+    if ( AI_IFF_FOURCC_FORM != head.type ) {
         return "The file is not an IFF file: FORM chunk is missing";
     }
-    ::memcpy(&fileType, outFile, 4);
-    AI_LSWAP4(fileType);
+    ::memcpy ( &fileType, outFile, 4 );
+    AI_LSWAP4 ( fileType );
     return 0;
 }
 
 
-}}
+}
+}
 
 #endif // !! AI_IFF_H_INCLUDED

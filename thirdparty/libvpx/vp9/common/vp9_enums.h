@@ -34,11 +34,11 @@ extern "C" {
 //                 sampling.
 // 111: Undefined profile.
 typedef enum BITSTREAM_PROFILE {
-  PROFILE_0,
-  PROFILE_1,
-  PROFILE_2,
-  PROFILE_3,
-  MAX_PROFILES
+    PROFILE_0,
+    PROFILE_1,
+    PROFILE_2,
+    PROFILE_3,
+    MAX_PROFILES
 } BITSTREAM_PROFILE;
 
 #define BLOCK_4X4     0
@@ -59,12 +59,12 @@ typedef enum BITSTREAM_PROFILE {
 typedef uint8_t BLOCK_SIZE;
 
 typedef enum PARTITION_TYPE {
-  PARTITION_NONE,
-  PARTITION_HORZ,
-  PARTITION_VERT,
-  PARTITION_SPLIT,
-  PARTITION_TYPES,
-  PARTITION_INVALID = PARTITION_TYPES
+    PARTITION_NONE,
+    PARTITION_HORZ,
+    PARTITION_VERT,
+    PARTITION_SPLIT,
+    PARTITION_TYPES,
+    PARTITION_INVALID = PARTITION_TYPES
 } PARTITION_TYPE;
 
 typedef char PARTITION_CONTEXT;
@@ -81,32 +81,32 @@ typedef uint8_t TX_SIZE;
 
 // frame transform mode
 typedef enum {
-  ONLY_4X4            = 0,        // only 4x4 transform used
-  ALLOW_8X8           = 1,        // allow block transform size up to 8x8
-  ALLOW_16X16         = 2,        // allow block transform size up to 16x16
-  ALLOW_32X32         = 3,        // allow block transform size up to 32x32
-  TX_MODE_SELECT      = 4,        // transform specified for each block
-  TX_MODES            = 5,
+    ONLY_4X4            = 0,        // only 4x4 transform used
+    ALLOW_8X8           = 1,        // allow block transform size up to 8x8
+    ALLOW_16X16         = 2,        // allow block transform size up to 16x16
+    ALLOW_32X32         = 3,        // allow block transform size up to 32x32
+    TX_MODE_SELECT      = 4,        // transform specified for each block
+    TX_MODES            = 5,
 } TX_MODE;
 
 typedef enum {
-  DCT_DCT   = 0,                      // DCT  in both horizontal and vertical
-  ADST_DCT  = 1,                      // ADST in vertical, DCT in horizontal
-  DCT_ADST  = 2,                      // DCT  in vertical, ADST in horizontal
-  ADST_ADST = 3,                      // ADST in both directions
-  TX_TYPES = 4
+    DCT_DCT   = 0,                      // DCT  in both horizontal and vertical
+    ADST_DCT  = 1,                      // ADST in vertical, DCT in horizontal
+    DCT_ADST  = 2,                      // DCT  in vertical, ADST in horizontal
+    ADST_ADST = 3,                      // ADST in both directions
+    TX_TYPES = 4
 } TX_TYPE;
 
 typedef enum {
-  VP9_LAST_FLAG = 1 << 0,
-  VP9_GOLD_FLAG = 1 << 1,
-  VP9_ALT_FLAG = 1 << 2,
+    VP9_LAST_FLAG = 1 << 0,
+    VP9_GOLD_FLAG = 1 << 1,
+    VP9_ALT_FLAG = 1 << 2,
 } VP9_REFFRAME;
 
 typedef enum {
-  PLANE_TYPE_Y  = 0,
-  PLANE_TYPE_UV = 1,
-  PLANE_TYPES
+    PLANE_TYPE_Y  = 0,
+    PLANE_TYPE_UV = 1,
+    PLANE_TYPES
 } PLANE_TYPE;
 
 #define DC_PRED    0       // Average of above and left pixels

@@ -24,7 +24,7 @@
 
 #pragma once
 
-typedef PFN_vkVoidFunction (VKAPI_PTR *PFN_GetPhysicalDeviceProcAddr)(VkInstance instance, const char* pName);
+typedef PFN_vkVoidFunction ( VKAPI_PTR *PFN_GetPhysicalDeviceProcAddr ) ( VkInstance instance, const char* pName );
 
 // Instance function pointer dispatch table
 typedef struct VkLayerInstanceDispatchTable_ {

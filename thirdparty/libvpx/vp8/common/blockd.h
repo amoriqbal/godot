@@ -12,7 +12,7 @@
 #ifndef VP8_COMMON_BLOCKD_H_
 #define VP8_COMMON_BLOCKD_H_
 
-void vpx_log(const char *format, ...);
+void vpx_log ( const char *format, ... );
 
 #include "vpx_config.h"
 #include "vpx_scale/yv12config.h"
@@ -38,8 +38,7 @@ extern "C" {
 #define SEGMENT_DELTADATA   0
 #define SEGMENT_ABSDATA     1
 
-typedef struct
-{
+typedef struct {
     int r, c;
 } POS;
 
@@ -50,8 +49,7 @@ typedef struct
 
 
 typedef char ENTROPY_CONTEXT;
-typedef struct
-{
+typedef struct {
     ENTROPY_CONTEXT y1[4];
     ENTROPY_CONTEXT u[2];
     ENTROPY_CONTEXT v[2];
@@ -65,14 +63,12 @@ extern const unsigned char vp8_block2above[25];
     Dest = (A)+(B);
 
 
-typedef enum
-{
+typedef enum {
     KEY_FRAME = 0,
     INTER_FRAME = 1
 } FRAME_TYPE;
 
-typedef enum
-{
+typedef enum {
     DC_PRED,            /* average of above and left pixels */
     V_PRED,             /* vertical prediction */
     H_PRED,             /* horizontal prediction */
@@ -89,8 +85,7 @@ typedef enum
 } MB_PREDICTION_MODE;
 
 /* Macroblock level features */
-typedef enum
-{
+typedef enum {
     MB_LVL_ALT_Q = 0,               /* Use alternate Quantizer .... */
     MB_LVL_ALT_LF = 1,              /* Use alternate loop filter value... */
     MB_LVL_MAX = 2                  /* Number of MB level features supported */
@@ -106,8 +101,7 @@ typedef enum
 
 #define VP8_MVREFS (1 + SPLITMV - NEARESTMV)
 
-typedef enum
-{
+typedef enum {
     B_DC_PRED,          /* average of above and left pixels */
     B_TM_PRED,
 
@@ -137,14 +131,12 @@ typedef enum
    modes for the Y blocks to the left and above us; for interframes, there
    is a single probability table. */
 
-union b_mode_info
-{
+union b_mode_info {
     B_PREDICTION_MODE as_mode;
     int_mv mv;
 };
 
-typedef enum
-{
+typedef enum {
     INTRA_FRAME = 0,
     LAST_FRAME = 1,
     GOLDEN_FRAME = 2,
@@ -152,8 +144,7 @@ typedef enum
     MAX_REF_FRAMES = 4
 } MV_REFERENCE_FRAME;
 
-typedef struct
-{
+typedef struct {
     uint8_t mode, uv_mode;
     uint8_t ref_frame;
     uint8_t is_4x4;
@@ -165,16 +156,14 @@ typedef struct
     uint8_t segment_id;                  /* Which set of segmentation parameters should be used for this MB */
 } MB_MODE_INFO;
 
-typedef struct modeinfo
-{
+typedef struct modeinfo {
     MB_MODE_INFO mbmi;
     union b_mode_info bmi[16];
 } MODE_INFO;
 
 #if CONFIG_MULTI_RES_ENCODING
 /* The mb-level information needed to be stored for higher-resolution encoder */
-typedef struct
-{
+typedef struct {
     MB_PREDICTION_MODE mode;
     MV_REFERENCE_FRAME ref_frame;
     int_mv mv;
@@ -183,8 +172,7 @@ typedef struct
 
 /* The frame-level information needed to be stored for higher-resolution
  *  encoder */
-typedef struct
-{
+typedef struct {
     FRAME_TYPE frame_type;
     int is_frame_dropped;
     // The frame rate for the lowest resolution.
@@ -197,8 +185,7 @@ typedef struct
 } LOWER_RES_FRAME_INFO;
 #endif
 
-typedef struct blockd
-{
+typedef struct blockd {
     short *qcoeff;
     short *dqcoeff;
     unsigned char  *predictor;
@@ -210,19 +197,18 @@ typedef struct blockd
     union b_mode_info bmi;
 } BLOCKD;
 
-typedef void (*vp8_subpix_fn_t)(unsigned char *src, int src_pitch, int xofst, int yofst, unsigned char *dst, int dst_pitch);
+typedef void ( *vp8_subpix_fn_t ) ( unsigned char *src, int src_pitch, int xofst, int yofst, unsigned char *dst, int dst_pitch );
 
-typedef struct macroblockd
-{
-    DECLARE_ALIGNED(16, unsigned char,  predictor[384]);
-    DECLARE_ALIGNED(16, short, qcoeff[400]);
-    DECLARE_ALIGNED(16, short, dqcoeff[400]);
-    DECLARE_ALIGNED(16, char,  eobs[25]);
+typedef struct macroblockd {
+    DECLARE_ALIGNED ( 16, unsigned char,  predictor[384] );
+    DECLARE_ALIGNED ( 16, short, qcoeff[400] );
+    DECLARE_ALIGNED ( 16, short, dqcoeff[400] );
+    DECLARE_ALIGNED ( 16, char,  eobs[25] );
 
-    DECLARE_ALIGNED(16, short,  dequant_y1[16]);
-    DECLARE_ALIGNED(16, short,  dequant_y1_dc[16]);
-    DECLARE_ALIGNED(16, short,  dequant_y2[16]);
-    DECLARE_ALIGNED(16, short,  dequant_uv[16]);
+    DECLARE_ALIGNED ( 16, short,  dequant_y1[16] );
+    DECLARE_ALIGNED ( 16, short,  dequant_y1_dc[16] );
+    DECLARE_ALIGNED ( 16, short,  dequant_y2[16] );
+    DECLARE_ALIGNED ( 16, short,  dequant_uv[16] );
 
     /* 16 Y blocks, 4 U, 4 V, 1 DC 2nd order block, each with 16 entries. */
     BLOCKD block[25];
@@ -297,13 +283,13 @@ typedef struct macroblockd
      * to keep a copy of the reference area. This buffer can be used for other
      * purpose.
      */
-    DECLARE_ALIGNED(32, unsigned char, y_buf[22*32]);
+    DECLARE_ALIGNED ( 32, unsigned char, y_buf[22*32] );
 #endif
 } MACROBLOCKD;
 
 
-extern void vp8_build_block_doffsets(MACROBLOCKD *x);
-extern void vp8_setup_block_dptrs(MACROBLOCKD *x);
+extern void vp8_build_block_doffsets ( MACROBLOCKD *x );
+extern void vp8_setup_block_dptrs ( MACROBLOCKD *x );
 
 #ifdef __cplusplus
 }  // extern "C"

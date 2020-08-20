@@ -50,7 +50,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 struct aiMesh;
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /** MakeVerboseFormatProcess: Class to convert an asset to the verbose
@@ -81,7 +82,7 @@ public:
     * @param pFlags The processing flags the importer was called with. A bitwise
     *   combination of #aiPostProcessSteps.
     * @return true if the process is present in this flag fields, false if not */
-    bool IsActive( unsigned int /*pFlags*/ ) const
+    bool IsActive ( unsigned int /*pFlags*/ ) const
     {
         // NOTE: There is no direct flag that corresponds to
         // this postprocess step.
@@ -92,20 +93,20 @@ public:
     /** Executes the post processing step on the given imported data.
     * At the moment a process is not supposed to fail.
     * @param pScene The imported data to work at. */
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
 public:
 
     // -------------------------------------------------------------------
     /** Checks whether the scene is already in verbose format.
-    * @param pScene The data to check. 
+    * @param pScene The data to check.
     * @return true if the scene is already in verbose format. */
-    static bool IsVerboseFormat(const aiScene* pScene);
+    static bool IsVerboseFormat ( const aiScene* pScene );
 
 private:
 
     //! Apply the postprocess step to a given submesh
-    bool MakeVerboseFormat (aiMesh* pcMesh);
+    bool MakeVerboseFormat ( aiMesh* pcMesh );
 };
 
 } // end of namespace Assimp

@@ -118,16 +118,16 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "ecintrin.h"
 #ifndef OVERRIDE_silk_CLZ16
-static OPUS_INLINE opus_int32 silk_CLZ16(opus_int16 in16)
+static OPUS_INLINE opus_int32 silk_CLZ16 ( opus_int16 in16 )
 {
-    return 32 - EC_ILOG(in16<<16|0x8000);
+    return 32 - EC_ILOG ( in16<<16|0x8000 );
 }
 #endif
 
 #ifndef OVERRIDE_silk_CLZ32
-static OPUS_INLINE opus_int32 silk_CLZ32(opus_int32 in32)
+static OPUS_INLINE opus_int32 silk_CLZ32 ( opus_int32 in32 )
 {
-    return in32 ? 32 - EC_ILOG(in32) : 32;
+    return in32 ? 32 - EC_ILOG ( in32 ) : 32;
 }
 #endif
 

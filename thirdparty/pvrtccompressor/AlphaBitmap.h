@@ -2,17 +2,26 @@
 
 #include "Bitmap.h"
 
-namespace Javelin {
+namespace Javelin
+{
 
-class AlphaBitmap : public Bitmap {
+class AlphaBitmap : public Bitmap
+{
 public:
-    AlphaBitmap(int w, int h)
-        : Bitmap(w, h, 1) {
+    AlphaBitmap ( int w, int h )
+        : Bitmap ( w, h, 1 )
+    {
     }
 
-    const unsigned char *GetData() const { return data; }
+    const unsigned char *GetData() const
+    {
+        return data;
+    }
 
-    unsigned char *GetData() { return data; }
+    unsigned char *GetData()
+    {
+        return data;
+    }
 };
 
 }

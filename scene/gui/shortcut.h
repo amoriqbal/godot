@@ -34,23 +34,24 @@
 #include "core/input/input_event.h"
 #include "core/resource.h"
 
-class ShortCut : public Resource {
-	GDCLASS(ShortCut, Resource);
+class ShortCut : public Resource
+{
+    GDCLASS ( ShortCut, Resource );
 
-	Ref<InputEvent> shortcut;
+    Ref<InputEvent> shortcut;
 
 protected:
-	static void _bind_methods();
+    static void _bind_methods();
 
 public:
-	void set_shortcut(const Ref<InputEvent> &p_shortcut);
-	Ref<InputEvent> get_shortcut() const;
-	bool is_shortcut(const Ref<InputEvent> &p_event) const;
-	bool is_valid() const;
+    void set_shortcut ( const Ref<InputEvent> &p_shortcut );
+    Ref<InputEvent> get_shortcut() const;
+    bool is_shortcut ( const Ref<InputEvent> &p_event ) const;
+    bool is_valid() const;
 
-	String get_as_text() const;
+    String get_as_text() const;
 
-	ShortCut();
+    ShortCut();
 };
 
 #endif // SHORTCUT_H

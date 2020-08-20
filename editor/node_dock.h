@@ -34,34 +34,35 @@
 #include "connections_dialog.h"
 #include "groups_editor.h"
 
-class NodeDock : public VBoxContainer {
-	GDCLASS(NodeDock, VBoxContainer);
+class NodeDock : public VBoxContainer
+{
+    GDCLASS ( NodeDock, VBoxContainer );
 
-	Button *connections_button;
-	Button *groups_button;
+    Button *connections_button;
+    Button *groups_button;
 
-	ConnectionsDock *connections;
-	GroupsEditor *groups;
+    ConnectionsDock *connections;
+    GroupsEditor *groups;
 
-	HBoxContainer *mode_hb;
+    HBoxContainer *mode_hb;
 
-	Label *select_a_node;
+    Label *select_a_node;
 
 protected:
-	static void _bind_methods();
-	void _notification(int p_what);
+    static void _bind_methods();
+    void _notification ( int p_what );
 
 public:
-	static NodeDock *singleton;
+    static NodeDock *singleton;
 
-	void set_node(Node *p_node);
+    void set_node ( Node *p_node );
 
-	void show_groups();
-	void show_connections();
+    void show_groups();
+    void show_connections();
 
-	void update_lists();
+    void update_lists();
 
-	NodeDock();
+    NodeDock();
 };
 
 #endif // NODE_DOCK_H

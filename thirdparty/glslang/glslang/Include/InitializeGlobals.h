@@ -35,7 +35,8 @@
 #ifndef __INITIALIZE_GLOBALS_INCLUDED_
 #define __INITIALIZE_GLOBALS_INCLUDED_
 
-namespace glslang {
+namespace glslang
+{
 
 bool InitializePoolIndex();
 

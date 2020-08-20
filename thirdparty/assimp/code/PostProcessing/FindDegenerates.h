@@ -50,38 +50,40 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assimp/mesh.h>
 
 class FindDegeneratesProcessTest;
-namespace Assimp    {
+namespace Assimp
+{
 
 
 // ---------------------------------------------------------------------------
 /** FindDegeneratesProcess: Searches a mesh for degenerated triangles.
 */
-class ASSIMP_API FindDegeneratesProcess : public BaseProcess {
+class ASSIMP_API FindDegeneratesProcess : public BaseProcess
+{
 public:
     FindDegeneratesProcess();
     ~FindDegeneratesProcess();
 
     // -------------------------------------------------------------------
     // Check whether step is active
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
     // Execute step on a given scene
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
     // -------------------------------------------------------------------
     // Setup import settings
-    void SetupProperties(const Importer* pImp);
+    void SetupProperties ( const Importer* pImp );
 
     // -------------------------------------------------------------------
     // Execute step on a given mesh
     ///@returns true if the current mesh should be deleted, false otherwise
-    bool ExecuteOnMesh( aiMesh* mesh);
+    bool ExecuteOnMesh ( aiMesh* mesh );
 
     // -------------------------------------------------------------------
     /// @brief Enable the instant removal of degenerated primitives
     /// @param enabled  true for enabled.
-    void EnableInstantRemoval(bool enabled);
+    void EnableInstantRemoval ( bool enabled );
 
     // -------------------------------------------------------------------
     /// @brief Check whether instant removal is currently enabled
@@ -91,7 +93,7 @@ public:
     // -------------------------------------------------------------------
     /// @brief Enable the area check for triangles.
     /// @param enabled  true for enabled.
-    void EnableAreaCheck( bool enabled );
+    void EnableAreaCheck ( bool enabled );
 
     // -------------------------------------------------------------------
     /// @brief Check whether the area check is enabled.
@@ -106,22 +108,26 @@ private:
 };
 
 inline
-void FindDegeneratesProcess::EnableInstantRemoval(bool enabled) {
+void FindDegeneratesProcess::EnableInstantRemoval ( bool enabled )
+{
     mConfigRemoveDegenerates = enabled;
 }
 
 inline
-bool FindDegeneratesProcess::IsInstantRemoval() const {
+bool FindDegeneratesProcess::IsInstantRemoval() const
+{
     return mConfigRemoveDegenerates;
 }
 
 inline
-void FindDegeneratesProcess::EnableAreaCheck( bool enabled ) {
+void FindDegeneratesProcess::EnableAreaCheck ( bool enabled )
+{
     mConfigCheckAreaOfTriangle = enabled;
 }
 
 inline
-bool FindDegeneratesProcess::isAreaCheckEnabled() const {
+bool FindDegeneratesProcess::isAreaCheckEnabled() const
+{
     return mConfigCheckAreaOfTriangle;
 }
 

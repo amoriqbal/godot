@@ -39,16 +39,16 @@
 
 #if defined(HAVE_ARM_NE10)
 
-int opus_fft_alloc_arm_neon(kiss_fft_state *st);
-void opus_fft_free_arm_neon(kiss_fft_state *st);
+int opus_fft_alloc_arm_neon ( kiss_fft_state *st );
+void opus_fft_free_arm_neon ( kiss_fft_state *st );
 
-void opus_fft_neon(const kiss_fft_state *st,
-                   const kiss_fft_cpx *fin,
-                   kiss_fft_cpx *fout);
+void opus_fft_neon ( const kiss_fft_state *st,
+                     const kiss_fft_cpx *fin,
+                     kiss_fft_cpx *fout );
 
-void opus_ifft_neon(const kiss_fft_state *st,
-                    const kiss_fft_cpx *fin,
-                    kiss_fft_cpx *fout);
+void opus_ifft_neon ( const kiss_fft_state *st,
+                      const kiss_fft_cpx *fin,
+                      kiss_fft_cpx *fout );
 
 #if !defined(OPUS_HAVE_RTCD)
 #define OVERRIDE_OPUS_FFT (1)

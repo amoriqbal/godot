@@ -76,295 +76,313 @@ import javax.microedition.khronos.opengles.GL10;
  * 'assets' directory. The recommended path for these resources in the 'assets' directory should be:
  * 'godot/plugin/v1/[PluginName]/'
  */
-public abstract class GodotPlugin {
-	private static final String TAG = GodotPlugin.class.getSimpleName();
+public abstract class GodotPlugin
+{
+    private static final String TAG = GodotPlugin.class.getSimpleName();
 
-	private final Godot godot;
-	private final ConcurrentHashMap<String, SignalInfo> registeredSignals = new ConcurrentHashMap<>();
+    private final Godot godot;
+    private final ConcurrentHashMap<String, SignalInfo> registeredSignals = new ConcurrentHashMap<>();
 
-	public GodotPlugin(Godot godot) {
-		this.godot = godot;
-	}
+    public GodotPlugin ( Godot godot )
+    {
+        this.godot = godot;
+    }
 
-	/**
-	 * Provides access to the Godot engine.
-	 */
-	protected Godot getGodot() {
-		return godot;
-	}
+    /**
+     * Provides access to the Godot engine.
+     */
+    protected Godot getGodot()
+    {
+        return godot;
+    }
 
-	/**
-	 * Provides access to the underlying {@link Activity}.
-	 */
-	@Nullable
-	protected Activity getActivity() {
-		return godot.getActivity();
-	}
+    /**
+     * Provides access to the underlying {@link Activity}.
+     */
+    @Nullable
+    protected Activity getActivity()
+    {
+        return godot.getActivity();
+    }
 
-	/**
-	 * Register the plugin with Godot native code.
-	 *
-	 * This method is invoked on the render thread.
-	 */
-	public final void onRegisterPluginWithGodotNative() {
-		nativeRegisterSingleton(getPluginName());
+    /**
+     * Register the plugin with Godot native code.
+     *
+     * This method is invoked on the render thread.
+     */
+    public final void onRegisterPluginWithGodotNative()
+    {
+        nativeRegisterSingleton ( getPluginName() );
 
-		Class clazz = getClass();
-		Method[] methods = clazz.getDeclaredMethods();
-		for (Method method : methods) {
-			boolean found = false;
+        Class clazz = getClass();
+        Method[] methods = clazz.getDeclaredMethods();
+        for ( Method method : methods ) {
+            boolean found = false;
 
-			for (String s : getPluginMethods()) {
-				if (s.equals(method.getName())) {
-					found = true;
-					break;
-				}
-			}
-			if (!found)
-				continue;
+            for ( String s : getPluginMethods() ) {
+                if ( s.equals ( method.getName() ) ) {
+                    found = true;
+                    break;
+                }
+            }
+            if ( !found ) {
+                continue;
+            }
 
-			List<String> ptr = new ArrayList<String>();
+            List<String> ptr = new ArrayList<String>();
 
-			Class[] paramTypes = method.getParameterTypes();
-			for (Class c : paramTypes) {
-				ptr.add(c.getName());
-			}
+            Class[] paramTypes = method.getParameterTypes();
+            for ( Class c : paramTypes ) {
+                ptr.add ( c.getName() );
+            }
 
-			String[] pt = new String[ptr.size()];
-			ptr.toArray(pt);
+            String[] pt = new String[ptr.size()];
+            ptr.toArray ( pt );
 
-			nativeRegisterMethod(getPluginName(), method.getName(), method.getReturnType().getName(), pt);
-		}
+            nativeRegisterMethod ( getPluginName(), method.getName(), method.getReturnType().getName(), pt );
+        }
 
-		// Register the signals for this plugin.
-		for (SignalInfo signalInfo : getPluginSignals()) {
-			String signalName = signalInfo.getName();
-			nativeRegisterSignal(getPluginName(), signalName, signalInfo.getParamTypesNames());
-			registeredSignals.put(signalName, signalInfo);
-		}
+        // Register the signals for this plugin.
+        for ( SignalInfo signalInfo : getPluginSignals() ) {
+            String signalName = signalInfo.getName();
+            nativeRegisterSignal ( getPluginName(), signalName, signalInfo.getParamTypesNames() );
+            registeredSignals.put ( signalName, signalInfo );
+        }
 
-		// Get the list of gdnative libraries to register.
-		Set<String> gdnativeLibrariesPaths = getPluginGDNativeLibrariesPaths();
-		if (!gdnativeLibrariesPaths.isEmpty()) {
-			nativeRegisterGDNativeLibraries(gdnativeLibrariesPaths.toArray(new String[0]));
-		}
-	}
+        // Get the list of gdnative libraries to register.
+        Set<String> gdnativeLibrariesPaths = getPluginGDNativeLibrariesPaths();
+        if ( !gdnativeLibrariesPaths.isEmpty() ) {
+            nativeRegisterGDNativeLibraries ( gdnativeLibrariesPaths.toArray ( new String[0] ) );
+        }
+    }
 
-	/**
-	 * Invoked once during the Godot Android initialization process after creation of the
-	 * {@link org.godotengine.godot.GodotView} view.
-	 * <p>
-	 * The plugin can return a non-null {@link View} layout in order to add it to the Godot view
-	 * hierarchy.
-	 *
-	 * @see Activity#onCreate(Bundle)
-	 * @return the plugin's view to be included; null if no views should be included.
-	 */
-	@Nullable
-	public View onMainCreate(Activity activity) {
-		return null;
-	}
+    /**
+     * Invoked once during the Godot Android initialization process after creation of the
+     * {@link org.godotengine.godot.GodotView} view.
+     * <p>
+     * The plugin can return a non-null {@link View} layout in order to add it to the Godot view
+     * hierarchy.
+     *
+     * @see Activity#onCreate(Bundle)
+     * @return the plugin's view to be included; null if no views should be included.
+     */
+    @Nullable
+    public View onMainCreate ( Activity activity )
+    {
+        return null;
+    }
 
-	/**
-	 * @see Activity#onActivityResult(int, int, Intent)
-	 */
-	public void onMainActivityResult(int requestCode, int resultCode, Intent data) {
-	}
+    /**
+     * @see Activity#onActivityResult(int, int, Intent)
+     */
+    public void onMainActivityResult ( int requestCode, int resultCode, Intent data )
+    {
+    }
 
-	/**
-	 * @see Activity#onRequestPermissionsResult(int, String[], int[])
-	 */
-	public void onMainRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-	}
+    /**
+     * @see Activity#onRequestPermissionsResult(int, String[], int[])
+     */
+    public void onMainRequestPermissionsResult ( int requestCode, String[] permissions, int[] grantResults )
+    {
+    }
 
-	/**
-	 * @see Activity#onPause()
-	 */
-	public void onMainPause() {}
+    /**
+     * @see Activity#onPause()
+     */
+    public void onMainPause() {}
 
-	/**
-	 * @see Activity#onResume()
-	 */
-	public void onMainResume() {}
+    /**
+     * @see Activity#onResume()
+     */
+    public void onMainResume() {}
 
-	/**
-	 * @see Activity#onDestroy()
-	 */
-	public void onMainDestroy() {}
+    /**
+     * @see Activity#onDestroy()
+     */
+    public void onMainDestroy() {}
 
-	/**
-	 * @see Activity#onBackPressed()
-	 */
-	public boolean onMainBackPressed() { return false; }
+    /**
+     * @see Activity#onBackPressed()
+     */
+    public boolean onMainBackPressed()
+    {
+        return false;
+    }
 
-	/**
-	 * Invoked on the render thread when the Godot main loop has started.
-	 */
-	public void onGodotMainLoopStarted() {}
+    /**
+     * Invoked on the render thread when the Godot main loop has started.
+     */
+    public void onGodotMainLoopStarted() {}
 
-	/**
-	 * Invoked once per frame on the GL thread after the frame is drawn.
-	 */
-	public void onGLDrawFrame(GL10 gl) {}
+    /**
+     * Invoked once per frame on the GL thread after the frame is drawn.
+     */
+    public void onGLDrawFrame ( GL10 gl ) {}
 
-	/**
-	 * Called on the GL thread after the surface is created and whenever the OpenGL ES surface size
-	 * changes.
-	 */
-	public void onGLSurfaceChanged(GL10 gl, int width, int height) {}
+    /**
+     * Called on the GL thread after the surface is created and whenever the OpenGL ES surface size
+     * changes.
+     */
+    public void onGLSurfaceChanged ( GL10 gl, int width, int height ) {}
 
-	/**
-	 * Called on the GL thread when the surface is created or recreated.
-	 */
-	public void onGLSurfaceCreated(GL10 gl, EGLConfig config) {}
+    /**
+     * Called on the GL thread when the surface is created or recreated.
+     */
+    public void onGLSurfaceCreated ( GL10 gl, EGLConfig config ) {}
 
-	/**
-	 * Invoked once per frame on the Vulkan thread after the frame is drawn.
-	 */
-	public void onVkDrawFrame() {}
+    /**
+     * Invoked once per frame on the Vulkan thread after the frame is drawn.
+     */
+    public void onVkDrawFrame() {}
 
-	/**
-	 * Called on the Vulkan thread after the surface is created and whenever the surface size
-	 * changes.
-	 */
-	public void onVkSurfaceChanged(Surface surface, int width, int height) {}
+    /**
+     * Called on the Vulkan thread after the surface is created and whenever the surface size
+     * changes.
+     */
+    public void onVkSurfaceChanged ( Surface surface, int width, int height ) {}
 
-	/**
-	 * Called on the Vulkan thread when the surface is created or recreated.
-	 */
-	public void onVkSurfaceCreated(Surface surface) {}
+    /**
+     * Called on the Vulkan thread when the surface is created or recreated.
+     */
+    public void onVkSurfaceCreated ( Surface surface ) {}
 
-	/**
-	 * Returns the name of the plugin.
-	 * <p>
-	 * This value must match the one listed in the plugin '<meta-data>' manifest entry.
-	 */
-	@NonNull
-	public abstract String getPluginName();
+    /**
+     * Returns the name of the plugin.
+     * <p>
+     * This value must match the one listed in the plugin '<meta-data>' manifest entry.
+     */
+    @NonNull
+    public abstract String getPluginName();
 
-	/**
-	 * Returns the list of methods to be exposed to Godot.
-	 */
-	@NonNull
-	public List<String> getPluginMethods() {
-		return Collections.emptyList();
-	}
+    /**
+     * Returns the list of methods to be exposed to Godot.
+     */
+    @NonNull
+    public List<String> getPluginMethods()
+    {
+        return Collections.emptyList();
+    }
 
-	/**
-	 * Returns the list of signals to be exposed to Godot.
-	 */
-	@NonNull
-	public Set<SignalInfo> getPluginSignals() {
-		return Collections.emptySet();
-	}
+    /**
+     * Returns the list of signals to be exposed to Godot.
+     */
+    @NonNull
+    public Set<SignalInfo> getPluginSignals()
+    {
+        return Collections.emptySet();
+    }
 
-	/**
-	 * Returns the paths for the plugin's gdnative libraries.
-	 *
-	 * The paths must be relative to the 'assets' directory and point to a '*.gdnlib' file.
-	 */
-	@NonNull
-	protected Set<String> getPluginGDNativeLibrariesPaths() {
-		return Collections.emptySet();
-	}
+    /**
+     * Returns the paths for the plugin's gdnative libraries.
+     *
+     * The paths must be relative to the 'assets' directory and point to a '*.gdnlib' file.
+     */
+    @NonNull
+    protected Set<String> getPluginGDNativeLibrariesPaths()
+    {
+        return Collections.emptySet();
+    }
 
-	/**
-	 * Runs the specified action on the UI thread. If the current thread is the UI
-	 * thread, then the action is executed immediately. If the current thread is
-	 * not the UI thread, the action is posted to the event queue of the UI thread.
-	 *
-	 * @param action the action to run on the UI thread
-	 */
-	protected void runOnUiThread(Runnable action) {
-		godot.runOnUiThread(action);
-	}
+    /**
+     * Runs the specified action on the UI thread. If the current thread is the UI
+     * thread, then the action is executed immediately. If the current thread is
+     * not the UI thread, the action is posted to the event queue of the UI thread.
+     *
+     * @param action the action to run on the UI thread
+     */
+    protected void runOnUiThread ( Runnable action )
+    {
+        godot.runOnUiThread ( action );
+    }
 
-	/**
-	 * Queue the specified action to be run on the render thread.
-	 *
-	 * @param action the action to run on the render thread
-	 */
-	protected void runOnRenderThread(Runnable action) {
-		godot.runOnRenderThread(action);
-	}
+    /**
+     * Queue the specified action to be run on the render thread.
+     *
+     * @param action the action to run on the render thread
+     */
+    protected void runOnRenderThread ( Runnable action )
+    {
+        godot.runOnRenderThread ( action );
+    }
 
-	/**
-	 * Emit a registered Godot signal.
-	 * @param signalName
-	 * @param signalArgs
-	 */
-	protected void emitSignal(final String signalName, final Object... signalArgs) {
-		try {
-			// Check that the given signal is among the registered set.
-			SignalInfo signalInfo = registeredSignals.get(signalName);
-			if (signalInfo == null) {
-				throw new IllegalArgumentException(
-						"Signal " + signalName + " is not registered for this plugin.");
-			}
+    /**
+     * Emit a registered Godot signal.
+     * @param signalName
+     * @param signalArgs
+     */
+    protected void emitSignal ( final String signalName, final Object... signalArgs )
+    {
+        try {
+            // Check that the given signal is among the registered set.
+            SignalInfo signalInfo = registeredSignals.get ( signalName );
+            if ( signalInfo == null ) {
+                throw new IllegalArgumentException (
+                    "Signal " + signalName + " is not registered for this plugin." );
+            }
 
-			// Validate the arguments count.
-			Class<?>[] signalParamTypes = signalInfo.getParamTypes();
-			if (signalArgs.length != signalParamTypes.length) {
-				throw new IllegalArgumentException(
-						"Invalid arguments count. Should be " + signalParamTypes.length + "  but is " + signalArgs.length);
-			}
+            // Validate the arguments count.
+            Class<?>[] signalParamTypes = signalInfo.getParamTypes();
+            if ( signalArgs.length != signalParamTypes.length ) {
+                throw new IllegalArgumentException (
+                    "Invalid arguments count. Should be " + signalParamTypes.length + "  but is " + signalArgs.length );
+            }
 
-			// Validate the argument's types.
-			for (int i = 0; i < signalParamTypes.length; i++) {
-				if (!signalParamTypes[i].isInstance(signalArgs[i])) {
-					throw new IllegalArgumentException(
-							"Invalid type for argument #" + i + ". Should be of type " + signalParamTypes[i].getName());
-				}
-			}
+            // Validate the argument's types.
+            for ( int i = 0; i < signalParamTypes.length; i++ ) {
+                if ( !signalParamTypes[i].isInstance ( signalArgs[i] ) ) {
+                    throw new IllegalArgumentException (
+                        "Invalid type for argument #" + i + ". Should be of type " + signalParamTypes[i].getName() );
+                }
+            }
 
-			runOnRenderThread(new Runnable() {
-				@Override
-				public void run() {
-					nativeEmitSignal(getPluginName(), signalName, signalArgs);
-				}
-			});
-		} catch (IllegalArgumentException exception) {
-			Log.w(TAG, exception.getMessage());
-			if (BuildConfig.DEBUG) {
-				throw exception;
-			}
-		}
-	}
+            runOnRenderThread ( new Runnable() {
+                @Override
+                public void run() {
+                    nativeEmitSignal ( getPluginName(), signalName, signalArgs );
+                }
+            } );
+        } catch ( IllegalArgumentException exception ) {
+            Log.w ( TAG, exception.getMessage() );
+            if ( BuildConfig.DEBUG ) {
+                throw exception;
+            }
+        }
+    }
 
-	/**
-	 * Used to setup a {@link GodotPlugin} instance.
-	 * @param p_name Name of the instance.
-	 */
-	private native void nativeRegisterSingleton(String p_name);
+    /**
+     * Used to setup a {@link GodotPlugin} instance.
+     * @param p_name Name of the instance.
+     */
+    private native void nativeRegisterSingleton ( String p_name );
 
-	/**
-	 * Used to complete registration of the {@link GodotPlugin} instance's methods.
-	 * @param p_sname Name of the instance
-	 * @param p_name Name of the method to register
-	 * @param p_ret Return type of the registered method
-	 * @param p_params Method parameters types
-	 */
-	private native void nativeRegisterMethod(String p_sname, String p_name, String p_ret, String[] p_params);
+    /**
+     * Used to complete registration of the {@link GodotPlugin} instance's methods.
+     * @param p_sname Name of the instance
+     * @param p_name Name of the method to register
+     * @param p_ret Return type of the registered method
+     * @param p_params Method parameters types
+     */
+    private native void nativeRegisterMethod ( String p_sname, String p_name, String p_ret, String[] p_params );
 
-	/**
-	 * Used to register gdnative libraries bundled by the plugin.
-	 * @param gdnlibPaths Paths to the libraries relative to the 'assets' directory.
-	 */
-	private native void nativeRegisterGDNativeLibraries(String[] gdnlibPaths);
+    /**
+     * Used to register gdnative libraries bundled by the plugin.
+     * @param gdnlibPaths Paths to the libraries relative to the 'assets' directory.
+     */
+    private native void nativeRegisterGDNativeLibraries ( String[] gdnlibPaths );
 
-	/**
-	 * Used to complete registration of the {@link GodotPlugin} instance's methods.
-	 * @param pluginName Name of the plugin
-	 * @param signalName Name of the signal to register
-	 * @param signalParamTypes Signal parameters types
-	 */
-	private native void nativeRegisterSignal(String pluginName, String signalName, String[] signalParamTypes);
+    /**
+     * Used to complete registration of the {@link GodotPlugin} instance's methods.
+     * @param pluginName Name of the plugin
+     * @param signalName Name of the signal to register
+     * @param signalParamTypes Signal parameters types
+     */
+    private native void nativeRegisterSignal ( String pluginName, String signalName, String[] signalParamTypes );
 
-	/**
-	 * Used to emit signal by {@link GodotPlugin} instance.
-	 * @param pluginName Name of the plugin
-	 * @param signalName Name of the signal to emit
-	 * @param signalParams Signal parameters
-	 */
-	private native void nativeEmitSignal(String pluginName, String signalName, Object[] signalParams);
+    /**
+     * Used to emit signal by {@link GodotPlugin} instance.
+     * @param pluginName Name of the plugin
+     * @param signalName Name of the signal to emit
+     * @param signalParams Signal parameters
+     */
+    private native void nativeEmitSignal ( String pluginName, String signalName, Object[] signalParams );
 }

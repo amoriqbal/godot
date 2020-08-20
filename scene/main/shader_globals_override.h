@@ -33,34 +33,35 @@
 
 #include "scene/3d/node_3d.h"
 
-class ShaderGlobalsOverride : public Node {
-	GDCLASS(ShaderGlobalsOverride, Node);
+class ShaderGlobalsOverride : public Node
+{
+    GDCLASS ( ShaderGlobalsOverride, Node );
 
-	struct Override {
-		bool in_use = false;
-		Variant override;
-	};
+    struct Override {
+        bool in_use = false;
+        Variant override;
+    };
 
-	StringName *_remap(const StringName &p_name) const;
+    StringName *_remap ( const StringName &p_name ) const;
 
-	bool active;
-	mutable HashMap<StringName, Override> overrides;
-	mutable HashMap<StringName, StringName> param_remaps;
+    bool active;
+    mutable HashMap<StringName, Override> overrides;
+    mutable HashMap<StringName, StringName> param_remaps;
 
-	void _activate();
+    void _activate();
 
 protected:
-	bool _set(const StringName &p_name, const Variant &p_value);
-	bool _get(const StringName &p_name, Variant &r_ret) const;
-	void _get_property_list(List<PropertyInfo> *p_list) const;
+    bool _set ( const StringName &p_name, const Variant &p_value );
+    bool _get ( const StringName &p_name, Variant &r_ret ) const;
+    void _get_property_list ( List<PropertyInfo> *p_list ) const;
 
-	void _notification(int p_what);
-	static void _bind_methods();
+    void _notification ( int p_what );
+    static void _bind_methods();
 
 public:
-	String get_configuration_warning() const override;
+    String get_configuration_warning() const override;
 
-	ShaderGlobalsOverride();
+    ShaderGlobalsOverride();
 };
 
 #endif // SHADER_GLOBALS_OVERRIDE_H

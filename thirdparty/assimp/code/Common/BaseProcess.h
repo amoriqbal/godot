@@ -49,7 +49,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 struct aiScene;
 
-namespace Assimp    {
+namespace Assimp
+{
 
 class Importer;
 
@@ -64,18 +65,16 @@ class SharedPostProcessInfo
 {
 public:
 
-    struct Base
-    {
+    struct Base {
         virtual ~Base()
         {}
     };
 
     //! Represents data that is allocated on the heap, thus needs to be deleted
     template <typename T>
-    struct THeapData : public Base
-    {
-        explicit THeapData(T* in)
-            : data (in)
+    struct THeapData : public Base {
+        explicit THeapData ( T* in )
+            : data ( in )
         {}
 
         ~THeapData()
@@ -87,10 +86,9 @@ public:
 
     //! Represents static, by-value data not allocated on the heap
     template <typename T>
-    struct TStaticData : public Base
-    {
-        explicit TStaticData(T in)
-            : data (in)
+    struct TStaticData : public Base {
+        explicit TStaticData ( T in )
+            : data ( in )
         {}
 
         ~TStaticData()
@@ -115,34 +113,34 @@ public:
     void Clean()
     {
         // invoke the virtual destructor for all stored properties
-        for (PropertyMap::iterator it = pmap.begin(), end = pmap.end();
-             it != end; ++it)
-        {
-            delete (*it).second;
+        for ( PropertyMap::iterator it = pmap.begin(), end = pmap.end();
+                it != end; ++it ) {
+            delete ( *it ).second;
         }
         pmap.clear();
     }
 
     //! Add a heap property to the list
     template <typename T>
-    void AddProperty( const char* name, T* in ){
-        AddProperty(name,(Base*)new THeapData<T>(in));
+    void AddProperty ( const char* name, T* in )
+    {
+        AddProperty ( name, ( Base* ) new THeapData<T> ( in ) );
     }
 
     //! Add a static by-value property to the list
     template <typename T>
-    void AddProperty( const char* name, T in ){
-        AddProperty(name,(Base*)new TStaticData<T>(in));
+    void AddProperty ( const char* name, T in )
+    {
+        AddProperty ( name, ( Base* ) new TStaticData<T> ( in ) );
     }
 
 
     //! Get a heap property
     template <typename T>
-    bool GetProperty( const char* name, T*& out ) const
+    bool GetProperty ( const char* name, T*& out ) const
     {
-        THeapData<T>* t = (THeapData<T>*)GetPropertyInternal(name);
-        if(!t)
-        {
+        THeapData<T>* t = ( THeapData<T>* ) GetPropertyInternal ( name );
+        if ( !t ) {
             out = NULL;
             return false;
         }
@@ -152,27 +150,32 @@ public:
 
     //! Get a static, by-value property
     template <typename T>
-    bool GetProperty( const char* name, T& out ) const
+    bool GetProperty ( const char* name, T& out ) const
     {
-        TStaticData<T>* t = (TStaticData<T>*)GetPropertyInternal(name);
-        if(!t)return false;
+        TStaticData<T>* t = ( TStaticData<T>* ) GetPropertyInternal ( name );
+        if ( !t ) {
+            return false;
+        }
         out = t->data;
         return true;
     }
 
     //! Remove a property of a specific type
-    void RemoveProperty( const char* name)  {
-        SetGenericPropertyPtr<Base>(pmap,name,NULL);
+    void RemoveProperty ( const char* name )
+    {
+        SetGenericPropertyPtr<Base> ( pmap,name,NULL );
     }
 
 private:
 
-    void AddProperty( const char* name, Base* data) {
-        SetGenericPropertyPtr<Base>(pmap,name,data);
+    void AddProperty ( const char* name, Base* data )
+    {
+        SetGenericPropertyPtr<Base> ( pmap,name,data );
     }
 
-    Base* GetPropertyInternal( const char* name) const  {
-        return GetGenericProperty<Base*>(pmap,name,NULL);
+    Base* GetPropertyInternal ( const char* name ) const
+    {
+        return GetGenericProperty<Base*> ( pmap,name,NULL );
     }
 
 private:
@@ -188,13 +191,12 @@ private:
  *
  *  For future use.
  */
- struct PPDependencyTable
- {
-     unsigned int execute_me_before_these;
-     unsigned int execute_me_after_these;
-     unsigned int only_if_these_are_not_specified;
-     unsigned int mutually_exclusive_with;
- };
+struct PPDependencyTable {
+    unsigned int execute_me_before_these;
+    unsigned int execute_me_after_these;
+    unsigned int only_if_these_are_not_specified;
+    unsigned int mutually_exclusive_with;
+};
 
 #endif
 
@@ -211,7 +213,8 @@ private:
  * should be executed. If the function returns true, the class' Execute()
  * function is called subsequently.
  */
-class ASSIMP_API_WINONLY BaseProcess {
+class ASSIMP_API_WINONLY BaseProcess
+{
     friend class Importer;
 
 public:
@@ -228,7 +231,7 @@ public:
      * @return true if the process is present in this flag fields,
      *   false if not.
     */
-    virtual bool IsActive( unsigned int pFlags) const = 0;
+    virtual bool IsActive ( unsigned int pFlags ) const = 0;
 
     // -------------------------------------------------------------------
     /** Check whether this step expects its input vertex data to be
@@ -241,14 +244,14 @@ public:
     * the object pointer will be set to NULL).
     * @param pImp Importer instance (pImp->mScene must be valid)
     */
-    void ExecuteOnScene( Importer* pImp);
+    void ExecuteOnScene ( Importer* pImp );
 
     // -------------------------------------------------------------------
     /** Called prior to ExecuteOnScene().
     * The function is a request to the process to update its configuration
     * basing on the Importer's configuration property list.
     */
-    virtual void SetupProperties(const Importer* pImp);
+    virtual void SetupProperties ( const Importer* pImp );
 
     // -------------------------------------------------------------------
     /** Executes the post processing step on the given imported data.
@@ -256,7 +259,7 @@ public:
     * This method must be implemented by deriving classes.
     * @param pScene The imported data to work at.
     */
-    virtual void Execute( aiScene* pScene) = 0;
+    virtual void Execute ( aiScene* pScene ) = 0;
 
 
     // -------------------------------------------------------------------
@@ -264,14 +267,16 @@ public:
      *  allows multiple postprocess steps to share data.
      * @param sh May be NULL
     */
-    inline void SetSharedData(SharedPostProcessInfo* sh)    {
+    inline void SetSharedData ( SharedPostProcessInfo* sh )
+    {
         shared = sh;
     }
 
     // -------------------------------------------------------------------
     /** Get the shared data that is assigned to the step.
     */
-    inline SharedPostProcessInfo* GetSharedData()   {
+    inline SharedPostProcessInfo* GetSharedData()
+    {
         return shared;
     }
 

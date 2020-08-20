@@ -40,14 +40,14 @@ typedef struct VkViSurfaceCreateInfoNN {
     void*                       window;
 } VkViSurfaceCreateInfoNN;
 
-typedef VkResult (VKAPI_PTR *PFN_vkCreateViSurfaceNN)(VkInstance instance, const VkViSurfaceCreateInfoNN* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface);
+typedef VkResult ( VKAPI_PTR *PFN_vkCreateViSurfaceNN ) ( VkInstance instance, const VkViSurfaceCreateInfoNN* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface );
 
 #ifndef VK_NO_PROTOTYPES
-VKAPI_ATTR VkResult VKAPI_CALL vkCreateViSurfaceNN(
+VKAPI_ATTR VkResult VKAPI_CALL vkCreateViSurfaceNN (
     VkInstance                                  instance,
     const VkViSurfaceCreateInfoNN*              pCreateInfo,
     const VkAllocationCallbacks*                pAllocator,
-    VkSurfaceKHR*                               pSurface);
+    VkSurfaceKHR*                               pSurface );
 #endif
 
 #ifdef __cplusplus

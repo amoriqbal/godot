@@ -42,64 +42,65 @@
 #include "servers/rendering/rasterizer.h"
 #include "servers/rendering_server.h"
 
-class OS_LinuxBSD : public OS_Unix {
-	virtual void delete_main_loop();
+class OS_LinuxBSD : public OS_Unix
+{
+    virtual void delete_main_loop();
 
-	bool force_quit;
+    bool force_quit;
 
 #ifdef JOYDEV_ENABLED
-	JoypadLinux *joypad = nullptr;
+    JoypadLinux *joypad = nullptr;
 #endif
 
 #ifdef ALSA_ENABLED
-	AudioDriverALSA driver_alsa;
+    AudioDriverALSA driver_alsa;
 #endif
 
 #ifdef ALSAMIDI_ENABLED
-	MIDIDriverALSAMidi driver_alsamidi;
+    MIDIDriverALSAMidi driver_alsamidi;
 #endif
 
 #ifdef PULSEAUDIO_ENABLED
-	AudioDriverPulseAudio driver_pulseaudio;
+    AudioDriverPulseAudio driver_pulseaudio;
 #endif
 
-	CrashHandler crash_handler;
+    CrashHandler crash_handler;
 
-	MainLoop *main_loop;
+    MainLoop *main_loop;
 
 protected:
-	virtual void initialize();
-	virtual void finalize();
+    virtual void initialize();
+    virtual void finalize();
 
-	virtual void initialize_joypads();
+    virtual void initialize_joypads();
 
-	virtual void set_main_loop(MainLoop *p_main_loop);
+    virtual void set_main_loop ( MainLoop *p_main_loop );
 
 public:
-	virtual String get_name() const;
+    virtual String get_name() const;
 
-	virtual MainLoop *get_main_loop() const;
+    virtual MainLoop *get_main_loop() const;
 
-	virtual String get_config_path() const;
-	virtual String get_data_path() const;
-	virtual String get_cache_path() const;
+    virtual String get_config_path() const;
+    virtual String get_data_path() const;
+    virtual String get_cache_path() const;
 
-	virtual String get_system_dir(SystemDir p_dir) const;
+    virtual String get_system_dir ( SystemDir p_dir ) const;
 
-	virtual Error shell_open(String p_uri);
+    virtual Error shell_open ( String p_uri );
 
-	virtual String get_unique_id() const;
+    virtual String get_unique_id() const;
 
-	virtual bool _check_internal_feature_support(const String &p_feature);
+    virtual bool _check_internal_feature_support ( const String &p_feature );
 
-	void run();
+    void run();
 
-	void disable_crash_handler();
-	bool is_disable_crash_handler() const;
+    void disable_crash_handler();
+    bool is_disable_crash_handler() const;
 
-	virtual Error move_to_trash(const String &p_path);
+    virtual Error move_to_trash ( const String &p_path );
 
-	OS_LinuxBSD();
+    OS_LinuxBSD();
 };
 
 #endif

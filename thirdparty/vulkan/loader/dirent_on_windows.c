@@ -28,29 +28,28 @@ struct DIR {
     char *name;           /* null-terminated char string */
 };
 
-DIR *opendir(const char *name) {
+DIR *opendir ( const char *name )
+{
     DIR *dir = 0;
 
-    if (name && name[0]) {
-        size_t base_length = strlen(name);
+    if ( name && name[0] ) {
+        size_t base_length = strlen ( name );
         const char *all = /* search pattern must end with suitable wildcard */
-            strchr("/\\", name[base_length - 1]) ? "*" : "/*";
+            strchr ( "/\\", name[base_length - 1] ) ? "*" : "/*";
 
-        if ((dir = (DIR *)loader_instance_tls_heap_alloc(sizeof *dir)) != 0 &&
-            (dir->name = (char *)loader_instance_tls_heap_alloc(base_length + strlen(all) + 1)) != 0) {
-            strcat(strcpy(dir->name, name), all);
+        if ( ( dir = ( DIR * ) loader_instance_tls_heap_alloc ( sizeof *dir ) ) != 0 &&
+                ( dir->name = ( char * ) loader_instance_tls_heap_alloc ( base_length + strlen ( all ) + 1 ) ) != 0 ) {
+            strcat ( strcpy ( dir->name, name ), all );
 
-            if ((dir->handle = (handle_type)_findfirst(dir->name, &dir->info)) != -1) {
+            if ( ( dir->handle = ( handle_type ) _findfirst ( dir->name, &dir->info ) ) != -1 ) {
                 dir->result.d_name = 0;
-            } else /* rollback */
-            {
-                loader_instance_tls_heap_free(dir->name);
-                loader_instance_tls_heap_free(dir);
+            } else { /* rollback */
+                loader_instance_tls_heap_free ( dir->name );
+                loader_instance_tls_heap_free ( dir );
                 dir = 0;
             }
-        } else /* rollback */
-        {
-            loader_instance_tls_heap_free(dir);
+        } else { /* rollback */
+            loader_instance_tls_heap_free ( dir );
             dir = 0;
             errno = ENOMEM;
         }
@@ -61,31 +60,32 @@ DIR *opendir(const char *name) {
     return dir;
 }
 
-int closedir(DIR *dir) {
+int closedir ( DIR *dir )
+{
     int result = -1;
 
-    if (dir) {
-        if (dir->handle != -1) {
-            result = _findclose(dir->handle);
+    if ( dir ) {
+        if ( dir->handle != -1 ) {
+            result = _findclose ( dir->handle );
         }
 
-        loader_instance_tls_heap_free(dir->name);
-        loader_instance_tls_heap_free(dir);
+        loader_instance_tls_heap_free ( dir->name );
+        loader_instance_tls_heap_free ( dir );
     }
 
-    if (result == -1) /* map all errors to EBADF */
-    {
+    if ( result == -1 ) { /* map all errors to EBADF */
         errno = EBADF;
     }
 
     return result;
 }
 
-struct dirent *readdir(DIR *dir) {
+struct dirent *readdir ( DIR *dir )
+{
     struct dirent *result = 0;
 
-    if (dir && dir->handle != -1) {
-        if (!dir->result.d_name || _findnext(dir->handle, &dir->info) != -1) {
+    if ( dir && dir->handle != -1 ) {
+        if ( !dir->result.d_name || _findnext ( dir->handle, &dir->info ) != -1 ) {
             result = &dir->result;
             result->d_name = dir->info.name;
         }
@@ -96,10 +96,11 @@ struct dirent *readdir(DIR *dir) {
     return result;
 }
 
-void rewinddir(DIR *dir) {
-    if (dir && dir->handle != -1) {
-        _findclose(dir->handle);
-        dir->handle = (handle_type)_findfirst(dir->name, &dir->info);
+void rewinddir ( DIR *dir )
+{
+    if ( dir && dir->handle != -1 ) {
+        _findclose ( dir->handle );
+        dir->handle = ( handle_type ) _findfirst ( dir->name, &dir->info );
         dir->result.d_name = 0;
     } else {
         errno = EBADF;

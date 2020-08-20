@@ -67,110 +67,113 @@ struct aiNode;
 
 namespace Assimp
 {
-    class IOSystem;
-    class IOStream;
-    class ExportProperties;
+class IOSystem;
+class IOStream;
+class ExportProperties;
 
-    // ---------------------------------------------------------------------
-    /** Helper class to export a given scene to an FBX file. */
-    // ---------------------------------------------------------------------
-    class FBXExporter
+// ---------------------------------------------------------------------
+/** Helper class to export a given scene to an FBX file. */
+// ---------------------------------------------------------------------
+class FBXExporter
+{
+public:
+    /// Constructor for a specific scene to export
+    FBXExporter ( const aiScene* pScene, const ExportProperties* pProperties );
+
+    // call one of these methods to export
+    void ExportBinary ( const char* pFile, IOSystem* pIOSystem );
+    void ExportAscii ( const char* pFile, IOSystem* pIOSystem );
+
+private:
+    bool binary; // whether current export is in binary or ascii format
+    const aiScene* mScene; // the scene to export
+    const ExportProperties* mProperties; // currently unused
+    std::shared_ptr<IOStream> outfile; // file to write to
+
+    std::vector<FBX::Node> connections; // connection storage
+
+    std::vector<int64_t> mesh_uids;
+    std::vector<int64_t> material_uids;
+    std::map<const aiNode*,int64_t> node_uids;
+
+    // this crude unique-ID system is actually fine
+    int64_t last_uid = 999999;
+    int64_t generate_uid()
     {
-    public:
-        /// Constructor for a specific scene to export
-        FBXExporter(const aiScene* pScene, const ExportProperties* pProperties);
+        return ++last_uid;
+    }
 
-        // call one of these methods to export
-        void ExportBinary(const char* pFile, IOSystem* pIOSystem);
-        void ExportAscii(const char* pFile, IOSystem* pIOSystem);
+    // binary files have a specific header and footer,
+    // in addition to the actual data
+    void WriteBinaryHeader();
+    void WriteBinaryFooter();
 
-    private:
-        bool binary; // whether current export is in binary or ascii format
-        const aiScene* mScene; // the scene to export
-        const ExportProperties* mProperties; // currently unused
-        std::shared_ptr<IOStream> outfile; // file to write to
+    // ascii files have a comment at the top
+    void WriteAsciiHeader();
 
-        std::vector<FBX::Node> connections; // connection storage
+    // WriteAllNodes does the actual export.
+    // It just calls all the Write<Section> methods below in order.
+    void WriteAllNodes();
 
-        std::vector<int64_t> mesh_uids;
-        std::vector<int64_t> material_uids;
-        std::map<const aiNode*,int64_t> node_uids;
+    // Methods to write individual sections.
+    // The order here matches the order inside an FBX file.
+    // Each method corresponds to a top-level FBX section,
+    // except WriteHeader which also includes some binary-only sections
+    // and WriteFooter which is binary data only.
+    void WriteHeaderExtension();
+    // WriteFileId(); // binary-only, included in WriteHeader
+    // WriteCreationTime(); // binary-only, included in WriteHeader
+    // WriteCreator(); // binary-only, included in WriteHeader
+    void WriteGlobalSettings();
+    void WriteDocuments();
+    void WriteReferences();
+    void WriteDefinitions();
+    void WriteObjects();
+    void WriteConnections();
+    // WriteTakes(); // deprecated since at least 2015 (fbx 7.4)
 
-        // this crude unique-ID system is actually fine
-        int64_t last_uid = 999999;
-        int64_t generate_uid() { return ++last_uid; }
-
-        // binary files have a specific header and footer,
-        // in addition to the actual data
-        void WriteBinaryHeader();
-        void WriteBinaryFooter();
-
-        // ascii files have a comment at the top
-        void WriteAsciiHeader();
-
-        // WriteAllNodes does the actual export.
-        // It just calls all the Write<Section> methods below in order.
-        void WriteAllNodes();
-
-        // Methods to write individual sections.
-        // The order here matches the order inside an FBX file.
-        // Each method corresponds to a top-level FBX section,
-        // except WriteHeader which also includes some binary-only sections
-        // and WriteFooter which is binary data only.
-        void WriteHeaderExtension();
-        // WriteFileId(); // binary-only, included in WriteHeader
-        // WriteCreationTime(); // binary-only, included in WriteHeader
-        // WriteCreator(); // binary-only, included in WriteHeader
-        void WriteGlobalSettings();
-        void WriteDocuments();
-        void WriteReferences();
-        void WriteDefinitions();
-        void WriteObjects();
-        void WriteConnections();
-        // WriteTakes(); // deprecated since at least 2015 (fbx 7.4)
-
-        // helpers
-        void WriteAsciiSectionHeader(const std::string& title);
-        void WriteModelNodes(
-            Assimp::StreamWriterLE& s,
-            const aiNode* node,
-            int64_t parent_uid,
-            const std::unordered_set<const aiNode*>& limbnodes
-        );
-        void WriteModelNodes( // usually don't call this directly
-            StreamWriterLE& s,
-            const aiNode* node,
-            int64_t parent_uid,
-            const std::unordered_set<const aiNode*>& limbnodes,
-            std::vector<std::pair<std::string,aiVector3D>>& transform_chain
-        );
-        void WriteModelNode( // nor this
-            StreamWriterLE& s,
-            bool binary,
-            const aiNode* node,
-            int64_t node_uid,
-            const std::string& type,
-            const std::vector<std::pair<std::string,aiVector3D>>& xfm_chain,
-            FBX::TransformInheritance ti_type=FBX::TransformInheritance_RSrs
-        );
-        void WriteAnimationCurveNode(
-            StreamWriterLE& outstream,
-            int64_t uid,
-            const std::string& name, // "T", "R", or "S"
-            aiVector3D default_value,
-            std::string property_name, // "Lcl Translation" etc
-            int64_t animation_layer_uid,
-            int64_t node_uid
-        );
-        void WriteAnimationCurve(
-            StreamWriterLE& outstream,
-            double default_value,
-            const std::vector<int64_t>& times,
-            const std::vector<float>& values,
-            int64_t curvenode_id,
-            const std::string& property_link // "d|X", "d|Y", etc
-        );
-    };
+    // helpers
+    void WriteAsciiSectionHeader ( const std::string& title );
+    void WriteModelNodes (
+        Assimp::StreamWriterLE& s,
+        const aiNode* node,
+        int64_t parent_uid,
+        const std::unordered_set<const aiNode*>& limbnodes
+    );
+    void WriteModelNodes ( // usually don't call this directly
+        StreamWriterLE& s,
+        const aiNode* node,
+        int64_t parent_uid,
+        const std::unordered_set<const aiNode*>& limbnodes,
+        std::vector<std::pair<std::string,aiVector3D>>& transform_chain
+    );
+    void WriteModelNode ( // nor this
+        StreamWriterLE& s,
+        bool binary,
+        const aiNode* node,
+        int64_t node_uid,
+        const std::string& type,
+        const std::vector<std::pair<std::string,aiVector3D>>& xfm_chain,
+        FBX::TransformInheritance ti_type=FBX::TransformInheritance_RSrs
+    );
+    void WriteAnimationCurveNode (
+        StreamWriterLE& outstream,
+        int64_t uid,
+        const std::string& name, // "T", "R", or "S"
+        aiVector3D default_value,
+        std::string property_name, // "Lcl Translation" etc
+        int64_t animation_layer_uid,
+        int64_t node_uid
+    );
+    void WriteAnimationCurve (
+        StreamWriterLE& outstream,
+        double default_value,
+        const std::vector<int64_t>& times,
+        const std::vector<float>& values,
+        int64_t curvenode_id,
+        const std::string& property_link // "d|X", "d|Y", etc
+    );
+};
 }
 
 #endif // ASSIMP_BUILD_NO_FBX_EXPORTER

@@ -53,10 +53,11 @@
 /*In _DEBUG mode this is not an intrinsic by default.*/
 # pragma intrinsic(_BitScanReverse)
 
-static __inline int ec_bsr(unsigned long _x){
-  unsigned long ret;
-  _BitScanReverse(&ret,_x);
-  return (int)ret;
+static __inline int ec_bsr ( unsigned long _x )
+{
+    unsigned long ret;
+    _BitScanReverse ( &ret,_x );
+    return ( int ) ret;
 }
 # define EC_CLZ0    (1)
 # define EC_CLZ(_x) (-ec_bsr(_x))
@@ -81,7 +82,7 @@ static __inline int ec_bsr(unsigned long _x){
   When we need to, it can be special cased.*/
 # define EC_ILOG(_x) (EC_CLZ0-EC_CLZ(_x))
 #else
-int ec_ilog(opus_uint32 _v);
+int ec_ilog ( opus_uint32 _v );
 # define EC_ILOG(_x) (ec_ilog(_x))
 #endif
 #endif

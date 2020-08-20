@@ -525,7 +525,8 @@ bytes in a code unit in that mode. */
 
 enum { PCRE2_MATCHEDBY_INTERPRETER,     /* pcre2_match() */
        PCRE2_MATCHEDBY_DFA_INTERPRETER, /* pcre2_dfa_match() */
-       PCRE2_MATCHEDBY_JIT };           /* pcre2_jit_match() */
+       PCRE2_MATCHEDBY_JIT
+     };           /* pcre2_jit_match() */
 
 /* Values for the flags field in a match data block. */
 
@@ -1301,7 +1302,8 @@ consume a character, that code will have to change. */
 enum { ESC_A = 1, ESC_G, ESC_K, ESC_B, ESC_b, ESC_D, ESC_d, ESC_S, ESC_s,
        ESC_W, ESC_w, ESC_N, ESC_dum, ESC_C, ESC_P, ESC_p, ESC_R, ESC_H,
        ESC_h, ESC_V, ESC_v, ESC_X, ESC_Z, ESC_z,
-       ESC_E, ESC_Q, ESC_g, ESC_k };
+       ESC_E, ESC_Q, ESC_g, ESC_k
+     };
 
 
 /********************** Opcode definitions ******************/
@@ -1330,266 +1332,266 @@ auto-possessified. */
 #define LAST_AUTOTAB_RIGHT_OP  OP_DOLLM
 
 enum {
-  OP_END,            /* 0 End of pattern */
+    OP_END,            /* 0 End of pattern */
 
-  /* Values corresponding to backslashed metacharacters */
+    /* Values corresponding to backslashed metacharacters */
 
-  OP_SOD,            /* 1 Start of data: \A */
-  OP_SOM,            /* 2 Start of match (subject + offset): \G */
-  OP_SET_SOM,        /* 3 Set start of match (\K) */
-  OP_NOT_WORD_BOUNDARY,  /*  4 \B */
-  OP_WORD_BOUNDARY,      /*  5 \b */
-  OP_NOT_DIGIT,          /*  6 \D */
-  OP_DIGIT,              /*  7 \d */
-  OP_NOT_WHITESPACE,     /*  8 \S */
-  OP_WHITESPACE,         /*  9 \s */
-  OP_NOT_WORDCHAR,       /* 10 \W */
-  OP_WORDCHAR,           /* 11 \w */
+    OP_SOD,            /* 1 Start of data: \A */
+    OP_SOM,            /* 2 Start of match (subject + offset): \G */
+    OP_SET_SOM,        /* 3 Set start of match (\K) */
+    OP_NOT_WORD_BOUNDARY,  /*  4 \B */
+    OP_WORD_BOUNDARY,      /*  5 \b */
+    OP_NOT_DIGIT,          /*  6 \D */
+    OP_DIGIT,              /*  7 \d */
+    OP_NOT_WHITESPACE,     /*  8 \S */
+    OP_WHITESPACE,         /*  9 \s */
+    OP_NOT_WORDCHAR,       /* 10 \W */
+    OP_WORDCHAR,           /* 11 \w */
 
-  OP_ANY,            /* 12 Match any character except newline (\N) */
-  OP_ALLANY,         /* 13 Match any character */
-  OP_ANYBYTE,        /* 14 Match any byte (\C); different to OP_ANY for UTF-8 */
-  OP_NOTPROP,        /* 15 \P (not Unicode property) */
-  OP_PROP,           /* 16 \p (Unicode property) */
-  OP_ANYNL,          /* 17 \R (any newline sequence) */
-  OP_NOT_HSPACE,     /* 18 \H (not horizontal whitespace) */
-  OP_HSPACE,         /* 19 \h (horizontal whitespace) */
-  OP_NOT_VSPACE,     /* 20 \V (not vertical whitespace) */
-  OP_VSPACE,         /* 21 \v (vertical whitespace) */
-  OP_EXTUNI,         /* 22 \X (extended Unicode sequence */
-  OP_EODN,           /* 23 End of data or \n at end of data (\Z) */
-  OP_EOD,            /* 24 End of data (\z) */
+    OP_ANY,            /* 12 Match any character except newline (\N) */
+    OP_ALLANY,         /* 13 Match any character */
+    OP_ANYBYTE,        /* 14 Match any byte (\C); different to OP_ANY for UTF-8 */
+    OP_NOTPROP,        /* 15 \P (not Unicode property) */
+    OP_PROP,           /* 16 \p (Unicode property) */
+    OP_ANYNL,          /* 17 \R (any newline sequence) */
+    OP_NOT_HSPACE,     /* 18 \H (not horizontal whitespace) */
+    OP_HSPACE,         /* 19 \h (horizontal whitespace) */
+    OP_NOT_VSPACE,     /* 20 \V (not vertical whitespace) */
+    OP_VSPACE,         /* 21 \v (vertical whitespace) */
+    OP_EXTUNI,         /* 22 \X (extended Unicode sequence */
+    OP_EODN,           /* 23 End of data or \n at end of data (\Z) */
+    OP_EOD,            /* 24 End of data (\z) */
 
-  /* Line end assertions */
+    /* Line end assertions */
 
-  OP_DOLL,           /* 25 End of line - not multiline */
-  OP_DOLLM,          /* 26 End of line - multiline */
-  OP_CIRC,           /* 27 Start of line - not multiline */
-  OP_CIRCM,          /* 28 Start of line - multiline */
+    OP_DOLL,           /* 25 End of line - not multiline */
+    OP_DOLLM,          /* 26 End of line - multiline */
+    OP_CIRC,           /* 27 Start of line - not multiline */
+    OP_CIRCM,          /* 28 Start of line - multiline */
 
-  /* Single characters; caseful must precede the caseless ones, and these
-  must remain in this order, and adjacent. */
+    /* Single characters; caseful must precede the caseless ones, and these
+    must remain in this order, and adjacent. */
 
-  OP_CHAR,           /* 29 Match one character, casefully */
-  OP_CHARI,          /* 30 Match one character, caselessly */
-  OP_NOT,            /* 31 Match one character, not the given one, casefully */
-  OP_NOTI,           /* 32 Match one character, not the given one, caselessly */
+    OP_CHAR,           /* 29 Match one character, casefully */
+    OP_CHARI,          /* 30 Match one character, caselessly */
+    OP_NOT,            /* 31 Match one character, not the given one, casefully */
+    OP_NOTI,           /* 32 Match one character, not the given one, caselessly */
 
-  /* The following sets of 13 opcodes must always be kept in step because
-  the offset from the first one is used to generate the others. */
+    /* The following sets of 13 opcodes must always be kept in step because
+    the offset from the first one is used to generate the others. */
 
-  /* Repeated characters; caseful must precede the caseless ones */
+    /* Repeated characters; caseful must precede the caseless ones */
 
-  OP_STAR,           /* 33 The maximizing and minimizing versions of */
-  OP_MINSTAR,        /* 34 these six opcodes must come in pairs, with */
-  OP_PLUS,           /* 35 the minimizing one second. */
-  OP_MINPLUS,        /* 36 */
-  OP_QUERY,          /* 37 */
-  OP_MINQUERY,       /* 38 */
+    OP_STAR,           /* 33 The maximizing and minimizing versions of */
+    OP_MINSTAR,        /* 34 these six opcodes must come in pairs, with */
+    OP_PLUS,           /* 35 the minimizing one second. */
+    OP_MINPLUS,        /* 36 */
+    OP_QUERY,          /* 37 */
+    OP_MINQUERY,       /* 38 */
 
-  OP_UPTO,           /* 39 From 0 to n matches of one character, caseful*/
-  OP_MINUPTO,        /* 40 */
-  OP_EXACT,          /* 41 Exactly n matches */
+    OP_UPTO,           /* 39 From 0 to n matches of one character, caseful*/
+    OP_MINUPTO,        /* 40 */
+    OP_EXACT,          /* 41 Exactly n matches */
 
-  OP_POSSTAR,        /* 42 Possessified star, caseful */
-  OP_POSPLUS,        /* 43 Possessified plus, caseful */
-  OP_POSQUERY,       /* 44 Posesssified query, caseful */
-  OP_POSUPTO,        /* 45 Possessified upto, caseful */
+    OP_POSSTAR,        /* 42 Possessified star, caseful */
+    OP_POSPLUS,        /* 43 Possessified plus, caseful */
+    OP_POSQUERY,       /* 44 Posesssified query, caseful */
+    OP_POSUPTO,        /* 45 Possessified upto, caseful */
 
-  /* Repeated characters; caseless must follow the caseful ones */
+    /* Repeated characters; caseless must follow the caseful ones */
 
-  OP_STARI,          /* 46 */
-  OP_MINSTARI,       /* 47 */
-  OP_PLUSI,          /* 48 */
-  OP_MINPLUSI,       /* 49 */
-  OP_QUERYI,         /* 50 */
-  OP_MINQUERYI,      /* 51 */
+    OP_STARI,          /* 46 */
+    OP_MINSTARI,       /* 47 */
+    OP_PLUSI,          /* 48 */
+    OP_MINPLUSI,       /* 49 */
+    OP_QUERYI,         /* 50 */
+    OP_MINQUERYI,      /* 51 */
 
-  OP_UPTOI,          /* 52 From 0 to n matches of one character, caseless */
-  OP_MINUPTOI,       /* 53 */
-  OP_EXACTI,         /* 54 */
+    OP_UPTOI,          /* 52 From 0 to n matches of one character, caseless */
+    OP_MINUPTOI,       /* 53 */
+    OP_EXACTI,         /* 54 */
 
-  OP_POSSTARI,       /* 55 Possessified star, caseless */
-  OP_POSPLUSI,       /* 56 Possessified plus, caseless */
-  OP_POSQUERYI,      /* 57 Posesssified query, caseless */
-  OP_POSUPTOI,       /* 58 Possessified upto, caseless */
+    OP_POSSTARI,       /* 55 Possessified star, caseless */
+    OP_POSPLUSI,       /* 56 Possessified plus, caseless */
+    OP_POSQUERYI,      /* 57 Posesssified query, caseless */
+    OP_POSUPTOI,       /* 58 Possessified upto, caseless */
 
-  /* The negated ones must follow the non-negated ones, and match them */
-  /* Negated repeated character, caseful; must precede the caseless ones */
+    /* The negated ones must follow the non-negated ones, and match them */
+    /* Negated repeated character, caseful; must precede the caseless ones */
 
-  OP_NOTSTAR,        /* 59 The maximizing and minimizing versions of */
-  OP_NOTMINSTAR,     /* 60 these six opcodes must come in pairs, with */
-  OP_NOTPLUS,        /* 61 the minimizing one second. They must be in */
-  OP_NOTMINPLUS,     /* 62 exactly the same order as those above. */
-  OP_NOTQUERY,       /* 63 */
-  OP_NOTMINQUERY,    /* 64 */
+    OP_NOTSTAR,        /* 59 The maximizing and minimizing versions of */
+    OP_NOTMINSTAR,     /* 60 these six opcodes must come in pairs, with */
+    OP_NOTPLUS,        /* 61 the minimizing one second. They must be in */
+    OP_NOTMINPLUS,     /* 62 exactly the same order as those above. */
+    OP_NOTQUERY,       /* 63 */
+    OP_NOTMINQUERY,    /* 64 */
 
-  OP_NOTUPTO,        /* 65 From 0 to n matches, caseful */
-  OP_NOTMINUPTO,     /* 66 */
-  OP_NOTEXACT,       /* 67 Exactly n matches */
+    OP_NOTUPTO,        /* 65 From 0 to n matches, caseful */
+    OP_NOTMINUPTO,     /* 66 */
+    OP_NOTEXACT,       /* 67 Exactly n matches */
 
-  OP_NOTPOSSTAR,     /* 68 Possessified versions, caseful */
-  OP_NOTPOSPLUS,     /* 69 */
-  OP_NOTPOSQUERY,    /* 70 */
-  OP_NOTPOSUPTO,     /* 71 */
+    OP_NOTPOSSTAR,     /* 68 Possessified versions, caseful */
+    OP_NOTPOSPLUS,     /* 69 */
+    OP_NOTPOSQUERY,    /* 70 */
+    OP_NOTPOSUPTO,     /* 71 */
 
-  /* Negated repeated character, caseless; must follow the caseful ones */
+    /* Negated repeated character, caseless; must follow the caseful ones */
 
-  OP_NOTSTARI,       /* 72 */
-  OP_NOTMINSTARI,    /* 73 */
-  OP_NOTPLUSI,       /* 74 */
-  OP_NOTMINPLUSI,    /* 75 */
-  OP_NOTQUERYI,      /* 76 */
-  OP_NOTMINQUERYI,   /* 77 */
+    OP_NOTSTARI,       /* 72 */
+    OP_NOTMINSTARI,    /* 73 */
+    OP_NOTPLUSI,       /* 74 */
+    OP_NOTMINPLUSI,    /* 75 */
+    OP_NOTQUERYI,      /* 76 */
+    OP_NOTMINQUERYI,   /* 77 */
 
-  OP_NOTUPTOI,       /* 78 From 0 to n matches, caseless */
-  OP_NOTMINUPTOI,    /* 79 */
-  OP_NOTEXACTI,      /* 80 Exactly n matches */
+    OP_NOTUPTOI,       /* 78 From 0 to n matches, caseless */
+    OP_NOTMINUPTOI,    /* 79 */
+    OP_NOTEXACTI,      /* 80 Exactly n matches */
 
-  OP_NOTPOSSTARI,    /* 81 Possessified versions, caseless */
-  OP_NOTPOSPLUSI,    /* 82 */
-  OP_NOTPOSQUERYI,   /* 83 */
-  OP_NOTPOSUPTOI,    /* 84 */
+    OP_NOTPOSSTARI,    /* 81 Possessified versions, caseless */
+    OP_NOTPOSPLUSI,    /* 82 */
+    OP_NOTPOSQUERYI,   /* 83 */
+    OP_NOTPOSUPTOI,    /* 84 */
 
-  /* Character types */
+    /* Character types */
 
-  OP_TYPESTAR,       /* 85 The maximizing and minimizing versions of */
-  OP_TYPEMINSTAR,    /* 86 these six opcodes must come in pairs, with */
-  OP_TYPEPLUS,       /* 87 the minimizing one second. These codes must */
-  OP_TYPEMINPLUS,    /* 88 be in exactly the same order as those above. */
-  OP_TYPEQUERY,      /* 89 */
-  OP_TYPEMINQUERY,   /* 90 */
+    OP_TYPESTAR,       /* 85 The maximizing and minimizing versions of */
+    OP_TYPEMINSTAR,    /* 86 these six opcodes must come in pairs, with */
+    OP_TYPEPLUS,       /* 87 the minimizing one second. These codes must */
+    OP_TYPEMINPLUS,    /* 88 be in exactly the same order as those above. */
+    OP_TYPEQUERY,      /* 89 */
+    OP_TYPEMINQUERY,   /* 90 */
 
-  OP_TYPEUPTO,       /* 91 From 0 to n matches */
-  OP_TYPEMINUPTO,    /* 92 */
-  OP_TYPEEXACT,      /* 93 Exactly n matches */
+    OP_TYPEUPTO,       /* 91 From 0 to n matches */
+    OP_TYPEMINUPTO,    /* 92 */
+    OP_TYPEEXACT,      /* 93 Exactly n matches */
 
-  OP_TYPEPOSSTAR,    /* 94 Possessified versions */
-  OP_TYPEPOSPLUS,    /* 95 */
-  OP_TYPEPOSQUERY,   /* 96 */
-  OP_TYPEPOSUPTO,    /* 97 */
+    OP_TYPEPOSSTAR,    /* 94 Possessified versions */
+    OP_TYPEPOSPLUS,    /* 95 */
+    OP_TYPEPOSQUERY,   /* 96 */
+    OP_TYPEPOSUPTO,    /* 97 */
 
-  /* These are used for character classes and back references; only the
-  first six are the same as the sets above. */
+    /* These are used for character classes and back references; only the
+    first six are the same as the sets above. */
 
-  OP_CRSTAR,         /* 98 The maximizing and minimizing versions of */
-  OP_CRMINSTAR,      /* 99 all these opcodes must come in pairs, with */
-  OP_CRPLUS,         /* 100 the minimizing one second. These codes must */
-  OP_CRMINPLUS,      /* 101 be in exactly the same order as those above. */
-  OP_CRQUERY,        /* 102 */
-  OP_CRMINQUERY,     /* 103 */
+    OP_CRSTAR,         /* 98 The maximizing and minimizing versions of */
+    OP_CRMINSTAR,      /* 99 all these opcodes must come in pairs, with */
+    OP_CRPLUS,         /* 100 the minimizing one second. These codes must */
+    OP_CRMINPLUS,      /* 101 be in exactly the same order as those above. */
+    OP_CRQUERY,        /* 102 */
+    OP_CRMINQUERY,     /* 103 */
 
-  OP_CRRANGE,        /* 104 These are different to the three sets above. */
-  OP_CRMINRANGE,     /* 105 */
+    OP_CRRANGE,        /* 104 These are different to the three sets above. */
+    OP_CRMINRANGE,     /* 105 */
 
-  OP_CRPOSSTAR,      /* 106 Possessified versions */
-  OP_CRPOSPLUS,      /* 107 */
-  OP_CRPOSQUERY,     /* 108 */
-  OP_CRPOSRANGE,     /* 109 */
+    OP_CRPOSSTAR,      /* 106 Possessified versions */
+    OP_CRPOSPLUS,      /* 107 */
+    OP_CRPOSQUERY,     /* 108 */
+    OP_CRPOSRANGE,     /* 109 */
 
-  /* End of quantifier opcodes */
+    /* End of quantifier opcodes */
 
-  OP_CLASS,          /* 110 Match a character class, chars < 256 only */
-  OP_NCLASS,         /* 111 Same, but the bitmap was created from a negative
+    OP_CLASS,          /* 110 Match a character class, chars < 256 only */
+    OP_NCLASS,         /* 111 Same, but the bitmap was created from a negative
                               class - the difference is relevant only when a
                               character > 255 is encountered. */
-  OP_XCLASS,         /* 112 Extended class for handling > 255 chars within the
+    OP_XCLASS,         /* 112 Extended class for handling > 255 chars within the
                               class. This does both positive and negative. */
-  OP_REF,            /* 113 Match a back reference, casefully */
-  OP_REFI,           /* 114 Match a back reference, caselessly */
-  OP_DNREF,          /* 115 Match a duplicate name backref, casefully */
-  OP_DNREFI,         /* 116 Match a duplicate name backref, caselessly */
-  OP_RECURSE,        /* 117 Match a numbered subpattern (possibly recursive) */
-  OP_CALLOUT,        /* 118 Call out to external function if provided */
-  OP_CALLOUT_STR,    /* 119 Call out with string argument */
+    OP_REF,            /* 113 Match a back reference, casefully */
+    OP_REFI,           /* 114 Match a back reference, caselessly */
+    OP_DNREF,          /* 115 Match a duplicate name backref, casefully */
+    OP_DNREFI,         /* 116 Match a duplicate name backref, caselessly */
+    OP_RECURSE,        /* 117 Match a numbered subpattern (possibly recursive) */
+    OP_CALLOUT,        /* 118 Call out to external function if provided */
+    OP_CALLOUT_STR,    /* 119 Call out with string argument */
 
-  OP_ALT,            /* 120 Start of alternation */
-  OP_KET,            /* 121 End of group that doesn't have an unbounded repeat */
-  OP_KETRMAX,        /* 122 These two must remain together and in this */
-  OP_KETRMIN,        /* 123 order. They are for groups the repeat for ever. */
-  OP_KETRPOS,        /* 124 Possessive unlimited repeat. */
+    OP_ALT,            /* 120 Start of alternation */
+    OP_KET,            /* 121 End of group that doesn't have an unbounded repeat */
+    OP_KETRMAX,        /* 122 These two must remain together and in this */
+    OP_KETRMIN,        /* 123 order. They are for groups the repeat for ever. */
+    OP_KETRPOS,        /* 124 Possessive unlimited repeat. */
 
-  /* The assertions must come before BRA, CBRA, ONCE, and COND. */
+    /* The assertions must come before BRA, CBRA, ONCE, and COND. */
 
-  OP_REVERSE,        /* 125 Move pointer back - used in lookbehind assertions */
-  OP_ASSERT,         /* 126 Positive lookahead */
-  OP_ASSERT_NOT,     /* 127 Negative lookahead */
-  OP_ASSERTBACK,     /* 128 Positive lookbehind */
-  OP_ASSERTBACK_NOT, /* 129 Negative lookbehind */
-  OP_ASSERT_NA,      /* 130 Positive non-atomic lookahead */
-  OP_ASSERTBACK_NA,  /* 131 Positive non-atomic lookbehind */
+    OP_REVERSE,        /* 125 Move pointer back - used in lookbehind assertions */
+    OP_ASSERT,         /* 126 Positive lookahead */
+    OP_ASSERT_NOT,     /* 127 Negative lookahead */
+    OP_ASSERTBACK,     /* 128 Positive lookbehind */
+    OP_ASSERTBACK_NOT, /* 129 Negative lookbehind */
+    OP_ASSERT_NA,      /* 130 Positive non-atomic lookahead */
+    OP_ASSERTBACK_NA,  /* 131 Positive non-atomic lookbehind */
 
-  /* ONCE, SCRIPT_RUN, BRA, BRAPOS, CBRA, CBRAPOS, and COND must come
-  immediately after the assertions, with ONCE first, as there's a test for >=
-  ONCE for a subpattern that isn't an assertion. The POS versions must
-  immediately follow the non-POS versions in each case. */
+    /* ONCE, SCRIPT_RUN, BRA, BRAPOS, CBRA, CBRAPOS, and COND must come
+    immediately after the assertions, with ONCE first, as there's a test for >=
+    ONCE for a subpattern that isn't an assertion. The POS versions must
+    immediately follow the non-POS versions in each case. */
 
-  OP_ONCE,           /* 132 Atomic group, contains captures */
-  OP_SCRIPT_RUN,     /* 133 Non-capture, but check characters' scripts */
-  OP_BRA,            /* 134 Start of non-capturing bracket */
-  OP_BRAPOS,         /* 135 Ditto, with unlimited, possessive repeat */
-  OP_CBRA,           /* 136 Start of capturing bracket */
-  OP_CBRAPOS,        /* 137 Ditto, with unlimited, possessive repeat */
-  OP_COND,           /* 138 Conditional group */
+    OP_ONCE,           /* 132 Atomic group, contains captures */
+    OP_SCRIPT_RUN,     /* 133 Non-capture, but check characters' scripts */
+    OP_BRA,            /* 134 Start of non-capturing bracket */
+    OP_BRAPOS,         /* 135 Ditto, with unlimited, possessive repeat */
+    OP_CBRA,           /* 136 Start of capturing bracket */
+    OP_CBRAPOS,        /* 137 Ditto, with unlimited, possessive repeat */
+    OP_COND,           /* 138 Conditional group */
 
-  /* These five must follow the previous five, in the same order. There's a
-  check for >= SBRA to distinguish the two sets. */
+    /* These five must follow the previous five, in the same order. There's a
+    check for >= SBRA to distinguish the two sets. */
 
-  OP_SBRA,           /* 139 Start of non-capturing bracket, check empty  */
-  OP_SBRAPOS,        /* 149 Ditto, with unlimited, possessive repeat */
-  OP_SCBRA,          /* 141 Start of capturing bracket, check empty */
-  OP_SCBRAPOS,       /* 142 Ditto, with unlimited, possessive repeat */
-  OP_SCOND,          /* 143 Conditional group, check empty */
+    OP_SBRA,           /* 139 Start of non-capturing bracket, check empty  */
+    OP_SBRAPOS,        /* 149 Ditto, with unlimited, possessive repeat */
+    OP_SCBRA,          /* 141 Start of capturing bracket, check empty */
+    OP_SCBRAPOS,       /* 142 Ditto, with unlimited, possessive repeat */
+    OP_SCOND,          /* 143 Conditional group, check empty */
 
-  /* The next two pairs must (respectively) be kept together. */
+    /* The next two pairs must (respectively) be kept together. */
 
-  OP_CREF,           /* 144 Used to hold a capture number as condition */
-  OP_DNCREF,         /* 145 Used to point to duplicate names as a condition */
-  OP_RREF,           /* 146 Used to hold a recursion number as condition */
-  OP_DNRREF,         /* 147 Used to point to duplicate names as a condition */
-  OP_FALSE,          /* 148 Always false (used by DEFINE and VERSION) */
-  OP_TRUE,           /* 149 Always true (used by VERSION) */
+    OP_CREF,           /* 144 Used to hold a capture number as condition */
+    OP_DNCREF,         /* 145 Used to point to duplicate names as a condition */
+    OP_RREF,           /* 146 Used to hold a recursion number as condition */
+    OP_DNRREF,         /* 147 Used to point to duplicate names as a condition */
+    OP_FALSE,          /* 148 Always false (used by DEFINE and VERSION) */
+    OP_TRUE,           /* 149 Always true (used by VERSION) */
 
-  OP_BRAZERO,        /* 150 These two must remain together and in this */
-  OP_BRAMINZERO,     /* 151 order. */
-  OP_BRAPOSZERO,     /* 152 */
+    OP_BRAZERO,        /* 150 These two must remain together and in this */
+    OP_BRAMINZERO,     /* 151 order. */
+    OP_BRAPOSZERO,     /* 152 */
 
-  /* These are backtracking control verbs */
+    /* These are backtracking control verbs */
 
-  OP_MARK,           /* 153 always has an argument */
-  OP_PRUNE,          /* 154 */
-  OP_PRUNE_ARG,      /* 155 same, but with argument */
-  OP_SKIP,           /* 156 */
-  OP_SKIP_ARG,       /* 157 same, but with argument */
-  OP_THEN,           /* 158 */
-  OP_THEN_ARG,       /* 159 same, but with argument */
-  OP_COMMIT,         /* 160 */
-  OP_COMMIT_ARG,     /* 161 same, but with argument */
+    OP_MARK,           /* 153 always has an argument */
+    OP_PRUNE,          /* 154 */
+    OP_PRUNE_ARG,      /* 155 same, but with argument */
+    OP_SKIP,           /* 156 */
+    OP_SKIP_ARG,       /* 157 same, but with argument */
+    OP_THEN,           /* 158 */
+    OP_THEN_ARG,       /* 159 same, but with argument */
+    OP_COMMIT,         /* 160 */
+    OP_COMMIT_ARG,     /* 161 same, but with argument */
 
-  /* These are forced failure and success verbs. FAIL and ACCEPT do accept an
-  argument, but these cases can be compiled as, for example, (*MARK:X)(*FAIL)
-  without the need for a special opcode. */
+    /* These are forced failure and success verbs. FAIL and ACCEPT do accept an
+    argument, but these cases can be compiled as, for example, (*MARK:X)(*FAIL)
+    without the need for a special opcode. */
 
-  OP_FAIL,           /* 162 */
-  OP_ACCEPT,         /* 163 */
-  OP_ASSERT_ACCEPT,  /* 164 Used inside assertions */
-  OP_CLOSE,          /* 165 Used before OP_ACCEPT to close open captures */
+    OP_FAIL,           /* 162 */
+    OP_ACCEPT,         /* 163 */
+    OP_ASSERT_ACCEPT,  /* 164 Used inside assertions */
+    OP_CLOSE,          /* 165 Used before OP_ACCEPT to close open captures */
 
-  /* This is used to skip a subpattern with a {0} quantifier */
+    /* This is used to skip a subpattern with a {0} quantifier */
 
-  OP_SKIPZERO,       /* 166 */
+    OP_SKIPZERO,       /* 166 */
 
-  /* This is used to identify a DEFINE group during compilation so that it can
-  be checked for having only one branch. It is changed to OP_FALSE before
-  compilation finishes. */
+    /* This is used to identify a DEFINE group during compilation so that it can
+    be checked for having only one branch. It is changed to OP_FALSE before
+    compilation finishes. */
 
-  OP_DEFINE,         /* 167 */
+    OP_DEFINE,         /* 167 */
 
-  /* This is not an opcode, but is used to check that tables indexed by opcode
-  are the correct length, in order to catch updating errors - there have been
-  some in the past. */
+    /* This is not an opcode, but is used to check that tables indexed by opcode
+    are the correct length, in order to catch updating errors - there have been
+    some in the past. */
 
-  OP_TABLE_LENGTH
+    OP_TABLE_LENGTH
 
 };
 
@@ -1752,9 +1754,9 @@ in UTF-8 mode. The code that uses this table must know about such things. */
 /* Structure to hold data for custom memory management. */
 
 typedef struct pcre2_memctl {
-  void *    (*malloc)(size_t, void *);
-  void      (*free)(void *, void *);
-  void      *memory_data;
+    void *    ( *malloc ) ( size_t, void * );
+    void ( *free ) ( void *, void * );
+    void      *memory_data;
 } pcre2_memctl;
 
 /* Structure for building a chain of open capturing subpatterns during
@@ -1763,10 +1765,10 @@ encountered. This is also used to identify subpatterns that contain recursive
 back references to themselves, so that they can be made atomic. */
 
 typedef struct open_capitem {
-  struct open_capitem *next;    /* Chain link */
-  uint16_t number;              /* Capture number */
-  uint16_t flag;                /* Set TRUE if recursive back ref */
-  uint16_t assert_depth;        /* Assertion depth when opened */
+    struct open_capitem *next;    /* Chain link */
+    uint16_t number;              /* Capture number */
+    uint16_t flag;                /* Set TRUE if recursive back ref */
+    uint16_t assert_depth;        /* Assertion depth when opened */
 } open_capitem;
 
 /* Layout of the UCP type table that translates property names into types and
@@ -1775,21 +1777,21 @@ relocations in shared libraries, it now has an offset into a single string
 instead. */
 
 typedef struct {
-  uint16_t name_offset;
-  uint16_t type;
-  uint16_t value;
+    uint16_t name_offset;
+    uint16_t type;
+    uint16_t value;
 } ucp_type_table;
 
 /* Unicode character database (UCD) record format */
 
 typedef struct {
-  uint8_t script;     /* ucp_Arabic, etc. */
-  uint8_t chartype;   /* ucp_Cc, etc. (general categories) */
-  uint8_t gbprop;     /* ucp_gbControl, etc. (grapheme break property) */
-  uint8_t caseset;    /* offset to multichar other cases or zero */
-  int32_t other_case; /* offset to other case, or zero if none */
-  int16_t scriptx;    /* script extension value */
-  int16_t dummy;      /* spare - to round to multiple of 4 bytes */
+    uint8_t script;     /* ucp_Arabic, etc. */
+    uint8_t chartype;   /* ucp_Cc, etc. (general categories) */
+    uint8_t gbprop;     /* ucp_gbControl, etc. (grapheme break property) */
+    uint8_t caseset;    /* offset to multichar other cases or zero */
+    int32_t other_case; /* offset to other case, or zero if none */
+    int16_t scriptx;    /* script extension value */
+    int16_t dummy;      /* spare - to round to multiple of 4 bytes */
 } ucd_record;
 
 /* UCD access macros */
@@ -1817,10 +1819,10 @@ typedef struct {
 /* Header for serialized pcre2 codes. */
 
 typedef struct pcre2_serialized_data {
-  uint32_t magic;
-  uint32_t version;
-  uint32_t config;
-  int32_t  number_of_codes;
+    uint32_t magic;
+    uint32_t version;
+    uint32_t config;
+    int32_t  number_of_codes;
 } pcre2_serialized_data;
 
 
@@ -1850,11 +1852,11 @@ libraries can be simultaneously linked to a single application. However, UTF-8
 tables are needed only when compiling the 8-bit library. */
 
 #if PCRE2_CODE_UNIT_WIDTH == 8
-extern const int              PRIV(utf8_table1)[];
-extern const int              PRIV(utf8_table1_size);
-extern const int              PRIV(utf8_table2)[];
-extern const int              PRIV(utf8_table3)[];
-extern const uint8_t          PRIV(utf8_table4)[];
+extern const int              PRIV ( utf8_table1 ) [];
+extern const int              PRIV ( utf8_table1_size );
+extern const int              PRIV ( utf8_table2 ) [];
+extern const int              PRIV ( utf8_table3 ) [];
+extern const uint8_t          PRIV ( utf8_table4 ) [];
 #endif
 
 #define _pcre2_OP_lengths              PCRE2_SUFFIX(_pcre2_OP_lengths_)
@@ -1883,33 +1885,33 @@ extern const uint8_t          PRIV(utf8_table4)[];
 #define _pcre2_utt_names               PCRE2_SUFFIX(_pcre2_utt_names_)
 #define _pcre2_utt_size                PCRE2_SUFFIX(_pcre2_utt_size_)
 
-extern const uint8_t                   PRIV(OP_lengths)[];
-extern const uint32_t                  PRIV(callout_end_delims)[];
-extern const uint32_t                  PRIV(callout_start_delims)[];
-extern const pcre2_compile_context     PRIV(default_compile_context);
-extern const pcre2_convert_context     PRIV(default_convert_context);
-extern const pcre2_match_context       PRIV(default_match_context);
-extern const uint8_t                   PRIV(default_tables)[];
-extern const uint32_t                  PRIV(hspace_list)[];
-extern const uint32_t                  PRIV(vspace_list)[];
-extern const uint32_t                  PRIV(ucd_caseless_sets)[];
-extern const uint32_t                  PRIV(ucd_digit_sets)[];
-extern const uint8_t                   PRIV(ucd_script_sets)[];
-extern const ucd_record                PRIV(ucd_records)[];
+extern const uint8_t                   PRIV ( OP_lengths ) [];
+extern const uint32_t                  PRIV ( callout_end_delims ) [];
+extern const uint32_t                  PRIV ( callout_start_delims ) [];
+extern const pcre2_compile_context     PRIV ( default_compile_context );
+extern const pcre2_convert_context     PRIV ( default_convert_context );
+extern const pcre2_match_context       PRIV ( default_match_context );
+extern const uint8_t                   PRIV ( default_tables ) [];
+extern const uint32_t                  PRIV ( hspace_list ) [];
+extern const uint32_t                  PRIV ( vspace_list ) [];
+extern const uint32_t                  PRIV ( ucd_caseless_sets ) [];
+extern const uint32_t                  PRIV ( ucd_digit_sets ) [];
+extern const uint8_t                   PRIV ( ucd_script_sets ) [];
+extern const ucd_record                PRIV ( ucd_records ) [];
 #if PCRE2_CODE_UNIT_WIDTH == 32
-extern const ucd_record                PRIV(dummy_ucd_record)[];
+extern const ucd_record                PRIV ( dummy_ucd_record ) [];
 #endif
-extern const uint16_t                  PRIV(ucd_stage1)[];
-extern const uint16_t                  PRIV(ucd_stage2)[];
-extern const uint32_t                  PRIV(ucp_gbtable)[];
-extern const uint32_t                  PRIV(ucp_gentype)[];
+extern const uint16_t                  PRIV ( ucd_stage1 ) [];
+extern const uint16_t                  PRIV ( ucd_stage2 ) [];
+extern const uint32_t                  PRIV ( ucp_gbtable ) [];
+extern const uint32_t                  PRIV ( ucp_gentype ) [];
 #ifdef SUPPORT_JIT
-extern const int                       PRIV(ucp_typerange)[];
+extern const int                       PRIV ( ucp_typerange ) [];
 #endif
-extern const char                     *PRIV(unicode_version);
-extern const ucp_type_table            PRIV(utt)[];
-extern const char                      PRIV(utt_names)[];
-extern const size_t                    PRIV(utt_size);
+extern const char                     *PRIV ( unicode_version );
+extern const ucp_type_table            PRIV ( utt ) [];
+extern const char                      PRIV ( utt_names ) [];
+extern const size_t                    PRIV ( utt_size );
 
 /* Mode-dependent macros and hidden and private structures are defined in a
 separate file so that pcre2test can include them at all supported widths. When
@@ -1954,39 +1956,39 @@ is available. */
 #define _pcre2_was_newline           PCRE2_SUFFIX(_pcre2_was_newline_)
 #define _pcre2_xclass                PCRE2_SUFFIX(_pcre2_xclass_)
 
-extern int          _pcre2_auto_possessify(PCRE2_UCHAR *, BOOL,
-                      const compile_block *);
-extern int          _pcre2_check_escape(PCRE2_SPTR *, PCRE2_SPTR, uint32_t *,
-                      int *, uint32_t, uint32_t, BOOL, compile_block *);
-extern PCRE2_SPTR   _pcre2_extuni(uint32_t, PCRE2_SPTR, PCRE2_SPTR, PCRE2_SPTR,
-                      BOOL, int *);
-extern PCRE2_SPTR   _pcre2_find_bracket(PCRE2_SPTR, BOOL, int);
-extern BOOL         _pcre2_is_newline(PCRE2_SPTR, uint32_t, PCRE2_SPTR,
-                      uint32_t *, BOOL);
-extern void         _pcre2_jit_free_rodata(void *, void *);
-extern void         _pcre2_jit_free(void *, pcre2_memctl *);
-extern size_t       _pcre2_jit_get_size(void *);
-const char *        _pcre2_jit_get_target(void);
-extern void *       _pcre2_memctl_malloc(size_t, pcre2_memctl *);
-extern unsigned int _pcre2_ord2utf(uint32_t, PCRE2_UCHAR *);
-extern BOOL         _pcre2_script_run(PCRE2_SPTR, PCRE2_SPTR, BOOL);
-extern int          _pcre2_strcmp(PCRE2_SPTR, PCRE2_SPTR);
-extern int          _pcre2_strcmp_c8(PCRE2_SPTR, const char *);
-extern PCRE2_SIZE   _pcre2_strcpy_c8(PCRE2_UCHAR *, const char *);
-extern PCRE2_SIZE   _pcre2_strlen(PCRE2_SPTR);
-extern int          _pcre2_strncmp(PCRE2_SPTR, PCRE2_SPTR, size_t);
-extern int          _pcre2_strncmp_c8(PCRE2_SPTR, const char *, size_t);
-extern int          _pcre2_study(pcre2_real_code *);
-extern int          _pcre2_valid_utf(PCRE2_SPTR, PCRE2_SIZE, PCRE2_SIZE *);
-extern BOOL         _pcre2_was_newline(PCRE2_SPTR, uint32_t, PCRE2_SPTR,
-                      uint32_t *, BOOL);
-extern BOOL         _pcre2_xclass(uint32_t, PCRE2_SPTR, BOOL);
+extern int          _pcre2_auto_possessify ( PCRE2_UCHAR *, BOOL,
+        const compile_block * );
+extern int          _pcre2_check_escape ( PCRE2_SPTR *, PCRE2_SPTR, uint32_t *,
+        int *, uint32_t, uint32_t, BOOL, compile_block * );
+extern PCRE2_SPTR   _pcre2_extuni ( uint32_t, PCRE2_SPTR, PCRE2_SPTR, PCRE2_SPTR,
+                                    BOOL, int * );
+extern PCRE2_SPTR   _pcre2_find_bracket ( PCRE2_SPTR, BOOL, int );
+extern BOOL         _pcre2_is_newline ( PCRE2_SPTR, uint32_t, PCRE2_SPTR,
+                                        uint32_t *, BOOL );
+extern void         _pcre2_jit_free_rodata ( void *, void * );
+extern void         _pcre2_jit_free ( void *, pcre2_memctl * );
+extern size_t       _pcre2_jit_get_size ( void * );
+const char *        _pcre2_jit_get_target ( void );
+extern void *       _pcre2_memctl_malloc ( size_t, pcre2_memctl * );
+extern unsigned int _pcre2_ord2utf ( uint32_t, PCRE2_UCHAR * );
+extern BOOL         _pcre2_script_run ( PCRE2_SPTR, PCRE2_SPTR, BOOL );
+extern int          _pcre2_strcmp ( PCRE2_SPTR, PCRE2_SPTR );
+extern int          _pcre2_strcmp_c8 ( PCRE2_SPTR, const char * );
+extern PCRE2_SIZE   _pcre2_strcpy_c8 ( PCRE2_UCHAR *, const char * );
+extern PCRE2_SIZE   _pcre2_strlen ( PCRE2_SPTR );
+extern int          _pcre2_strncmp ( PCRE2_SPTR, PCRE2_SPTR, size_t );
+extern int          _pcre2_strncmp_c8 ( PCRE2_SPTR, const char *, size_t );
+extern int          _pcre2_study ( pcre2_real_code * );
+extern int          _pcre2_valid_utf ( PCRE2_SPTR, PCRE2_SIZE, PCRE2_SIZE * );
+extern BOOL         _pcre2_was_newline ( PCRE2_SPTR, uint32_t, PCRE2_SPTR,
+        uint32_t *, BOOL );
+extern BOOL         _pcre2_xclass ( uint32_t, PCRE2_SPTR, BOOL );
 
 /* This function is needed only when memmove() is not available. */
 
 #if !defined(VPCOMPAT) && !defined(HAVE_MEMMOVE)
 #define _pcre2_memmove               PCRE2_SUFFIX(_pcre2_memmove)
-extern void *       _pcre2_memmove(void *, const void *, size_t);
+extern void *       _pcre2_memmove ( void *, const void *, size_t );
 #endif
 
 #endif  /* PCRE2_CODE_UNIT_WIDTH */

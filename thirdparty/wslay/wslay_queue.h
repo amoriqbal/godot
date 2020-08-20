@@ -32,22 +32,22 @@
 #include <wslay/wslay.h>
 
 struct wslay_queue_cell {
-  void *data;
-  struct wslay_queue_cell *next;
+    void *data;
+    struct wslay_queue_cell *next;
 };
 
 struct wslay_queue {
-  struct wslay_queue_cell *top;
-  struct wslay_queue_cell *tail;
+    struct wslay_queue_cell *top;
+    struct wslay_queue_cell *tail;
 };
 
-struct wslay_queue* wslay_queue_new(void);
-void wslay_queue_free(struct wslay_queue *queue);
-int wslay_queue_push(struct wslay_queue *queue, void *data);
-int wslay_queue_push_front(struct wslay_queue *queue, void *data);
-void wslay_queue_pop(struct wslay_queue *queue);
-void* wslay_queue_top(struct wslay_queue *queue);
-void* wslay_queue_tail(struct wslay_queue *queue);
-int wslay_queue_empty(struct wslay_queue *queue);
+struct wslay_queue* wslay_queue_new ( void );
+void wslay_queue_free ( struct wslay_queue *queue );
+int wslay_queue_push ( struct wslay_queue *queue, void *data );
+int wslay_queue_push_front ( struct wslay_queue *queue, void *data );
+void wslay_queue_pop ( struct wslay_queue *queue );
+void* wslay_queue_top ( struct wslay_queue *queue );
+void* wslay_queue_tail ( struct wslay_queue *queue );
+int wslay_queue_empty ( struct wslay_queue *queue );
 
 #endif /* WSLAY_QUEUE_H */

@@ -26,21 +26,18 @@
 extern "C" {
 #endif
 
-typedef struct
-{
+typedef struct {
     int ithread;
     void *ptr1;
     void *ptr2;
 } DECODETHREAD_DATA;
 
-typedef struct
-{
+typedef struct {
     MACROBLOCKD  mbd;
 } MB_ROW_DEC;
 
 
-typedef struct
-{
+typedef struct {
     int enabled;
     unsigned int count;
     const unsigned char *ptrs[MAX_PARTITIONS];
@@ -49,8 +46,7 @@ typedef struct
 
 #define MAX_FB_MT_DEC 32
 
-struct frame_buffers
-{
+struct frame_buffers {
     /*
      * this struct will be populated with frame buffer management
      * info in future commits. */
@@ -63,13 +59,12 @@ struct frame_buffers
 
 };
 
-typedef struct VP8D_COMP
-{
-    DECLARE_ALIGNED(16, MACROBLOCKD, mb);
+typedef struct VP8D_COMP {
+    DECLARE_ALIGNED ( 16, MACROBLOCKD, mb );
 
     YV12_BUFFER_CONFIG *dec_fb_ref[NUM_YV12_BUFFERS];
 
-    DECLARE_ALIGNED(16, VP8_COMMON, common);
+    DECLARE_ALIGNED ( 16, VP8_COMMON, common );
 
     /* the last partition will be used for the modes/mvs */
     vp8_reader mbc[MAX_PARTITIONS];
@@ -132,10 +127,10 @@ typedef struct VP8D_COMP
     void *decrypt_state;
 } VP8D_COMP;
 
-int vp8_decode_frame(VP8D_COMP *cpi);
+int vp8_decode_frame ( VP8D_COMP *cpi );
 
-int vp8_create_decoder_instances(struct frame_buffers *fb, VP8D_CONFIG *oxcf);
-int vp8_remove_decoder_instances(struct frame_buffers *fb);
+int vp8_create_decoder_instances ( struct frame_buffers *fb, VP8D_CONFIG *oxcf );
+int vp8_remove_decoder_instances ( struct frame_buffers *fb );
 
 #if CONFIG_DEBUG
 #define CHECK_MEM_ERROR(lval,expr) do {\

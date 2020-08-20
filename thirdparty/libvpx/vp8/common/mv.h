@@ -17,14 +17,12 @@
 extern "C" {
 #endif
 
-typedef struct
-{
+typedef struct {
     short row;
     short col;
 } MV;
 
-typedef union int_mv
-{
+typedef union int_mv {
     uint32_t  as_int;
     MV        as_mv;
 } int_mv;        /* facilitates faster equality tests and copies */

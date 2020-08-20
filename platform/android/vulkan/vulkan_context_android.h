@@ -35,14 +35,15 @@
 
 struct ANativeWindow;
 
-class VulkanContextAndroid : public VulkanContext {
-	virtual const char *_get_platform_surface_extension() const;
+class VulkanContextAndroid : public VulkanContext
+{
+    virtual const char *_get_platform_surface_extension() const;
 
 public:
-	int window_create(ANativeWindow *p_window, int p_width, int p_height);
+    int window_create ( ANativeWindow *p_window, int p_width, int p_height );
 
-	VulkanContextAndroid();
-	~VulkanContextAndroid();
+    VulkanContextAndroid();
+    ~VulkanContextAndroid();
 };
 
 #endif // VULKAN_CONTEXT_ANDROID_H

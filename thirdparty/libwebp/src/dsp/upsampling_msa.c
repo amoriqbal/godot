@@ -240,296 +240,311 @@
   STORE2_##N(out0, out1, dst);                         \
 } while (0)
 
-static WEBP_INLINE int Clip8(int v) {
-  return v < 0 ? 0 : v > 255 ? 255 : v;
+static WEBP_INLINE int Clip8 ( int v )
+{
+    return v < 0 ? 0 : v > 255 ? 255 : v;
 }
 
-static void YuvToRgb(int y, int u, int v, uint8_t* const rgb) {
-  const int y1 = MultHi(y, 19077);
-  const int r1 = y1 + MultHi(v, 26149) - 14234;
-  const int g1 = y1 - MultHi(u, 6419) - MultHi(v, 13320) + 8708;
-  const int b1 = y1 + MultHi(u, 33050) - 17685;
-  rgb[0] = Clip8(r1 >> 6);
-  rgb[1] = Clip8(g1 >> 6);
-  rgb[2] = Clip8(b1 >> 6);
+static void YuvToRgb ( int y, int u, int v, uint8_t* const rgb )
+{
+    const int y1 = MultHi ( y, 19077 );
+    const int r1 = y1 + MultHi ( v, 26149 ) - 14234;
+    const int g1 = y1 - MultHi ( u, 6419 ) - MultHi ( v, 13320 ) + 8708;
+    const int b1 = y1 + MultHi ( u, 33050 ) - 17685;
+    rgb[0] = Clip8 ( r1 >> 6 );
+    rgb[1] = Clip8 ( g1 >> 6 );
+    rgb[2] = Clip8 ( b1 >> 6 );
 }
 
-static void YuvToBgr(int y, int u, int v, uint8_t* const bgr) {
-  const int y1 = MultHi(y, 19077);
-  const int r1 = y1 + MultHi(v, 26149) - 14234;
-  const int g1 = y1 - MultHi(u, 6419) - MultHi(v, 13320) + 8708;
-  const int b1 = y1 + MultHi(u, 33050) - 17685;
-  bgr[0] = Clip8(b1 >> 6);
-  bgr[1] = Clip8(g1 >> 6);
-  bgr[2] = Clip8(r1 >> 6);
+static void YuvToBgr ( int y, int u, int v, uint8_t* const bgr )
+{
+    const int y1 = MultHi ( y, 19077 );
+    const int r1 = y1 + MultHi ( v, 26149 ) - 14234;
+    const int g1 = y1 - MultHi ( u, 6419 ) - MultHi ( v, 13320 ) + 8708;
+    const int b1 = y1 + MultHi ( u, 33050 ) - 17685;
+    bgr[0] = Clip8 ( b1 >> 6 );
+    bgr[1] = Clip8 ( g1 >> 6 );
+    bgr[2] = Clip8 ( r1 >> 6 );
 }
 
 #if !defined(WEBP_REDUCE_CSP)
-static void YuvToRgb565(int y, int u, int v, uint8_t* const rgb) {
-  const int y1 = MultHi(y, 19077);
-  const int r1 = y1 + MultHi(v, 26149) - 14234;
-  const int g1 = y1 - MultHi(u, 6419) - MultHi(v, 13320) + 8708;
-  const int b1 = y1 + MultHi(u, 33050) - 17685;
-  const int r = Clip8(r1 >> 6);
-  const int g = Clip8(g1 >> 6);
-  const int b = Clip8(b1 >> 6);
-  const int rg = (r & 0xf8) | (g >> 5);
-  const int gb = ((g << 3) & 0xe0) | (b >> 3);
+static void YuvToRgb565 ( int y, int u, int v, uint8_t* const rgb )
+{
+    const int y1 = MultHi ( y, 19077 );
+    const int r1 = y1 + MultHi ( v, 26149 ) - 14234;
+    const int g1 = y1 - MultHi ( u, 6419 ) - MultHi ( v, 13320 ) + 8708;
+    const int b1 = y1 + MultHi ( u, 33050 ) - 17685;
+    const int r = Clip8 ( r1 >> 6 );
+    const int g = Clip8 ( g1 >> 6 );
+    const int b = Clip8 ( b1 >> 6 );
+    const int rg = ( r & 0xf8 ) | ( g >> 5 );
+    const int gb = ( ( g << 3 ) & 0xe0 ) | ( b >> 3 );
 #if (WEBP_SWAP_16BIT_CSP == 1)
-  rgb[0] = gb;
-  rgb[1] = rg;
+    rgb[0] = gb;
+    rgb[1] = rg;
 #else
-  rgb[0] = rg;
-  rgb[1] = gb;
+    rgb[0] = rg;
+    rgb[1] = gb;
 #endif
 }
 
-static void YuvToRgba4444(int y, int u, int v, uint8_t* const argb) {
-  const int y1 = MultHi(y, 19077);
-  const int r1 = y1 + MultHi(v, 26149) - 14234;
-  const int g1 = y1 - MultHi(u, 6419) - MultHi(v, 13320) + 8708;
-  const int b1 = y1 + MultHi(u, 33050) - 17685;
-  const int r = Clip8(r1 >> 6);
-  const int g = Clip8(g1 >> 6);
-  const int b = Clip8(b1 >> 6);
-  const int rg = (r & 0xf0) | (g >> 4);
-  const int ba = (b & 0xf0) | 0x0f;     // overwrite the lower 4 bits
+static void YuvToRgba4444 ( int y, int u, int v, uint8_t* const argb )
+{
+    const int y1 = MultHi ( y, 19077 );
+    const int r1 = y1 + MultHi ( v, 26149 ) - 14234;
+    const int g1 = y1 - MultHi ( u, 6419 ) - MultHi ( v, 13320 ) + 8708;
+    const int b1 = y1 + MultHi ( u, 33050 ) - 17685;
+    const int r = Clip8 ( r1 >> 6 );
+    const int g = Clip8 ( g1 >> 6 );
+    const int b = Clip8 ( b1 >> 6 );
+    const int rg = ( r & 0xf0 ) | ( g >> 4 );
+    const int ba = ( b & 0xf0 ) | 0x0f;   // overwrite the lower 4 bits
 #if (WEBP_SWAP_16BIT_CSP == 1)
-  argb[0] = ba;
-  argb[1] = rg;
+    argb[0] = ba;
+    argb[1] = rg;
 #else
-  argb[0] = rg;
-  argb[1] = ba;
+    argb[0] = rg;
+    argb[1] = ba;
 #endif
 }
 
-static void YuvToArgb(uint8_t y, uint8_t u, uint8_t v, uint8_t* const argb) {
-  argb[0] = 0xff;
-  YuvToRgb(y, u, v, argb + 1);
+static void YuvToArgb ( uint8_t y, uint8_t u, uint8_t v, uint8_t* const argb )
+{
+    argb[0] = 0xff;
+    YuvToRgb ( y, u, v, argb + 1 );
 }
 #endif  // WEBP_REDUCE_CSP
 
-static void YuvToBgra(uint8_t y, uint8_t u, uint8_t v, uint8_t* const bgra) {
-  YuvToBgr(y, u, v, bgra);
-  bgra[3] = 0xff;
+static void YuvToBgra ( uint8_t y, uint8_t u, uint8_t v, uint8_t* const bgra )
+{
+    YuvToBgr ( y, u, v, bgra );
+    bgra[3] = 0xff;
 }
 
-static void YuvToRgba(uint8_t y, uint8_t u, uint8_t v, uint8_t* const rgba) {
-  YuvToRgb(y, u, v, rgba);
-  rgba[3] = 0xff;
+static void YuvToRgba ( uint8_t y, uint8_t u, uint8_t v, uint8_t* const rgba )
+{
+    YuvToRgb ( y, u, v, rgba );
+    rgba[3] = 0xff;
 }
 
 #if !defined(WEBP_REDUCE_CSP)
-static void YuvToRgbLine(const uint8_t* y, const uint8_t* u,
-                         const uint8_t* v, uint8_t* dst, int length) {
-  v16u8 R, G, B;
-  while (length >= 16) {
-    CALC_RGB16(y, u, v, R, G, B);
-    STORE16_3(R, G, B, dst);
-    y      += 16;
-    u      += 16;
-    v      += 16;
-    dst    += 16 * 3;
-    length -= 16;
-  }
-  if (length > 8) {
-    uint8_t temp[3 * 16] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
-    CALC_RGB16(temp, u, v, R, G, B);
-    STORE16_3(R, G, B, temp);
-    memcpy(dst, temp, length * 3 * sizeof(*dst));
-  } else if (length > 0) {
-    uint8_t temp[3 * 8] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
-    CALC_RGB8(temp, u, v, R, G, B);
-    STORE8_3(R, G, B, temp);
-    memcpy(dst, temp, length * 3 * sizeof(*dst));
-  }
+static void YuvToRgbLine ( const uint8_t* y, const uint8_t* u,
+                           const uint8_t* v, uint8_t* dst, int length )
+{
+    v16u8 R, G, B;
+    while ( length >= 16 ) {
+        CALC_RGB16 ( y, u, v, R, G, B );
+        STORE16_3 ( R, G, B, dst );
+        y      += 16;
+        u      += 16;
+        v      += 16;
+        dst    += 16 * 3;
+        length -= 16;
+    }
+    if ( length > 8 ) {
+        uint8_t temp[3 * 16] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
+        CALC_RGB16 ( temp, u, v, R, G, B );
+        STORE16_3 ( R, G, B, temp );
+        memcpy ( dst, temp, length * 3 * sizeof ( *dst ) );
+    } else if ( length > 0 ) {
+        uint8_t temp[3 * 8] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
+        CALC_RGB8 ( temp, u, v, R, G, B );
+        STORE8_3 ( R, G, B, temp );
+        memcpy ( dst, temp, length * 3 * sizeof ( *dst ) );
+    }
 }
 
-static void YuvToBgrLine(const uint8_t* y, const uint8_t* u,
-                         const uint8_t* v, uint8_t* dst, int length) {
-  v16u8 R, G, B;
-  while (length >= 16) {
-    CALC_RGB16(y, u, v, R, G, B);
-    STORE16_3(B, G, R, dst);
-    y      += 16;
-    u      += 16;
-    v      += 16;
-    dst    += 16 * 3;
-    length -= 16;
-  }
-  if (length > 8) {
-    uint8_t temp[3 * 16] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
-    CALC_RGB16(temp, u, v, R, G, B);
-    STORE16_3(B, G, R, temp);
-    memcpy(dst, temp, length * 3 * sizeof(*dst));
-  } else if (length > 0) {
-    uint8_t temp[3 * 8] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
-    CALC_RGB8(temp, u, v, R, G, B);
-    STORE8_3(B, G, R, temp);
-    memcpy(dst, temp, length * 3 * sizeof(*dst));
-  }
+static void YuvToBgrLine ( const uint8_t* y, const uint8_t* u,
+                           const uint8_t* v, uint8_t* dst, int length )
+{
+    v16u8 R, G, B;
+    while ( length >= 16 ) {
+        CALC_RGB16 ( y, u, v, R, G, B );
+        STORE16_3 ( B, G, R, dst );
+        y      += 16;
+        u      += 16;
+        v      += 16;
+        dst    += 16 * 3;
+        length -= 16;
+    }
+    if ( length > 8 ) {
+        uint8_t temp[3 * 16] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
+        CALC_RGB16 ( temp, u, v, R, G, B );
+        STORE16_3 ( B, G, R, temp );
+        memcpy ( dst, temp, length * 3 * sizeof ( *dst ) );
+    } else if ( length > 0 ) {
+        uint8_t temp[3 * 8] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
+        CALC_RGB8 ( temp, u, v, R, G, B );
+        STORE8_3 ( B, G, R, temp );
+        memcpy ( dst, temp, length * 3 * sizeof ( *dst ) );
+    }
 }
 #endif  // WEBP_REDUCE_CSP
 
-static void YuvToRgbaLine(const uint8_t* y, const uint8_t* u,
-                          const uint8_t* v, uint8_t* dst, int length) {
-  v16u8 R, G, B;
-  const v16u8 A = (v16u8)__msa_ldi_b(ALPHAVAL);
-  while (length >= 16) {
-    CALC_RGB16(y, u, v, R, G, B);
-    STORE16_4(R, G, B, A, dst);
-    y      += 16;
-    u      += 16;
-    v      += 16;
-    dst    += 16 * 4;
-    length -= 16;
-  }
-  if (length > 8) {
-    uint8_t temp[4 * 16] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
-    CALC_RGB16(&temp[0], u, v, R, G, B);
-    STORE16_4(R, G, B, A, temp);
-    memcpy(dst, temp, length * 4 * sizeof(*dst));
-  } else if (length > 0) {
-    uint8_t temp[4 * 8] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
-    CALC_RGB8(temp, u, v, R, G, B);
-    STORE8_4(R, G, B, A, temp);
-    memcpy(dst, temp, length * 4 * sizeof(*dst));
-  }
+static void YuvToRgbaLine ( const uint8_t* y, const uint8_t* u,
+                            const uint8_t* v, uint8_t* dst, int length )
+{
+    v16u8 R, G, B;
+    const v16u8 A = ( v16u8 ) __msa_ldi_b ( ALPHAVAL );
+    while ( length >= 16 ) {
+        CALC_RGB16 ( y, u, v, R, G, B );
+        STORE16_4 ( R, G, B, A, dst );
+        y      += 16;
+        u      += 16;
+        v      += 16;
+        dst    += 16 * 4;
+        length -= 16;
+    }
+    if ( length > 8 ) {
+        uint8_t temp[4 * 16] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
+        CALC_RGB16 ( &temp[0], u, v, R, G, B );
+        STORE16_4 ( R, G, B, A, temp );
+        memcpy ( dst, temp, length * 4 * sizeof ( *dst ) );
+    } else if ( length > 0 ) {
+        uint8_t temp[4 * 8] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
+        CALC_RGB8 ( temp, u, v, R, G, B );
+        STORE8_4 ( R, G, B, A, temp );
+        memcpy ( dst, temp, length * 4 * sizeof ( *dst ) );
+    }
 }
 
-static void YuvToBgraLine(const uint8_t* y, const uint8_t* u,
-                          const uint8_t* v, uint8_t* dst, int length) {
-  v16u8 R, G, B;
-  const v16u8 A = (v16u8)__msa_ldi_b(ALPHAVAL);
-  while (length >= 16) {
-    CALC_RGB16(y, u, v, R, G, B);
-    STORE16_4(B, G, R, A, dst);
-    y      += 16;
-    u      += 16;
-    v      += 16;
-    dst    += 16 * 4;
-    length -= 16;
-  }
-  if (length > 8) {
-    uint8_t temp[4 * 16] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
-    CALC_RGB16(temp, u, v, R, G, B);
-    STORE16_4(B, G, R, A, temp);
-    memcpy(dst, temp, length * 4 * sizeof(*dst));
-  } else if (length > 0) {
-    uint8_t temp[4 * 8] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
-    CALC_RGB8(temp, u, v, R, G, B);
-    STORE8_4(B, G, R, A, temp);
-    memcpy(dst, temp, length * 4 * sizeof(*dst));
-  }
+static void YuvToBgraLine ( const uint8_t* y, const uint8_t* u,
+                            const uint8_t* v, uint8_t* dst, int length )
+{
+    v16u8 R, G, B;
+    const v16u8 A = ( v16u8 ) __msa_ldi_b ( ALPHAVAL );
+    while ( length >= 16 ) {
+        CALC_RGB16 ( y, u, v, R, G, B );
+        STORE16_4 ( B, G, R, A, dst );
+        y      += 16;
+        u      += 16;
+        v      += 16;
+        dst    += 16 * 4;
+        length -= 16;
+    }
+    if ( length > 8 ) {
+        uint8_t temp[4 * 16] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
+        CALC_RGB16 ( temp, u, v, R, G, B );
+        STORE16_4 ( B, G, R, A, temp );
+        memcpy ( dst, temp, length * 4 * sizeof ( *dst ) );
+    } else if ( length > 0 ) {
+        uint8_t temp[4 * 8] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
+        CALC_RGB8 ( temp, u, v, R, G, B );
+        STORE8_4 ( B, G, R, A, temp );
+        memcpy ( dst, temp, length * 4 * sizeof ( *dst ) );
+    }
 }
 
 #if !defined(WEBP_REDUCE_CSP)
-static void YuvToArgbLine(const uint8_t* y, const uint8_t* u,
-                          const uint8_t* v, uint8_t* dst, int length) {
-  v16u8 R, G, B;
-  const v16u8 A = (v16u8)__msa_ldi_b(ALPHAVAL);
-  while (length >= 16) {
-    CALC_RGB16(y, u, v, R, G, B);
-    STORE16_4(A, R, G, B, dst);
-    y      += 16;
-    u      += 16;
-    v      += 16;
-    dst    += 16 * 4;
-    length -= 16;
-  }
-  if (length > 8) {
-    uint8_t temp[4 * 16] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
-    CALC_RGB16(temp, u, v, R, G, B);
-    STORE16_4(A, R, G, B, temp);
-    memcpy(dst, temp, length * 4 * sizeof(*dst));
-  } else if (length > 0) {
-    uint8_t temp[4 * 8] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
-    CALC_RGB8(temp, u, v, R, G, B);
-    STORE8_4(A, R, G, B, temp);
-    memcpy(dst, temp, length * 4 * sizeof(*dst));
-  }
+static void YuvToArgbLine ( const uint8_t* y, const uint8_t* u,
+                            const uint8_t* v, uint8_t* dst, int length )
+{
+    v16u8 R, G, B;
+    const v16u8 A = ( v16u8 ) __msa_ldi_b ( ALPHAVAL );
+    while ( length >= 16 ) {
+        CALC_RGB16 ( y, u, v, R, G, B );
+        STORE16_4 ( A, R, G, B, dst );
+        y      += 16;
+        u      += 16;
+        v      += 16;
+        dst    += 16 * 4;
+        length -= 16;
+    }
+    if ( length > 8 ) {
+        uint8_t temp[4 * 16] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
+        CALC_RGB16 ( temp, u, v, R, G, B );
+        STORE16_4 ( A, R, G, B, temp );
+        memcpy ( dst, temp, length * 4 * sizeof ( *dst ) );
+    } else if ( length > 0 ) {
+        uint8_t temp[4 * 8] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
+        CALC_RGB8 ( temp, u, v, R, G, B );
+        STORE8_4 ( A, R, G, B, temp );
+        memcpy ( dst, temp, length * 4 * sizeof ( *dst ) );
+    }
 }
 
-static void YuvToRgba4444Line(const uint8_t* y, const uint8_t* u,
-                              const uint8_t* v, uint8_t* dst, int length) {
-  v16u8 R, G, B, RG, BA, tmp0, tmp1;
-  while (length >= 16) {
+static void YuvToRgba4444Line ( const uint8_t* y, const uint8_t* u,
+                                const uint8_t* v, uint8_t* dst, int length )
+{
+    v16u8 R, G, B, RG, BA, tmp0, tmp1;
+    while ( length >= 16 ) {
 #if (WEBP_SWAP_16BIT_CSP == 1)
-    CALC_RGBA4444(y, u, v, BA, RG, 16, dst);
+        CALC_RGBA4444 ( y, u, v, BA, RG, 16, dst );
 #else
-    CALC_RGBA4444(y, u, v, RG, BA, 16, dst);
+        CALC_RGBA4444 ( y, u, v, RG, BA, 16, dst );
 #endif
-    y      += 16;
-    u      += 16;
-    v      += 16;
-    dst    += 16 * 2;
-    length -= 16;
-  }
-  if (length > 8) {
-    uint8_t temp[2 * 16] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
+        y      += 16;
+        u      += 16;
+        v      += 16;
+        dst    += 16 * 2;
+        length -= 16;
+    }
+    if ( length > 8 ) {
+        uint8_t temp[2 * 16] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
 #if (WEBP_SWAP_16BIT_CSP == 1)
-    CALC_RGBA4444(temp, u, v, BA, RG, 16, temp);
+        CALC_RGBA4444 ( temp, u, v, BA, RG, 16, temp );
 #else
-    CALC_RGBA4444(temp, u, v, RG, BA, 16, temp);
+        CALC_RGBA4444 ( temp, u, v, RG, BA, 16, temp );
 #endif
-    memcpy(dst, temp, length * 2 * sizeof(*dst));
-  } else if (length > 0) {
-    uint8_t temp[2 * 8] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
+        memcpy ( dst, temp, length * 2 * sizeof ( *dst ) );
+    } else if ( length > 0 ) {
+        uint8_t temp[2 * 8] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
 #if (WEBP_SWAP_16BIT_CSP == 1)
-    CALC_RGBA4444(temp, u, v, BA, RG, 8, temp);
+        CALC_RGBA4444 ( temp, u, v, BA, RG, 8, temp );
 #else
-    CALC_RGBA4444(temp, u, v, RG, BA, 8, temp);
+        CALC_RGBA4444 ( temp, u, v, RG, BA, 8, temp );
 #endif
-    memcpy(dst, temp, length * 2 * sizeof(*dst));
-  }
+        memcpy ( dst, temp, length * 2 * sizeof ( *dst ) );
+    }
 }
 
-static void YuvToRgb565Line(const uint8_t* y, const uint8_t* u,
-                            const uint8_t* v, uint8_t* dst, int length) {
-  v16u8 R, G, B, RG, GB, tmp0, tmp1;
-  while (length >= 16) {
+static void YuvToRgb565Line ( const uint8_t* y, const uint8_t* u,
+                              const uint8_t* v, uint8_t* dst, int length )
+{
+    v16u8 R, G, B, RG, GB, tmp0, tmp1;
+    while ( length >= 16 ) {
 #if (WEBP_SWAP_16BIT_CSP == 1)
-    CALC_RGB565(y, u, v, GB, RG, 16, dst);
+        CALC_RGB565 ( y, u, v, GB, RG, 16, dst );
 #else
-    CALC_RGB565(y, u, v, RG, GB, 16, dst);
+        CALC_RGB565 ( y, u, v, RG, GB, 16, dst );
 #endif
-    y      += 16;
-    u      += 16;
-    v      += 16;
-    dst    += 16 * 2;
-    length -= 16;
-  }
-  if (length > 8) {
-    uint8_t temp[2 * 16] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
+        y      += 16;
+        u      += 16;
+        v      += 16;
+        dst    += 16 * 2;
+        length -= 16;
+    }
+    if ( length > 8 ) {
+        uint8_t temp[2 * 16] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
 #if (WEBP_SWAP_16BIT_CSP == 1)
-    CALC_RGB565(temp, u, v, GB, RG, 16, temp);
+        CALC_RGB565 ( temp, u, v, GB, RG, 16, temp );
 #else
-    CALC_RGB565(temp, u, v, RG, GB, 16, temp);
+        CALC_RGB565 ( temp, u, v, RG, GB, 16, temp );
 #endif
-    memcpy(dst, temp, length * 2 * sizeof(*dst));
-  } else if (length > 0) {
-    uint8_t temp[2 * 8] = { 0 };
-    memcpy(temp, y, length * sizeof(*temp));
+        memcpy ( dst, temp, length * 2 * sizeof ( *dst ) );
+    } else if ( length > 0 ) {
+        uint8_t temp[2 * 8] = { 0 };
+        memcpy ( temp, y, length * sizeof ( *temp ) );
 #if (WEBP_SWAP_16BIT_CSP == 1)
-    CALC_RGB565(temp, u, v, GB, RG, 8, temp);
+        CALC_RGB565 ( temp, u, v, GB, RG, 8, temp );
 #else
-    CALC_RGB565(temp, u, v, RG, GB, 8, temp);
+        CALC_RGB565 ( temp, u, v, RG, GB, 8, temp );
 #endif
-    memcpy(dst, temp, length * 2 * sizeof(*dst));
-  }
+        memcpy ( dst, temp, length * 2 * sizeof ( *dst ) );
+    }
 }
 #endif  // WEBP_REDUCE_CSP
 
@@ -646,14 +661,14 @@ static void FUNC_NAME(const uint8_t* top_y, const uint8_t* bot_y,        \
   }                                                                      \
 }
 
-UPSAMPLE_FUNC(UpsampleRgbaLinePair,     YuvToRgba,     4)
-UPSAMPLE_FUNC(UpsampleBgraLinePair,     YuvToBgra,     4)
+UPSAMPLE_FUNC ( UpsampleRgbaLinePair,     YuvToRgba,     4 )
+UPSAMPLE_FUNC ( UpsampleBgraLinePair,     YuvToBgra,     4 )
 #if !defined(WEBP_REDUCE_CSP)
-UPSAMPLE_FUNC(UpsampleRgbLinePair,      YuvToRgb,      3)
-UPSAMPLE_FUNC(UpsampleBgrLinePair,      YuvToBgr,      3)
-UPSAMPLE_FUNC(UpsampleArgbLinePair,     YuvToArgb,     4)
-UPSAMPLE_FUNC(UpsampleRgba4444LinePair, YuvToRgba4444, 2)
-UPSAMPLE_FUNC(UpsampleRgb565LinePair,   YuvToRgb565,   2)
+UPSAMPLE_FUNC ( UpsampleRgbLinePair,      YuvToRgb,      3 )
+UPSAMPLE_FUNC ( UpsampleBgrLinePair,      YuvToBgr,      3 )
+UPSAMPLE_FUNC ( UpsampleArgbLinePair,     YuvToArgb,     4 )
+UPSAMPLE_FUNC ( UpsampleRgba4444LinePair, YuvToRgba4444, 2 )
+UPSAMPLE_FUNC ( UpsampleRgb565LinePair,   YuvToRgb565,   2 )
 #endif   // WEBP_REDUCE_CSP
 
 //------------------------------------------------------------------------------
@@ -661,21 +676,22 @@ UPSAMPLE_FUNC(UpsampleRgb565LinePair,   YuvToRgb565,   2)
 
 extern WebPUpsampleLinePairFunc WebPUpsamplers[/* MODE_LAST */];
 
-extern void WebPInitUpsamplersMSA(void);
+extern void WebPInitUpsamplersMSA ( void );
 
-WEBP_TSAN_IGNORE_FUNCTION void WebPInitUpsamplersMSA(void) {
-  WebPUpsamplers[MODE_RGBA]      = UpsampleRgbaLinePair;
-  WebPUpsamplers[MODE_BGRA]      = UpsampleBgraLinePair;
-  WebPUpsamplers[MODE_rgbA]      = UpsampleRgbaLinePair;
-  WebPUpsamplers[MODE_bgrA]      = UpsampleBgraLinePair;
+WEBP_TSAN_IGNORE_FUNCTION void WebPInitUpsamplersMSA ( void )
+{
+    WebPUpsamplers[MODE_RGBA]      = UpsampleRgbaLinePair;
+    WebPUpsamplers[MODE_BGRA]      = UpsampleBgraLinePair;
+    WebPUpsamplers[MODE_rgbA]      = UpsampleRgbaLinePair;
+    WebPUpsamplers[MODE_bgrA]      = UpsampleBgraLinePair;
 #if !defined(WEBP_REDUCE_CSP)
-  WebPUpsamplers[MODE_RGB]       = UpsampleRgbLinePair;
-  WebPUpsamplers[MODE_BGR]       = UpsampleBgrLinePair;
-  WebPUpsamplers[MODE_ARGB]      = UpsampleArgbLinePair;
-  WebPUpsamplers[MODE_Argb]      = UpsampleArgbLinePair;
-  WebPUpsamplers[MODE_RGB_565]   = UpsampleRgb565LinePair;
-  WebPUpsamplers[MODE_RGBA_4444] = UpsampleRgba4444LinePair;
-  WebPUpsamplers[MODE_rgbA_4444] = UpsampleRgba4444LinePair;
+    WebPUpsamplers[MODE_RGB]       = UpsampleRgbLinePair;
+    WebPUpsamplers[MODE_BGR]       = UpsampleBgrLinePair;
+    WebPUpsamplers[MODE_ARGB]      = UpsampleArgbLinePair;
+    WebPUpsamplers[MODE_Argb]      = UpsampleArgbLinePair;
+    WebPUpsamplers[MODE_RGB_565]   = UpsampleRgb565LinePair;
+    WebPUpsamplers[MODE_RGBA_4444] = UpsampleRgba4444LinePair;
+    WebPUpsamplers[MODE_rgbA_4444] = UpsampleRgba4444LinePair;
 #endif   // WEBP_REDUCE_CSP
 }
 
@@ -684,5 +700,5 @@ WEBP_TSAN_IGNORE_FUNCTION void WebPInitUpsamplersMSA(void) {
 #endif  // WEBP_USE_MSA
 
 #if !(defined(FANCY_UPSAMPLING) && defined(WEBP_USE_MSA))
-WEBP_DSP_INIT_STUB(WebPInitUpsamplersMSA)
+WEBP_DSP_INIT_STUB ( WebPInitUpsamplersMSA )
 #endif

@@ -39,9 +39,9 @@
  * @return : decompressed block size,
  *           or an error code (which can be tested using ZSTD_isError())
  */
-size_t ZSTD_decompressBlock_internal(ZSTD_DCtx* dctx,
-                               void* dst, size_t dstCapacity,
-                         const void* src, size_t srcSize, const int frame);
+size_t ZSTD_decompressBlock_internal ( ZSTD_DCtx* dctx,
+                                       void* dst, size_t dstCapacity,
+                                       const void* src, size_t srcSize, const int frame );
 
 /* ZSTD_buildFSETable() :
  * generate FSE decoding table for one symbol (ll, ml or off)
@@ -50,10 +50,10 @@ size_t ZSTD_decompressBlock_internal(ZSTD_DCtx* dctx,
  * in which case it cannot fail.
  * Internal use only.
  */
-void ZSTD_buildFSETable(ZSTD_seqSymbol* dt,
-             const short* normalizedCounter, unsigned maxSymbolValue,
-             const U32* baseValue, const U32* nbAdditionalBits,
-                   unsigned tableLog);
+void ZSTD_buildFSETable ( ZSTD_seqSymbol* dt,
+                          const short* normalizedCounter, unsigned maxSymbolValue,
+                          const U32* baseValue, const U32* nbAdditionalBits,
+                          unsigned tableLog );
 
 
 #endif /* ZSTD_DEC_BLOCK_H */

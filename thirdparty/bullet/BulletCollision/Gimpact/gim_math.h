@@ -55,16 +55,15 @@ email: projectileman@yahoo.com
 #define G_SIGN_BITMASK 0x80000000
 #define G_EPSILON SIMD_EPSILON
 
-enum GIM_SCALAR_TYPES
-{
-	G_STYPE_REAL = 0,
-	G_STYPE_REAL2,
-	G_STYPE_SHORT,
-	G_STYPE_USHORT,
-	G_STYPE_INT,
-	G_STYPE_UINT,
-	G_STYPE_INT64,
-	G_STYPE_UINT64
+enum GIM_SCALAR_TYPES {
+    G_STYPE_REAL = 0,
+    G_STYPE_REAL2,
+    G_STYPE_SHORT,
+    G_STYPE_USHORT,
+    G_STYPE_INT,
+    G_STYPE_UINT,
+    G_STYPE_INT64,
+    G_STYPE_UINT64
 };
 
 #define G_DEGTORAD(X) ((X)*3.1415926f / 180.0f)
@@ -131,18 +130,18 @@ enum GIM_SCALAR_TYPES
 	}
 
 //! Computes 1.0f / sqrtf(x). Comes from Quake3. See http://www.magic-software.com/3DGEDInvSqrt.html
-inline GREAL gim_inv_sqrt(GREAL f)
+inline GREAL gim_inv_sqrt ( GREAL f )
 {
-	GREAL r;
-	GIM_INV_SQRT(f, r);
-	return r;
+    GREAL r;
+    GIM_INV_SQRT ( f, r );
+    return r;
 }
 
-inline GREAL gim_sqrt(GREAL f)
+inline GREAL gim_sqrt ( GREAL f )
 {
-	GREAL r;
-	GIM_SQRT(f, r);
-	return r;
+    GREAL r;
+    GIM_SQRT ( f, r );
+    return r;
 }
 
 #endif  // GIM_MATH_H_INCLUDED

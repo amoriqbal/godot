@@ -50,7 +50,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "PostProcessing/ProcessHelper.h"
 
 class FindInstancesProcessTest;
-namespace Assimp    {
+namespace Assimp
+{
 
 // -------------------------------------------------------------------------------
 /** @brief Get a pseudo(!)-hash representing a mesh.
@@ -61,17 +62,18 @@ namespace Assimp    {
  *  @return Hash.
  */
 inline
-uint64_t GetMeshHash(aiMesh* in) {
-    ai_assert(nullptr != in);
+uint64_t GetMeshHash ( aiMesh* in )
+{
+    ai_assert ( nullptr != in );
 
     // ... get an unique value representing the vertex format of the mesh
-    const unsigned int fhash = GetMeshVFormatUnique(in);
+    const unsigned int fhash = GetMeshVFormatUnique ( in );
 
     // and bake it with number of vertices/faces/bones/matidx/ptypes
-    return ((uint64_t)fhash << 32u) | ((
-        (in->mNumBones << 16u) ^  (in->mNumVertices)       ^
-        (in->mNumFaces<<4u)    ^  (in->mMaterialIndex<<15) ^
-        (in->mPrimitiveTypes<<28)) & 0xffffffff );
+    return ( ( uint64_t ) fhash << 32u ) | ( (
+                ( in->mNumBones << 16u ) ^ ( in->mNumVertices )       ^
+                ( in->mNumFaces<<4u )    ^ ( in->mMaterialIndex<<15 ) ^
+                ( in->mPrimitiveTypes<<28 ) ) & 0xffffffff );
 }
 
 // -------------------------------------------------------------------------------
@@ -84,22 +86,25 @@ uint64_t GetMeshHash(aiMesh* in) {
  *  @return true if the arrays are identical
  */
 inline
-bool CompareArrays(const aiVector3D* first, const aiVector3D* second,
-        unsigned int size, float e) {
-    for (const aiVector3D* end = first+size; first != end; ++first,++second) {
-        if ( (*first - *second).SquareLength() >= e)
+bool CompareArrays ( const aiVector3D* first, const aiVector3D* second,
+                     unsigned int size, float e )
+{
+    for ( const aiVector3D* end = first+size; first != end; ++first,++second ) {
+        if ( ( *first - *second ).SquareLength() >= e ) {
             return false;
+        }
     }
     return true;
 }
 
 // and the same for colors ...
-inline bool CompareArrays(const aiColor4D* first, const aiColor4D* second,
-    unsigned int size, float e)
+inline bool CompareArrays ( const aiColor4D* first, const aiColor4D* second,
+                            unsigned int size, float e )
 {
-    for (const aiColor4D* end = first+size; first != end; ++first,++second) {
-        if ( GetColorDifference(*first,*second) >= e)
+    for ( const aiColor4D* end = first+size; first != end; ++first,++second ) {
+        if ( GetColorDifference ( *first,*second ) >= e ) {
             return false;
+        }
     }
     return true;
 }
@@ -117,15 +122,15 @@ public:
 public:
     // -------------------------------------------------------------------
     // Check whether step is active in given flags combination
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
     // Execute step on a given scene
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
     // -------------------------------------------------------------------
     // Setup properties prior to executing the process
-    void SetupProperties(const Importer* pImp);
+    void SetupProperties ( const Importer* pImp );
 
 private:
 

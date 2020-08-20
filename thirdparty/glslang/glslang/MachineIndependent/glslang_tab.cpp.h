@@ -43,8 +43,7 @@ extern int yydebug;
 /* Token type.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-  enum yytokentype
-  {
+enum yytokentype {
     CONST = 258,
     BOOL = 259,
     INT = 260,
@@ -453,14 +452,13 @@ extern int yydebug;
     PERVIEWNV = 663,
     PERTASKNV = 664,
     PRECISE = 665
-  };
+};
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
-union YYSTYPE
-{
+union YYSTYPE {
 #line 96 "MachineIndependent/glslang.y" /* yacc.c:1909  */
 
     struct {
@@ -507,6 +505,6 @@ typedef union YYSTYPE YYSTYPE;
 
 
 
-int yyparse (glslang::TParseContext* pParseContext);
+int yyparse ( glslang::TParseContext* pParseContext );
 
 #endif /* !YY_YY_MACHINEINDEPENDENT_GLSLANG_TAB_CPP_H_INCLUDED  */

@@ -51,25 +51,31 @@
 //
 typedef enum {
     EBadProfile           = 0,
-    ENoProfile            = (1 << 0), // only for desktop, before profiles showed up
-    ECoreProfile          = (1 << 1),
-    ECompatibilityProfile = (1 << 2),
-    EEsProfile            = (1 << 3)
+    ENoProfile            = ( 1 << 0 ), // only for desktop, before profiles showed up
+    ECoreProfile          = ( 1 << 1 ),
+    ECompatibilityProfile = ( 1 << 2 ),
+    EEsProfile            = ( 1 << 3 )
 } EProfile;
 
-namespace glslang {
+namespace glslang
+{
 
 //
 // Map from profile enum to externally readable text name.
 //
-inline const char* ProfileName(EProfile profile)
+inline const char* ProfileName ( EProfile profile )
 {
-    switch (profile) {
-    case ENoProfile:             return "none";
-    case ECoreProfile:           return "core";
-    case ECompatibilityProfile:  return "compatibility";
-    case EEsProfile:             return "es";
-    default:                     return "unknown profile";
+    switch ( profile ) {
+    case ENoProfile:
+        return "none";
+    case ECoreProfile:
+        return "core";
+    case ECompatibilityProfile:
+        return "compatibility";
+    case EEsProfile:
+        return "es";
+    default:
+        return "unknown profile";
     }
 }
 
@@ -82,7 +88,7 @@ inline const char* ProfileName(EProfile profile)
 // The union of all requested rule sets will be applied.
 //
 struct SpvVersion {
-    SpvVersion() : spv(0), vulkanGlsl(0), vulkan(0), openGl(0) {}
+    SpvVersion() : spv ( 0 ), vulkanGlsl ( 0 ), vulkan ( 0 ), openGl ( 0 ) {}
     unsigned int spv; // the version of SPIR-V to target, as defined by "word 1" of the SPIR-V binary header
     int vulkanGlsl;   // the version of GLSL semantics for Vulkan, from GL_KHR_vulkan_glsl, for "#define VULKAN XXX"
     int vulkan;       // the version of Vulkan, for which SPIR-V execution environment rules to use
@@ -186,14 +192,14 @@ const char* const E_GL_EXT_shader_realtime_clock            = "GL_EXT_shader_rea
 // Arrays of extensions for the above viewportEXTs duplications
 
 const char* const post_depth_coverageEXTs[] = { E_GL_ARB_post_depth_coverage, E_GL_EXT_post_depth_coverage };
-const int Num_post_depth_coverageEXTs = sizeof(post_depth_coverageEXTs) / sizeof(post_depth_coverageEXTs[0]);
+const int Num_post_depth_coverageEXTs = sizeof ( post_depth_coverageEXTs ) / sizeof ( post_depth_coverageEXTs[0] );
 
 // OVR extensions
 const char* const E_GL_OVR_multiview                    = "GL_OVR_multiview";
 const char* const E_GL_OVR_multiview2                   = "GL_OVR_multiview2";
 
 const char* const OVR_multiview_EXTs[] = { E_GL_OVR_multiview, E_GL_OVR_multiview2 };
-const int Num_OVR_multiview_EXTs = sizeof(OVR_multiview_EXTs) / sizeof(OVR_multiview_EXTs[0]);
+const int Num_OVR_multiview_EXTs = sizeof ( OVR_multiview_EXTs ) / sizeof ( OVR_multiview_EXTs[0] );
 
 // #line and #include
 const char* const E_GL_GOOGLE_cpp_style_line_directive          = "GL_GOOGLE_cpp_style_line_directive";
@@ -231,7 +237,7 @@ const char* const E_GL_NV_mesh_shader                           = "GL_NV_mesh_sh
 // Arrays of extensions for the above viewportEXTs duplications
 
 const char* const viewportEXTs[] = { E_GL_ARB_shader_viewport_layer_array, E_GL_NV_viewport_array2 };
-const int Num_viewportEXTs = sizeof(viewportEXTs) / sizeof(viewportEXTs[0]);
+const int Num_viewportEXTs = sizeof ( viewportEXTs ) / sizeof ( viewportEXTs[0] );
 
 const char* const E_GL_NV_cooperative_matrix                    = "GL_NV_cooperative_matrix";
 const char* const E_GL_NV_shader_sm_builtins                    = "GL_NV_shader_sm_builtins";
@@ -283,31 +289,31 @@ const char* const E_GL_EXT_shader_subgroup_extended_types_float16 = "GL_EXT_shad
 // Arrays of extensions for the above AEP duplications
 
 const char* const AEP_geometry_shader[] = { E_GL_EXT_geometry_shader, E_GL_OES_geometry_shader };
-const int Num_AEP_geometry_shader = sizeof(AEP_geometry_shader)/sizeof(AEP_geometry_shader[0]);
+const int Num_AEP_geometry_shader = sizeof ( AEP_geometry_shader ) /sizeof ( AEP_geometry_shader[0] );
 
 const char* const AEP_geometry_point_size[] = { E_GL_EXT_geometry_point_size, E_GL_OES_geometry_point_size };
-const int Num_AEP_geometry_point_size = sizeof(AEP_geometry_point_size)/sizeof(AEP_geometry_point_size[0]);
+const int Num_AEP_geometry_point_size = sizeof ( AEP_geometry_point_size ) /sizeof ( AEP_geometry_point_size[0] );
 
 const char* const AEP_gpu_shader5[] = { E_GL_EXT_gpu_shader5, E_GL_OES_gpu_shader5 };
-const int Num_AEP_gpu_shader5 = sizeof(AEP_gpu_shader5)/sizeof(AEP_gpu_shader5[0]);
+const int Num_AEP_gpu_shader5 = sizeof ( AEP_gpu_shader5 ) /sizeof ( AEP_gpu_shader5[0] );
 
 const char* const AEP_primitive_bounding_box[] = { E_GL_EXT_primitive_bounding_box, E_GL_OES_primitive_bounding_box };
-const int Num_AEP_primitive_bounding_box = sizeof(AEP_primitive_bounding_box)/sizeof(AEP_primitive_bounding_box[0]);
+const int Num_AEP_primitive_bounding_box = sizeof ( AEP_primitive_bounding_box ) /sizeof ( AEP_primitive_bounding_box[0] );
 
 const char* const AEP_shader_io_blocks[] = { E_GL_EXT_shader_io_blocks, E_GL_OES_shader_io_blocks };
-const int Num_AEP_shader_io_blocks = sizeof(AEP_shader_io_blocks)/sizeof(AEP_shader_io_blocks[0]);
+const int Num_AEP_shader_io_blocks = sizeof ( AEP_shader_io_blocks ) /sizeof ( AEP_shader_io_blocks[0] );
 
 const char* const AEP_tessellation_shader[] = { E_GL_EXT_tessellation_shader, E_GL_OES_tessellation_shader };
-const int Num_AEP_tessellation_shader = sizeof(AEP_tessellation_shader)/sizeof(AEP_tessellation_shader[0]);
+const int Num_AEP_tessellation_shader = sizeof ( AEP_tessellation_shader ) /sizeof ( AEP_tessellation_shader[0] );
 
 const char* const AEP_tessellation_point_size[] = { E_GL_EXT_tessellation_point_size, E_GL_OES_tessellation_point_size };
-const int Num_AEP_tessellation_point_size = sizeof(AEP_tessellation_point_size)/sizeof(AEP_tessellation_point_size[0]);
+const int Num_AEP_tessellation_point_size = sizeof ( AEP_tessellation_point_size ) /sizeof ( AEP_tessellation_point_size[0] );
 
 const char* const AEP_texture_buffer[] = { E_GL_EXT_texture_buffer, E_GL_OES_texture_buffer };
-const int Num_AEP_texture_buffer = sizeof(AEP_texture_buffer)/sizeof(AEP_texture_buffer[0]);
+const int Num_AEP_texture_buffer = sizeof ( AEP_texture_buffer ) /sizeof ( AEP_texture_buffer[0] );
 
 const char* const AEP_texture_cube_map_array[] = { E_GL_EXT_texture_cube_map_array, E_GL_OES_texture_cube_map_array };
-const int Num_AEP_texture_cube_map_array = sizeof(AEP_texture_cube_map_array)/sizeof(AEP_texture_cube_map_array[0]);
+const int Num_AEP_texture_cube_map_array = sizeof ( AEP_texture_cube_map_array ) /sizeof ( AEP_texture_cube_map_array[0] );
 
 } // end namespace glslang
 

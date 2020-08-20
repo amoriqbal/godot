@@ -43,10 +43,11 @@
 #include <iostream>
 #include <vector>
 
-namespace spv {
+namespace spv
+{
 
-    // disassemble with glslang custom disassembler
-    void Disassemble(std::ostream& out, const std::vector<unsigned int>&);
+// disassemble with glslang custom disassembler
+void Disassemble ( std::ostream& out, const std::vector<unsigned int>& );
 
 }  // end namespace spv
 

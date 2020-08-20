@@ -54,7 +54,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include <stdint.h>
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // ----------------------------------------------------------------------------------
 /** Specialized version of SpatialSort to support smoothing groups
@@ -73,7 +74,7 @@ public:
     /** Construction from a given face array, handling smoothing groups
      *  properly
      */
-    explicit SGSpatialSort(const std::vector<aiVector3D>& vPositions);
+    explicit SGSpatialSort ( const std::vector<aiVector3D>& vPositions );
 
     // -------------------------------------------------------------------
     /** Add a vertex to the spatial sort
@@ -81,8 +82,8 @@ public:
      * @param index Index of the vrtex
      * @param smoothingGroup SmoothingGroup for this vertex
      */
-    void Add(const aiVector3D& vPosition, unsigned int index,
-        unsigned int smoothingGroup);
+    void Add ( const aiVector3D& vPosition, unsigned int index,
+               unsigned int smoothingGroup );
 
     // -------------------------------------------------------------------
     /** Prepare the spatial sorter for use. This step runs in O(logn)
@@ -106,9 +107,9 @@ public:
      * @return An iterator to iterate over all vertices in the given area.
      */
     // -------------------------------------------------------------------
-    void FindPositions( const aiVector3D& pPosition, uint32_t pSG,
-        float pRadius, std::vector<unsigned int>& poResults,
-        bool exactMatch = false) const;
+    void FindPositions ( const aiVector3D& pPosition, uint32_t pSG,
+                         float pRadius, std::vector<unsigned int>& poResults,
+                         bool exactMatch = false ) const;
 
 protected:
     /** Normal of the sorting plane, normalized. The center is always at (0, 0, 0) */
@@ -126,22 +127,26 @@ protected:
         float mDistance;        ///< Distance of this vertex to the sorting plane
 
         Entry() AI_NO_EXCEPT
-        : mIndex(0)
+    :
+        mIndex ( 0 )
         , mPosition()
-        , mSmoothGroups(0)
-        , mDistance(0.0f) {
+        , mSmoothGroups ( 0 )
+        , mDistance ( 0.0f )
+        {
             // empty
         }
 
-        Entry( unsigned int pIndex, const aiVector3D& pPosition, float pDistance,uint32_t pSG)
-        : mIndex( pIndex)
-        , mPosition( pPosition)
-        , mSmoothGroups(pSG)
-        , mDistance( pDistance) {
+        Entry ( unsigned int pIndex, const aiVector3D& pPosition, float pDistance,uint32_t pSG )
+            : mIndex ( pIndex )
+            , mPosition ( pPosition )
+            , mSmoothGroups ( pSG )
+            , mDistance ( pDistance )
+        {
             // empty
         }
 
-        bool operator < (const Entry& e) const {
+        bool operator < ( const Entry& e ) const
+        {
             return mDistance < e.mDistance;
         }
     };

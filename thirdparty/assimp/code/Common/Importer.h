@@ -52,12 +52,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 struct aiScene;
 
-namespace Assimp    {
-    class ProgressHandler;
-    class IOSystem;
-    class BaseImporter;
-    class BaseProcess;
-    class SharedPostProcessInfo;
+namespace Assimp
+{
+class ProgressHandler;
+class IOSystem;
+class BaseImporter;
+class BaseProcess;
+class SharedPostProcessInfo;
 
 
 //! @cond never
@@ -68,7 +69,8 @@ namespace Assimp    {
  *  std::vector and std::map in the public headers. Furthermore we are dropping
  *  any STL interface problems caused by mismatching STL settings. All
  *  size calculation are now done by us, not the app heap. */
-class ImporterPimpl {
+class ImporterPimpl
+{
 public:
     // Data type to store the key hash
     typedef unsigned int KeyType;
@@ -125,20 +127,22 @@ public:
 
 inline
 ImporterPimpl::ImporterPimpl() AI_NO_EXCEPT
-: mIOHandler( nullptr )
-, mIsDefaultHandler( false )
-, mProgressHandler( nullptr )
-, mIsDefaultProgressHandler( false )
+:
+mIOHandler ( nullptr )
+, mIsDefaultHandler ( false )
+, mProgressHandler ( nullptr )
+, mIsDefaultProgressHandler ( false )
 , mImporter()
 , mPostProcessingSteps()
-, mScene( nullptr )
+, mScene ( nullptr )
 , mErrorString()
 , mIntProperties()
 , mFloatProperties()
 , mStringProperties()
 , mMatrixProperties()
-, bExtraVerbose( false )
-, mPPShared( nullptr ) {
+, bExtraVerbose ( false )
+, mPPShared ( nullptr )
+{
     // empty
 }
 //! @endcond
@@ -163,19 +167,20 @@ public:
     // -------------------------------------------------------------------
     /** Wraps a full list of configuration properties for an importer.
      *  Properties can be set using SetGenericProperty */
-    struct PropertyMap
-    {
+    struct PropertyMap {
         ImporterPimpl::IntPropertyMap     ints;
         ImporterPimpl::FloatPropertyMap   floats;
         ImporterPimpl::StringPropertyMap  strings;
         ImporterPimpl::MatrixPropertyMap  matrices;
 
-        bool operator == (const PropertyMap& prop) const {
+        bool operator == ( const PropertyMap& prop ) const
+        {
             // fixme: really isocpp? gcc complains
             return ints == prop.ints && floats == prop.floats && strings == prop.strings && matrices == prop.matrices;
         }
 
-        bool empty () const {
+        bool empty () const
+        {
             return ints.empty() && floats.empty() && strings.empty() && matrices.empty();
         }
     };
@@ -184,9 +189,9 @@ public:
 public:
     // -------------------------------------------------------------------
     /** Construct a batch loader from a given IO system to be used
-     *  to access external files 
+     *  to access external files
      */
-    explicit BatchLoader(IOSystem* pIO, bool validate = false );
+    explicit BatchLoader ( IOSystem* pIO, bool validate = false );
 
     // -------------------------------------------------------------------
     /** The class destructor.
@@ -197,14 +202,14 @@ public:
     /** Sets the validation step. True for enable validation during postprocess.
      *  @param  enable  True for validation.
      */
-    void setValidation( bool enabled );
-    
+    void setValidation ( bool enabled );
+
     // -------------------------------------------------------------------
     /** Returns the current validation step.
      *  @return The current validation step.
      */
     bool getValidation() const;
-    
+
     // -------------------------------------------------------------------
     /** Add a new file to the list of files to be loaded.
      *  @param file File to be loaded
@@ -217,7 +222,7 @@ public:
         const std::string& file,
         unsigned int steps = 0,
         const PropertyMap* map = NULL
-        );
+    );
 
     // -------------------------------------------------------------------
     /** Get an imported scene.
@@ -228,9 +233,9 @@ public:
      *  @param which LRWC returned by AddLoadRequest().
      *  @return NULL if there is no scene with this file name
      *  in the queue of the scene hasn't been loaded yet. */
-    aiScene* GetImport(
+    aiScene* GetImport (
         unsigned int which
-        );
+    );
 
     // -------------------------------------------------------------------
     /** Waits until all scenes have been loaded. This returns

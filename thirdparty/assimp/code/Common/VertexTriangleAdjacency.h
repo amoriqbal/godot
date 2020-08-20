@@ -51,7 +51,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 struct aiMesh;
 struct aiFace;
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // --------------------------------------------------------------------------------------------
 /** @brief The VertexTriangleAdjacency class computes a vertex-triangle
@@ -60,7 +61,8 @@ namespace Assimp    {
  *  @note Although it is called #VertexTriangleAdjacency, the current version does also
  *    support arbitrary polygons. */
 // --------------------------------------------------------------------------------------------
-class ASSIMP_API VertexTriangleAdjacency {
+class ASSIMP_API VertexTriangleAdjacency
+{
 public:
     // ----------------------------------------------------------------------------
     /** @brief Construction from an existing index buffer
@@ -71,9 +73,9 @@ public:
      *  @param bComputeNumTriangles If you want the class to compute
      *    a list containing the number of referenced triangles per vertex
      *    per vertex - pass true.  */
-    VertexTriangleAdjacency(aiFace* pcFaces,unsigned int iNumFaces,
-        unsigned int iNumVertices = 0,
-        bool bComputeNumTriangles = true);
+    VertexTriangleAdjacency ( aiFace* pcFaces,unsigned int iNumFaces,
+                              unsigned int iNumVertices = 0,
+                              bool bComputeNumTriangles = true );
 
     // ----------------------------------------------------------------------------
     /** @brief Destructor */
@@ -83,8 +85,9 @@ public:
     /** @brief Get all triangles adjacent to a vertex
      *  @param iVertIndex Index of the vertex
      *  @return A pointer to the adjacency list. */
-    unsigned int* GetAdjacentTriangles(unsigned int iVertIndex) const {
-        ai_assert(iVertIndex < mNumVertices);
+    unsigned int* GetAdjacentTriangles ( unsigned int iVertIndex ) const
+    {
+        ai_assert ( iVertIndex < mNumVertices );
         return &mAdjacencyTable[ mOffsetTable[iVertIndex]];
     }
 
@@ -93,9 +96,10 @@ public:
      *    a vertex. This function returns a reference that can be modified
      *  @param iVertIndex Index of the vertex
      *  @return Number of referenced triangles */
-    unsigned int& GetNumTrianglesPtr(unsigned int iVertIndex) {
-        ai_assert( iVertIndex < mNumVertices );
-        ai_assert( nullptr != mLiveTriangles );
+    unsigned int& GetNumTrianglesPtr ( unsigned int iVertIndex )
+    {
+        ai_assert ( iVertIndex < mNumVertices );
+        ai_assert ( nullptr != mLiveTriangles );
         return mLiveTriangles[iVertIndex];
     }
 

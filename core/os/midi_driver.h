@@ -38,23 +38,24 @@
  * Multi-Platform abstraction for accessing to MIDI.
  */
 
-class MIDIDriver {
-	static MIDIDriver *singleton;
-	static uint8_t last_received_message;
+class MIDIDriver
+{
+    static MIDIDriver *singleton;
+    static uint8_t last_received_message;
 
 public:
-	static MIDIDriver *get_singleton();
-	void set_singleton();
+    static MIDIDriver *get_singleton();
+    void set_singleton();
 
-	virtual Error open() = 0;
-	virtual void close() = 0;
+    virtual Error open() = 0;
+    virtual void close() = 0;
 
-	virtual PackedStringArray get_connected_inputs();
+    virtual PackedStringArray get_connected_inputs();
 
-	static void receive_input_packet(uint64_t timestamp, uint8_t *data, uint32_t length);
+    static void receive_input_packet ( uint64_t timestamp, uint8_t *data, uint32_t length );
 
-	MIDIDriver();
-	virtual ~MIDIDriver() {}
+    MIDIDriver();
+    virtual ~MIDIDriver() {}
 };
 
 #endif // MIDI_DRIVER_H

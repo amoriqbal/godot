@@ -41,11 +41,12 @@
 class RigidBodyBullet;
 class btTypedConstraint;
 
-class JointBullet : public ConstraintBullet {
+class JointBullet : public ConstraintBullet
+{
 public:
-	JointBullet();
-	virtual ~JointBullet();
+    JointBullet();
+    virtual ~JointBullet();
 
-	virtual PhysicsServer3D::JointType get_type() const = 0;
+    virtual PhysicsServer3D::JointType get_type() const = 0;
 };
 #endif

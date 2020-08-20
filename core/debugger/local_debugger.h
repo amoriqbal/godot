@@ -35,25 +35,26 @@
 #include "core/list.h"
 #include "core/script_language.h"
 
-class LocalDebugger : public EngineDebugger {
+class LocalDebugger : public EngineDebugger
+{
 private:
-	struct ScriptsProfiler;
+    struct ScriptsProfiler;
 
-	ScriptsProfiler *scripts_profiler = nullptr;
+    ScriptsProfiler *scripts_profiler = nullptr;
 
-	String target_function;
-	Map<String, String> options;
+    String target_function;
+    Map<String, String> options;
 
-	Pair<String, int> to_breakpoint(const String &p_line);
-	void print_variables(const List<String> &names, const List<Variant> &values, const String &variable_prefix);
+    Pair<String, int> to_breakpoint ( const String &p_line );
+    void print_variables ( const List<String> &names, const List<Variant> &values, const String &variable_prefix );
 
 public:
-	void debug(bool p_can_continue, bool p_is_error_breakpoint);
-	void send_message(const String &p_message, const Array &p_args);
-	void send_error(const String &p_func, const String &p_file, int p_line, const String &p_err, const String &p_descr, ErrorHandlerType p_type);
+    void debug ( bool p_can_continue, bool p_is_error_breakpoint );
+    void send_message ( const String &p_message, const Array &p_args );
+    void send_error ( const String &p_func, const String &p_file, int p_line, const String &p_err, const String &p_descr, ErrorHandlerType p_type );
 
-	LocalDebugger();
-	~LocalDebugger();
+    LocalDebugger();
+    ~LocalDebugger();
 };
 
 #endif // LOCAL_DEBUGGER_H

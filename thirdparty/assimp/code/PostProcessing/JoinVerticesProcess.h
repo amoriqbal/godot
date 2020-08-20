@@ -62,7 +62,8 @@ namespace Assimp
  * erases all but one of the copies. This usually reduces the number of vertices
  * in a mesh by a serious amount and is the standard form to render a mesh.
  */
-class ASSIMP_API JoinVerticesProcess : public BaseProcess {
+class ASSIMP_API JoinVerticesProcess : public BaseProcess
+{
 public:
     JoinVerticesProcess();
     ~JoinVerticesProcess();
@@ -73,21 +74,21 @@ public:
      *   combination of #aiPostProcessSteps.
      * @return true if the process is present in this flag fields, false if not.
     */
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
     /** Executes the post processing step on the given imported data.
     * At the moment a process is not supposed to fail.
     * @param pScene The imported data to work at.
     */
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
     // -------------------------------------------------------------------
     /** Unites identical vertices in the given mesh.
      * @param pMesh The mesh to process.
      * @param meshIndex Index of the mesh to process
      */
-    int ProcessMesh( aiMesh* pMesh, unsigned int meshIndex);
+    int ProcessMesh ( aiMesh* pMesh, unsigned int meshIndex );
 };
 
 } // end of namespace Assimp

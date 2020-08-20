@@ -34,12 +34,15 @@ extern "C" {
 #endif
 
 /* Structures definitions : */
-struct UPNParg { const char * elt; const char * val; };
+struct UPNParg {
+    const char * elt;
+    const char * val;
+};
 
 char *
-simpleUPnPcommand(int, const char *, const char *,
-                  const char *, struct UPNParg *,
-                  int *);
+simpleUPnPcommand ( int, const char *, const char *,
+                    const char *, struct UPNParg *,
+                    int * );
 
 /* upnpDiscover()
  * discover UPnP devices on the network.
@@ -60,35 +63,35 @@ simpleUPnPcommand(int, const char *, const char *,
  * if 0, the discovery will stop with the first type returning results.
  * TTL should default to 2. */
 MINIUPNP_LIBSPEC struct UPNPDev *
-upnpDiscover(int delay, const char * multicastif,
-             const char * minissdpdsock, int localport,
-             int ipv6, unsigned char ttl,
-             int * error);
+upnpDiscover ( int delay, const char * multicastif,
+               const char * minissdpdsock, int localport,
+               int ipv6, unsigned char ttl,
+               int * error );
 
 MINIUPNP_LIBSPEC struct UPNPDev *
-upnpDiscoverAll(int delay, const char * multicastif,
-                const char * minissdpdsock, int localport,
-                int ipv6, unsigned char ttl,
-                int * error);
+upnpDiscoverAll ( int delay, const char * multicastif,
+                  const char * minissdpdsock, int localport,
+                  int ipv6, unsigned char ttl,
+                  int * error );
 
 MINIUPNP_LIBSPEC struct UPNPDev *
-upnpDiscoverDevice(const char * device, int delay, const char * multicastif,
-                const char * minissdpdsock, int localport,
-                int ipv6, unsigned char ttl,
-                int * error);
+upnpDiscoverDevice ( const char * device, int delay, const char * multicastif,
+                     const char * minissdpdsock, int localport,
+                     int ipv6, unsigned char ttl,
+                     int * error );
 
 MINIUPNP_LIBSPEC struct UPNPDev *
-upnpDiscoverDevices(const char * const deviceTypes[],
-                    int delay, const char * multicastif,
-                    const char * minissdpdsock, int localport,
-                    int ipv6, unsigned char ttl,
-                    int * error,
-                    int searchalltypes);
+upnpDiscoverDevices ( const char * const deviceTypes[],
+                      int delay, const char * multicastif,
+                      const char * minissdpdsock, int localport,
+                      int ipv6, unsigned char ttl,
+                      int * error,
+                      int searchalltypes );
 
 /* parserootdesc() :
  * parse root XML description of a UPnP device and fill the IGDdatas
  * structure. */
-MINIUPNP_LIBSPEC void parserootdesc(const char *, int, struct IGDdatas *);
+MINIUPNP_LIBSPEC void parserootdesc ( const char *, int, struct IGDdatas * );
 
 /* structure used to get fast access to urls
  * controlURL: controlURL of the WANIPConnection
@@ -97,11 +100,11 @@ MINIUPNP_LIBSPEC void parserootdesc(const char *, int, struct IGDdatas *);
  * controlURL_6FC: controlURL of the WANIPv6FirewallControl
  */
 struct UPNPUrls {
-	char * controlURL;
-	char * ipcondescURL;
-	char * controlURL_CIF;
-	char * controlURL_6FC;
-	char * rootdescURL;
+    char * controlURL;
+    char * ipcondescURL;
+    char * controlURL_CIF;
+    char * controlURL_6FC;
+    char * rootdescURL;
 };
 
 /* UPNP_GetValidIGD() :
@@ -117,10 +120,10 @@ struct UPNPUrls {
  * free allocated memory.
  */
 MINIUPNP_LIBSPEC int
-UPNP_GetValidIGD(struct UPNPDev * devlist,
-                 struct UPNPUrls * urls,
-				 struct IGDdatas * data,
-				 char * lanaddr, int lanaddrlen);
+UPNP_GetValidIGD ( struct UPNPDev * devlist,
+                   struct UPNPUrls * urls,
+                   struct IGDdatas * data,
+                   char * lanaddr, int lanaddrlen );
 
 /* UPNP_GetIGDFromUrl()
  * Used when skipping the discovery process.
@@ -129,20 +132,20 @@ UPNP_GetValidIGD(struct UPNPDev * devlist,
  *   0 - Not ok
  *   1 - OK */
 MINIUPNP_LIBSPEC int
-UPNP_GetIGDFromUrl(const char * rootdescurl,
-                   struct UPNPUrls * urls,
-                   struct IGDdatas * data,
-                   char * lanaddr, int lanaddrlen);
+UPNP_GetIGDFromUrl ( const char * rootdescurl,
+                     struct UPNPUrls * urls,
+                     struct IGDdatas * data,
+                     char * lanaddr, int lanaddrlen );
 
 MINIUPNP_LIBSPEC void
-GetUPNPUrls(struct UPNPUrls *, struct IGDdatas *,
-            const char *, unsigned int);
+GetUPNPUrls ( struct UPNPUrls *, struct IGDdatas *,
+              const char *, unsigned int );
 
 MINIUPNP_LIBSPEC void
-FreeUPNPUrls(struct UPNPUrls *);
+FreeUPNPUrls ( struct UPNPUrls * );
 
 /* return 0 or 1 */
-MINIUPNP_LIBSPEC int UPNPIGD_IsConnected(struct UPNPUrls *, struct IGDdatas *);
+MINIUPNP_LIBSPEC int UPNPIGD_IsConnected ( struct UPNPUrls *, struct IGDdatas * );
 
 
 #ifdef __cplusplus

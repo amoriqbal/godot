@@ -42,94 +42,96 @@
 	@author Juan Linietsky <reduzio@gmail.com>
 */
 
-class ShaderRD {
-	//versions
-	CharString general_defines;
-	Vector<CharString> variant_defines;
+class ShaderRD
+{
+    //versions
+    CharString general_defines;
+    Vector<CharString> variant_defines;
 
-	struct Version {
-		CharString uniforms;
-		CharString vertex_globals;
-		CharString vertex_code;
-		CharString compute_globals;
-		CharString compute_code;
-		CharString fragment_light;
-		CharString fragment_globals;
-		CharString fragment_code;
-		Vector<CharString> custom_defines;
+    struct Version {
+        CharString uniforms;
+        CharString vertex_globals;
+        CharString vertex_code;
+        CharString compute_globals;
+        CharString compute_code;
+        CharString fragment_light;
+        CharString fragment_globals;
+        CharString fragment_code;
+        Vector<CharString> custom_defines;
 
-		RID *variants; //same size as version defines
+        RID *variants; //same size as version defines
 
-		bool valid;
-		bool dirty;
-		bool initialize_needed;
-	};
+        bool valid;
+        bool dirty;
+        bool initialize_needed;
+    };
 
-	Mutex variant_set_mutex;
+    Mutex variant_set_mutex;
 
-	void _compile_variant(uint32_t p_variant, Version *p_version);
+    void _compile_variant ( uint32_t p_variant, Version *p_version );
 
-	void _clear_version(Version *p_version);
-	void _compile_version(Version *p_version);
+    void _clear_version ( Version *p_version );
+    void _compile_version ( Version *p_version );
 
-	RID_Owner<Version> version_owner;
+    RID_Owner<Version> version_owner;
 
-	CharString fragment_codev; //for version and extensions
-	CharString fragment_code0;
-	CharString fragment_code1;
-	CharString fragment_code2;
-	CharString fragment_code3;
-	CharString fragment_code4;
+    CharString fragment_codev; //for version and extensions
+    CharString fragment_code0;
+    CharString fragment_code1;
+    CharString fragment_code2;
+    CharString fragment_code3;
+    CharString fragment_code4;
 
-	CharString vertex_codev; //for version and extensions
-	CharString vertex_code0;
-	CharString vertex_code1;
-	CharString vertex_code2;
-	CharString vertex_code3;
+    CharString vertex_codev; //for version and extensions
+    CharString vertex_code0;
+    CharString vertex_code1;
+    CharString vertex_code2;
+    CharString vertex_code3;
 
-	bool is_compute = false;
+    bool is_compute = false;
 
-	CharString compute_codev; //for version and extensions
-	CharString compute_code0;
-	CharString compute_code1;
-	CharString compute_code2;
-	CharString compute_code3;
+    CharString compute_codev; //for version and extensions
+    CharString compute_code0;
+    CharString compute_code1;
+    CharString compute_code2;
+    CharString compute_code3;
 
-	const char *name;
+    const char *name;
 
 protected:
-	ShaderRD() {}
-	void setup(const char *p_vertex_code, const char *p_fragment_code, const char *p_compute_code, const char *p_name);
+    ShaderRD() {}
+    void setup ( const char *p_vertex_code, const char *p_fragment_code, const char *p_compute_code, const char *p_name );
 
 public:
-	RID version_create();
+    RID version_create();
 
-	void version_set_code(RID p_version, const String &p_uniforms, const String &p_vertex_globals, const String &p_vertex_code, const String &p_fragment_globals, const String &p_fragment_light, const String &p_fragment_code, const Vector<String> &p_custom_defines);
-	void version_set_compute_code(RID p_version, const String &p_uniforms, const String &p_compute_globals, const String &p_compute_code, const Vector<String> &p_custom_defines);
+    void version_set_code ( RID p_version, const String &p_uniforms, const String &p_vertex_globals, const String &p_vertex_code, const String &p_fragment_globals, const String &p_fragment_light, const String &p_fragment_code, const Vector<String> &p_custom_defines );
+    void version_set_compute_code ( RID p_version, const String &p_uniforms, const String &p_compute_globals, const String &p_compute_code, const Vector<String> &p_custom_defines );
 
-	_FORCE_INLINE_ RID version_get_shader(RID p_version, int p_variant) {
-		ERR_FAIL_INDEX_V(p_variant, variant_defines.size(), RID());
+    _FORCE_INLINE_ RID version_get_shader ( RID p_version, int p_variant )
+    {
+        ERR_FAIL_INDEX_V ( p_variant, variant_defines.size(), RID() );
 
-		Version *version = version_owner.getornull(p_version);
-		ERR_FAIL_COND_V(!version, RID());
+        Version *version = version_owner.getornull ( p_version );
+        ERR_FAIL_COND_V ( !version, RID() );
 
-		if (version->dirty) {
-			_compile_version(version);
-		}
+        if ( version->dirty ) {
+            _compile_version ( version );
+        }
 
-		if (!version->valid) {
-			return RID();
-		}
+        if ( !version->valid ) {
+            return RID();
+        }
 
-		return version->variants[p_variant];
-	}
+        return version->variants[p_variant];
+    }
 
-	bool version_is_valid(RID p_version);
+    bool version_is_valid ( RID p_version );
 
-	bool version_free(RID p_version);
+    bool version_free ( RID p_version );
 
-	void initialize(const Vector<String> &p_variant_defines, const String &p_general_defines = "");
-	virtual ~ShaderRD();
+    void initialize ( const Vector<String> &p_variant_defines, const String &p_general_defines = "" );
+    virtual ~ShaderRD();
 };
 
 #endif

@@ -42,46 +42,47 @@
 
 #include <vector>
 
-namespace spv {
+namespace spv
+{
 
 // Fill in all the parameters
 void Parameterize();
 
 // Return the English names of all the enums.
-const char* SourceString(int);
-const char* AddressingString(int);
-const char* MemoryString(int);
-const char* ExecutionModelString(int);
-const char* ExecutionModeString(int);
-const char* StorageClassString(int);
-const char* DecorationString(int);
-const char* BuiltInString(int);
-const char* DimensionString(int);
-const char* SelectControlString(int);
-const char* LoopControlString(int);
-const char* FunctionControlString(int);
-const char* SamplerAddressingModeString(int);
-const char* SamplerFilterModeString(int);
-const char* ImageFormatString(int);
-const char* ImageChannelOrderString(int);
-const char* ImageChannelTypeString(int);
-const char* ImageChannelDataTypeString(int type);
-const char* ImageOperandsString(int format);
-const char* ImageOperands(int);
-const char* FPFastMathString(int);
-const char* FPRoundingModeString(int);
-const char* LinkageTypeString(int);
-const char* FuncParamAttrString(int);
-const char* AccessQualifierString(int);
-const char* MemorySemanticsString(int);
-const char* MemoryAccessString(int);
-const char* ExecutionScopeString(int);
-const char* GroupOperationString(int);
-const char* KernelEnqueueFlagsString(int);
-const char* KernelProfilingInfoString(int);
-const char* CapabilityString(int);
-const char* OpcodeString(int);
-const char* ScopeString(int mem);
+const char* SourceString ( int );
+const char* AddressingString ( int );
+const char* MemoryString ( int );
+const char* ExecutionModelString ( int );
+const char* ExecutionModeString ( int );
+const char* StorageClassString ( int );
+const char* DecorationString ( int );
+const char* BuiltInString ( int );
+const char* DimensionString ( int );
+const char* SelectControlString ( int );
+const char* LoopControlString ( int );
+const char* FunctionControlString ( int );
+const char* SamplerAddressingModeString ( int );
+const char* SamplerFilterModeString ( int );
+const char* ImageFormatString ( int );
+const char* ImageChannelOrderString ( int );
+const char* ImageChannelTypeString ( int );
+const char* ImageChannelDataTypeString ( int type );
+const char* ImageOperandsString ( int format );
+const char* ImageOperands ( int );
+const char* FPFastMathString ( int );
+const char* FPRoundingModeString ( int );
+const char* LinkageTypeString ( int );
+const char* FuncParamAttrString ( int );
+const char* AccessQualifierString ( int );
+const char* MemorySemanticsString ( int );
+const char* MemoryAccessString ( int );
+const char* ExecutionScopeString ( int );
+const char* GroupOperationString ( int );
+const char* KernelEnqueueFlagsString ( int );
+const char* KernelProfilingInfoString ( int );
+const char* CapabilityString ( int );
+const char* OpcodeString ( int );
+const char* ScopeString ( int mem );
 
 // For grouping opcodes into subsections
 enum OpcodeClass {
@@ -165,20 +166,33 @@ enum OperandClass {
 typedef std::vector<Capability> EnumCaps;
 
 // Parameterize a set of operands with their OperandClass(es) and descriptions.
-class OperandParameters {
+class OperandParameters
+{
 public:
     OperandParameters() { }
-    void push(OperandClass oc, const char* d, bool opt = false)
+    void push ( OperandClass oc, const char* d, bool opt = false )
     {
-        opClass.push_back(oc);
-        desc.push_back(d);
-        optional.push_back(opt);
+        opClass.push_back ( oc );
+        desc.push_back ( d );
+        optional.push_back ( opt );
     }
     void setOptional();
-    OperandClass getClass(int op) const { return opClass[op]; }
-    const char* getDesc(int op) const { return desc[op]; }
-    bool isOptional(int op) const { return optional[op]; }
-    int getNum() const { return (int)opClass.size(); }
+    OperandClass getClass ( int op ) const
+    {
+        return opClass[op];
+    }
+    const char* getDesc ( int op ) const
+    {
+        return desc[op];
+    }
+    bool isOptional ( int op ) const
+    {
+        return optional[op];
+    }
+    int getNum() const
+    {
+        return ( int ) opClass.size();
+    }
 
 protected:
     std::vector<OperandClass> opClass;
@@ -187,51 +201,63 @@ protected:
 };
 
 // Parameterize an enumerant
-class EnumParameters {
+class EnumParameters
+{
 public:
-    EnumParameters() : desc(0) { }
+    EnumParameters() : desc ( 0 ) { }
     const char* desc;
 };
 
 // Parameterize a set of enumerants that form an enum
-class EnumDefinition : public EnumParameters {
+class EnumDefinition : public EnumParameters
+{
 public:
-    EnumDefinition() : 
-        ceiling(0), bitmask(false), getName(0), enumParams(0), operandParams(0) { }
-    void set(int ceil, const char* (*name)(int), EnumParameters* ep, bool mask = false)
+    EnumDefinition() :
+        ceiling ( 0 ), bitmask ( false ), getName ( 0 ), enumParams ( 0 ), operandParams ( 0 ) { }
+    void set ( int ceil, const char* ( *name ) ( int ), EnumParameters* ep, bool mask = false )
     {
         ceiling = ceil;
         getName = name;
         bitmask = mask;
         enumParams = ep;
     }
-    void setOperands(OperandParameters* op) { operandParams = op; }
+    void setOperands ( OperandParameters* op )
+    {
+        operandParams = op;
+    }
     int ceiling;   // ceiling of enumerants
     bool bitmask;  // true if these enumerants combine into a bitmask
-    const char* (*getName)(int);      // a function that returns the name for each enumerant value (or shift)
+    const char* ( *getName ) ( int ); // a function that returns the name for each enumerant value (or shift)
     EnumParameters* enumParams;       // parameters for each individual enumerant
     OperandParameters* operandParams; // sets of operands
 };
 
 // Parameterize an instruction's logical format, including its known set of operands,
 // per OperandParameters above.
-class InstructionParameters {
+class InstructionParameters
+{
 public:
     InstructionParameters() :
-        opDesc("TBD"),
-        opClass(OpClassMissing),
-        typePresent(true),         // most normal, only exceptions have to be spelled out
-        resultPresent(true)        // most normal, only exceptions have to be spelled out
+        opDesc ( "TBD" ),
+        opClass ( OpClassMissing ),
+        typePresent ( true ),      // most normal, only exceptions have to be spelled out
+        resultPresent ( true )     // most normal, only exceptions have to be spelled out
     { }
 
-    void setResultAndType(bool r, bool t)
+    void setResultAndType ( bool r, bool t )
     {
         resultPresent = r;
         typePresent = t;
     }
 
-    bool hasResult() const { return resultPresent != 0; }
-    bool hasType()   const { return typePresent != 0; }
+    bool hasResult() const
+    {
+        return resultPresent != 0;
+    }
+    bool hasType()   const
+    {
+        return typePresent != 0;
+    }
 
     const char* opDesc;
     OpcodeClass opClass;
@@ -249,10 +275,10 @@ extern InstructionParameters InstructionDesc[];
 // These hold definitions of the enumerants used for operands
 extern EnumDefinition OperandClassParams[];
 
-const char* GetOperandDesc(OperandClass operand);
-void PrintImmediateRow(int imm, const char* name, const EnumParameters* enumParams, bool caps, bool hex = false);
-const char* AccessQualifierString(int attr);
+const char* GetOperandDesc ( OperandClass operand );
+void PrintImmediateRow ( int imm, const char* name, const EnumParameters* enumParams, bool caps, bool hex = false );
+const char* AccessQualifierString ( int attr );
 
-void PrintOperands(const OperandParameters& operands, int reservedOperands);
+void PrintOperands ( const OperandParameters& operands, int reservedOperands );
 
 }  // end namespace spv

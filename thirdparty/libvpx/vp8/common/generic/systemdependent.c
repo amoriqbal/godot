@@ -24,7 +24,7 @@
 #include <unistd.h>
 #elif defined(_WIN32)
 #include <windows.h>
-typedef void (WINAPI *PGNSI)(LPSYSTEM_INFO);
+typedef void ( WINAPI *PGNSI ) ( LPSYSTEM_INFO );
 #elif defined(__OS2__)
 #define INCL_DOS
 #define INCL_DOSSPINLOCK
@@ -39,15 +39,15 @@ static int get_cpu_count()
 
 #if HAVE_UNISTD_H && !defined(__OS2__)
 #if defined(_SC_NPROCESSORS_ONLN)
-    core_count = sysconf(_SC_NPROCESSORS_ONLN);
+    core_count = sysconf ( _SC_NPROCESSORS_ONLN );
 #elif defined(_SC_NPROC_ONLN)
-    core_count = sysconf(_SC_NPROC_ONLN);
+    core_count = sysconf ( _SC_NPROC_ONLN );
 #endif
 #elif defined(_WIN32)
     {
 #if _WIN32_WINNT >= 0x0501
         SYSTEM_INFO sysinfo;
-        GetNativeSystemInfo(&sysinfo);
+        GetNativeSystemInfo ( &sysinfo );
 #else
         PGNSI pGNSI;
         SYSTEM_INFO sysinfo;
@@ -55,12 +55,13 @@ static int get_cpu_count()
         /* Call GetNativeSystemInfo if supported or
          * GetSystemInfo otherwise. */
 
-        pGNSI = (PGNSI) GetProcAddress(
-                GetModuleHandle(TEXT("kernel32.dll")), "GetNativeSystemInfo");
-        if (pGNSI != NULL)
-            pGNSI(&sysinfo);
-        else
-            GetSystemInfo(&sysinfo);
+        pGNSI = ( PGNSI ) GetProcAddress (
+                    GetModuleHandle ( TEXT ( "kernel32.dll" ) ), "GetNativeSystemInfo" );
+        if ( pGNSI != NULL ) {
+            pGNSI ( &sysinfo );
+        } else {
+            GetSystemInfo ( &sysinfo );
+        }
 #endif
 
         core_count = sysinfo.dwNumberOfProcessors;
@@ -71,13 +72,14 @@ static int get_cpu_count()
         ULONG status;
 
         core_count = 0;
-        for (proc_id = 1; ; proc_id++)
-        {
-            if (DosGetProcessorStatus(proc_id, &status))
+        for ( proc_id = 1; ; proc_id++ ) {
+            if ( DosGetProcessorStatus ( proc_id, &status ) ) {
                 break;
+            }
 
-            if (status == PROC_ONLINE)
+            if ( status == PROC_ONLINE ) {
                 core_count++;
+            }
         }
     }
 #else
@@ -90,12 +92,12 @@ static int get_cpu_count()
 
 void vp8_clear_system_state_c() {};
 
-void vp8_machine_specific_config(VP8_COMMON *ctx)
+void vp8_machine_specific_config ( VP8_COMMON *ctx )
 {
 #if CONFIG_MULTITHREAD
     ctx->processor_core_count = get_cpu_count();
 #else
-    (void)ctx;
+    ( void ) ctx;
 #endif /* CONFIG_MULTITHREAD */
 
 #if ARCH_ARM

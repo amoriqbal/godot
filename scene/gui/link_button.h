@@ -34,35 +34,36 @@
 #include "scene/gui/base_button.h"
 #include "scene/resources/bit_map.h"
 
-class LinkButton : public BaseButton {
-	GDCLASS(LinkButton, BaseButton);
+class LinkButton : public BaseButton
+{
+    GDCLASS ( LinkButton, BaseButton );
 
 public:
-	enum UnderlineMode {
-		UNDERLINE_MODE_ALWAYS,
-		UNDERLINE_MODE_ON_HOVER,
-		UNDERLINE_MODE_NEVER
-	};
+    enum UnderlineMode {
+        UNDERLINE_MODE_ALWAYS,
+        UNDERLINE_MODE_ON_HOVER,
+        UNDERLINE_MODE_NEVER
+    };
 
 private:
-	String text;
-	UnderlineMode underline_mode;
+    String text;
+    UnderlineMode underline_mode;
 
 protected:
-	virtual Size2 get_minimum_size() const override;
-	void _notification(int p_what);
-	static void _bind_methods();
+    virtual Size2 get_minimum_size() const override;
+    void _notification ( int p_what );
+    static void _bind_methods();
 
 public:
-	void set_text(const String &p_text);
-	String get_text() const;
+    void set_text ( const String &p_text );
+    String get_text() const;
 
-	void set_underline_mode(UnderlineMode p_underline_mode);
-	UnderlineMode get_underline_mode() const;
+    void set_underline_mode ( UnderlineMode p_underline_mode );
+    UnderlineMode get_underline_mode() const;
 
-	LinkButton();
+    LinkButton();
 };
 
-VARIANT_ENUM_CAST(LinkButton::UnderlineMode);
+VARIANT_ENUM_CAST ( LinkButton::UnderlineMode );
 
 #endif // LINKBUTTON_H

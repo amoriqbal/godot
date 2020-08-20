@@ -1760,10 +1760,10 @@ int Node::get_persistent_group_count() const {
 }
 
 void Node::_print_tree_pretty(const String &prefix, const bool last) {
-	String new_prefix = last ? String::utf8(" ┖╴") : String::utf8(" ┠╴");
+	String new_prefix = last ? String::utf8(" ??????") : String::utf8(" ??????");
 	print_line(prefix + new_prefix + String(get_name()));
 	for (int i = 0; i < data.children.size(); i++) {
-		new_prefix = last ? String::utf8("   ") : String::utf8(" ┃ ");
+		new_prefix = last ? String::utf8("   ") : String::utf8(" ??? ");
 		data.children[i]->_print_tree_pretty(prefix + new_prefix, i == data.children.size() - 1);
 	}
 }

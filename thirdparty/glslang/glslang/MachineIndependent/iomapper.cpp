@@ -525,7 +525,7 @@ int TDefaultIoResolverBase::resolveInOutLocation(EShLanguage stage, TVarEntryInf
     // work with mixed location/no-location declarations.
     int location = nextLocation;
     int typeLocationSize;
-    // Don’t take into account the outer-most array if the stage’s
+    // Don???t take into account the outer-most array if the stage???s
     // interface is automatically an array.
     typeLocationSize = computeTypeLocationSize(type, stage);
     nextLocation += typeLocationSize;
@@ -540,7 +540,7 @@ int TDefaultIoResolverBase::resolveInOutIndex(EShLanguage /*stage*/, TVarEntryIn
 
 uint32_t TDefaultIoResolverBase::computeTypeLocationSize(const TType& type, EShLanguage stage) {
     int typeLocationSize;
-    // Don’t take into account the outer-most array if the stage’s
+    // Don???t take into account the outer-most array if the stage???s
     // interface is automatically an array.
     if (type.getQualifier().isArrayedIo(stage)) {
         TType elementType(type, 0);

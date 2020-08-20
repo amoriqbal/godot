@@ -52,14 +52,16 @@ struct aiMesh;
 
 class TriangulateProcessTest;
 
-namespace Assimp {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /** The TriangulateProcess splits up all faces with more than three indices
  * into triangles. You usually want this to happen because the graphics cards
  * need their data as triangles.
  */
-class ASSIMP_API TriangulateProcess : public BaseProcess {
+class ASSIMP_API TriangulateProcess : public BaseProcess
+{
 public:
     TriangulateProcess();
     ~TriangulateProcess();
@@ -70,20 +72,20 @@ public:
      *   combination of #aiPostProcessSteps.
      * @return true if the process is present in this flag fields, false if not.
     */
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
     /** Executes the post processing step on the given imported data.
     * At the moment a process is not supposed to fail.
     * @param pScene The imported data to work at.
     */
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
     // -------------------------------------------------------------------
     /** Triangulates the given mesh.
      * @param pMesh The mesh to triangulate.
      */
-    bool TriangulateMesh( aiMesh* pMesh);
+    bool TriangulateMesh ( aiMesh* pMesh );
 };
 
 } // end of namespace Assimp

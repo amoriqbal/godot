@@ -22,7 +22,8 @@ import android.os.Messenger;
  * This interface should be implemented by the client activity for the
  * downloader. It is used to pass status from the service to the client.
  */
-public interface IDownloaderClient {
+public interface IDownloaderClient
+{
     static final int STATE_IDLE = 1;
     static final int STATE_FETCHING_URL = 2;
     static final int STATE_CONNECTING = 3;
@@ -90,7 +91,7 @@ public interface IDownloaderClient {
      * @param m the service Messenger. This Messenger is used to call the
      *            service API from the client.
      */
-    void onServiceConnected(Messenger m);
+    void onServiceConnected ( Messenger m );
 
     /**
      * Called when the download state changes. Depending on the state, there may
@@ -112,7 +113,7 @@ public interface IDownloaderClient {
      *
      * @param newState one of the STATE_* values defined in IDownloaderClient
      */
-    void onDownloadStateChanged(int newState);
+    void onDownloadStateChanged ( int newState );
 
     /**
      * Shows the download progress. This is intended to be used to fill out a
@@ -122,5 +123,5 @@ public interface IDownloaderClient {
      * @param progress the DownloadProgressInfo object containing the current
      *            progress of all downloads.
      */
-    void onDownloadProgress(DownloadProgressInfo progress);
+    void onDownloadProgress ( DownloadProgressInfo progress );
 }

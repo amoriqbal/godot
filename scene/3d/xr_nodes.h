@@ -43,22 +43,23 @@
 /*
 	XRCamera is a subclass of camera which will register itself with its parent XROrigin and as a result is automatically positioned
 */
-class XRCamera3D : public Camera3D {
-	GDCLASS(XRCamera3D, Camera3D);
+class XRCamera3D : public Camera3D
+{
+    GDCLASS ( XRCamera3D, Camera3D );
 
 protected:
-	void _notification(int p_what);
+    void _notification ( int p_what );
 
 public:
-	String get_configuration_warning() const override;
+    String get_configuration_warning() const override;
 
-	virtual Vector3 project_local_ray_normal(const Point2 &p_pos) const override;
-	virtual Point2 unproject_position(const Vector3 &p_pos) const override;
-	virtual Vector3 project_position(const Point2 &p_point, float p_z_depth) const override;
-	virtual Vector<Plane> get_frustum() const override;
+    virtual Vector3 project_local_ray_normal ( const Point2 &p_pos ) const override;
+    virtual Point2 unproject_position ( const Vector3 &p_pos ) const override;
+    virtual Vector3 project_position ( const Point2 &p_point, float p_z_depth ) const override;
+    virtual Vector<Plane> get_frustum() const override;
 
-	XRCamera3D() {}
-	~XRCamera3D() {}
+    XRCamera3D() {}
+    ~XRCamera3D() {}
 };
 
 /*
@@ -67,40 +68,41 @@ public:
 	It must be a child node of our XROrigin node
 */
 
-class XRController3D : public Node3D {
-	GDCLASS(XRController3D, Node3D);
+class XRController3D : public Node3D
+{
+    GDCLASS ( XRController3D, Node3D );
 
 private:
-	int controller_id = 1;
-	bool is_active = true;
-	int button_states = 0;
-	Ref<Mesh> mesh;
+    int controller_id = 1;
+    bool is_active = true;
+    int button_states = 0;
+    Ref<Mesh> mesh;
 
 protected:
-	void _notification(int p_what);
-	static void _bind_methods();
+    void _notification ( int p_what );
+    static void _bind_methods();
 
 public:
-	void set_controller_id(int p_controller_id);
-	int get_controller_id() const;
-	String get_controller_name() const;
+    void set_controller_id ( int p_controller_id );
+    int get_controller_id() const;
+    String get_controller_name() const;
 
-	int get_joystick_id() const;
-	bool is_button_pressed(int p_button) const;
-	float get_joystick_axis(int p_axis) const;
+    int get_joystick_id() const;
+    bool is_button_pressed ( int p_button ) const;
+    float get_joystick_axis ( int p_axis ) const;
 
-	real_t get_rumble() const;
-	void set_rumble(real_t p_rumble);
+    real_t get_rumble() const;
+    void set_rumble ( real_t p_rumble );
 
-	bool get_is_active() const;
-	XRPositionalTracker::TrackerHand get_hand() const;
+    bool get_is_active() const;
+    XRPositionalTracker::TrackerHand get_hand() const;
 
-	Ref<Mesh> get_mesh() const;
+    Ref<Mesh> get_mesh() const;
 
-	String get_configuration_warning() const override;
+    String get_configuration_warning() const override;
 
-	XRController3D() {}
-	~XRController3D() {}
+    XRController3D() {}
+    ~XRController3D() {}
 };
 
 /*
@@ -108,35 +110,36 @@ public:
 	It must be a child node of our XROrigin3D node
 */
 
-class XRAnchor3D : public Node3D {
-	GDCLASS(XRAnchor3D, Node3D);
+class XRAnchor3D : public Node3D
+{
+    GDCLASS ( XRAnchor3D, Node3D );
 
 private:
-	int anchor_id = 1;
-	bool is_active = true;
-	Vector3 size;
-	Ref<Mesh> mesh;
+    int anchor_id = 1;
+    bool is_active = true;
+    Vector3 size;
+    Ref<Mesh> mesh;
 
 protected:
-	void _notification(int p_what);
-	static void _bind_methods();
+    void _notification ( int p_what );
+    static void _bind_methods();
 
 public:
-	void set_anchor_id(int p_anchor_id);
-	int get_anchor_id() const;
-	String get_anchor_name() const;
+    void set_anchor_id ( int p_anchor_id );
+    int get_anchor_id() const;
+    String get_anchor_name() const;
 
-	bool get_is_active() const;
-	Vector3 get_size() const;
+    bool get_is_active() const;
+    Vector3 get_size() const;
 
-	Plane get_plane() const;
+    Plane get_plane() const;
 
-	Ref<Mesh> get_mesh() const;
+    Ref<Mesh> get_mesh() const;
 
-	String get_configuration_warning() const override;
+    String get_configuration_warning() const override;
 
-	XRAnchor3D() {}
-	~XRAnchor3D() {}
+    XRAnchor3D() {}
+    ~XRAnchor3D() {}
 };
 
 /*
@@ -147,27 +150,28 @@ public:
 	Our camera and controllers will always be child nodes and thus place relative to this origin point.
 	This node will automatically locate any camera child nodes and update its position while our XRController3D node will handle tracked controllers.
 */
-class XROrigin3D : public Node3D {
-	GDCLASS(XROrigin3D, Node3D);
+class XROrigin3D : public Node3D
+{
+    GDCLASS ( XROrigin3D, Node3D );
 
 private:
-	XRCamera3D *tracked_camera = nullptr;
+    XRCamera3D *tracked_camera = nullptr;
 
 protected:
-	void _notification(int p_what);
-	static void _bind_methods();
+    void _notification ( int p_what );
+    static void _bind_methods();
 
 public:
-	String get_configuration_warning() const override;
+    String get_configuration_warning() const override;
 
-	void set_tracked_camera(XRCamera3D *p_tracked_camera);
-	void clear_tracked_camera_if(XRCamera3D *p_tracked_camera);
+    void set_tracked_camera ( XRCamera3D *p_tracked_camera );
+    void clear_tracked_camera_if ( XRCamera3D *p_tracked_camera );
 
-	float get_world_scale() const;
-	void set_world_scale(float p_world_scale);
+    float get_world_scale() const;
+    void set_world_scale ( float p_world_scale );
 
-	XROrigin3D() {}
-	~XROrigin3D() {}
+    XROrigin3D() {}
+    ~XROrigin3D() {}
 };
 
 #endif /* XR_NODES_H */

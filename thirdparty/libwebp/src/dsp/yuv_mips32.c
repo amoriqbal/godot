@@ -77,27 +77,28 @@ static void FUNC_NAME(const uint8_t* y,                                        \
   }                                                                            \
 }
 
-ROW_FUNC(YuvToRgbRow_MIPS32,      3, 0, 1, 2, 0)
-ROW_FUNC(YuvToRgbaRow_MIPS32,     4, 0, 1, 2, 3)
-ROW_FUNC(YuvToBgrRow_MIPS32,      3, 2, 1, 0, 0)
-ROW_FUNC(YuvToBgraRow_MIPS32,     4, 2, 1, 0, 3)
+ROW_FUNC ( YuvToRgbRow_MIPS32,      3, 0, 1, 2, 0 )
+ROW_FUNC ( YuvToRgbaRow_MIPS32,     4, 0, 1, 2, 3 )
+ROW_FUNC ( YuvToBgrRow_MIPS32,      3, 2, 1, 0, 0 )
+ROW_FUNC ( YuvToBgraRow_MIPS32,     4, 2, 1, 0, 3 )
 
 #undef ROW_FUNC
 
 //------------------------------------------------------------------------------
 // Entry point
 
-extern void WebPInitSamplersMIPS32(void);
+extern void WebPInitSamplersMIPS32 ( void );
 
-WEBP_TSAN_IGNORE_FUNCTION void WebPInitSamplersMIPS32(void) {
-  WebPSamplers[MODE_RGB]  = YuvToRgbRow_MIPS32;
-  WebPSamplers[MODE_RGBA] = YuvToRgbaRow_MIPS32;
-  WebPSamplers[MODE_BGR]  = YuvToBgrRow_MIPS32;
-  WebPSamplers[MODE_BGRA] = YuvToBgraRow_MIPS32;
+WEBP_TSAN_IGNORE_FUNCTION void WebPInitSamplersMIPS32 ( void )
+{
+    WebPSamplers[MODE_RGB]  = YuvToRgbRow_MIPS32;
+    WebPSamplers[MODE_RGBA] = YuvToRgbaRow_MIPS32;
+    WebPSamplers[MODE_BGR]  = YuvToBgrRow_MIPS32;
+    WebPSamplers[MODE_BGRA] = YuvToBgraRow_MIPS32;
 }
 
 #else  // !WEBP_USE_MIPS32
 
-WEBP_DSP_INIT_STUB(WebPInitSamplersMIPS32)
+WEBP_DSP_INIT_STUB ( WebPInitSamplersMIPS32 )
 
 #endif  // WEBP_USE_MIPS32

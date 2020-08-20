@@ -35,7 +35,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /* Window types:                        */
 /*  1 -> sine window from 0 to pi/2     */
 /*  2 -> sine window from pi/2 to pi    */
-void silk_apply_sine_window_FLP(
+void silk_apply_sine_window_FLP (
     silk_float                      px_win[],                           /* O    Pointer to windowed signal                  */
     const silk_float                px[],                               /* I    Pointer to input signal                     */
     const opus_int                  win_type,                           /* I    Selects a window type                       */
@@ -45,10 +45,10 @@ void silk_apply_sine_window_FLP(
     opus_int   k;
     silk_float freq, c, S0, S1;
 
-    silk_assert( win_type == 1 || win_type == 2 );
+    silk_assert ( win_type == 1 || win_type == 2 );
 
     /* Length must be multiple of 4 */
-    silk_assert( ( length & 3 ) == 0 );
+    silk_assert ( ( length & 3 ) == 0 );
 
     freq = PI / ( length + 1 );
 
@@ -56,7 +56,7 @@ void silk_apply_sine_window_FLP(
     c = 2.0f - freq * freq;
 
     /* Initialize state */
-    if( win_type < 2 ) {
+    if ( win_type < 2 ) {
         /* Start from 0 */
         S0 = 0.0f;
         /* Approximation of sin(f) */
@@ -70,7 +70,7 @@ void silk_apply_sine_window_FLP(
 
     /* Uses the recursive equation:   sin(n*f) = 2 * cos(f) * sin((n-1)*f) - sin((n-2)*f)   */
     /* 4 samples at a time */
-    for( k = 0; k < length; k += 4 ) {
+    for ( k = 0; k < length; k += 4 ) {
         px_win[ k + 0 ] = px[ k + 0 ] * 0.5f * ( S0 + S1 );
         px_win[ k + 1 ] = px[ k + 1 ] * S1;
         S0 = c * S1 - S0;

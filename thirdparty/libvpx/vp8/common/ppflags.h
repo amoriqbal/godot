@@ -15,8 +15,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-enum
-{
+enum {
     VP8D_NOFILTERING            = 0,
     VP8D_DEBLOCK                = 1<<0,
     VP8D_DEMACROBLOCK           = 1<<1,
@@ -31,8 +30,7 @@ enum
     VP8D_MFQE                   = 1<<10
 };
 
-typedef struct
-{
+typedef struct {
     int post_proc_flag;
     int deblocking_level;
     int noise_level;

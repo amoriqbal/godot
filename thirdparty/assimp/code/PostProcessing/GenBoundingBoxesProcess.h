@@ -52,21 +52,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Common/BaseProcess.h"
 
-namespace Assimp {
+namespace Assimp
+{
 
 /** Post-processing process to find axis-aligned bounding volumes for amm meshes
  *  used in a scene
  */
-class ASSIMP_API GenBoundingBoxesProcess : public BaseProcess {
+class ASSIMP_API GenBoundingBoxesProcess : public BaseProcess
+{
 public:
     /// The class constructor.
     GenBoundingBoxesProcess();
     /// The class destructor.
     ~GenBoundingBoxesProcess();
     /// Will return true, if aiProcess_GenBoundingBoxes is defined.
-    bool IsActive(unsigned int pFlags) const override;
+    bool IsActive ( unsigned int pFlags ) const override;
     /// The execution callback.
-    void Execute(aiScene* pScene) override;
+    void Execute ( aiScene* pScene ) override;
 };
 
 } // Namespace Assimp

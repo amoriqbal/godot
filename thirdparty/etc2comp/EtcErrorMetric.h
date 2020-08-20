@@ -19,36 +19,34 @@
 namespace Etc
 {
 
-	enum ErrorMetric
-	{
-		RGBA,
-		RGBX,
-		REC709,
-		NUMERIC,
-		NORMALXYZ,
-		//
-		ERROR_METRICS,
-		//
-		BT709 = REC709
-	};
+enum ErrorMetric {
+    RGBA,
+    RGBX,
+    REC709,
+    NUMERIC,
+    NORMALXYZ,
+    //
+    ERROR_METRICS,
+    //
+    BT709 = REC709
+};
 
-	inline const char *ErrorMetricToString(ErrorMetric errorMetric)
-	{
-		switch (errorMetric)
-		{
-		case RGBA:
-			return "RGBA";
-		case RGBX:
-			return "RGBX";
-		case REC709:
-			return "REC709";
-		case NUMERIC:
-			return "NUMERIC";
-		case NORMALXYZ:
-			return "NORMALXYZ";
-		case ERROR_METRICS:
-		default:
-			return "UNKNOWN";
-		}
-	}
+inline const char *ErrorMetricToString ( ErrorMetric errorMetric )
+{
+    switch ( errorMetric ) {
+    case RGBA:
+        return "RGBA";
+    case RGBX:
+        return "RGBX";
+    case REC709:
+        return "REC709";
+    case NUMERIC:
+        return "NUMERIC";
+    case NORMALXYZ:
+        return "NORMALXYZ";
+    case ERROR_METRICS:
+    default:
+        return "UNKNOWN";
+    }
+}
 } // namespace Etc

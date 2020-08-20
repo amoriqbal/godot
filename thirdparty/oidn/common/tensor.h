@@ -20,47 +20,60 @@
 #include <vector>
 #include <map>
 
-namespace oidn {
+namespace oidn
+{
 
-  template<typename T>
-  using shared_vector = std::shared_ptr<std::vector<T>>;
+template<typename T>
+using shared_vector = std::shared_ptr<std::vector<T>>;
 
-  // Generic tensor
-  struct Tensor
-  {
+// Generic tensor
+struct Tensor {
     float* data;
     std::vector<int64_t> dims;
     std::string format;
     shared_vector<char> buffer; // optional, only for reference counting
 
-    __forceinline Tensor() : data(nullptr) {}
+    __forceinline Tensor() : data ( nullptr ) {}
 
-    __forceinline Tensor(const std::vector<int64_t>& dims, const std::string& format)
-      : dims(dims),
-        format(format)
+    __forceinline Tensor ( const std::vector<int64_t>& dims, const std::string& format )
+        : dims ( dims ),
+          format ( format )
     {
-      buffer = std::make_shared<std::vector<char>>(size() * sizeof(float));
-      data = (float*)buffer->data();
+        buffer = std::make_shared<std::vector<char>> ( size() * sizeof ( float ) );
+        data = ( float* ) buffer->data();
     }
 
-    __forceinline operator bool() const { return data != nullptr; }
+    __forceinline operator bool() const
+    {
+        return data != nullptr;
+    }
 
-    __forceinline int ndims() const { return (int)dims.size(); }
+    __forceinline int ndims() const
+    {
+        return ( int ) dims.size();
+    }
 
     // Returns the number of values
     __forceinline size_t size() const
     {
-      size_t size = 1;
-      for (int i = 0; i < ndims(); ++i)
-        size *= dims[i];
-      return size;
+        size_t size = 1;
+        for ( int i = 0; i < ndims(); ++i ) {
+            size *= dims[i];
+        }
+        return size;
     }
 
-    __forceinline float& operator [](size_t i) { return data[i]; }
-    __forceinline const float& operator [](size_t i) const { return data[i]; }
-  };
+    __forceinline float& operator [] ( size_t i )
+    {
+        return data[i];
+    }
+    __forceinline const float& operator [] ( size_t i ) const
+    {
+        return data[i];
+    }
+};
 
-  // Parses tensors from a buffer
-  std::map<std::string, Tensor> parseTensors(void* buffer);
+// Parses tensors from a buffer
+std::map<std::string, Tensor> parseTensors ( void* buffer );
 
 } // namespace oidn

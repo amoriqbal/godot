@@ -461,7 +461,7 @@ typedef enum {
     mkldnn_forward_inference = 96,
     /** Forward data propagation (alias for @c mkldnn_forward_inference) */
     mkldnn_forward_scoring = mkldnn_forward_inference,
-   /** Forward data propagation (alias for @c mkldnn_forward_training) */
+    /** Forward data propagation (alias for @c mkldnn_forward_training) */
     mkldnn_forward = mkldnn_forward_training,
     /** Backward propagation (with respect to all parameters */
     mkldnn_backward = 128,

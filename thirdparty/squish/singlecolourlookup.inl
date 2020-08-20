@@ -23,8 +23,7 @@
 
    -------------------------------------------------------------------------- */
 
-static SingleColourLookup const lookup_5_3[] =
-{
+static SingleColourLookup const lookup_5_3[] = {
     { { { 0, 0, 0 }, { 0, 0, 0 } } },
     { { { 0, 0, 1 }, { 0, 0, 1 } } },
     { { { 0, 0, 2 }, { 0, 0, 2 } } },
@@ -283,8 +282,7 @@ static SingleColourLookup const lookup_5_3[] =
     { { { 31, 0, 0 }, { 31, 31, 0 } } }
 };
 
-static SingleColourLookup const lookup_6_3[] =
-{
+static SingleColourLookup const lookup_6_3[] = {
     { { { 0, 0, 0 }, { 0, 0, 0 } } },
     { { { 0, 0, 1 }, { 0, 1, 1 } } },
     { { { 0, 0, 2 }, { 0, 1, 0 } } },
@@ -543,8 +541,7 @@ static SingleColourLookup const lookup_6_3[] =
     { { { 63, 0, 0 }, { 63, 63, 0 } } }
 };
 
-static SingleColourLookup const lookup_5_4[] =
-{
+static SingleColourLookup const lookup_5_4[] = {
     { { { 0, 0, 0 }, { 0, 0, 0 } } },
     { { { 0, 0, 1 }, { 0, 1, 1 } } },
     { { { 0, 0, 2 }, { 0, 1, 0 } } },
@@ -803,8 +800,7 @@ static SingleColourLookup const lookup_5_4[] =
     { { { 31, 0, 0 }, { 31, 31, 0 } } }
 };
 
-static SingleColourLookup const lookup_6_4[] =
-{
+static SingleColourLookup const lookup_6_4[] = {
     { { { 0, 0, 0 }, { 0, 0, 0 } } },
     { { { 0, 0, 1 }, { 0, 1, 0 } } },
     { { { 0, 0, 2 }, { 0, 2, 0 } } },

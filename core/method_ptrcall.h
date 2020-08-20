@@ -102,85 +102,91 @@ struct PtrToArg {
 		}                                                                     \
 	}
 
-MAKE_PTRARG(bool);
-MAKE_PTRARGCONV(uint8_t, int64_t);
-MAKE_PTRARGCONV(int8_t, int64_t);
-MAKE_PTRARGCONV(uint16_t, int64_t);
-MAKE_PTRARGCONV(int16_t, int64_t);
-MAKE_PTRARGCONV(uint32_t, int64_t);
-MAKE_PTRARGCONV(int32_t, int64_t);
-MAKE_PTRARG(int64_t);
-MAKE_PTRARG(uint64_t);
-MAKE_PTRARGCONV(float, double);
-MAKE_PTRARG(double);
+MAKE_PTRARG ( bool );
+MAKE_PTRARGCONV ( uint8_t, int64_t );
+MAKE_PTRARGCONV ( int8_t, int64_t );
+MAKE_PTRARGCONV ( uint16_t, int64_t );
+MAKE_PTRARGCONV ( int16_t, int64_t );
+MAKE_PTRARGCONV ( uint32_t, int64_t );
+MAKE_PTRARGCONV ( int32_t, int64_t );
+MAKE_PTRARG ( int64_t );
+MAKE_PTRARG ( uint64_t );
+MAKE_PTRARGCONV ( float, double );
+MAKE_PTRARG ( double );
 
-MAKE_PTRARG(String);
-MAKE_PTRARG(Vector2);
-MAKE_PTRARG(Rect2);
-MAKE_PTRARG_BY_REFERENCE(Vector3);
-MAKE_PTRARG(Vector2i);
-MAKE_PTRARG(Rect2i);
-MAKE_PTRARG_BY_REFERENCE(Vector3i);
-MAKE_PTRARG(Transform2D);
-MAKE_PTRARG_BY_REFERENCE(Plane);
-MAKE_PTRARG(Quat);
-MAKE_PTRARG_BY_REFERENCE(AABB);
-MAKE_PTRARG_BY_REFERENCE(Basis);
-MAKE_PTRARG_BY_REFERENCE(Transform);
-MAKE_PTRARG_BY_REFERENCE(Color);
-MAKE_PTRARG(StringName);
-MAKE_PTRARG(NodePath);
-MAKE_PTRARG(RID);
-MAKE_PTRARG(Dictionary);
-MAKE_PTRARG(Callable);
-MAKE_PTRARG(Signal);
-MAKE_PTRARG(Array);
-MAKE_PTRARG(PackedByteArray);
-MAKE_PTRARG(PackedInt32Array);
-MAKE_PTRARG(PackedInt64Array);
-MAKE_PTRARG(PackedFloat32Array);
-MAKE_PTRARG(PackedFloat64Array);
-MAKE_PTRARG(PackedStringArray);
-MAKE_PTRARG(PackedVector2Array);
-MAKE_PTRARG(PackedVector3Array);
-MAKE_PTRARG(PackedColorArray);
-MAKE_PTRARG_BY_REFERENCE(Variant);
+MAKE_PTRARG ( String );
+MAKE_PTRARG ( Vector2 );
+MAKE_PTRARG ( Rect2 );
+MAKE_PTRARG_BY_REFERENCE ( Vector3 );
+MAKE_PTRARG ( Vector2i );
+MAKE_PTRARG ( Rect2i );
+MAKE_PTRARG_BY_REFERENCE ( Vector3i );
+MAKE_PTRARG ( Transform2D );
+MAKE_PTRARG_BY_REFERENCE ( Plane );
+MAKE_PTRARG ( Quat );
+MAKE_PTRARG_BY_REFERENCE ( AABB );
+MAKE_PTRARG_BY_REFERENCE ( Basis );
+MAKE_PTRARG_BY_REFERENCE ( Transform );
+MAKE_PTRARG_BY_REFERENCE ( Color );
+MAKE_PTRARG ( StringName );
+MAKE_PTRARG ( NodePath );
+MAKE_PTRARG ( RID );
+MAKE_PTRARG ( Dictionary );
+MAKE_PTRARG ( Callable );
+MAKE_PTRARG ( Signal );
+MAKE_PTRARG ( Array );
+MAKE_PTRARG ( PackedByteArray );
+MAKE_PTRARG ( PackedInt32Array );
+MAKE_PTRARG ( PackedInt64Array );
+MAKE_PTRARG ( PackedFloat32Array );
+MAKE_PTRARG ( PackedFloat64Array );
+MAKE_PTRARG ( PackedStringArray );
+MAKE_PTRARG ( PackedVector2Array );
+MAKE_PTRARG ( PackedVector3Array );
+MAKE_PTRARG ( PackedColorArray );
+MAKE_PTRARG_BY_REFERENCE ( Variant );
 
 //this is for Object
 
 template <class T>
 struct PtrToArg<T *> {
-	_FORCE_INLINE_ static T *convert(const void *p_ptr) {
-		return const_cast<T *>(reinterpret_cast<const T *>(p_ptr));
-	}
+    _FORCE_INLINE_ static T *convert ( const void *p_ptr )
+    {
+        return const_cast<T *> ( reinterpret_cast<const T *> ( p_ptr ) );
+    }
 
-	_FORCE_INLINE_ static void encode(T *p_var, void *p_ptr) {
-		*((T **)p_ptr) = p_var;
-	}
+    _FORCE_INLINE_ static void encode ( T *p_var, void *p_ptr )
+    {
+        * ( ( T ** ) p_ptr ) = p_var;
+    }
 };
 
 template <class T>
 struct PtrToArg<const T *> {
-	_FORCE_INLINE_ static const T *convert(const void *p_ptr) {
-		return reinterpret_cast<const T *>(p_ptr);
-	}
+    _FORCE_INLINE_ static const T *convert ( const void *p_ptr )
+    {
+        return reinterpret_cast<const T *> ( p_ptr );
+    }
 
-	_FORCE_INLINE_ static void encode(T *p_var, void *p_ptr) {
-		*((T **)p_ptr) = p_var;
-	}
+    _FORCE_INLINE_ static void encode ( T *p_var, void *p_ptr )
+    {
+        * ( ( T ** ) p_ptr ) = p_var;
+    }
 };
 
 //this is for ObjectID
 
 template <>
 struct PtrToArg<ObjectID> {
-	_FORCE_INLINE_ static const ObjectID convert(const void *p_ptr) {
-		return ObjectID(*reinterpret_cast<const uint64_t *>(p_ptr));
-	}
+    _FORCE_INLINE_ static const ObjectID convert ( const void *p_ptr )
+    {
+        return ObjectID ( *reinterpret_cast<const uint64_t *> ( p_ptr ) );
+    }
 
-	_FORCE_INLINE_ static void encode(const ObjectID &p_val, void *p_ptr) {
-		*((uint64_t *)p_ptr) = p_val;
-	}
+    _FORCE_INLINE_ static void encode ( const ObjectID &p_val, void *p_ptr )
+    {
+        * ( ( uint64_t * ) p_ptr ) = p_val;
+    }
 };
 
 //this is for the special cases used by Variant
@@ -283,7 +289,7 @@ MAKE_VECARG(Vector2);
 MAKE_VECARG(Vector3);
 MAKE_VECARG(Color);
 */
-MAKE_VECARG_ALT(String, StringName);
+MAKE_VECARG_ALT ( String, StringName );
 
 //for stuff that gets converted to Array vectors
 #define MAKE_VECARR(m_type)                                                    \
@@ -322,9 +328,9 @@ MAKE_VECARG_ALT(String, StringName);
 		}                                                                      \
 	}
 
-MAKE_VECARR(Variant);
-MAKE_VECARR(RID);
-MAKE_VECARR(Plane);
+MAKE_VECARR ( Variant );
+MAKE_VECARR ( RID );
+MAKE_VECARR ( Plane );
 
 #define MAKE_DVECARR(m_type)                                                   \
 	template <>                                                                \
@@ -394,59 +400,62 @@ MAKE_VECARR(Plane);
 		}                                                                     \
 	}
 
-MAKE_STRINGCONV_BY_REFERENCE(IP_Address);
+MAKE_STRINGCONV_BY_REFERENCE ( IP_Address );
 
 template <>
 struct PtrToArg<Vector<Face3>> {
-	_FORCE_INLINE_ static Vector<Face3> convert(const void *p_ptr) {
-		const Vector<Vector3> *dvs = reinterpret_cast<const Vector<Vector3> *>(p_ptr);
-		Vector<Face3> ret;
-		int len = dvs->size() / 3;
-		ret.resize(len);
-		{
-			const Vector3 *r = dvs->ptr();
-			Face3 *w = ret.ptrw();
-			for (int i = 0; i < len; i++) {
-				w[i].vertex[0] = r[i * 3 + 0];
-				w[i].vertex[1] = r[i * 3 + 1];
-				w[i].vertex[2] = r[i * 3 + 2];
-			}
-		}
-		return ret;
-	}
-	_FORCE_INLINE_ static void encode(Vector<Face3> p_vec, void *p_ptr) {
-		Vector<Vector3> *arr = reinterpret_cast<Vector<Vector3> *>(p_ptr);
-		int len = p_vec.size();
-		arr->resize(len * 3);
-		{
-			const Face3 *r = p_vec.ptr();
-			Vector3 *w = arr->ptrw();
-			for (int i = 0; i < len; i++) {
-				w[i * 3 + 0] = r[i].vertex[0];
-				w[i * 3 + 1] = r[i].vertex[1];
-				w[i * 3 + 2] = r[i].vertex[2];
-			}
-		}
-	}
+    _FORCE_INLINE_ static Vector<Face3> convert ( const void *p_ptr )
+    {
+        const Vector<Vector3> *dvs = reinterpret_cast<const Vector<Vector3> *> ( p_ptr );
+        Vector<Face3> ret;
+        int len = dvs->size() / 3;
+        ret.resize ( len );
+        {
+            const Vector3 *r = dvs->ptr();
+            Face3 *w = ret.ptrw();
+            for ( int i = 0; i < len; i++ ) {
+                w[i].vertex[0] = r[i * 3 + 0];
+                w[i].vertex[1] = r[i * 3 + 1];
+                w[i].vertex[2] = r[i * 3 + 2];
+            }
+        }
+        return ret;
+    }
+    _FORCE_INLINE_ static void encode ( Vector<Face3> p_vec, void *p_ptr )
+    {
+        Vector<Vector3> *arr = reinterpret_cast<Vector<Vector3> *> ( p_ptr );
+        int len = p_vec.size();
+        arr->resize ( len * 3 );
+        {
+            const Face3 *r = p_vec.ptr();
+            Vector3 *w = arr->ptrw();
+            for ( int i = 0; i < len; i++ ) {
+                w[i * 3 + 0] = r[i].vertex[0];
+                w[i * 3 + 1] = r[i].vertex[1];
+                w[i * 3 + 2] = r[i].vertex[2];
+            }
+        }
+    }
 };
 template <>
 struct PtrToArg<const Vector<Face3> &> {
-	_FORCE_INLINE_ static Vector<Face3> convert(const void *p_ptr) {
-		const Vector<Vector3> *dvs = reinterpret_cast<const Vector<Vector3> *>(p_ptr);
-		Vector<Face3> ret;
-		int len = dvs->size() / 3;
-		ret.resize(len);
-		{
-			const Vector3 *r = dvs->ptr();
-			Face3 *w = ret.ptrw();
-			for (int i = 0; i < len; i++) {
-				w[i].vertex[0] = r[i * 3 + 0];
-				w[i].vertex[1] = r[i * 3 + 1];
-				w[i].vertex[2] = r[i * 3 + 2];
-			}
-		}
-		return ret;
-	}
+    _FORCE_INLINE_ static Vector<Face3> convert ( const void *p_ptr )
+    {
+        const Vector<Vector3> *dvs = reinterpret_cast<const Vector<Vector3> *> ( p_ptr );
+        Vector<Face3> ret;
+        int len = dvs->size() / 3;
+        ret.resize ( len );
+        {
+            const Vector3 *r = dvs->ptr();
+            Face3 *w = ret.ptrw();
+            for ( int i = 0; i < len; i++ ) {
+                w[i].vertex[0] = r[i * 3 + 0];
+                w[i].vertex[1] = r[i * 3 + 1];
+                w[i].vertex[2] = r[i * 3 + 2];
+            }
+        }
+        return ret;
+    }
 };
 
 #endif // METHOD_PTRCALL_H

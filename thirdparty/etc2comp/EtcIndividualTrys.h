@@ -21,75 +21,72 @@
 namespace Etc
 {
 
-	class IndividualTrys
-	{
-	public:
+class IndividualTrys
+{
+public:
 
-		static const unsigned int MAX_RADIUS = 1;
+    static const unsigned int MAX_RADIUS = 1;
 
-		IndividualTrys(ColorFloatRGBA a_frgbaColor1,
-						ColorFloatRGBA a_frgbaColor2,
-						const unsigned int *a_pauiPixelMapping1,
-						const unsigned int *a_pauiPixelMapping2,
-						unsigned int a_uiRadius);
+    IndividualTrys ( ColorFloatRGBA a_frgbaColor1,
+                     ColorFloatRGBA a_frgbaColor2,
+                     const unsigned int *a_pauiPixelMapping1,
+                     const unsigned int *a_pauiPixelMapping2,
+                     unsigned int a_uiRadius );
 
-		inline static int MoveAwayFromEdge(int a_i, int a_iDistance)
-		{
-			if (a_i < (0+ a_iDistance))
-			{
-				return (0 + a_iDistance);
-			}
-			else if (a_i > (15- a_iDistance))
-			{
-				return (15 - a_iDistance);
-			}
+    inline static int MoveAwayFromEdge ( int a_i, int a_iDistance )
+    {
+        if ( a_i < ( 0+ a_iDistance ) ) {
+            return ( 0 + a_iDistance );
+        } else if ( a_i > ( 15- a_iDistance ) ) {
+            return ( 15 - a_iDistance );
+        }
 
-			return a_i;
-		}
+        return a_i;
+    }
 
-		class Try
-		{
-        public :
-			static const unsigned int SELECTORS = 8;	// per half
+    class Try
+    {
+    public :
+        static const unsigned int SELECTORS = 8;	// per half
 
-			int m_iRed;
-			int m_iGreen;
-			int m_iBlue;
-			unsigned int m_uiCW;
-			unsigned int m_auiSelectors[SELECTORS];
-			float m_fError;
-        };
+        int m_iRed;
+        int m_iGreen;
+        int m_iBlue;
+        unsigned int m_uiCW;
+        unsigned int m_auiSelectors[SELECTORS];
+        float m_fError;
+    };
 
-		class Half
-		{
-		public:
+    class Half
+    {
+    public:
 
-			static const unsigned int MAX_TRYS = 27;
+        static const unsigned int MAX_TRYS = 27;
 
-			void Init(int a_iRed, int a_iGreen, int a_iBlue, 
-						const unsigned int *a_pauiPixelMapping,
-						unsigned int a_uiRadius);
+        void Init ( int a_iRed, int a_iGreen, int a_iBlue,
+                    const unsigned int *a_pauiPixelMapping,
+                    unsigned int a_uiRadius );
 
-			// center of trys
-			int m_iRed;
-			int m_iGreen;
-			int m_iBlue;
+        // center of trys
+        int m_iRed;
+        int m_iGreen;
+        int m_iBlue;
 
-			const unsigned int *m_pauiPixelMapping;
-			unsigned int m_uiRadius;
+        const unsigned int *m_pauiPixelMapping;
+        unsigned int m_uiRadius;
 
-			unsigned int m_uiTrys;
-			Try m_atry[MAX_TRYS];
+        unsigned int m_uiTrys;
+        Try m_atry[MAX_TRYS];
 
-			Try *m_ptryBest;
-		};
+        Try *m_ptryBest;
+    };
 
-		Half m_half1;
-		Half m_half2;
+    Half m_half1;
+    Half m_half2;
 
-	};
+};
 
-	// ----------------------------------------------------------------------------------------------------
-	//
+// ----------------------------------------------------------------------------------------------------
+//
 
 } // namespace Etc

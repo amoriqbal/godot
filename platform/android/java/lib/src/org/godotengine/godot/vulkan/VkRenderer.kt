@@ -28,7 +28,8 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-@file:JvmName("VkRenderer")
+@file:
+JvmName ( "VkRenderer" )
 package org.godotengine.godot.vulkan
 
 import android.view.Surface
@@ -51,59 +52,67 @@ import org.godotengine.godot.plugin.GodotPluginRegistry
  *
  * @see [VkSurfaceView.startRenderer]
  */
-internal class VkRenderer {
+internal class VkRenderer
+{
 
-	private val pluginRegistry: GodotPluginRegistry = GodotPluginRegistry.getPluginRegistry()
+private val pluginRegistry:
+    GodotPluginRegistry = GodotPluginRegistry.getPluginRegistry()
 
-	/**
-	 * Called when the surface is created and signals the beginning of rendering.
-	 */
-	fun onVkSurfaceCreated(surface: Surface) {
-		GodotLib.newcontext(surface, false)
+                          /**
+                           * Called when the surface is created and signals the beginning of rendering.
+                           */
+                          fun onVkSurfaceCreated ( surface: Surface )
+    {
+        GodotLib.newcontext ( surface, false )
 
-		for (plugin in pluginRegistry.getAllPlugins()) {
-			plugin.onVkSurfaceCreated(surface)
-		}
-	}
+        for ( plugin in pluginRegistry.getAllPlugins() ) {
+            plugin.onVkSurfaceCreated ( surface )
+        }
+    }
 
-	/**
-	 * Called after the surface is created and whenever its size changes.
-	 */
-	fun onVkSurfaceChanged(surface: Surface, width: Int, height: Int) {
-		GodotLib.resize(surface, width, height)
+    /**
+     * Called after the surface is created and whenever its size changes.
+     */
+    fun onVkSurfaceChanged ( surface: Surface, width: Int, height: Int )
+    {
+        GodotLib.resize ( surface, width, height )
 
-		for (plugin in pluginRegistry.getAllPlugins()) {
-			plugin.onVkSurfaceChanged(surface, width, height)
-		}
-	}
+        for ( plugin in pluginRegistry.getAllPlugins() ) {
+            plugin.onVkSurfaceChanged ( surface, width, height )
+        }
+    }
 
-	/**
-	 * Called to draw the current frame.
-	 */
-	fun onVkDrawFrame() {
-		GodotLib.step()
-		for (plugin in pluginRegistry.getAllPlugins()) {
-			plugin.onVkDrawFrame()
-		}
-	}
+    /**
+     * Called to draw the current frame.
+     */
+    fun onVkDrawFrame()
+    {
+        GodotLib.step()
+        for ( plugin in pluginRegistry.getAllPlugins() ) {
+            plugin.onVkDrawFrame()
+        }
+    }
 
-	/**
-	 * Called when the rendering thread is resumed.
-	 */
-	fun onVkResume() {
-		GodotLib.onRendererResumed()
-	}
+    /**
+     * Called when the rendering thread is resumed.
+     */
+    fun onVkResume()
+    {
+        GodotLib.onRendererResumed()
+    }
 
-	/**
-	 * Called when the rendering thread is paused.
-	 */
-	fun onVkPause() {
-		GodotLib.onRendererPaused()
-	}
+    /**
+     * Called when the rendering thread is paused.
+     */
+    fun onVkPause()
+    {
+        GodotLib.onRendererPaused()
+    }
 
-	/**
-	 * Called when the rendering thread is destroyed and used as signal to tear down the Vulkan logic.
-	 */
-	fun onVkDestroy() {
-	}
+    /**
+     * Called when the rendering thread is destroyed and used as signal to tear down the Vulkan logic.
+     */
+    fun onVkDestroy()
+    {
+    }
 }

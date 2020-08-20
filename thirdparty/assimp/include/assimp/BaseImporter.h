@@ -61,7 +61,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 struct aiScene;
 struct aiImporterDesc;
 
-namespace Assimp    {
+namespace Assimp
+{
 
 class Importer;
 class IOSystem;
@@ -84,12 +85,13 @@ class IOStream;
  * imports the given file. ReadFile is not overridable, it just calls
  * InternReadFile() and catches any ImportErrorException that might occur.
  */
-class ASSIMP_API BaseImporter {
+class ASSIMP_API BaseImporter
+{
     friend class Importer;
 
 private:
     /* Pushes state into importer for the importer scale */
-    virtual void UpdateImporterScale( Importer* pImp );
+    virtual void UpdateImporterScale ( Importer* pImp );
 
 public:
 
@@ -117,11 +119,11 @@ public:
      *   to be able to load files with unknown/not existent file extensions.
      * @return true if the class can read this file, false if not.
      */
-    virtual bool CanRead(
+    virtual bool CanRead (
         const std::string& pFile,
         IOSystem* pIOHandler,
         bool checkSig
-        ) const = 0;
+    ) const = 0;
 
     // -------------------------------------------------------------------
     /** Imports the given file and returns the imported data.
@@ -142,18 +144,19 @@ public:
      * in InternReadFile(), this function will catch it and transform it into
      *  a suitable response to the caller.
      */
-    aiScene* ReadFile(
+    aiScene* ReadFile (
         Importer* pImp,
         const std::string& pFile,
         IOSystem* pIOHandler
-        );
+    );
 
     // -------------------------------------------------------------------
     /** Returns the error description of the last error that occurred.
      * @return A description of the last error that occurred. An empty
      * string if there was no error.
      */
-    const std::string& GetErrorText() const {
+    const std::string& GetErrorText() const
+    {
         return m_ErrorText;
     }
 
@@ -163,9 +166,9 @@ public:
      * basing on the Importer's configuration property list.
      * @param pImp Importer instance
      */
-    virtual void SetupProperties(
+    virtual void SetupProperties (
         const Importer* pImp
-        );
+    );
 
     // -------------------------------------------------------------------
     /** Called by #Importer::GetImporterInfo to get a description of
@@ -175,7 +178,7 @@ public:
     /**
      * Will be called only by scale process when scaling is requested.
      */
-    virtual void SetFileScale(double scale)
+    virtual void SetFileScale ( double scale )
     {
         fileScale = scale;
     }
@@ -195,7 +198,7 @@ public:
 
     /**
      * Assimp Importer
-     * unit conversions available 
+     * unit conversions available
      * NOTE: Valid options are initialised in the
      * constructor in the implementation file to
      * work around a VS2013 compiler bug if support
@@ -204,7 +207,7 @@ public:
      * */
     std::map<ImporterUnits, double> importerUnits;
 
-    virtual void SetApplicationUnits( const ImporterUnits& unit )
+    virtual void SetApplicationUnits ( const ImporterUnits& unit )
     {
         importerScale = importerUnits[unit];
         applicationUnits = unit;
@@ -220,9 +223,9 @@ public:
      *  Take the extension list contained in the structure returned by
      *  #GetInfo and insert all file extensions into the given set.
      *  @param extension set to collect file extensions in*/
-    void GetExtensionList(std::set<std::string>& extensions);
-    
-protected:    
+    void GetExtensionList ( std::set<std::string>& extensions );
+
+protected:
     ImporterUnits applicationUnits = ImporterUnits::M;
     double importerScale = 1.0;
     double fileScale = 1.0;
@@ -273,11 +276,11 @@ protected:
      * NULL is not a valid parameter.
      * @param pIOHandler The IO handler to use for any file access.
      * NULL is not a valid parameter. */
-    virtual void InternReadFile(
+    virtual void InternReadFile (
         const std::string& pFile,
         aiScene* pScene,
         IOSystem* pIOHandler
-        ) = 0;
+    ) = 0;
 
 public: // static utilities
 
@@ -295,14 +298,14 @@ public: // static utilities
      *  @param numTokens Size of the token array
      *  @param searchBytes Number of bytes to be searched for the tokens.
      */
-    static bool SearchFileHeaderForToken(
+    static bool SearchFileHeaderForToken (
         IOSystem* pIOSystem,
         const std::string&  file,
         const char** tokens,
         unsigned int numTokens,
         unsigned int searchBytes = 200,
         bool tokensSol = false,
-        bool noAlphaBeforeTokens = false);
+        bool noAlphaBeforeTokens = false );
 
     // -------------------------------------------------------------------
     /** @brief Check whether a file has a specific file extension
@@ -316,7 +319,7 @@ public: // static utilities
         const std::string& pFile,
         const char* ext0,
         const char* ext1 = NULL,
-        const char* ext2 = NULL);
+        const char* ext2 = NULL );
 
     // -------------------------------------------------------------------
     /** @brief Extract file extension from a string
@@ -324,7 +327,7 @@ public: // static utilities
      *  @return Extension without trailing dot, all lowercase
      */
     static std::string GetExtension (
-        const std::string& pFile);
+        const std::string& pFile );
 
     // -------------------------------------------------------------------
     /** @brief Check whether a file starts with one or more magic tokens
@@ -340,13 +343,13 @@ public: // static utilities
      *  byte-swapped variant of all tokens (big endian). Only for
      *  tokens of size 2,4.
      */
-    static bool CheckMagicToken(
+    static bool CheckMagicToken (
         IOSystem* pIOHandler,
         const std::string& pFile,
         const void* magic,
         unsigned int num,
         unsigned int offset = 0,
-        unsigned int size   = 4);
+        unsigned int size   = 4 );
 
     // -------------------------------------------------------------------
     /** An utility for all text file loaders. It converts a file to our
@@ -354,8 +357,8 @@ public: // static utilities
      *
      *  @param data File buffer to be converted to UTF8 data. The buffer
      *  is resized as appropriate. */
-    static void ConvertToUTF8(
-        std::vector<char>& data);
+    static void ConvertToUTF8 (
+        std::vector<char>& data );
 
     // -------------------------------------------------------------------
     /** An utility for all text file loaders. It converts a file from our
@@ -363,14 +366,14 @@ public: // static utilities
      *
      *  @param data File buffer to be converted from UTF8 to ISO-8859-1. The buffer
      *  is resized as appropriate. */
-    static void ConvertUTF8toISO8859_1(
-        std::string& data);
+    static void ConvertUTF8toISO8859_1 (
+        std::string& data );
 
     // -------------------------------------------------------------------
     /// @brief  Enum to define, if empty files are ok or not.
-    enum TextFileMode { 
+    enum TextFileMode {
         ALLOW_EMPTY,
-        FORBID_EMPTY 
+        FORBID_EMPTY
     };
 
     // -------------------------------------------------------------------
@@ -382,10 +385,10 @@ public: // static utilities
      *   converted text file data. The buffer is terminated with
      *   a binary 0.
      *  @param mode Whether it is OK to load empty text files. */
-    static void TextFileToBuffer(
+    static void TextFileToBuffer (
         IOStream* stream,
         std::vector<char>& data,
-        TextFileMode mode = FORBID_EMPTY);
+        TextFileMode mode = FORBID_EMPTY );
 
     // -------------------------------------------------------------------
     /** Utility function to move a std::vector into a aiScene array
@@ -394,15 +397,15 @@ public: // static utilities
     *  @param numOut The output count of elements copied. */
     template<typename T>
     AI_FORCE_INLINE
-    static void CopyVector(
+    static void CopyVector (
         std::vector<T>& vec,
         T*& out,
-        unsigned int& outLength)
+        unsigned int& outLength )
     {
-        outLength = unsigned(vec.size());
-        if (outLength) {
+        outLength = unsigned ( vec.size() );
+        if ( outLength ) {
             out = new T[outLength];
-            std::swap_ranges(vec.begin(), vec.end(), out);
+            std::swap_ranges ( vec.begin(), vec.end(), out );
         }
     }
 

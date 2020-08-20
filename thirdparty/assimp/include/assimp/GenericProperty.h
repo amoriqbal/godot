@@ -57,17 +57,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ------------------------------------------------------------------------------------------------
 template <class T>
 inline
-bool SetGenericProperty(std::map< unsigned int, T >& list,
-        const char* szName, const T& value) {
-    ai_assert(nullptr != szName);
-    const uint32_t hash = SuperFastHash(szName);
+bool SetGenericProperty ( std::map< unsigned int, T >& list,
+                          const char* szName, const T& value )
+{
+    ai_assert ( nullptr != szName );
+    const uint32_t hash = SuperFastHash ( szName );
 
-    typename std::map<unsigned int, T>::iterator it = list.find(hash);
-    if (it == list.end())   {
-        list.insert(std::pair<unsigned int, T>( hash, value ));
+    typename std::map<unsigned int, T>::iterator it = list.find ( hash );
+    if ( it == list.end() )   {
+        list.insert ( std::pair<unsigned int, T> ( hash, value ) );
         return false;
     }
-    (*it).second = value;
+    ( *it ).second = value;
 
     return true;
 }
@@ -75,17 +76,18 @@ bool SetGenericProperty(std::map< unsigned int, T >& list,
 // ------------------------------------------------------------------------------------------------
 template <class T>
 inline
-const T& GetGenericProperty(const std::map< unsigned int, T >& list,
-        const char* szName, const T& errorReturn) {
-    ai_assert(nullptr != szName);
-    const uint32_t hash = SuperFastHash(szName);
+const T& GetGenericProperty ( const std::map< unsigned int, T >& list,
+                              const char* szName, const T& errorReturn )
+{
+    ai_assert ( nullptr != szName );
+    const uint32_t hash = SuperFastHash ( szName );
 
-    typename std::map<unsigned int, T>::const_iterator it = list.find(hash);
-    if (it == list.end()) {
+    typename std::map<unsigned int, T>::const_iterator it = list.find ( hash );
+    if ( it == list.end() ) {
         return errorReturn;
     }
 
-    return (*it).second;
+    return ( *it ).second;
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -93,28 +95,29 @@ const T& GetGenericProperty(const std::map< unsigned int, T >& list,
 // passing NULL removes the whole property
 template <class T>
 inline
-void SetGenericPropertyPtr(std::map< unsigned int, T* >& list,
-        const char* szName, T* value, bool* bWasExisting = nullptr ) {
-    ai_assert(nullptr != szName);
-    const uint32_t hash = SuperFastHash(szName);
+void SetGenericPropertyPtr ( std::map< unsigned int, T* >& list,
+                             const char* szName, T* value, bool* bWasExisting = nullptr )
+{
+    ai_assert ( nullptr != szName );
+    const uint32_t hash = SuperFastHash ( szName );
 
-    typename std::map<unsigned int, T*>::iterator it = list.find(hash);
-    if (it == list.end())   {
-        if (bWasExisting) {
+    typename std::map<unsigned int, T*>::iterator it = list.find ( hash );
+    if ( it == list.end() )   {
+        if ( bWasExisting ) {
             *bWasExisting = false;
         }
 
-        list.insert(std::pair<unsigned int,T*>( hash, value ));
+        list.insert ( std::pair<unsigned int,T*> ( hash, value ) );
         return;
     }
-    if ((*it).second != value)  {
-        delete (*it).second;
-        (*it).second = value;
+    if ( ( *it ).second != value )  {
+        delete ( *it ).second;
+        ( *it ).second = value;
     }
-    if (!value) {
-        list.erase(it);
+    if ( !value ) {
+        list.erase ( it );
     }
-    if (bWasExisting) {
+    if ( bWasExisting ) {
         *bWasExisting = true;
     }
 }
@@ -122,13 +125,14 @@ void SetGenericPropertyPtr(std::map< unsigned int, T* >& list,
 // ------------------------------------------------------------------------------------------------
 template <class T>
 inline
-bool HasGenericProperty(const std::map< unsigned int, T >& list,
-        const char* szName) {
-    ai_assert(nullptr != szName);
-    const uint32_t hash = SuperFastHash(szName);
+bool HasGenericProperty ( const std::map< unsigned int, T >& list,
+                          const char* szName )
+{
+    ai_assert ( nullptr != szName );
+    const uint32_t hash = SuperFastHash ( szName );
 
-    typename std::map<unsigned int, T>::const_iterator it = list.find(hash);
-    if (it == list.end()) {
+    typename std::map<unsigned int, T>::const_iterator it = list.find ( hash );
+    if ( it == list.end() ) {
         return false;
     }
 

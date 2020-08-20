@@ -20,75 +20,75 @@
 #include "aftypes.h"
 
 
-  /*
-   * We are not using `af_angle_atan' anymore, but we keep the source
-   * code below just in case...
-   */
+/*
+ * We are not using `af_angle_atan' anymore, but we keep the source
+ * code below just in case...
+ */
 
 
 #if 0
 
 
-  /*
-   * The trick here is to realize that we don't need a very accurate angle
-   * approximation.  We are going to use the result of `af_angle_atan' to
-   * only compare the sign of angle differences, or check whether its
-   * magnitude is very small.
-   *
-   * The approximation
-   *
-   *   dy * PI / (|dx|+|dy|)
-   *
-   * should be enough, and much faster to compute.
-   */
-  FT_LOCAL_DEF( AF_Angle )
-  af_angle_atan( FT_Fixed  dx,
-                 FT_Fixed  dy )
-  {
+/*
+ * The trick here is to realize that we don't need a very accurate angle
+ * approximation.  We are going to use the result of `af_angle_atan' to
+ * only compare the sign of angle differences, or check whether its
+ * magnitude is very small.
+ *
+ * The approximation
+ *
+ *   dy * PI / (|dx|+|dy|)
+ *
+ * should be enough, and much faster to compute.
+ */
+FT_LOCAL_DEF ( AF_Angle )
+af_angle_atan ( FT_Fixed  dx,
+                FT_Fixed  dy )
+{
     AF_Angle  angle;
     FT_Fixed  ax = dx;
     FT_Fixed  ay = dy;
 
 
-    if ( ax < 0 )
-      ax = -ax;
-    if ( ay < 0 )
-      ay = -ay;
+    if ( ax < 0 ) {
+        ax = -ax;
+    }
+    if ( ay < 0 ) {
+        ay = -ay;
+    }
 
     ax += ay;
 
-    if ( ax == 0 )
-      angle = 0;
-    else
-    {
-      angle = ( AF_ANGLE_PI2 * dy ) / ( ax + ay );
-      if ( dx < 0 )
-      {
-        if ( angle >= 0 )
-          angle = AF_ANGLE_PI - angle;
-        else
-          angle = -AF_ANGLE_PI - angle;
-      }
+    if ( ax == 0 ) {
+        angle = 0;
+    } else {
+        angle = ( AF_ANGLE_PI2 * dy ) / ( ax + ay );
+        if ( dx < 0 ) {
+            if ( angle >= 0 ) {
+                angle = AF_ANGLE_PI - angle;
+            } else {
+                angle = -AF_ANGLE_PI - angle;
+            }
+        }
     }
 
     return angle;
-  }
+}
 
 
 #elif 0
 
 
-  /* the following table has been automatically generated with */
-  /* the `mather.py' Python script                             */
+/* the following table has been automatically generated with */
+/* the `mather.py' Python script                             */
 
 #define AF_ATAN_BITS  8
 
-  static const FT_Byte  af_arctan[1L << AF_ATAN_BITS] =
-  {
-     0,  0,  1,  1,  1,  2,  2,  2,
-     3,  3,  3,  3,  4,  4,  4,  5,
-     5,  5,  6,  6,  6,  7,  7,  7,
-     8,  8,  8,  9,  9,  9, 10, 10,
+static const FT_Byte  af_arctan[1L << AF_ATAN_BITS] = {
+    0,  0,  1,  1,  1,  2,  2,  2,
+    3,  3,  3,  3,  4,  4,  4,  5,
+    5,  5,  6,  6,  6,  7,  7,  7,
+    8,  8,  8,  9,  9,  9, 10, 10,
     10, 10, 11, 11, 11, 12, 12, 12,
     13, 13, 13, 14, 14, 14, 14, 15,
     15, 15, 16, 16, 16, 17, 17, 17,
@@ -117,100 +117,98 @@
     60, 60, 60, 61, 61, 61, 61, 61,
     61, 62, 62, 62, 62, 62, 62, 63,
     63, 63, 63, 63, 63, 64, 64, 64
-  };
+};
 
 
-  FT_LOCAL_DEF( AF_Angle )
-  af_angle_atan( FT_Fixed  dx,
-                 FT_Fixed  dy )
-  {
+FT_LOCAL_DEF ( AF_Angle )
+af_angle_atan ( FT_Fixed  dx,
+                FT_Fixed  dy )
+{
     AF_Angle  angle;
 
 
     /* check trivial cases */
-    if ( dy == 0 )
-    {
-      angle = 0;
-      if ( dx < 0 )
-        angle = AF_ANGLE_PI;
-      return angle;
-    }
-    else if ( dx == 0 )
-    {
-      angle = AF_ANGLE_PI2;
-      if ( dy < 0 )
-        angle = -AF_ANGLE_PI2;
-      return angle;
+    if ( dy == 0 ) {
+        angle = 0;
+        if ( dx < 0 ) {
+            angle = AF_ANGLE_PI;
+        }
+        return angle;
+    } else if ( dx == 0 ) {
+        angle = AF_ANGLE_PI2;
+        if ( dy < 0 ) {
+            angle = -AF_ANGLE_PI2;
+        }
+        return angle;
     }
 
     angle = 0;
-    if ( dx < 0 )
-    {
-      dx = -dx;
-      dy = -dy;
-      angle = AF_ANGLE_PI;
+    if ( dx < 0 ) {
+        dx = -dx;
+        dy = -dy;
+        angle = AF_ANGLE_PI;
     }
 
-    if ( dy < 0 )
-    {
-      FT_Pos  tmp;
+    if ( dy < 0 ) {
+        FT_Pos  tmp;
 
 
-      tmp = dx;
-      dx  = -dy;
-      dy  = tmp;
-      angle -= AF_ANGLE_PI2;
+        tmp = dx;
+        dx  = -dy;
+        dy  = tmp;
+        angle -= AF_ANGLE_PI2;
     }
 
-    if ( dx == 0 && dy == 0 )
-      return 0;
+    if ( dx == 0 && dy == 0 ) {
+        return 0;
+    }
 
-    if ( dx == dy )
-      angle += AF_ANGLE_PI4;
-    else if ( dx > dy )
-      angle += af_arctan[FT_DivFix( dy, dx ) >> ( 16 - AF_ATAN_BITS )];
-    else
-      angle += AF_ANGLE_PI2 -
-               af_arctan[FT_DivFix( dx, dy ) >> ( 16 - AF_ATAN_BITS )];
+    if ( dx == dy ) {
+        angle += AF_ANGLE_PI4;
+    } else if ( dx > dy ) {
+        angle += af_arctan[FT_DivFix ( dy, dx ) >> ( 16 - AF_ATAN_BITS )];
+    } else
+        angle += AF_ANGLE_PI2 -
+                 af_arctan[FT_DivFix ( dx, dy ) >> ( 16 - AF_ATAN_BITS )];
 
-    if ( angle > AF_ANGLE_PI )
-      angle -= AF_ANGLE_2PI;
+    if ( angle > AF_ANGLE_PI ) {
+        angle -= AF_ANGLE_2PI;
+    }
 
     return angle;
-  }
+}
 
 
 #endif /* 0 */
 
 
-  FT_LOCAL_DEF( void )
-  af_sort_pos( FT_UInt  count,
-               FT_Pos*  table )
-  {
+FT_LOCAL_DEF ( void )
+af_sort_pos ( FT_UInt  count,
+              FT_Pos*  table )
+{
     FT_UInt  i, j;
     FT_Pos   swap;
 
 
-    for ( i = 1; i < count; i++ )
-    {
-      for ( j = i; j > 0; j-- )
-      {
-        if ( table[j] >= table[j - 1] )
-          break;
+    for ( i = 1; i < count; i++ ) {
+        for ( j = i; j > 0; j-- ) {
+            if ( table[j] >= table[j - 1] ) {
+                break;
+            }
 
-        swap         = table[j];
-        table[j]     = table[j - 1];
-        table[j - 1] = swap;
-      }
+            swap         = table[j];
+            table[j]     = table[j - 1];
+            table[j - 1] = swap;
+        }
     }
-  }
+}
 
 
-  FT_LOCAL_DEF( void )
-  af_sort_and_quantize_widths( FT_UInt*  count,
-                               AF_Width  table,
-                               FT_Pos    threshold )
-  {
+FT_LOCAL_DEF ( void )
+af_sort_and_quantize_widths ( FT_UInt*  count,
+                              AF_Width  table,
+                              FT_Pos    threshold )
+{
     FT_UInt      i, j;
     FT_UInt      cur_idx;
     FT_Pos       cur_val;
@@ -218,21 +216,21 @@
     AF_WidthRec  swap;
 
 
-    if ( *count == 1 )
-      return;
+    if ( *count == 1 ) {
+        return;
+    }
 
     /* sort */
-    for ( i = 1; i < *count; i++ )
-    {
-      for ( j = i; j > 0; j-- )
-      {
-        if ( table[j].org >= table[j - 1].org )
-          break;
+    for ( i = 1; i < *count; i++ ) {
+        for ( j = i; j > 0; j-- ) {
+            if ( table[j].org >= table[j - 1].org ) {
+                break;
+            }
 
-        swap         = table[j];
-        table[j]     = table[j - 1];
-        table[j - 1] = swap;
-      }
+            swap         = table[j];
+            table[j]     = table[j - 1];
+            table[j - 1] = swap;
+        }
     }
 
     cur_idx = 0;
@@ -242,44 +240,41 @@
     /* `threshold'; this is very primitive and might not yield   */
     /* the best result, but normally, using reference character  */
     /* `o', `*count' is 2, so the code below is fully sufficient */
-    for ( i = 1; i < *count; i++ )
-    {
-      if ( table[i].org - cur_val > threshold ||
-           i == *count - 1                    )
-      {
-        sum = 0;
+    for ( i = 1; i < *count; i++ ) {
+        if ( table[i].org - cur_val > threshold ||
+                i == *count - 1 ) {
+            sum = 0;
 
-        /* fix loop for end of array */
-        if ( table[i].org - cur_val <= threshold &&
-             i == *count - 1                     )
-          i++;
+            /* fix loop for end of array */
+            if ( table[i].org - cur_val <= threshold &&
+                    i == *count - 1 ) {
+                i++;
+            }
 
-        for ( j = cur_idx; j < i; j++ )
-        {
-          sum         += table[j].org;
-          table[j].org = 0;
+            for ( j = cur_idx; j < i; j++ ) {
+                sum         += table[j].org;
+                table[j].org = 0;
+            }
+            table[cur_idx].org = sum / ( FT_Pos ) j;
+
+            if ( i < *count - 1 ) {
+                cur_idx = i + 1;
+                cur_val = table[cur_idx].org;
+            }
         }
-        table[cur_idx].org = sum / (FT_Pos)j;
-
-        if ( i < *count - 1 )
-        {
-          cur_idx = i + 1;
-          cur_val = table[cur_idx].org;
-        }
-      }
     }
 
     cur_idx = 1;
 
     /* compress array to remove zero values */
-    for ( i = 1; i < *count; i++ )
-    {
-      if ( table[i].org )
-        table[cur_idx++] = table[i];
+    for ( i = 1; i < *count; i++ ) {
+        if ( table[i].org ) {
+            table[cur_idx++] = table[i];
+        }
     }
 
     *count = cur_idx;
-  }
+}
 
 
 /* END */

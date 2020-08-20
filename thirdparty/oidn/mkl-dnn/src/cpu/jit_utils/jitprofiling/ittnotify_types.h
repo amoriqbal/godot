@@ -38,8 +38,7 @@
 #ifndef _ITTNOTIFY_TYPES_H_
 #define _ITTNOTIFY_TYPES_H_
 
-typedef enum ___itt_group_id
-{
+typedef enum ___itt_group_id {
     __itt_group_none      = 0,
     __itt_group_legacy    = 1<<0,
     __itt_group_control   = 1<<1,
@@ -63,8 +62,7 @@ typedef enum ___itt_group_id
 
 #pragma pack(push, 8)
 
-typedef struct ___itt_group_list
-{
+typedef struct ___itt_group_list {
     __itt_group_id id;
     const char*    name;
 } __itt_group_list;

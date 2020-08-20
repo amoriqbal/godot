@@ -21,76 +21,76 @@
 namespace Etc
 {
 
-	class Block4x4Encoding_RGB8 : public Block4x4Encoding_ETC1
-	{
-	public:
+class Block4x4Encoding_RGB8 : public Block4x4Encoding_ETC1
+{
+public:
 
-		Block4x4Encoding_RGB8(void);
-		virtual ~Block4x4Encoding_RGB8(void);
+    Block4x4Encoding_RGB8 ( void );
+    virtual ~Block4x4Encoding_RGB8 ( void );
 
-		virtual void InitFromEncodingBits(Block4x4 *a_pblockParent,
-											unsigned char *a_paucEncodingBits,
-											ColorFloatRGBA *a_pafrgbaSource,
+    virtual void InitFromEncodingBits ( Block4x4 *a_pblockParent,
+                                        unsigned char *a_paucEncodingBits,
+                                        ColorFloatRGBA *a_pafrgbaSource,
 
-											ErrorMetric a_errormetric);
+                                        ErrorMetric a_errormetric );
 
-		virtual void PerformIteration(float a_fEffort);
-		
-		virtual void SetEncodingBits(void);
+    virtual void PerformIteration ( float a_fEffort );
 
-		inline ColorFloatRGBA GetColor3(void) const
-		{
-			return m_frgbaColor3;
-		}
+    virtual void SetEncodingBits ( void );
 
-	protected:
+    inline ColorFloatRGBA GetColor3 ( void ) const
+    {
+        return m_frgbaColor3;
+    }
 
-		static const unsigned int PLANAR_CORNER_COLORS = 3;
-		static const unsigned int MAX_PLANAR_REGRESSION_SIZE = 4;
-		static const unsigned int TH_DISTANCES = 8;
+protected:
 
-		static float s_afTHDistanceTable[TH_DISTANCES];
+    static const unsigned int PLANAR_CORNER_COLORS = 3;
+    static const unsigned int MAX_PLANAR_REGRESSION_SIZE = 4;
+    static const unsigned int TH_DISTANCES = 8;
 
-		void TryPlanar(unsigned int a_uiRadius);
-		void TryTAndH(unsigned int a_uiRadius);
+    static float s_afTHDistanceTable[TH_DISTANCES];
 
-		void InitFromEncodingBits_Planar(void);
+    void TryPlanar ( unsigned int a_uiRadius );
+    void TryTAndH ( unsigned int a_uiRadius );
 
-		ColorFloatRGBA	m_frgbaColor3;		// used for planar
+    void InitFromEncodingBits_Planar ( void );
 
-		void SetEncodingBits_T(void);
-		void SetEncodingBits_H(void);
-		void SetEncodingBits_Planar(void);
+    ColorFloatRGBA	m_frgbaColor3;		// used for planar
 
-		// state shared between iterations
-		ColorFloatRGBA	m_frgbaOriginalColor1_TAndH;
-		ColorFloatRGBA	m_frgbaOriginalColor2_TAndH;
+    void SetEncodingBits_T ( void );
+    void SetEncodingBits_H ( void );
+    void SetEncodingBits_Planar ( void );
 
-		void CalculateBaseColorsForTAndH(void);
-		void TryT(unsigned int a_uiRadius);
-		void TryT_BestSelectorCombination(void);
-		void TryH(unsigned int a_uiRadius);
-		void TryH_BestSelectorCombination(void);
+    // state shared between iterations
+    ColorFloatRGBA	m_frgbaOriginalColor1_TAndH;
+    ColorFloatRGBA	m_frgbaOriginalColor2_TAndH;
 
-	private:
+    void CalculateBaseColorsForTAndH ( void );
+    void TryT ( unsigned int a_uiRadius );
+    void TryT_BestSelectorCombination ( void );
+    void TryH ( unsigned int a_uiRadius );
+    void TryH_BestSelectorCombination ( void );
 
-		void InitFromEncodingBits_T(void);
-		void InitFromEncodingBits_H(void);
+private:
 
-		void CalculatePlanarCornerColors(void);
+    void InitFromEncodingBits_T ( void );
+    void InitFromEncodingBits_H ( void );
 
-		void ColorRegression(ColorFloatRGBA *a_pafrgbaPixels, unsigned int a_uiPixels,
-			ColorFloatRGBA *a_pfrgbaSlope, ColorFloatRGBA *a_pfrgbaOffset);
+    void CalculatePlanarCornerColors ( void );
 
-		bool TwiddlePlanar(void);
-		bool TwiddlePlanarR();
-		bool TwiddlePlanarG();
-		bool TwiddlePlanarB();
+    void ColorRegression ( ColorFloatRGBA *a_pafrgbaPixels, unsigned int a_uiPixels,
+                           ColorFloatRGBA *a_pfrgbaSlope, ColorFloatRGBA *a_pfrgbaOffset );
 
-		void DecodePixels_T(void);
-		void DecodePixels_H(void);
-		void DecodePixels_Planar(void);
+    bool TwiddlePlanar ( void );
+    bool TwiddlePlanarR();
+    bool TwiddlePlanarG();
+    bool TwiddlePlanarB();
 
-	};
+    void DecodePixels_T ( void );
+    void DecodePixels_H ( void );
+    void DecodePixels_Planar ( void );
+
+};
 
 } // namespace Etc

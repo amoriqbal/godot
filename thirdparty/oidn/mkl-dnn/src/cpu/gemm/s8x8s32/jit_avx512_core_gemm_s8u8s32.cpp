@@ -984,7 +984,7 @@ static inline void get_omp_thread_count(dim_t m, dim_t n, dim_t k,
             return;
         }
 
-        // adaptive decrement to march faster·
+        // adaptive decrement to march faster??
         while (i > 1) {
             double omp_cycles = omp_intercept_big_core + i * omp_slope_big_core;
             if (omp_cycles * i < gemm_cycles * (i - 1))

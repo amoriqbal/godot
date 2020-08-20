@@ -5,34 +5,30 @@ using System.Threading.Tasks;
 
 namespace GodotTools.Core
 {
-    public static class ProcessExtensions
+public static class ProcessExtensions
+{
+    public static async Task WaitForExitAsync ( this Process process, CancellationToken cancellationToken = default ( CancellationToken ) )
     {
-        public static async Task WaitForExitAsync(this Process process, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var tcs = new TaskCompletionSource<bool>();
+        var tcs = new TaskCompletionSource<bool>();
 
-            void ProcessExited(object sender, EventArgs e)
-            {
-                tcs.TrySetResult(true);
+        void ProcessExited ( object sender, EventArgs e ) {
+            tcs.TrySetResult ( true );
+        }
+
+        process.EnableRaisingEvents = true;
+        process.Exited += ProcessExited;
+
+        try {
+            if ( process.HasExited ) {
+                return;
             }
 
-            process.EnableRaisingEvents = true;
-            process.Exited += ProcessExited;
-
-            try
-            {
-                if (process.HasExited)
-                    return;
-
-                using (cancellationToken.Register(() => tcs.TrySetCanceled()))
-                {
-                    await tcs.Task;
-                }
+            using ( cancellationToken.Register ( () => tcs.TrySetCanceled() ) ) {
+                await tcs.Task;
             }
-            finally
-            {
-                process.Exited -= ProcessExited;
-            }
+        } finally {
+            process.Exited -= ProcessExited;
         }
     }
+}
 }

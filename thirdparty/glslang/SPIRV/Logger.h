@@ -38,31 +38,45 @@
 #include <string>
 #include <vector>
 
-namespace spv {
+namespace spv
+{
 
 // A class for holding all SPIR-V build status messages, including
 // missing/TBD functionalities, warnings, and errors.
-class SpvBuildLogger {
+class SpvBuildLogger
+{
 public:
     SpvBuildLogger() {}
 
 #ifdef GLSLANG_WEB
-    void tbdFunctionality(const std::string& f) { }
-    void missingFunctionality(const std::string& f) { }
-    void warning(const std::string& w) { }
-    void error(const std::string& e) { errors.push_back(e); }
-    std::string getAllMessages() { return ""; }
+    void tbdFunctionality ( const std::string& f ) { }
+    void missingFunctionality ( const std::string& f ) { }
+    void warning ( const std::string& w ) { }
+    void error ( const std::string& e )
+    {
+        errors.push_back ( e );
+    }
+    std::string getAllMessages()
+    {
+        return "";
+    }
 #else
 
     // Registers a TBD functionality.
-    void tbdFunctionality(const std::string& f);
+    void tbdFunctionality ( const std::string& f );
     // Registers a missing functionality.
-    void missingFunctionality(const std::string& f);
+    void missingFunctionality ( const std::string& f );
 
     // Logs a warning.
-    void warning(const std::string& w) { warnings.push_back(w); }
+    void warning ( const std::string& w )
+    {
+        warnings.push_back ( w );
+    }
     // Logs an error.
-    void error(const std::string& e) { errors.push_back(e); }
+    void error ( const std::string& e )
+    {
+        errors.push_back ( e );
+    }
 
     // Returns all messages accumulated in the order of:
     // TBD functionalities, missing functionalities, warnings, errors.
@@ -70,7 +84,7 @@ public:
 #endif
 
 private:
-    SpvBuildLogger(const SpvBuildLogger&);
+    SpvBuildLogger ( const SpvBuildLogger& );
 
     std::vector<std::string> tbdFeatures;
     std::vector<std::string> missingFeatures;

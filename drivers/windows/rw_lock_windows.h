@@ -37,25 +37,26 @@
 
 #include <windows.h>
 
-class RWLockWindows : public RWLock {
-	SRWLOCK lock;
+class RWLockWindows : public RWLock
+{
+    SRWLOCK lock;
 
-	static RWLock *create_func_windows();
+    static RWLock *create_func_windows();
 
 public:
-	virtual void read_lock();
-	virtual void read_unlock();
-	virtual Error read_try_lock();
+    virtual void read_lock();
+    virtual void read_unlock();
+    virtual Error read_try_lock();
 
-	virtual void write_lock();
-	virtual void write_unlock();
-	virtual Error write_try_lock();
+    virtual void write_lock();
+    virtual void write_unlock();
+    virtual Error write_try_lock();
 
-	static void make_default();
+    static void make_default();
 
-	RWLockWindows();
+    RWLockWindows();
 
-	~RWLockWindows();
+    ~RWLockWindows();
 };
 
 #endif

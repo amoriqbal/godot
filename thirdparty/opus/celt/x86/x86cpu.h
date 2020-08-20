@@ -53,7 +53,7 @@
 # endif
 
 # if defined(OPUS_HAVE_RTCD)
-int opus_select_arch(void);
+int opus_select_arch ( void );
 # endif
 
 /*gcc appears to emit MOVDQA's to load the argument of an _mm_cvtepi8_epi32()

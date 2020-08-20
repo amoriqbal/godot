@@ -51,158 +51,165 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Registry used to load and access the registered Godot Android plugins.
  */
-public final class GodotPluginRegistry {
-	private static final String TAG = GodotPluginRegistry.class.getSimpleName();
+public final class GodotPluginRegistry
+{
+    private static final String TAG = GodotPluginRegistry.class.getSimpleName();
 
-	private static final String GODOT_PLUGIN_V1_NAME_PREFIX = "org.godotengine.plugin.v1.";
+    private static final String GODOT_PLUGIN_V1_NAME_PREFIX = "org.godotengine.plugin.v1.";
 
-	/**
-	 * Name for the metadata containing the list of Godot plugins to enable.
-	 */
-	private static final String GODOT_ENABLED_PLUGINS_LABEL = "plugins";
+    /**
+     * Name for the metadata containing the list of Godot plugins to enable.
+     */
+    private static final String GODOT_ENABLED_PLUGINS_LABEL = "plugins";
 
-	private static final String PLUGIN_VALUE_SEPARATOR_REGEX = "\\|";
+    private static final String PLUGIN_VALUE_SEPARATOR_REGEX = "\\|";
 
-	private static GodotPluginRegistry instance;
-	private final ConcurrentHashMap<String, GodotPlugin> registry;
+    private static GodotPluginRegistry instance;
+    private final ConcurrentHashMap<String, GodotPlugin> registry;
 
-	private GodotPluginRegistry(Godot godot) {
-		registry = new ConcurrentHashMap<>();
-		loadPlugins(godot);
-	}
+    private GodotPluginRegistry ( Godot godot )
+    {
+        registry = new ConcurrentHashMap<>();
+        loadPlugins ( godot );
+    }
 
-	/**
-	 * Retrieve the plugin tied to the given plugin name.
-	 * @param pluginName Name of the plugin
-	 * @return {@link GodotPlugin} handle if it exists, null otherwise.
-	 */
-	@Nullable
-	public GodotPlugin getPlugin(String pluginName) {
-		return registry.get(pluginName);
-	}
+    /**
+     * Retrieve the plugin tied to the given plugin name.
+     * @param pluginName Name of the plugin
+     * @return {@link GodotPlugin} handle if it exists, null otherwise.
+     */
+    @Nullable
+    public GodotPlugin getPlugin ( String pluginName )
+    {
+        return registry.get ( pluginName );
+    }
 
-	/**
-	 * Retrieve the full set of loaded plugins.
-	 */
-	public Collection<GodotPlugin> getAllPlugins() {
-		return registry.values();
-	}
+    /**
+     * Retrieve the full set of loaded plugins.
+     */
+    public Collection<GodotPlugin> getAllPlugins()
+    {
+        return registry.values();
+    }
 
-	/**
-	 * Parse the manifest file and load all included Godot Android plugins.
-	 * <p>
-	 * A plugin manifest entry is a '<meta-data>' tag setup as described in the {@link GodotPlugin}
-	 * documentation.
-	 *
-	 * @param godot Godot instance
-	 * @return A singleton instance of {@link GodotPluginRegistry}. This ensures that only one instance
-	 * of each Godot Android plugins is available at runtime.
-	 */
-	public static GodotPluginRegistry initializePluginRegistry(Godot godot) {
-		if (instance == null) {
-			instance = new GodotPluginRegistry(godot);
-		}
+    /**
+     * Parse the manifest file and load all included Godot Android plugins.
+     * <p>
+     * A plugin manifest entry is a '<meta-data>' tag setup as described in the {@link GodotPlugin}
+     * documentation.
+     *
+     * @param godot Godot instance
+     * @return A singleton instance of {@link GodotPluginRegistry}. This ensures that only one instance
+     * of each Godot Android plugins is available at runtime.
+     */
+    public static GodotPluginRegistry initializePluginRegistry ( Godot godot )
+    {
+        if ( instance == null ) {
+            instance = new GodotPluginRegistry ( godot );
+        }
 
-		return instance;
-	}
+        return instance;
+    }
 
-	/**
-	 * Return the plugin registry if it's initialized.
-	 * Throws a {@link IllegalStateException} exception if not.
-	 *
-	 * @throws IllegalStateException if {@link GodotPluginRegistry#initializePluginRegistry(Godot)} has not been called prior to calling this method.
-	 */
-	public static GodotPluginRegistry getPluginRegistry() throws IllegalStateException {
-		if (instance == null) {
-			throw new IllegalStateException("Plugin registry hasn't been initialized.");
-		}
+    /**
+     * Return the plugin registry if it's initialized.
+     * Throws a {@link IllegalStateException} exception if not.
+     *
+     * @throws IllegalStateException if {@link GodotPluginRegistry#initializePluginRegistry(Godot)} has not been called prior to calling this method.
+     */
+    public static GodotPluginRegistry getPluginRegistry() throws IllegalStateException
+    {
+        if ( instance == null ) {
+            throw new IllegalStateException ( "Plugin registry hasn't been initialized." );
+        }
 
-		return instance;
-	}
+        return instance;
+    }
 
-	private void loadPlugins(Godot godot) {
-		try {
-			final Activity activity = godot.getActivity();
-			ApplicationInfo appInfo = activity
-											  .getPackageManager()
-											  .getApplicationInfo(activity.getPackageName(),
-													  PackageManager.GET_META_DATA);
-			Bundle metaData = appInfo.metaData;
-			if (metaData == null || metaData.isEmpty()) {
-				return;
-			}
+    private void loadPlugins ( Godot godot )
+    {
+        try {
+            final Activity activity = godot.getActivity();
+            ApplicationInfo appInfo = activity
+                                      .getPackageManager()
+                                      .getApplicationInfo ( activity.getPackageName(),
+                                              PackageManager.GET_META_DATA );
+            Bundle metaData = appInfo.metaData;
+            if ( metaData == null || metaData.isEmpty() ) {
+                return;
+            }
 
-			// When using the Godot editor for building and exporting the apk, this is used to check
-			// which plugins to enable.
-			// When using a custom process to generate the apk, the metadata is not needed since
-			// it's assumed that the developer is aware of the dependencies included in the apk.
-			final Set<String> enabledPluginsSet;
-			if (metaData.containsKey(GODOT_ENABLED_PLUGINS_LABEL)) {
-				String enabledPlugins = metaData.getString(GODOT_ENABLED_PLUGINS_LABEL, "");
-				String[] enabledPluginsList = enabledPlugins.split(PLUGIN_VALUE_SEPARATOR_REGEX);
-				if (enabledPluginsList.length == 0) {
-					// No plugins to enable. Aborting early.
-					return;
-				}
+            // When using the Godot editor for building and exporting the apk, this is used to check
+            // which plugins to enable.
+            // When using a custom process to generate the apk, the metadata is not needed since
+            // it's assumed that the developer is aware of the dependencies included in the apk.
+            final Set<String> enabledPluginsSet;
+            if ( metaData.containsKey ( GODOT_ENABLED_PLUGINS_LABEL ) ) {
+                String enabledPlugins = metaData.getString ( GODOT_ENABLED_PLUGINS_LABEL, "" );
+                String[] enabledPluginsList = enabledPlugins.split ( PLUGIN_VALUE_SEPARATOR_REGEX );
+                if ( enabledPluginsList.length == 0 ) {
+                    // No plugins to enable. Aborting early.
+                    return;
+                }
 
-				enabledPluginsSet = new HashSet<>();
-				for (String enabledPlugin : enabledPluginsList) {
-					enabledPluginsSet.add(enabledPlugin.trim());
-				}
-			} else {
-				enabledPluginsSet = null;
-			}
+                enabledPluginsSet = new HashSet<>();
+                for ( String enabledPlugin : enabledPluginsList ) {
+                    enabledPluginsSet.add ( enabledPlugin.trim() );
+                }
+            } else {
+                enabledPluginsSet = null;
+            }
 
-			int godotPluginV1NamePrefixLength = GODOT_PLUGIN_V1_NAME_PREFIX.length();
-			for (String metaDataName : metaData.keySet()) {
-				// Parse the meta-data looking for entry with the Godot plugin name prefix.
-				if (metaDataName.startsWith(GODOT_PLUGIN_V1_NAME_PREFIX)) {
-					String pluginName = metaDataName.substring(godotPluginV1NamePrefixLength).trim();
-					if (enabledPluginsSet != null && !enabledPluginsSet.contains(pluginName)) {
-						Log.w(TAG, "Plugin " + pluginName + " is listed in the dependencies but is not enabled.");
-						continue;
-					}
+            int godotPluginV1NamePrefixLength = GODOT_PLUGIN_V1_NAME_PREFIX.length();
+            for ( String metaDataName : metaData.keySet() ) {
+                // Parse the meta-data looking for entry with the Godot plugin name prefix.
+                if ( metaDataName.startsWith ( GODOT_PLUGIN_V1_NAME_PREFIX ) ) {
+                    String pluginName = metaDataName.substring ( godotPluginV1NamePrefixLength ).trim();
+                    if ( enabledPluginsSet != null && !enabledPluginsSet.contains ( pluginName ) ) {
+                        Log.w ( TAG, "Plugin " + pluginName + " is listed in the dependencies but is not enabled." );
+                        continue;
+                    }
 
-					Log.i(TAG, "Initializing Godot plugin " + pluginName);
+                    Log.i ( TAG, "Initializing Godot plugin " + pluginName );
 
-					// Retrieve the plugin class full name.
-					String pluginHandleClassFullName = metaData.getString(metaDataName);
-					if (!TextUtils.isEmpty(pluginHandleClassFullName)) {
-						try {
-							// Attempt to create the plugin init class via reflection.
-							@SuppressWarnings("unchecked")
-							Class<GodotPlugin> pluginClass = (Class<GodotPlugin>)Class
-																	 .forName(pluginHandleClassFullName);
-							Constructor<GodotPlugin> pluginConstructor = pluginClass
-																				 .getConstructor(Godot.class);
-							GodotPlugin pluginHandle = pluginConstructor.newInstance(godot);
+                    // Retrieve the plugin class full name.
+                    String pluginHandleClassFullName = metaData.getString ( metaDataName );
+                    if ( !TextUtils.isEmpty ( pluginHandleClassFullName ) ) {
+                        try {
+                            // Attempt to create the plugin init class via reflection.
+                            @SuppressWarnings ( "unchecked" )
+                            Class<GodotPlugin> pluginClass = ( Class<GodotPlugin> ) Class
+                                                             .forName ( pluginHandleClassFullName );
+                            Constructor<GodotPlugin> pluginConstructor = pluginClass
+                                    .getConstructor ( Godot.class );
+                            GodotPlugin pluginHandle = pluginConstructor.newInstance ( godot );
 
-							// Load the plugin initializer into the registry using the plugin name
-							// as key.
-							if (!pluginName.equals(pluginHandle.getPluginName())) {
-								Log.w(TAG,
-										"Meta-data plugin name does not match the value returned by the plugin handle: " + pluginName + " =/= " + pluginHandle.getPluginName());
-							}
-							registry.put(pluginName, pluginHandle);
-							Log.i(TAG, "Completed initialization for Godot plugin " + pluginHandle.getPluginName());
-						} catch (ClassNotFoundException e) {
-							Log.w(TAG, "Unable to load Godot plugin " + pluginName, e);
-						} catch (IllegalAccessException e) {
-							Log.w(TAG, "Unable to load Godot plugin " + pluginName, e);
-						} catch (InstantiationException e) {
-							Log.w(TAG, "Unable to load Godot plugin " + pluginName, e);
-						} catch (NoSuchMethodException e) {
-							Log.w(TAG, "Unable to load Godot plugin " + pluginName, e);
-						} catch (InvocationTargetException e) {
-							Log.w(TAG, "Unable to load Godot plugin " + pluginName, e);
-						}
-					} else {
-						Log.w(TAG, "Invalid plugin loader class for " + pluginName);
-					}
-				}
-			}
-		} catch (PackageManager.NameNotFoundException e) {
-			Log.e(TAG, "Unable load Godot Android plugins from the manifest file.", e);
-		}
-	}
+                            // Load the plugin initializer into the registry using the plugin name
+                            // as key.
+                            if ( !pluginName.equals ( pluginHandle.getPluginName() ) ) {
+                                Log.w ( TAG,
+                                        "Meta-data plugin name does not match the value returned by the plugin handle: " + pluginName + " =/= " + pluginHandle.getPluginName() );
+                            }
+                            registry.put ( pluginName, pluginHandle );
+                            Log.i ( TAG, "Completed initialization for Godot plugin " + pluginHandle.getPluginName() );
+                        } catch ( ClassNotFoundException e ) {
+                            Log.w ( TAG, "Unable to load Godot plugin " + pluginName, e );
+                        } catch ( IllegalAccessException e ) {
+                            Log.w ( TAG, "Unable to load Godot plugin " + pluginName, e );
+                        } catch ( InstantiationException e ) {
+                            Log.w ( TAG, "Unable to load Godot plugin " + pluginName, e );
+                        } catch ( NoSuchMethodException e ) {
+                            Log.w ( TAG, "Unable to load Godot plugin " + pluginName, e );
+                        } catch ( InvocationTargetException e ) {
+                            Log.w ( TAG, "Unable to load Godot plugin " + pluginName, e );
+                        }
+                    } else {
+                        Log.w ( TAG, "Invalid plugin loader class for " + pluginName );
+                    }
+                }
+            }
+        } catch ( PackageManager.NameNotFoundException e ) {
+            Log.e ( TAG, "Unable load Godot Android plugins from the manifest file.", e );
+        }
+    }
 }

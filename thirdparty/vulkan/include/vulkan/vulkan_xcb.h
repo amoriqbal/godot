@@ -41,21 +41,21 @@ typedef struct VkXcbSurfaceCreateInfoKHR {
     xcb_window_t                  window;
 } VkXcbSurfaceCreateInfoKHR;
 
-typedef VkResult (VKAPI_PTR *PFN_vkCreateXcbSurfaceKHR)(VkInstance instance, const VkXcbSurfaceCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface);
-typedef VkBool32 (VKAPI_PTR *PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR)(VkPhysicalDevice physicalDevice, uint32_t queueFamilyIndex, xcb_connection_t* connection, xcb_visualid_t visual_id);
+typedef VkResult ( VKAPI_PTR *PFN_vkCreateXcbSurfaceKHR ) ( VkInstance instance, const VkXcbSurfaceCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface );
+typedef VkBool32 ( VKAPI_PTR *PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR ) ( VkPhysicalDevice physicalDevice, uint32_t queueFamilyIndex, xcb_connection_t* connection, xcb_visualid_t visual_id );
 
 #ifndef VK_NO_PROTOTYPES
-VKAPI_ATTR VkResult VKAPI_CALL vkCreateXcbSurfaceKHR(
+VKAPI_ATTR VkResult VKAPI_CALL vkCreateXcbSurfaceKHR (
     VkInstance                                  instance,
     const VkXcbSurfaceCreateInfoKHR*            pCreateInfo,
     const VkAllocationCallbacks*                pAllocator,
-    VkSurfaceKHR*                               pSurface);
+    VkSurfaceKHR*                               pSurface );
 
-VKAPI_ATTR VkBool32 VKAPI_CALL vkGetPhysicalDeviceXcbPresentationSupportKHR(
+VKAPI_ATTR VkBool32 VKAPI_CALL vkGetPhysicalDeviceXcbPresentationSupportKHR (
     VkPhysicalDevice                            physicalDevice,
     uint32_t                                    queueFamilyIndex,
     xcb_connection_t*                           connection,
-    xcb_visualid_t                              visual_id);
+    xcb_visualid_t                              visual_id );
 #endif
 
 #ifdef __cplusplus

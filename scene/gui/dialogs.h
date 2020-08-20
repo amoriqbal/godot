@@ -41,71 +41,79 @@
 
 class LineEdit;
 
-class AcceptDialog : public Window {
-	GDCLASS(AcceptDialog, Window);
+class AcceptDialog : public Window
+{
+    GDCLASS ( AcceptDialog, Window );
 
-	Window *parent_visible;
-	Panel *bg;
-	HBoxContainer *hbc;
-	Label *label;
-	Button *ok;
-	bool hide_on_ok;
+    Window *parent_visible;
+    Panel *bg;
+    HBoxContainer *hbc;
+    Label *label;
+    Button *ok;
+    bool hide_on_ok;
 
-	void _custom_action(const String &p_action);
-	void _update_child_rects();
+    void _custom_action ( const String &p_action );
+    void _update_child_rects();
 
-	static bool swap_cancel_ok;
+    static bool swap_cancel_ok;
 
-	void _input_from_window(const Ref<InputEvent> &p_event);
-	void _parent_focused();
+    void _input_from_window ( const Ref<InputEvent> &p_event );
+    void _parent_focused();
 
 protected:
-	virtual Size2 _get_contents_minimum_size() const override;
+    virtual Size2 _get_contents_minimum_size() const override;
 
-	void _notification(int p_what);
-	static void _bind_methods();
-	virtual void ok_pressed() {}
-	virtual void cancel_pressed() {}
-	virtual void custom_action(const String &) {}
+    void _notification ( int p_what );
+    static void _bind_methods();
+    virtual void ok_pressed() {}
+    virtual void cancel_pressed() {}
+    virtual void custom_action ( const String & ) {}
 
-	// Not private since used by derived classes signal.
-	void _text_entered(const String &p_text);
-	void _ok_pressed();
-	void _cancel_pressed();
+    // Not private since used by derived classes signal.
+    void _text_entered ( const String &p_text );
+    void _ok_pressed();
+    void _cancel_pressed();
 
 public:
-	Label *get_label() { return label; }
-	static void set_swap_cancel_ok(bool p_swap);
+    Label *get_label()
+    {
+        return label;
+    }
+    static void set_swap_cancel_ok ( bool p_swap );
 
-	void register_text_enter(Node *p_line_edit);
+    void register_text_enter ( Node *p_line_edit );
 
-	Button *get_ok() { return ok; }
-	Button *add_button(const String &p_text, bool p_right = false, const String &p_action = "");
-	Button *add_cancel(const String &p_cancel = "");
+    Button *get_ok()
+    {
+        return ok;
+    }
+    Button *add_button ( const String &p_text, bool p_right = false, const String &p_action = "" );
+    Button *add_cancel ( const String &p_cancel = "" );
 
-	void set_hide_on_ok(bool p_hide);
-	bool get_hide_on_ok() const;
+    void set_hide_on_ok ( bool p_hide );
+    bool get_hide_on_ok() const;
 
-	void set_text(String p_text);
-	String get_text() const;
+    void set_text ( String p_text );
+    String get_text() const;
 
-	void set_autowrap(bool p_autowrap);
-	bool has_autowrap();
+    void set_autowrap ( bool p_autowrap );
+    bool has_autowrap();
 
-	AcceptDialog();
-	~AcceptDialog();
+    AcceptDialog();
+    ~AcceptDialog();
 };
 
-class ConfirmationDialog : public AcceptDialog {
-	GDCLASS(ConfirmationDialog, AcceptDialog);
-	Button *cancel;
+class ConfirmationDialog : public AcceptDialog
+{
+    GDCLASS ( ConfirmationDialog, AcceptDialog );
+    Button *cancel;
 
 protected:
-	static void _bind_methods();
+    static void _bind_methods();
 
 public:
-	Button *get_cancel();
-	ConfirmationDialog();
+    Button *get_cancel();
+    ConfirmationDialog();
 };
 
 #endif

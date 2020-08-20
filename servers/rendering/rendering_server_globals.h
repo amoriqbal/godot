@@ -37,16 +37,17 @@ class RenderingServerCanvas;
 class RenderingServerViewport;
 class RenderingServerScene;
 
-class RenderingServerGlobals {
+class RenderingServerGlobals
+{
 public:
-	static RasterizerStorage *storage;
-	static RasterizerCanvas *canvas_render;
-	static RasterizerScene *scene_render;
-	static Rasterizer *rasterizer;
+    static RasterizerStorage *storage;
+    static RasterizerCanvas *canvas_render;
+    static RasterizerScene *scene_render;
+    static Rasterizer *rasterizer;
 
-	static RenderingServerCanvas *canvas;
-	static RenderingServerViewport *viewport;
-	static RenderingServerScene *scene;
+    static RenderingServerCanvas *canvas;
+    static RenderingServerViewport *viewport;
+    static RenderingServerScene *scene;
 };
 
 #define RSG RenderingServerGlobals

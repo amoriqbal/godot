@@ -33,56 +33,63 @@
 
 #include "core/error_list.h"
 
-class RWLock {
+class RWLock
+{
 protected:
-	static RWLock *(*create_func)();
+    static RWLock * ( *create_func ) ();
 
 public:
-	virtual void read_lock() = 0; ///< Lock the rwlock, block if locked by someone else
-	virtual void read_unlock() = 0; ///< Unlock the rwlock, let other threads continue
-	virtual Error read_try_lock() = 0; ///< Attempt to lock the rwlock, OK on success, ERROR means it can't lock.
+    virtual void read_lock() = 0; ///< Lock the rwlock, block if locked by someone else
+    virtual void read_unlock() = 0; ///< Unlock the rwlock, let other threads continue
+    virtual Error read_try_lock() = 0; ///< Attempt to lock the rwlock, OK on success, ERROR means it can't lock.
 
-	virtual void write_lock() = 0; ///< Lock the rwlock, block if locked by someone else
-	virtual void write_unlock() = 0; ///< Unlock the rwlock, let other thwrites continue
-	virtual Error write_try_lock() = 0; ///< Attempt to lock the rwlock, OK on success, ERROR means it can't lock.
+    virtual void write_lock() = 0; ///< Lock the rwlock, block if locked by someone else
+    virtual void write_unlock() = 0; ///< Unlock the rwlock, let other thwrites continue
+    virtual Error write_try_lock() = 0; ///< Attempt to lock the rwlock, OK on success, ERROR means it can't lock.
 
-	static RWLock *create(); ///< Create a rwlock
+    static RWLock *create(); ///< Create a rwlock
 
-	virtual ~RWLock() {}
+    virtual ~RWLock() {}
 };
 
-class RWLockRead {
-	RWLock *lock;
+class RWLockRead
+{
+    RWLock *lock;
 
 public:
-	RWLockRead(const RWLock *p_lock) {
-		lock = const_cast<RWLock *>(p_lock);
-		if (lock) {
-			lock->read_lock();
-		}
-	}
-	~RWLockRead() {
-		if (lock) {
-			lock->read_unlock();
-		}
-	}
+    RWLockRead ( const RWLock *p_lock )
+    {
+        lock = const_cast<RWLock *> ( p_lock );
+        if ( lock ) {
+            lock->read_lock();
+        }
+    }
+    ~RWLockRead()
+    {
+        if ( lock ) {
+            lock->read_unlock();
+        }
+    }
 };
 
-class RWLockWrite {
-	RWLock *lock;
+class RWLockWrite
+{
+    RWLock *lock;
 
 public:
-	RWLockWrite(RWLock *p_lock) {
-		lock = p_lock;
-		if (lock) {
-			lock->write_lock();
-		}
-	}
-	~RWLockWrite() {
-		if (lock) {
-			lock->write_unlock();
-		}
-	}
+    RWLockWrite ( RWLock *p_lock )
+    {
+        lock = p_lock;
+        if ( lock ) {
+            lock->write_lock();
+        }
+    }
+    ~RWLockWrite()
+    {
+        if ( lock ) {
+            lock->write_unlock();
+        }
+    }
 };
 
 #endif // RW_LOCK_H

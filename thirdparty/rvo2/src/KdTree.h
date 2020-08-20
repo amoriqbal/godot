@@ -46,72 +46,75 @@
 // Note: Slightly modified to work better with Godot.
 // - Removed `sim_`.
 // - KdTree things are public
-namespace RVO {
+namespace RVO
+{
 class Agent;
 class RVOSimulator;
 
 /**
 	 * \brief   Defines <i>k</i>d-trees for agents in the simulation.
 	 */
-class KdTree {
+class KdTree
+{
 public:
     /**
-		 * \brief   Defines an agent <i>k</i>d-tree node.
-		 */
-    class AgentTreeNode {
+    	 * \brief   Defines an agent <i>k</i>d-tree node.
+    	 */
+    class AgentTreeNode
+    {
     public:
         /**
-			 * \brief   The beginning node number.
-			 */
+        	 * \brief   The beginning node number.
+        	 */
         size_t begin;
 
         /**
-			 * \brief   The ending node number.
-			 */
+        	 * \brief   The ending node number.
+        	 */
         size_t end;
 
         /**
-			 * \brief   The left node number.
-			 */
+        	 * \brief   The left node number.
+        	 */
         size_t left;
 
         /**
-			 * \brief   The right node number.
-			 */
+        	 * \brief   The right node number.
+        	 */
         size_t right;
 
         /**
-			 * \brief   The maximum coordinates.
-			 */
+        	 * \brief   The maximum coordinates.
+        	 */
         Vector3 maxCoord;
 
         /**
-			 * \brief   The minimum coordinates.
-			 */
+        	 * \brief   The minimum coordinates.
+        	 */
         Vector3 minCoord;
     };
 
     /**
-		 * \brief   Constructs a <i>k</i>d-tree instance.
-		 * \param   sim  The simulator instance.
-		 */
+    	 * \brief   Constructs a <i>k</i>d-tree instance.
+    	 * \param   sim  The simulator instance.
+    	 */
     explicit KdTree();
 
     /**
-		 * \brief   Builds an agent <i>k</i>d-tree.
-		 */
-    void buildAgentTree(std::vector<Agent *> agents);
+    	 * \brief   Builds an agent <i>k</i>d-tree.
+    	 */
+    void buildAgentTree ( std::vector<Agent *> agents );
 
-    void buildAgentTreeRecursive(size_t begin, size_t end, size_t node);
+    void buildAgentTreeRecursive ( size_t begin, size_t end, size_t node );
 
     /**
-		 * \brief   Computes the agent neighbors of the specified agent.
-		 * \param   agent    A pointer to the agent for which agent neighbors are to be computed.
-		 * \param   rangeSq  The squared range around the agent.
-		 */
-    void computeAgentNeighbors(Agent *agent, float rangeSq) const;
+    	 * \brief   Computes the agent neighbors of the specified agent.
+    	 * \param   agent    A pointer to the agent for which agent neighbors are to be computed.
+    	 * \param   rangeSq  The squared range around the agent.
+    	 */
+    void computeAgentNeighbors ( Agent *agent, float rangeSq ) const;
 
-    void queryAgentTreeRecursive(Agent *agent, float &rangeSq, size_t node) const;
+    void queryAgentTreeRecursive ( Agent *agent, float &rangeSq, size_t node ) const;
 
     std::vector<Agent *> agents_;
     std::vector<AgentTreeNode> agentTree_;

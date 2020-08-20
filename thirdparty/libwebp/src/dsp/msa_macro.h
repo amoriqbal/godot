@@ -18,31 +18,31 @@
 #include <msa.h>
 
 #if defined(__clang__)
-  #define CLANG_BUILD
+#define CLANG_BUILD
 #endif
 
 #ifdef CLANG_BUILD
-  #define ALPHAVAL  (-1)
-  #define ADDVI_H(a, b)  __msa_addvi_h((v8i16)a, b)
-  #define ADDVI_W(a, b)  __msa_addvi_w((v4i32)a, b)
-  #define SRAI_B(a, b)  __msa_srai_b((v16i8)a, b)
-  #define SRAI_H(a, b)  __msa_srai_h((v8i16)a, b)
-  #define SRAI_W(a, b)  __msa_srai_w((v4i32)a, b)
-  #define SRLI_H(a, b)  __msa_srli_h((v8i16)a, b)
-  #define SLLI_B(a, b)  __msa_slli_b((v4i32)a, b)
-  #define ANDI_B(a, b)  __msa_andi_b((v16u8)a, b)
-  #define ORI_B(a, b)   __msa_ori_b((v16u8)a, b)
+#define ALPHAVAL  (-1)
+#define ADDVI_H(a, b)  __msa_addvi_h((v8i16)a, b)
+#define ADDVI_W(a, b)  __msa_addvi_w((v4i32)a, b)
+#define SRAI_B(a, b)  __msa_srai_b((v16i8)a, b)
+#define SRAI_H(a, b)  __msa_srai_h((v8i16)a, b)
+#define SRAI_W(a, b)  __msa_srai_w((v4i32)a, b)
+#define SRLI_H(a, b)  __msa_srli_h((v8i16)a, b)
+#define SLLI_B(a, b)  __msa_slli_b((v4i32)a, b)
+#define ANDI_B(a, b)  __msa_andi_b((v16u8)a, b)
+#define ORI_B(a, b)   __msa_ori_b((v16u8)a, b)
 #else
-  #define ALPHAVAL  (0xff)
-  #define ADDVI_H(a, b)  (a + b)
-  #define ADDVI_W(a, b)  (a + b)
-  #define SRAI_B(a, b)  (a >> b)
-  #define SRAI_H(a, b)  (a >> b)
-  #define SRAI_W(a, b)  (a >> b)
-  #define SRLI_H(a, b)  (a << b)
-  #define SLLI_B(a, b)  (a << b)
-  #define ANDI_B(a, b)  (a & b)
-  #define ORI_B(a, b)   (a | b)
+#define ALPHAVAL  (0xff)
+#define ADDVI_H(a, b)  (a + b)
+#define ADDVI_W(a, b)  (a + b)
+#define SRAI_B(a, b)  (a >> b)
+#define SRAI_H(a, b)  (a >> b)
+#define SRAI_W(a, b)  (a >> b)
+#define SRLI_H(a, b)  (a << b)
+#define SLLI_B(a, b)  (a << b)
+#define ANDI_B(a, b)  (a & b)
+#define ORI_B(a, b)   (a | b)
 #endif
 
 #define LD_B(RTYPE, psrc) *((RTYPE*)(psrc))
@@ -95,42 +95,42 @@
 #define MSA_STORE(val, pdst, FUNC_NAME)  FUNC_NAME(val, pdst)
 
 #if (__mips_isa_rev >= 6)
-  MSA_LOAD_FUNC(uint16_t, lh, msa_lh);
-  #define LH(psrc)  MSA_LOAD(psrc, msa_lh)
-  MSA_LOAD_FUNC(uint32_t, lw, msa_lw);
-  #define LW(psrc)  MSA_LOAD(psrc, msa_lw)
-  #if (__mips == 64)
-    MSA_LOAD_FUNC(uint64_t, ld, msa_ld);
-    #define LD(psrc)  MSA_LOAD(psrc, msa_ld)
-  #else  // !(__mips == 64)
-    #define LD(psrc)  ((((uint64_t)MSA_LOAD(psrc + 4, msa_lw)) << 32) | \
+MSA_LOAD_FUNC ( uint16_t, lh, msa_lh );
+#define LH(psrc)  MSA_LOAD(psrc, msa_lh)
+MSA_LOAD_FUNC ( uint32_t, lw, msa_lw );
+#define LW(psrc)  MSA_LOAD(psrc, msa_lw)
+#if (__mips == 64)
+MSA_LOAD_FUNC ( uint64_t, ld, msa_ld );
+#define LD(psrc)  MSA_LOAD(psrc, msa_ld)
+#else  // !(__mips == 64)
+#define LD(psrc)  ((((uint64_t)MSA_LOAD(psrc + 4, msa_lw)) << 32) | \
                        MSA_LOAD(psrc, msa_lw))
-  #endif  // (__mips == 64)
+#endif  // (__mips == 64)
 
-  MSA_STORE_FUNC(uint16_t, sh, msa_sh);
-  #define SH(val, pdst)  MSA_STORE(val, pdst, msa_sh)
-  MSA_STORE_FUNC(uint32_t, sw, msa_sw);
-  #define SW(val, pdst)  MSA_STORE(val, pdst, msa_sw)
-  MSA_STORE_FUNC(uint64_t, sd, msa_sd);
-  #define SD(val, pdst)  MSA_STORE(val, pdst, msa_sd)
+MSA_STORE_FUNC ( uint16_t, sh, msa_sh );
+#define SH(val, pdst)  MSA_STORE(val, pdst, msa_sh)
+MSA_STORE_FUNC ( uint32_t, sw, msa_sw );
+#define SW(val, pdst)  MSA_STORE(val, pdst, msa_sw)
+MSA_STORE_FUNC ( uint64_t, sd, msa_sd );
+#define SD(val, pdst)  MSA_STORE(val, pdst, msa_sd)
 #else  // !(__mips_isa_rev >= 6)
-  MSA_LOAD_FUNC(uint16_t, ulh, msa_ulh);
-  #define LH(psrc)  MSA_LOAD(psrc, msa_ulh)
-  MSA_LOAD_FUNC(uint32_t, ulw, msa_ulw);
-  #define LW(psrc)  MSA_LOAD(psrc, msa_ulw)
-  #if (__mips == 64)
-    MSA_LOAD_FUNC(uint64_t, uld, msa_uld);
-    #define LD(psrc)  MSA_LOAD(psrc, msa_uld)
-  #else  // !(__mips == 64)
-    #define LD(psrc)  ((((uint64_t)MSA_LOAD(psrc + 4, msa_ulw)) << 32) | \
+MSA_LOAD_FUNC ( uint16_t, ulh, msa_ulh );
+#define LH(psrc)  MSA_LOAD(psrc, msa_ulh)
+MSA_LOAD_FUNC ( uint32_t, ulw, msa_ulw );
+#define LW(psrc)  MSA_LOAD(psrc, msa_ulw)
+#if (__mips == 64)
+MSA_LOAD_FUNC ( uint64_t, uld, msa_uld );
+#define LD(psrc)  MSA_LOAD(psrc, msa_uld)
+#else  // !(__mips == 64)
+#define LD(psrc)  ((((uint64_t)MSA_LOAD(psrc + 4, msa_ulw)) << 32) | \
                         MSA_LOAD(psrc, msa_ulw))
-  #endif  // (__mips == 64)
+#endif  // (__mips == 64)
 
-  MSA_STORE_FUNC(uint16_t, ush, msa_ush);
-  #define SH(val, pdst)  MSA_STORE(val, pdst, msa_ush)
-  MSA_STORE_FUNC(uint32_t, usw, msa_usw);
-  #define SW(val, pdst)  MSA_STORE(val, pdst, msa_usw)
-  #define SD(val, pdst) do {                                               \
+MSA_STORE_FUNC ( uint16_t, ush, msa_ush );
+#define SH(val, pdst)  MSA_STORE(val, pdst, msa_ush)
+MSA_STORE_FUNC ( uint32_t, usw, msa_usw );
+#define SW(val, pdst)  MSA_STORE(val, pdst, msa_usw)
+#define SD(val, pdst) do {                                               \
     uint8_t* const pdst_sd_m = (uint8_t*)(pdst);                           \
     const uint32_t val0_m = (uint32_t)(val & 0x00000000FFFFFFFF);          \
     const uint32_t val1_m = (uint32_t)((val >> 32) & 0x00000000FFFFFFFF);  \
@@ -585,12 +585,13 @@
  * Details     : 4 signed word elements of 'in' vector are added together and
  *               the resulting integer sum is returned
  */
-static WEBP_INLINE int32_t func_hadd_sw_s32(v4i32 in) {
-  const v2i64 res0_m = __msa_hadd_s_d((v4i32)in, (v4i32)in);
-  const v2i64 res1_m = __msa_splati_d(res0_m, 1);
-  const v2i64 out = res0_m + res1_m;
-  int32_t sum_m = __msa_copy_s_w((v4i32)out, 0);
-  return sum_m;
+static WEBP_INLINE int32_t func_hadd_sw_s32 ( v4i32 in )
+{
+    const v2i64 res0_m = __msa_hadd_s_d ( ( v4i32 ) in, ( v4i32 ) in );
+    const v2i64 res1_m = __msa_splati_d ( res0_m, 1 );
+    const v2i64 out = res0_m + res1_m;
+    int32_t sum_m = __msa_copy_s_w ( ( v4i32 ) out, 0 );
+    return sum_m;
 }
 #define HADD_SW_S32(in) func_hadd_sw_s32(in)
 
@@ -601,13 +602,14 @@ static WEBP_INLINE int32_t func_hadd_sw_s32(v4i32 in) {
  * Details     : 8 signed halfword elements of input vector are added
  *               together and the resulting integer sum is returned
  */
-static WEBP_INLINE int32_t func_hadd_sh_s32(v8i16 in) {
-  const v4i32 res = __msa_hadd_s_w(in, in);
-  const v2i64 res0 = __msa_hadd_s_d(res, res);
-  const v2i64 res1 = __msa_splati_d(res0, 1);
-  const v2i64 res2 = res0 + res1;
-  const int32_t sum_m = __msa_copy_s_w((v4i32)res2, 0);
-  return sum_m;
+static WEBP_INLINE int32_t func_hadd_sh_s32 ( v8i16 in )
+{
+    const v4i32 res = __msa_hadd_s_w ( in, in );
+    const v2i64 res0 = __msa_hadd_s_d ( res, res );
+    const v2i64 res1 = __msa_splati_d ( res0, 1 );
+    const v2i64 res2 = res0 + res1;
+    const int32_t sum_m = __msa_copy_s_w ( ( v4i32 ) res2, 0 );
+    return sum_m;
 }
 #define HADD_SH_S32(in) func_hadd_sh_s32(in)
 
@@ -618,14 +620,15 @@ static WEBP_INLINE int32_t func_hadd_sh_s32(v8i16 in) {
  * Details     : 8 unsigned halfword elements of input vector are added
  *               together and the resulting integer sum is returned
  */
-static WEBP_INLINE uint32_t func_hadd_uh_u32(v8u16 in) {
-  uint32_t sum_m;
-  const v4u32 res_m = __msa_hadd_u_w(in, in);
-  v2u64 res0_m = __msa_hadd_u_d(res_m, res_m);
-  v2u64 res1_m = (v2u64)__msa_splati_d((v2i64)res0_m, 1);
-  res0_m = res0_m + res1_m;
-  sum_m = __msa_copy_s_w((v4i32)res0_m, 0);
-  return sum_m;
+static WEBP_INLINE uint32_t func_hadd_uh_u32 ( v8u16 in )
+{
+    uint32_t sum_m;
+    const v4u32 res_m = __msa_hadd_u_w ( in, in );
+    v2u64 res0_m = __msa_hadd_u_d ( res_m, res_m );
+    v2u64 res1_m = ( v2u64 ) __msa_splati_d ( ( v2i64 ) res0_m, 1 );
+    res0_m = res0_m + res1_m;
+    sum_m = __msa_copy_s_w ( ( v4i32 ) res0_m, 0 );
+    return sum_m;
 }
 #define HADD_UH_U32(in) func_hadd_uh_u32(in)
 

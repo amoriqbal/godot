@@ -65,54 +65,69 @@
 #include <cstring>
 #include <vector>
 
-namespace glslang {
+namespace glslang
+{
 
 // If we are using guard blocks, we must track each individual
 // allocation.  If we aren't using guard blocks, these
 // never get instantiated, so won't have any impact.
 //
 
-class TAllocation {
+class TAllocation
+{
 public:
-    TAllocation(size_t size, unsigned char* mem, TAllocation* prev = 0) :
-        size(size), mem(mem), prevAlloc(prev) {
+    TAllocation ( size_t size, unsigned char* mem, TAllocation* prev = 0 ) :
+        size ( size ), mem ( mem ), prevAlloc ( prev )
+    {
         // Allocations are bracketed:
         //    [allocationHeader][initialGuardBlock][userData][finalGuardBlock]
         // This would be cleaner with if (guardBlockSize)..., but that
         // makes the compiler print warnings about 0 length memsets,
         // even with the if() protecting them.
 #       ifdef GUARD_BLOCKS
-            memset(preGuard(),  guardBlockBeginVal, guardBlockSize);
-            memset(data(),      userDataFill,       size);
-            memset(postGuard(), guardBlockEndVal,   guardBlockSize);
+        memset ( preGuard(),  guardBlockBeginVal, guardBlockSize );
+        memset ( data(),      userDataFill,       size );
+        memset ( postGuard(), guardBlockEndVal,   guardBlockSize );
 #       endif
     }
 
-    void check() const {
-        checkGuardBlock(preGuard(),  guardBlockBeginVal, "before");
-        checkGuardBlock(postGuard(), guardBlockEndVal,   "after");
+    void check() const
+    {
+        checkGuardBlock ( preGuard(),  guardBlockBeginVal, "before" );
+        checkGuardBlock ( postGuard(), guardBlockEndVal,   "after" );
     }
 
     void checkAllocList() const;
 
     // Return total size needed to accommodate user buffer of 'size',
     // plus our tracking data.
-    inline static size_t allocationSize(size_t size) {
+    inline static size_t allocationSize ( size_t size )
+    {
         return size + 2 * guardBlockSize + headerSize();
     }
 
     // Offset from surrounding buffer to get to user data buffer.
-    inline static unsigned char* offsetAllocation(unsigned char* m) {
+    inline static unsigned char* offsetAllocation ( unsigned char* m )
+    {
         return m + guardBlockSize + headerSize();
     }
 
 private:
-    void checkGuardBlock(unsigned char* blockMem, unsigned char val, const char* locText) const;
+    void checkGuardBlock ( unsigned char* blockMem, unsigned char val, const char* locText ) const;
 
     // Find offsets to pre and post guard blocks, and user data buffer
-    unsigned char* preGuard()  const { return mem + headerSize(); }
-    unsigned char* data()      const { return preGuard() + guardBlockSize; }
-    unsigned char* postGuard() const { return data() + size; }
+    unsigned char* preGuard()  const
+    {
+        return mem + headerSize();
+    }
+    unsigned char* data()      const
+    {
+        return preGuard() + guardBlockSize;
+    }
+    unsigned char* postGuard() const
+    {
+        return data() + size;
+    }
 
     size_t size;                  // size of the user data area
     unsigned char* mem;           // beginning of our allocation (pts to header)
@@ -124,9 +139,15 @@ private:
 
     const static size_t guardBlockSize;
 #   ifdef GUARD_BLOCKS
-    inline static size_t headerSize() { return sizeof(TAllocation); }
+    inline static size_t headerSize()
+    {
+        return sizeof ( TAllocation );
+    }
 #   else
-    inline static size_t headerSize() { return 0; }
+    inline static size_t headerSize()
+    {
+        return 0;
+    }
 #   endif
 };
 
@@ -144,9 +165,10 @@ private:
 // page size.  But, having it be about that size or equal to a set of
 // pages is likely most optimal.
 //
-class TPoolAllocator {
+class TPoolAllocator
+{
 public:
-    TPoolAllocator(int growthIncrement = 8*1024, int allocationAlignment = 16);
+    TPoolAllocator ( int growthIncrement = 8*1024, int allocationAlignment = 16 );
 
     //
     // Don't call the destructor just to free up the memory, call pop()
@@ -174,7 +196,7 @@ public:
     // Call allocate() to actually acquire memory.  Returns 0 if no memory
     // available, otherwise a properly aligned pointer to 'numBytes' of memory.
     //
-    void* allocate(size_t numBytes);
+    void* allocate ( size_t numBytes );
 
     //
     // There is no deallocate.  The point of this class is that
@@ -187,16 +209,18 @@ protected:
     friend struct tHeader;
 
     struct tHeader {
-        tHeader(tHeader* nextPage, size_t pageCount) :
+        tHeader ( tHeader* nextPage, size_t pageCount ) :
 #ifdef GUARD_BLOCKS
-        lastAllocation(0),
+            lastAllocation ( 0 ),
 #endif
-        nextPage(nextPage), pageCount(pageCount) { }
+            nextPage ( nextPage ), pageCount ( pageCount ) { }
 
-        ~tHeader() {
+        ~tHeader()
+        {
 #ifdef GUARD_BLOCKS
-            if (lastAllocation)
+            if ( lastAllocation ) {
                 lastAllocation->checkAllocList();
+            }
 #endif
         }
 
@@ -215,24 +239,26 @@ protected:
 
     // Track allocations if and only if we're using guard blocks
 #ifndef GUARD_BLOCKS
-    void* initializeAllocation(tHeader*, unsigned char* memory, size_t) {
+    void* initializeAllocation ( tHeader*, unsigned char* memory, size_t )
+    {
 #else
-    void* initializeAllocation(tHeader* block, unsigned char* memory, size_t numBytes) {
-        new(memory) TAllocation(numBytes, memory, block->lastAllocation);
-        block->lastAllocation = reinterpret_cast<TAllocation*>(memory);
+    void* initializeAllocation ( tHeader* block, unsigned char* memory, size_t numBytes )
+    {
+        new ( memory ) TAllocation ( numBytes, memory, block->lastAllocation );
+        block->lastAllocation = reinterpret_cast<TAllocation*> ( memory );
 #endif
 
         // This is optimized entirely away if GUARD_BLOCKS is not defined.
-        return TAllocation::offsetAllocation(memory);
+        return TAllocation::offsetAllocation ( memory );
     }
 
     size_t pageSize;        // granularity of allocation from the OS
     size_t alignment;       // all returned allocations will be aligned at
-                            //      this granularity, which will be a power of 2
+    //      this granularity, which will be a power of 2
     size_t alignmentMask;
     size_t headerSkip;      // amount of memory to skip to make room for the
-                            //      header (basically, size of header, rounded
-                            //      up to make it aligned
+    //      header (basically, size of header, rounded
+    //      up to make it aligned
     size_t currentPageOffset;  // next offset in top of inUseList to allocate from
     tHeader* freeList;      // list of popped memory
     tHeader* inUseList;     // list of all memory currently being used
@@ -241,8 +267,8 @@ protected:
     int numCalls;           // just an interesting statistic
     size_t totalBytes;      // just an interesting statistic
 private:
-    TPoolAllocator& operator=(const TPoolAllocator&);  // don't allow assignment operator
-    TPoolAllocator(const TPoolAllocator&);  // don't allow default copy constructor
+    TPoolAllocator& operator= ( const TPoolAllocator& ); // don't allow assignment operator
+    TPoolAllocator ( const TPoolAllocator& ); // don't allow default copy constructor
 };
 
 //
@@ -251,7 +277,7 @@ private:
 // with everyone using the same global allocator.
 //
 extern TPoolAllocator& GetThreadPoolAllocator();
-void SetThreadPoolAllocator(TPoolAllocator* poolAllocator);
+void SetThreadPoolAllocator ( TPoolAllocator* poolAllocator );
 
 //
 // This STL compatible allocator is intended to be used as the allocator
@@ -261,7 +287,8 @@ void SetThreadPoolAllocator(TPoolAllocator* poolAllocator);
 // do any deallocation, but will still do destruction.
 //
 template<class T>
-class pool_allocator {
+class pool_allocator
+{
 public:
     typedef size_t size_type;
     typedef ptrdiff_t difference_type;
@@ -271,43 +298,79 @@ public:
     typedef const T& const_reference;
     typedef T value_type;
     template<class Other>
-        struct rebind {
-            typedef pool_allocator<Other> other;
-        };
-    pointer address(reference x) const { return &x; }
-    const_pointer address(const_reference x) const { return &x; }
+    struct rebind {
+        typedef pool_allocator<Other> other;
+    };
+    pointer address ( reference x ) const
+    {
+        return &x;
+    }
+    const_pointer address ( const_reference x ) const
+    {
+        return &x;
+    }
 
-    pool_allocator() : allocator(GetThreadPoolAllocator()) { }
-    pool_allocator(TPoolAllocator& a) : allocator(a) { }
-    pool_allocator(const pool_allocator<T>& p) : allocator(p.allocator) { }
+    pool_allocator() : allocator ( GetThreadPoolAllocator() ) { }
+    pool_allocator ( TPoolAllocator& a ) : allocator ( a ) { }
+    pool_allocator ( const pool_allocator<T>& p ) : allocator ( p.allocator ) { }
 
     template<class Other>
-        pool_allocator(const pool_allocator<Other>& p) : allocator(p.getAllocator()) { }
+    pool_allocator ( const pool_allocator<Other>& p ) : allocator ( p.getAllocator() ) { }
 
-    pointer allocate(size_type n) {
-        return reinterpret_cast<pointer>(getAllocator().allocate(n * sizeof(T))); }
-    pointer allocate(size_type n, const void*) {
-        return reinterpret_cast<pointer>(getAllocator().allocate(n * sizeof(T))); }
+    pointer allocate ( size_type n )
+    {
+        return reinterpret_cast<pointer> ( getAllocator().allocate ( n * sizeof ( T ) ) );
+    }
+    pointer allocate ( size_type n, const void* )
+    {
+        return reinterpret_cast<pointer> ( getAllocator().allocate ( n * sizeof ( T ) ) );
+    }
 
-    void deallocate(void*, size_type) { }
-    void deallocate(pointer, size_type) { }
+    void deallocate ( void*, size_type ) { }
+    void deallocate ( pointer, size_type ) { }
 
-    pointer _Charalloc(size_t n) {
-        return reinterpret_cast<pointer>(getAllocator().allocate(n)); }
+    pointer _Charalloc ( size_t n )
+    {
+        return reinterpret_cast<pointer> ( getAllocator().allocate ( n ) );
+    }
 
-    void construct(pointer p, const T& val) { new ((void *)p) T(val); }
-    void destroy(pointer p) { p->T::~T(); }
+    void construct ( pointer p, const T& val )
+    {
+        new ( ( void * ) p ) T ( val );
+    }
+    void destroy ( pointer p )
+    {
+        p->T::~T();
+    }
 
-    bool operator==(const pool_allocator& rhs) const { return &getAllocator() == &rhs.getAllocator(); }
-    bool operator!=(const pool_allocator& rhs) const { return &getAllocator() != &rhs.getAllocator(); }
+    bool operator== ( const pool_allocator& rhs ) const
+    {
+        return &getAllocator() == &rhs.getAllocator();
+    }
+    bool operator!= ( const pool_allocator& rhs ) const
+    {
+        return &getAllocator() != &rhs.getAllocator();
+    }
 
-    size_type max_size() const { return static_cast<size_type>(-1) / sizeof(T); }
-    size_type max_size(int size) const { return static_cast<size_type>(-1) / size; }
+    size_type max_size() const
+    {
+        return static_cast<size_type> ( -1 ) / sizeof ( T );
+    }
+    size_type max_size ( int size ) const
+    {
+        return static_cast<size_type> ( -1 ) / size;
+    }
 
-    TPoolAllocator& getAllocator() const { return allocator; }
+    TPoolAllocator& getAllocator() const
+    {
+        return allocator;
+    }
 
 protected:
-    pool_allocator& operator=(const pool_allocator&) { return *this; }
+    pool_allocator& operator= ( const pool_allocator& )
+    {
+        return *this;
+    }
     TPoolAllocator& allocator;
 };
 

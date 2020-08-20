@@ -54,17 +54,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <vector>
 
-namespace Assimp {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /**
  *  Implementation of a cached stream buffer.
  */
 template<class T>
-class IOStreamBuffer {
+class IOStreamBuffer
+{
 public:
     /// @brief  The class constructor.
-    IOStreamBuffer( size_t cache = 4096 * 4096 );
+    IOStreamBuffer ( size_t cache = 4096 * 4096 );
 
     /// @brief  The class destructor.
     ~IOStreamBuffer();
@@ -72,7 +74,7 @@ public:
     /// @brief  Will open the cached access for a given stream.
     /// @param  stream      The stream to cache.
     /// @return true if successful.
-    bool open( IOStream *stream );
+    bool open ( IOStream *stream );
 
     /// @brief  Will close the cached access.
     /// @return true if successful.
@@ -81,7 +83,7 @@ public:
     /// @brief  Returns the file-size.
     /// @return The file-size.
     size_t size() const;
-    
+
     /// @brief  Returns the cache size.
     /// @return The cache size.
     size_t cacheSize() const;
@@ -105,17 +107,17 @@ public:
     /// @brief  Will read the next line.
     /// @param  buffer      The buffer for the next line.
     /// @return true if successful.
-    bool getNextDataLine( std::vector<T> &buffer, T continuationToken );
+    bool getNextDataLine ( std::vector<T> &buffer, T continuationToken );
 
     /// @brief  Will read the next line ascii or binary end line char.
     /// @param  buffer      The buffer for the next line.
     /// @return true if successful.
-    bool getNextLine(std::vector<T> &buffer);
+    bool getNextLine ( std::vector<T> &buffer );
 
     /// @brief  Will read the next block.
     /// @param  buffer      The buffer for the next block.
     /// @return true if successful.
-    bool getNextBlock( std::vector<T> &buffer );
+    bool getNextBlock ( std::vector<T> &buffer );
 
 private:
     IOStream *m_stream;
@@ -130,27 +132,30 @@ private:
 
 template<class T>
 AI_FORCE_INLINE
-IOStreamBuffer<T>::IOStreamBuffer( size_t cache )
-: m_stream( nullptr )
-, m_filesize( 0 )
-, m_cacheSize( cache )
-, m_numBlocks( 0 )
-, m_blockIdx( 0 )
-, m_cachePos( 0 )
-, m_filePos( 0 ) {
-    m_cache.resize( cache );
-    std::fill( m_cache.begin(), m_cache.end(), '\n' );
+IOStreamBuffer<T>::IOStreamBuffer ( size_t cache )
+    : m_stream ( nullptr )
+    , m_filesize ( 0 )
+    , m_cacheSize ( cache )
+    , m_numBlocks ( 0 )
+    , m_blockIdx ( 0 )
+    , m_cachePos ( 0 )
+    , m_filePos ( 0 )
+{
+    m_cache.resize ( cache );
+    std::fill ( m_cache.begin(), m_cache.end(), '\n' );
 }
 
 template<class T>
 AI_FORCE_INLINE
-IOStreamBuffer<T>::~IOStreamBuffer() {
+IOStreamBuffer<T>::~IOStreamBuffer()
+{
     // empty
 }
 
 template<class T>
 AI_FORCE_INLINE
-bool IOStreamBuffer<T>::open( IOStream *stream ) {
+bool IOStreamBuffer<T>::open ( IOStream *stream )
+{
     //  file still opened!
     if ( nullptr != m_stream ) {
         return false;
@@ -180,7 +185,8 @@ bool IOStreamBuffer<T>::open( IOStream *stream ) {
 
 template<class T>
 AI_FORCE_INLINE
-bool IOStreamBuffer<T>::close() {
+bool IOStreamBuffer<T>::close()
+{
     if ( nullptr == m_stream ) {
         return false;
     }
@@ -198,21 +204,24 @@ bool IOStreamBuffer<T>::close() {
 
 template<class T>
 AI_FORCE_INLINE
-size_t IOStreamBuffer<T>::size() const {
+size_t IOStreamBuffer<T>::size() const
+{
     return m_filesize;
 }
 
 template<class T>
 AI_FORCE_INLINE
-size_t IOStreamBuffer<T>::cacheSize() const {
+size_t IOStreamBuffer<T>::cacheSize() const
+{
     return m_cacheSize;
 }
 
 template<class T>
 AI_FORCE_INLINE
-bool IOStreamBuffer<T>::readNextBlock() {
-    m_stream->Seek( m_filePos, aiOrigin_SET );
-    size_t readLen = m_stream->Read( &m_cache[ 0 ], sizeof( T ), m_cacheSize );
+bool IOStreamBuffer<T>::readNextBlock()
+{
+    m_stream->Seek ( m_filePos, aiOrigin_SET );
+    size_t readLen = m_stream->Read ( &m_cache[ 0 ], sizeof ( T ), m_cacheSize );
     if ( readLen == 0 ) {
         return false;
     }
@@ -228,46 +237,50 @@ bool IOStreamBuffer<T>::readNextBlock() {
 
 template<class T>
 AI_FORCE_INLINE
-size_t IOStreamBuffer<T>::getNumBlocks() const {
+size_t IOStreamBuffer<T>::getNumBlocks() const
+{
     return m_numBlocks;
 }
 
 template<class T>
 AI_FORCE_INLINE
-size_t IOStreamBuffer<T>::getCurrentBlockIndex() const {
+size_t IOStreamBuffer<T>::getCurrentBlockIndex() const
+{
     return m_blockIdx;
 }
 
 template<class T>
 AI_FORCE_INLINE
-size_t IOStreamBuffer<T>::getFilePos() const {
+size_t IOStreamBuffer<T>::getFilePos() const
+{
     return m_filePos;
 }
 
 template<class T>
 AI_FORCE_INLINE
-bool IOStreamBuffer<T>::getNextDataLine( std::vector<T> &buffer, T continuationToken ) {
-    buffer.resize( m_cacheSize );
+bool IOStreamBuffer<T>::getNextDataLine ( std::vector<T> &buffer, T continuationToken )
+{
+    buffer.resize ( m_cacheSize );
     if ( m_cachePos >= m_cacheSize || 0 == m_filePos ) {
         if ( !readNextBlock() ) {
             return false;
         }
     }
 
-    bool continuationFound( false );
+    bool continuationFound ( false );
     size_t i = 0;
-    for( ;; ) {
+    for ( ;; ) {
         if ( continuationToken == m_cache[ m_cachePos ] ) {
             continuationFound = true;
             ++m_cachePos;
         }
-        if ( IsLineEnd( m_cache[ m_cachePos ] ) ) {
+        if ( IsLineEnd ( m_cache[ m_cachePos ] ) ) {
             if ( !continuationFound ) {
                 // the end of the data line
                 break;
             } else {
                 // skip line end
-                while ( m_cache[m_cachePos] != '\n') {
+                while ( m_cache[m_cachePos] != '\n' ) {
                     ++m_cachePos;
                 }
                 ++m_cachePos;
@@ -278,7 +291,7 @@ bool IOStreamBuffer<T>::getNextDataLine( std::vector<T> &buffer, T continuationT
         buffer[ i ] = m_cache[ m_cachePos ];
         ++m_cachePos;
         ++i;
-        if (m_cachePos >= size()) {
+        if ( m_cachePos >= size() ) {
             break;
         }
         if ( m_cachePos >= m_cacheSize ) {
@@ -287,7 +300,7 @@ bool IOStreamBuffer<T>::getNextDataLine( std::vector<T> &buffer, T continuationT
             }
         }
     }
-    
+
     buffer[ i ] = '\n';
     ++m_cachePos;
 
@@ -295,40 +308,42 @@ bool IOStreamBuffer<T>::getNextDataLine( std::vector<T> &buffer, T continuationT
 }
 
 static AI_FORCE_INLINE
-bool isEndOfCache( size_t pos, size_t cacheSize ) {
+bool isEndOfCache ( size_t pos, size_t cacheSize )
+{
     return ( pos == cacheSize );
 }
 
 template<class T>
 AI_FORCE_INLINE
-bool IOStreamBuffer<T>::getNextLine(std::vector<T> &buffer) {
-    buffer.resize(m_cacheSize);
-    if ( isEndOfCache( m_cachePos, m_cacheSize ) || 0 == m_filePos) {
-       if (!readNextBlock()) {
-          return false;
-       }
-      }
+bool IOStreamBuffer<T>::getNextLine ( std::vector<T> &buffer )
+{
+    buffer.resize ( m_cacheSize );
+    if ( isEndOfCache ( m_cachePos, m_cacheSize ) || 0 == m_filePos ) {
+        if ( !readNextBlock() ) {
+            return false;
+        }
+    }
 
-    if (IsLineEnd(m_cache[m_cachePos])) {
+    if ( IsLineEnd ( m_cache[m_cachePos] ) ) {
         // skip line end
-        while (m_cache[m_cachePos] != '\n') {
+        while ( m_cache[m_cachePos] != '\n' ) {
             ++m_cachePos;
         }
         ++m_cachePos;
-        if ( isEndOfCache( m_cachePos, m_cacheSize ) ) {
+        if ( isEndOfCache ( m_cachePos, m_cacheSize ) ) {
             if ( !readNextBlock() ) {
                 return false;
             }
         }
     }
 
-    size_t i( 0 );
-    while (!IsLineEnd(m_cache[ m_cachePos ])) {
+    size_t i ( 0 );
+    while ( !IsLineEnd ( m_cache[ m_cachePos ] ) ) {
         buffer[i] = m_cache[ m_cachePos ];
         ++m_cachePos;
         ++i;
-        if (m_cachePos >= m_cacheSize) {
-            if (!readNextBlock()) {
+        if ( m_cachePos >= m_cacheSize ) {
+            if ( !readNextBlock() ) {
                 return false;
             }
         }
@@ -341,17 +356,18 @@ bool IOStreamBuffer<T>::getNextLine(std::vector<T> &buffer) {
 
 template<class T>
 AI_FORCE_INLINE
-bool IOStreamBuffer<T>::getNextBlock( std::vector<T> &buffer) {
+bool IOStreamBuffer<T>::getNextBlock ( std::vector<T> &buffer )
+{
     // Return the last block-value if getNextLine was used before
-    if ( 0 != m_cachePos ) {      
-        buffer = std::vector<T>( m_cache.begin() + m_cachePos, m_cache.end() );
+    if ( 0 != m_cachePos ) {
+        buffer = std::vector<T> ( m_cache.begin() + m_cachePos, m_cache.end() );
         m_cachePos = 0;
     } else {
         if ( !readNextBlock() ) {
             return false;
         }
 
-        buffer = std::vector<T>(m_cache.begin(), m_cache.end());
+        buffer = std::vector<T> ( m_cache.begin(), m_cache.end() );
     }
 
     return true;

@@ -60,8 +60,8 @@ extern "C" {
   crash even in case of corrupted input.
 */
 
-typedef voidpf (*alloc_func) OF((voidpf opaque, uInt items, uInt size));
-typedef void   (*free_func)  OF((voidpf opaque, voidpf address));
+typedef voidpf ( *alloc_func ) OF ( ( voidpf opaque, uInt items, uInt size ) );
+typedef void ( *free_func )  OF ( ( voidpf opaque, voidpf address ) );
 
 struct internal_state;
 
@@ -120,7 +120,7 @@ typedef z_stream FAR *z_streamp;
    a single step).
 */
 
-                        /* constants */
+/* constants */
 
 #define Z_NO_FLUSH      0
 #define Z_PARTIAL_FLUSH 1 /* will be removed, use Z_SYNC_FLUSH instead */
@@ -164,7 +164,7 @@ typedef z_stream FAR *z_streamp;
 #define Z_NULL  0  /* for initializing zalloc, zfree, opaque */
 
 
-                        /* basic functions */
+/* basic functions */
 
 /* The application can compare zlibVersion and ZLIB_VERSION for consistency.
    If the first character differs, the library code actually used is
@@ -306,7 +306,7 @@ ZEXTERN(int)  inflateInit OF((z_streamp strm));
 */
 
 
-ZEXTERN(int) inflate OF((z_streamp strm, int flush));
+ZEXTERN ( int ) inflate OF ( ( z_streamp strm, int flush ) );
 /*
     inflate decompresses as much data as possible, and stops when the input
   buffer becomes empty or the output buffer becomes full. It may some
@@ -375,7 +375,7 @@ ZEXTERN(int) inflate OF((z_streamp strm, int flush));
 */
 
 
-ZEXTERN(int)  inflateEnd OF((z_streamp strm));
+ZEXTERN ( int )  inflateEnd OF ( ( z_streamp strm ) );
 /*
      All dynamically allocated data structures for this stream are freed.
    This function discards any unprocessed input and does not flush any
@@ -386,7 +386,7 @@ ZEXTERN(int)  inflateEnd OF((z_streamp strm));
    static string (which must not be deallocated).
 */
 
-                        /* Advanced functions */
+/* Advanced functions */
 
 /*
     The following functions are needed only in some special applications.
@@ -566,7 +566,7 @@ ZEXTERN(int)  inflateInit2 OF((z_streamp strm,
   until success or end of the input data.
 */
 
-ZEXTERN(int)  inflateReset OF((z_streamp strm));
+ZEXTERN ( int )  inflateReset OF ( ( z_streamp strm ) );
 /*
      This function is equivalent to inflateEnd followed by inflateInit,
    but does not free and reallocate all the internal decompression state.
@@ -577,7 +577,7 @@ ZEXTERN(int)  inflateReset OF((z_streamp strm));
 */
 
 
-                        /* utility functions */
+/* utility functions */
 
 /*
      The following utility functions are implemented on top of the
@@ -764,7 +764,7 @@ ZEXTERN(int)  inflateReset OF((z_streamp strm));
    to get the exact error code.
 */
 
-                        /* checksum functions */
+/* checksum functions */
 
 /*
      These functions are not related to compression but are exported
@@ -772,7 +772,7 @@ ZEXTERN(int)  inflateReset OF((z_streamp strm));
    compression library.
 */
 
-ZEXTERN(uLong)  adler32 OF((uLong adler, const Bytef *buf, uInt len));
+ZEXTERN ( uLong )  adler32 OF ( ( uLong adler, const Bytef *buf, uInt len ) );
 
 /*
      Update a running Adler-32 checksum with the bytes buf[0..len-1] and
@@ -805,13 +805,13 @@ ZEXTERN(uLong)  adler32 OF((uLong adler, const Bytef *buf, uInt len));
 */
 
 
-                        /* various hacks, don't look :) */
+/* various hacks, don't look :) */
 
 /* deflateInit and inflateInit are macros to allow checking the zlib version
  * and the compiler's view of z_stream:
  */
-ZEXTERN(int)  inflateInit2_ OF((z_streamp strm, int  windowBits,
-                                      const char *version, int stream_size));
+ZEXTERN ( int )  inflateInit2_ OF ( ( z_streamp strm, int  windowBits,
+                                      const char *version, int stream_size ) );
 #define deflateInit(strm, level) \
         deflateInit_((strm), (level),       ZLIB_VERSION, sizeof(z_stream))
 #define inflateInit(strm) \

@@ -427,97 +427,98 @@
 /*SSE2 implementation of the fDCT for x86-64 only.
   Because of the 8 extra XMM registers on x86-64, this version can operate
    without any temporary stack access at all.*/
-void oc_enc_fdct8x8_x86_64sse2(ogg_int16_t _y[64],const ogg_int16_t _x[64]){
-  ptrdiff_t a;
-  __asm__ __volatile__(
-    /*Load the input.*/
-    "movdqa 0x00(%[x]),%%xmm0\n\t"
-    "movdqa 0x10(%[x]),%%xmm1\n\t"
-    "movdqa 0x20(%[x]),%%xmm2\n\t"
-    "movdqa 0x30(%[x]),%%xmm3\n\t"
-    "movdqa 0x40(%[x]),%%xmm4\n\t"
-    "movdqa 0x50(%[x]),%%xmm5\n\t"
-    "movdqa 0x60(%[x]),%%xmm6\n\t"
-    "movdqa 0x70(%[x]),%%xmm7\n\t"
-    /*Add two extra bits of working precision to improve accuracy; any more and
-       we could overflow.*/
-    /*We also add a few biases to correct for some systematic error that
-       remains in the full fDCT->iDCT round trip.*/
-    /*xmm15={0}x8*/
-    "pxor %%xmm15,%%xmm15\n\t"
-    /*xmm14={-1}x8*/
-    "pcmpeqb %%xmm14,%%xmm14\n\t"
-    "psllw $2,%%xmm0\n\t"
-    /*xmm8=xmm0*/
-    "movdqa %%xmm0,%%xmm8\n\t"
-    "psllw $2,%%xmm1\n\t"
-    /*xmm8={_x[7...0]==0}*/
-    "pcmpeqw %%xmm15,%%xmm8\n\t"
-    "psllw $2,%%xmm2\n\t"
-    /*xmm8={_x[7...0]!=0}*/
-    "psubw %%xmm14,%%xmm8\n\t"
-    "psllw $2,%%xmm3\n\t"
-    /*%[a]=1*/
-    "mov $1,%[a]\n\t"
-    /*xmm8={_x[6]!=0,0,_x[4]!=0,0,_x[2]!=0,0,_x[0]!=0,0}*/
-    "pslld $16,%%xmm8\n\t"
-    "psllw $2,%%xmm4\n\t"
-    /*xmm9={0,0,0,0,0,0,0,1}*/
-    "movd %[a],%%xmm9\n\t"
-    /*xmm8={0,0,_x[2]!=0,0,_x[0]!=0,0}*/
-    "pshufhw $0x00,%%xmm8,%%xmm8\n\t"
-    "psllw $2,%%xmm5\n\t"
-    /*%[a]={1}x2*/
-    "mov $0x10001,%[a]\n\t"
-    /*xmm8={0,0,0,0,0,0,0,_x[0]!=0}*/
-    "pshuflw $0x01,%%xmm8,%%xmm8\n\t"
-    "psllw $2,%%xmm6\n\t"
-    /*xmm10={0,0,0,0,0,0,1,1}*/
-    "movd %[a],%%xmm10\n\t"
-    /*xmm0=_x[7...0]+{0,0,0,0,0,0,0,_x[0]!=0}*/
-    "paddw %%xmm8,%%xmm0\n\t"
-    "psllw $2,%%xmm7\n\t"
-    /*xmm0=_x[7...0]+{0,0,0,0,0,0,1,(_x[0]!=0)+1}*/
-    "paddw %%xmm10,%%xmm0\n\t"
-    /*xmm1=_x[15...8]-{0,0,0,0,0,0,0,1}*/
-    "psubw %%xmm9,%%xmm1\n\t"
-    /*Transform columns.*/
-    OC_FDCT8x8
-    /*Transform rows.*/
-    OC_TRANSPOSE8x8
-    OC_FDCT8x8
-    /*TODO: zig-zag ordering?*/
-    OC_TRANSPOSE8x8
-    /*xmm14={-2,-2,-2,-2,-2,-2,-2,-2}*/
-    "paddw %%xmm14,%%xmm14\n\t"
-    "psubw %%xmm14,%%xmm0\n\t"
-    "psubw %%xmm14,%%xmm1\n\t"
-    "psraw $2,%%xmm0\n\t"
-    "psubw %%xmm14,%%xmm2\n\t"
-    "psraw $2,%%xmm1\n\t"
-    "psubw %%xmm14,%%xmm3\n\t"
-    "psraw $2,%%xmm2\n\t"
-    "psubw %%xmm14,%%xmm4\n\t"
-    "psraw $2,%%xmm3\n\t"
-    "psubw %%xmm14,%%xmm5\n\t"
-    "psraw $2,%%xmm4\n\t"
-    "psubw %%xmm14,%%xmm6\n\t"
-    "psraw $2,%%xmm5\n\t"
-    "psubw %%xmm14,%%xmm7\n\t"
-    "psraw $2,%%xmm6\n\t"
-    "psraw $2,%%xmm7\n\t"
-    /*Store the result.*/
-    "movdqa %%xmm0,0x00(%[y])\n\t"
-    "movdqa %%xmm1,0x10(%[y])\n\t"
-    "movdqa %%xmm2,0x20(%[y])\n\t"
-    "movdqa %%xmm3,0x30(%[y])\n\t"
-    "movdqa %%xmm4,0x40(%[y])\n\t"
-    "movdqa %%xmm5,0x50(%[y])\n\t"
-    "movdqa %%xmm6,0x60(%[y])\n\t"
-    "movdqa %%xmm7,0x70(%[y])\n\t"
-    :[a]"=&r"(a)
-    :[y]"r"(_y),[x]"r"(_x)
-    :"memory"
-  );
+void oc_enc_fdct8x8_x86_64sse2 ( ogg_int16_t _y[64],const ogg_int16_t _x[64] )
+{
+    ptrdiff_t a;
+    __asm__ __volatile__ (
+        /*Load the input.*/
+        "movdqa 0x00(%[x]),%%xmm0\n\t"
+        "movdqa 0x10(%[x]),%%xmm1\n\t"
+        "movdqa 0x20(%[x]),%%xmm2\n\t"
+        "movdqa 0x30(%[x]),%%xmm3\n\t"
+        "movdqa 0x40(%[x]),%%xmm4\n\t"
+        "movdqa 0x50(%[x]),%%xmm5\n\t"
+        "movdqa 0x60(%[x]),%%xmm6\n\t"
+        "movdqa 0x70(%[x]),%%xmm7\n\t"
+        /*Add two extra bits of working precision to improve accuracy; any more and
+           we could overflow.*/
+        /*We also add a few biases to correct for some systematic error that
+           remains in the full fDCT->iDCT round trip.*/
+        /*xmm15={0}x8*/
+        "pxor %%xmm15,%%xmm15\n\t"
+        /*xmm14={-1}x8*/
+        "pcmpeqb %%xmm14,%%xmm14\n\t"
+        "psllw $2,%%xmm0\n\t"
+        /*xmm8=xmm0*/
+        "movdqa %%xmm0,%%xmm8\n\t"
+        "psllw $2,%%xmm1\n\t"
+        /*xmm8={_x[7...0]==0}*/
+        "pcmpeqw %%xmm15,%%xmm8\n\t"
+        "psllw $2,%%xmm2\n\t"
+        /*xmm8={_x[7...0]!=0}*/
+        "psubw %%xmm14,%%xmm8\n\t"
+        "psllw $2,%%xmm3\n\t"
+        /*%[a]=1*/
+        "mov $1,%[a]\n\t"
+        /*xmm8={_x[6]!=0,0,_x[4]!=0,0,_x[2]!=0,0,_x[0]!=0,0}*/
+        "pslld $16,%%xmm8\n\t"
+        "psllw $2,%%xmm4\n\t"
+        /*xmm9={0,0,0,0,0,0,0,1}*/
+        "movd %[a],%%xmm9\n\t"
+        /*xmm8={0,0,_x[2]!=0,0,_x[0]!=0,0}*/
+        "pshufhw $0x00,%%xmm8,%%xmm8\n\t"
+        "psllw $2,%%xmm5\n\t"
+        /*%[a]={1}x2*/
+        "mov $0x10001,%[a]\n\t"
+        /*xmm8={0,0,0,0,0,0,0,_x[0]!=0}*/
+        "pshuflw $0x01,%%xmm8,%%xmm8\n\t"
+        "psllw $2,%%xmm6\n\t"
+        /*xmm10={0,0,0,0,0,0,1,1}*/
+        "movd %[a],%%xmm10\n\t"
+        /*xmm0=_x[7...0]+{0,0,0,0,0,0,0,_x[0]!=0}*/
+        "paddw %%xmm8,%%xmm0\n\t"
+        "psllw $2,%%xmm7\n\t"
+        /*xmm0=_x[7...0]+{0,0,0,0,0,0,1,(_x[0]!=0)+1}*/
+        "paddw %%xmm10,%%xmm0\n\t"
+        /*xmm1=_x[15...8]-{0,0,0,0,0,0,0,1}*/
+        "psubw %%xmm9,%%xmm1\n\t"
+        /*Transform columns.*/
+        OC_FDCT8x8
+        /*Transform rows.*/
+        OC_TRANSPOSE8x8
+        OC_FDCT8x8
+        /*TODO: zig-zag ordering?*/
+        OC_TRANSPOSE8x8
+        /*xmm14={-2,-2,-2,-2,-2,-2,-2,-2}*/
+        "paddw %%xmm14,%%xmm14\n\t"
+        "psubw %%xmm14,%%xmm0\n\t"
+        "psubw %%xmm14,%%xmm1\n\t"
+        "psraw $2,%%xmm0\n\t"
+        "psubw %%xmm14,%%xmm2\n\t"
+        "psraw $2,%%xmm1\n\t"
+        "psubw %%xmm14,%%xmm3\n\t"
+        "psraw $2,%%xmm2\n\t"
+        "psubw %%xmm14,%%xmm4\n\t"
+        "psraw $2,%%xmm3\n\t"
+        "psubw %%xmm14,%%xmm5\n\t"
+        "psraw $2,%%xmm4\n\t"
+        "psubw %%xmm14,%%xmm6\n\t"
+        "psraw $2,%%xmm5\n\t"
+        "psubw %%xmm14,%%xmm7\n\t"
+        "psraw $2,%%xmm6\n\t"
+        "psraw $2,%%xmm7\n\t"
+        /*Store the result.*/
+        "movdqa %%xmm0,0x00(%[y])\n\t"
+        "movdqa %%xmm1,0x10(%[y])\n\t"
+        "movdqa %%xmm2,0x20(%[y])\n\t"
+        "movdqa %%xmm3,0x30(%[y])\n\t"
+        "movdqa %%xmm4,0x40(%[y])\n\t"
+        "movdqa %%xmm5,0x50(%[y])\n\t"
+        "movdqa %%xmm6,0x60(%[y])\n\t"
+        "movdqa %%xmm7,0x70(%[y])\n\t"
+        :[a]"=&r" ( a )
+        :[y]"r" ( _y ),[x]"r" ( _x )
+        :"memory"
+    );
 }
 #endif

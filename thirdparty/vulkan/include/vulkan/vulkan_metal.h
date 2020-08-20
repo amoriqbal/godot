@@ -47,14 +47,14 @@ typedef struct VkMetalSurfaceCreateInfoEXT {
     const CAMetalLayer*             pLayer;
 } VkMetalSurfaceCreateInfoEXT;
 
-typedef VkResult (VKAPI_PTR *PFN_vkCreateMetalSurfaceEXT)(VkInstance instance, const VkMetalSurfaceCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface);
+typedef VkResult ( VKAPI_PTR *PFN_vkCreateMetalSurfaceEXT ) ( VkInstance instance, const VkMetalSurfaceCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface );
 
 #ifndef VK_NO_PROTOTYPES
-VKAPI_ATTR VkResult VKAPI_CALL vkCreateMetalSurfaceEXT(
+VKAPI_ATTR VkResult VKAPI_CALL vkCreateMetalSurfaceEXT (
     VkInstance                                  instance,
     const VkMetalSurfaceCreateInfoEXT*          pCreateInfo,
     const VkAllocationCallbacks*                pAllocator,
-    VkSurfaceKHR*                               pSurface);
+    VkSurfaceKHR*                               pSurface );
 #endif
 
 #ifdef __cplusplus

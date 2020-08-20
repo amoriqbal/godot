@@ -19,31 +19,32 @@
 #include "platform.h"
 #include <chrono>
 
-namespace oidn {
+namespace oidn
+{
 
-  class Timer
-  {
-  private:
+class Timer
+{
+private:
     using clock = std::chrono::high_resolution_clock;
 
     std::chrono::time_point<clock> start;
 
-  public:
+public:
     Timer()
     {
-      reset();
+        reset();
     }
 
     void reset()
     {
-      start = clock::now();
+        start = clock::now();
     }
 
     double query() const
     {
-      auto end = clock::now();
-      return std::chrono::duration_cast<std::chrono::duration<double>>(end - start).count();
+        auto end = clock::now();
+        return std::chrono::duration_cast<std::chrono::duration<double>> ( end - start ).count();
     }
-  };
+};
 
 } // namespace oidn

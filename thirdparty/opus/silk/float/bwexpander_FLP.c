@@ -32,7 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "SigProc_FLP.h"
 
 /* Chirp (bw expand) LP AR filter */
-void silk_bwexpander_FLP(
+void silk_bwexpander_FLP (
     silk_float          *ar,                /* I/O  AR filter to be expanded (without leading 1)                */
     const opus_int      d,                  /* I    length of ar                                                */
     const silk_float    chirp               /* I    chirp factor (typically in range (0..1) )                   */
@@ -41,7 +41,7 @@ void silk_bwexpander_FLP(
     opus_int   i;
     silk_float cfac = chirp;
 
-    for( i = 0; i < d - 1; i++ ) {
+    for ( i = 0; i < d - 1; i++ ) {
         ar[ i ] *=  cfac;
         cfac    *=  chirp;
     }

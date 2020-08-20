@@ -53,7 +53,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 struct aiNode;
 struct aiMaterial;
 
-namespace Assimp    {
+namespace Assimp
+{
 
 #define AI_TT_UV_IDX_LOCK_TBD   0xffffffff
 #define AI_TT_UV_IDX_LOCK_NONE  0xeeeeeeee
@@ -67,10 +68,12 @@ namespace Assimp    {
 */
 struct TTUpdateInfo {
     TTUpdateInfo() AI_NO_EXCEPT
-    : directShortcut(nullptr)
-    , mat(nullptr)
-    , semantic(0)
-    , index(0) {
+:
+    directShortcut ( nullptr )
+    , mat ( nullptr )
+    , semantic ( 0 )
+    , index ( 0 )
+    {
         // empty
     }
 
@@ -90,10 +93,12 @@ struct TTUpdateInfo {
 */
 struct STransformVecInfo : public aiUVTransform {
     STransformVecInfo() AI_NO_EXCEPT
-    : uvIndex(0)
-    , mapU(aiTextureMapMode_Wrap)
-    , mapV(aiTextureMapMode_Wrap)
-    , lockedPos(AI_TT_UV_IDX_LOCK_NONE) {
+:
+    uvIndex ( 0 )
+    , mapU ( aiTextureMapMode_Wrap )
+    , mapV ( aiTextureMapMode_Wrap )
+    , lockedPos ( AI_TT_UV_IDX_LOCK_NONE )
+    {
         // empty
     }
 
@@ -116,33 +121,30 @@ struct STransformVecInfo : public aiUVTransform {
     // -------------------------------------------------------------------
     /** Compare two transform setups
     */
-    inline bool operator== (const STransformVecInfo& other) const
+    inline bool operator== ( const STransformVecInfo& other ) const
     {
         // We use a small epsilon here
         const static float epsilon = 0.05f;
 
-        if (std::fabs( mTranslation.x - other.mTranslation.x ) > epsilon ||
-            std::fabs( mTranslation.y - other.mTranslation.y ) > epsilon)
-        {
+        if ( std::fabs ( mTranslation.x - other.mTranslation.x ) > epsilon ||
+                std::fabs ( mTranslation.y - other.mTranslation.y ) > epsilon ) {
             return false;
         }
 
-        if (std::fabs( mScaling.x - other.mScaling.x ) > epsilon ||
-            std::fabs( mScaling.y - other.mScaling.y ) > epsilon)
-        {
+        if ( std::fabs ( mScaling.x - other.mScaling.x ) > epsilon ||
+                std::fabs ( mScaling.y - other.mScaling.y ) > epsilon ) {
             return false;
         }
 
-        if (std::fabs( mRotation - other.mRotation) > epsilon)
-        {
+        if ( std::fabs ( mRotation - other.mRotation ) > epsilon ) {
             return false;
         }
         return true;
     }
 
-    inline bool operator!= (const STransformVecInfo& other) const
+    inline bool operator!= ( const STransformVecInfo& other ) const
     {
-            return !(*this == other);
+        return ! ( *this == other );
     }
 
 
@@ -151,35 +153,32 @@ struct STransformVecInfo : public aiUVTransform {
     */
     inline bool IsUntransformed() const
     {
-        return (1.0f == mScaling.x && 1.f == mScaling.y &&
-            !mTranslation.x && !mTranslation.y &&
-            mRotation < AI_TT_ROTATION_EPSILON);
+        return ( 1.0f == mScaling.x && 1.f == mScaling.y &&
+                 !mTranslation.x && !mTranslation.y &&
+                 mRotation < AI_TT_ROTATION_EPSILON );
     }
 
     // -------------------------------------------------------------------
     /** Build a 3x3 matrix from the transformations
     */
-    inline void GetMatrix(aiMatrix3x3& mOut)
+    inline void GetMatrix ( aiMatrix3x3& mOut )
     {
         mOut = aiMatrix3x3();
 
-        if (1.0f != mScaling.x || 1.0f != mScaling.y)
-        {
+        if ( 1.0f != mScaling.x || 1.0f != mScaling.y ) {
             aiMatrix3x3 mScale;
             mScale.a1 = mScaling.x;
             mScale.b2 = mScaling.y;
             mOut = mScale;
         }
-        if (mRotation)
-        {
+        if ( mRotation ) {
             aiMatrix3x3 mRot;
-            mRot.a1 = mRot.b2 = std::cos(mRotation);
-            mRot.a2 = mRot.b1 = std::sin(mRotation);
+            mRot.a1 = mRot.b2 = std::cos ( mRotation );
+            mRot.a2 = mRot.b1 = std::sin ( mRotation );
             mRot.a2 = -mRot.a2;
             mOut *= mRot;
         }
-        if (mTranslation.x || mTranslation.y)
-        {
+        if ( mTranslation.x || mTranslation.y ) {
             aiMatrix3x3 mTrans;
             mTrans.a3 = mTranslation.x;
             mTrans.b3 = mTranslation.y;
@@ -203,13 +202,13 @@ public:
 public:
 
     // -------------------------------------------------------------------
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
     // -------------------------------------------------------------------
-    void SetupProperties(const Importer* pImp);
+    void SetupProperties ( const Importer* pImp );
 
 
 protected:
@@ -220,7 +219,7 @@ protected:
      *
      *  @param info Transformation setup to be preprocessed.
     */
-    void PreProcessUVTransform(STransformVecInfo& info);
+    void PreProcessUVTransform ( STransformVecInfo& info );
 
 private:
 

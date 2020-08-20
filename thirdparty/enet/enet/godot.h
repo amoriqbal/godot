@@ -57,10 +57,9 @@ typedef void *ENetSocket;
 #define ENET_NET_TO_HOST_16(value) (ntohs(value)) /**< macro that converts net to host byte-order of a 16-bit value */
 #define ENET_NET_TO_HOST_32(value) (ntohl(value)) /**< macro that converts net to host byte-order of a 32-bit value */
 
-typedef struct
-{
-	void *data;
-	size_t dataLength;
+typedef struct {
+    void *data;
+    size_t dataLength;
 } ENetBuffer;
 
 #define ENET_CALLBACK
@@ -69,11 +68,10 @@ typedef struct
 
 typedef void ENetSocketSet;
 
-typedef struct _ENetAddress
-{
-   uint8_t host[16];
-   uint16_t port;
-   uint8_t wildcard;
+typedef struct _ENetAddress {
+    uint8_t host[16];
+    uint16_t port;
+    uint8_t wildcard;
 } ENetAddress;
 #define enet_host_equal(host_a, host_b) (memcmp(&host_a, &host_b,16) == 0)
 

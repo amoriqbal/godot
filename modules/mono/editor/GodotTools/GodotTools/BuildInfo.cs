@@ -6,46 +6,61 @@ using Path = System.IO.Path;
 
 namespace GodotTools
 {
-    [Serializable]
-    public sealed class BuildInfo : Reference // TODO Remove Reference once we have proper serialization
+[Serializable]
+public sealed class BuildInfo : Reference // TODO Remove Reference once we have proper serialization
+{
+    public string Solution
     {
-        public string Solution { get; }
-        public string[] Targets { get; }
-        public string Configuration { get; }
-        public bool Restore { get; }
-        public Array<string> CustomProperties { get; } = new Array<string>(); // TODO Use List once we have proper serialization
+        get;
+    }
+    public string[] Targets
+    {
+        get;
+    }
+    public string Configuration
+    {
+        get;
+    }
+    public bool Restore
+    {
+        get;
+    }
+    public Array<string> CustomProperties
+    {
+        get;
+    } = new Array<string>(); // TODO Use List once we have proper serialization
 
-        public string LogsDirPath => Path.Combine(GodotSharpDirs.BuildLogsDirs, $"{Solution.MD5Text()}_{Configuration}");
+    public string LogsDirPath => Path.Combine ( GodotSharpDirs.BuildLogsDirs, $"{Solution.MD5Text()}_{Configuration}" );
 
-        public override bool Equals(object obj)
-        {
-            if (obj is BuildInfo other)
-                return other.Solution == Solution && other.Configuration == Configuration;
-
-            return false;
+    public override bool Equals ( object obj )
+    {
+        if ( obj is BuildInfo other ) {
+            return other.Solution == Solution && other.Configuration == Configuration;
         }
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = 17;
-                hash = hash * 29 + Solution.GetHashCode();
-                hash = hash * 29 + Configuration.GetHashCode();
-                return hash;
-            }
-        }
+        return false;
+    }
 
-        private BuildInfo()
-        {
-        }
-
-        public BuildInfo(string solution, string[] targets, string configuration, bool restore)
-        {
-            Solution = solution;
-            Targets = targets;
-            Configuration = configuration;
-            Restore = restore;
+    public override int GetHashCode()
+    {
+        unchecked {
+            int hash = 17;
+            hash = hash * 29 + Solution.GetHashCode();
+            hash = hash * 29 + Configuration.GetHashCode();
+            return hash;
         }
     }
+
+    private BuildInfo()
+    {
+    }
+
+    public BuildInfo ( string solution, string[] targets, string configuration, bool restore )
+    {
+        Solution = solution;
+        Targets = targets;
+        Configuration = configuration;
+        Restore = restore;
+    }
+}
 }

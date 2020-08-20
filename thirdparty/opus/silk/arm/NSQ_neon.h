@@ -31,7 +31,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #undef silk_short_prediction_create_arch_coef
 /* For vectorized calc, reverse a_Q12 coefs, convert to 32-bit, and shift for vqdmulhq_s32. */
-static OPUS_INLINE void silk_short_prediction_create_arch_coef_neon(opus_int32 *out, const opus_int16 *in, opus_int order)
+static OPUS_INLINE void silk_short_prediction_create_arch_coef_neon ( opus_int32 *out, const opus_int16 *in, opus_int order )
 {
     out[15] = in[0] << 15;
     out[14] = in[1] << 15;
@@ -44,17 +44,14 @@ static OPUS_INLINE void silk_short_prediction_create_arch_coef_neon(opus_int32 *
     out[7]  = in[8] << 15;
     out[6]  = in[9] << 15;
 
-    if (order == 16)
-    {
+    if ( order == 16 ) {
         out[5] = in[10] << 15;
         out[4] = in[11] << 15;
         out[3] = in[12] << 15;
         out[2] = in[13] << 15;
         out[1] = in[14] << 15;
         out[0] = in[15] << 15;
-    }
-    else
-    {
+    } else {
         out[5] = 0;
         out[4] = 0;
         out[3] = 0;
@@ -76,9 +73,9 @@ static OPUS_INLINE void silk_short_prediction_create_arch_coef_neon(opus_int32 *
 
 #endif
 
-opus_int32 silk_noise_shape_quantizer_short_prediction_neon(const opus_int32 *buf32, const opus_int32 *coef32, opus_int order);
+opus_int32 silk_noise_shape_quantizer_short_prediction_neon ( const opus_int32 *buf32, const opus_int32 *coef32, opus_int order );
 
-opus_int32 silk_NSQ_noise_shape_feedback_loop_neon(const opus_int32 *data0, opus_int32 *data1, const opus_int16 *coef, opus_int order);
+opus_int32 silk_NSQ_noise_shape_feedback_loop_neon ( const opus_int32 *data0, opus_int32 *data1, const opus_int16 *coef, opus_int order );
 
 #if defined(OPUS_ARM_PRESUME_NEON_INTR)
 #undef silk_noise_shape_quantizer_short_prediction
@@ -99,9 +96,9 @@ opus_int32 silk_NSQ_noise_shape_feedback_loop_neon(const opus_int32 *data0, opus
         silk_noise_shape_quantizer_short_prediction_c(in, coef, order))
 
 extern opus_int32
- (*const SILK_NSQ_NOISE_SHAPE_FEEDBACK_LOOP_IMPL[OPUS_ARCHMASK+1])(
- const opus_int32 *data0, opus_int32 *data1, const opus_int16 *coef,
- opus_int order);
+( *const SILK_NSQ_NOISE_SHAPE_FEEDBACK_LOOP_IMPL[OPUS_ARCHMASK+1] ) (
+    const opus_int32 *data0, opus_int32 *data1, const opus_int16 *coef,
+    opus_int order );
 
 #undef silk_NSQ_noise_shape_feedback_loop
 #define silk_NSQ_noise_shape_feedback_loop(data0, data1, coef, order, arch) \

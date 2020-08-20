@@ -50,13 +50,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class RemoveVCProcessTest;
 
-namespace Assimp {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /** RemoveVCProcess: Class to exclude specific parts of the data structure
  *  from further processing by removing them,
 */
-class ASSIMP_API RemoveVCProcess : public BaseProcess {
+class ASSIMP_API RemoveVCProcess : public BaseProcess
+{
 public:
     /// The default class constructor.
     RemoveVCProcess();
@@ -70,28 +72,28 @@ public:
     *   combination of #aiPostProcessSteps.
     * @return true if the process is present in this flag fields, false if not.
     */
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
     /** Executes the post processing step on the given imported data.
     * At the moment a process is not supposed to fail.
     * @param pScene The imported data to work at.
     */
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
     // -------------------------------------------------------------------
     /** Called prior to ExecuteOnScene().
     * The function is a request to the process to update its configuration
     * basing on the Importer's configuration property list.
     */
-    virtual void SetupProperties(const Importer* pImp);
+    virtual void SetupProperties ( const Importer* pImp );
 
     // -------------------------------------------------------------------
     /** Manually setup the configuration flags for the step
      *
      *  @param Bitwise combination of the #aiComponent enumerated values.
     */
-    void SetDeleteFlags(unsigned int f)
+    void SetDeleteFlags ( unsigned int f )
     {
         configDeleteFlags = f;
     }
@@ -106,7 +108,7 @@ public:
 
 private:
 
-    bool ProcessMesh (aiMesh* pcMesh);
+    bool ProcessMesh ( aiMesh* pcMesh );
 
     /** Configuration flag
      */

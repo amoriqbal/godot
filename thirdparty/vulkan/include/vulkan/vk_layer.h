@@ -37,18 +37,18 @@
 
 #define MAX_NUM_UNKNOWN_EXTS 250
 
- // Loader-Layer version negotiation API.  Versions add the following features:
- //   Versions 0/1 - Initial.  Doesn't support vk_layerGetPhysicalDeviceProcAddr
- //                  or vk_icdNegotiateLoaderLayerInterfaceVersion.
- //   Version 2    - Add support for vk_layerGetPhysicalDeviceProcAddr and
- //                  vk_icdNegotiateLoaderLayerInterfaceVersion.
+// Loader-Layer version negotiation API.  Versions add the following features:
+//   Versions 0/1 - Initial.  Doesn't support vk_layerGetPhysicalDeviceProcAddr
+//                  or vk_icdNegotiateLoaderLayerInterfaceVersion.
+//   Version 2    - Add support for vk_layerGetPhysicalDeviceProcAddr and
+//                  vk_icdNegotiateLoaderLayerInterfaceVersion.
 #define CURRENT_LOADER_LAYER_INTERFACE_VERSION 2
 #define MIN_SUPPORTED_LOADER_LAYER_INTERFACE_VERSION 1
 
 #define VK_CURRENT_CHAIN_VERSION 1
 
 // Typedef for use in the interfaces below
-typedef PFN_vkVoidFunction (VKAPI_PTR *PFN_GetPhysicalDeviceProcAddr)(VkInstance instance, const char* pName);
+typedef PFN_vkVoidFunction ( VKAPI_PTR *PFN_GetPhysicalDeviceProcAddr ) ( VkInstance instance, const char* pName );
 
 // Version negotiation values
 typedef enum VkNegotiateLayerStructType {
@@ -67,10 +67,10 @@ typedef struct VkNegotiateLayerInterface {
 } VkNegotiateLayerInterface;
 
 // Version negotiation functions
-typedef VkResult (VKAPI_PTR *PFN_vkNegotiateLoaderLayerInterfaceVersion)(VkNegotiateLayerInterface *pVersionStruct);
+typedef VkResult ( VKAPI_PTR *PFN_vkNegotiateLoaderLayerInterfaceVersion ) ( VkNegotiateLayerInterface *pVersionStruct );
 
 // Function prototype for unknown physical device extension command
-typedef VkResult(VKAPI_PTR *PFN_PhysDevExt)(VkPhysicalDevice phys_device);
+typedef VkResult ( VKAPI_PTR *PFN_PhysDevExt ) ( VkPhysicalDevice phys_device );
 
 // ------------------------------------------------------------------------------------------------
 // CreateInstance and CreateDevice support structures
@@ -104,13 +104,13 @@ typedef struct VkLayerDeviceInfo_ {
     PFN_vkGetInstanceProcAddr pfnNextGetInstanceProcAddr;
 } VkLayerDeviceInfo;
 
-typedef VkResult (VKAPI_PTR *PFN_vkSetInstanceLoaderData)(VkInstance instance,
-        void *object);
-typedef VkResult (VKAPI_PTR *PFN_vkSetDeviceLoaderData)(VkDevice device,
-        void *object);
-typedef VkResult (VKAPI_PTR *PFN_vkLayerCreateDevice)(VkInstance instance, VkPhysicalDevice physicalDevice, const VkDeviceCreateInfo *pCreateInfo,
-						      const VkAllocationCallbacks *pAllocator, VkDevice *pDevice, PFN_vkGetInstanceProcAddr layerGIPA, PFN_vkGetDeviceProcAddr *nextGDPA);
-typedef void (VKAPI_PTR *PFN_vkLayerDestroyDevice)(VkDevice physicalDevice, const VkAllocationCallbacks *pAllocator, PFN_vkDestroyDevice destroyFunction);
+typedef VkResult ( VKAPI_PTR *PFN_vkSetInstanceLoaderData ) ( VkInstance instance,
+        void *object );
+typedef VkResult ( VKAPI_PTR *PFN_vkSetDeviceLoaderData ) ( VkDevice device,
+        void *object );
+typedef VkResult ( VKAPI_PTR *PFN_vkLayerCreateDevice ) ( VkInstance instance, VkPhysicalDevice physicalDevice, const VkDeviceCreateInfo *pCreateInfo,
+        const VkAllocationCallbacks *pAllocator, VkDevice *pDevice, PFN_vkGetInstanceProcAddr layerGIPA, PFN_vkGetDeviceProcAddr *nextGDPA );
+typedef void ( VKAPI_PTR *PFN_vkLayerDestroyDevice ) ( VkDevice physicalDevice, const VkAllocationCallbacks *pAllocator, PFN_vkDestroyDevice destroyFunction );
 typedef struct {
     VkStructureType sType; // VK_STRUCTURE_TYPE_LOADER_INSTANCE_CREATE_INFO
     const void *pNext;
@@ -119,9 +119,9 @@ typedef struct {
         VkLayerInstanceLink *pLayerInfo;
         PFN_vkSetInstanceLoaderData pfnSetInstanceLoaderData;
         struct {
-	  PFN_vkLayerCreateDevice pfnLayerCreateDevice;
-	  PFN_vkLayerDestroyDevice pfnLayerDestroyDevice;
-	} layerDevice;
+            PFN_vkLayerCreateDevice pfnLayerCreateDevice;
+            PFN_vkLayerDestroyDevice pfnLayerDestroyDevice;
+        } layerDevice;
     } u;
 } VkLayerInstanceCreateInfo;
 
@@ -145,7 +145,7 @@ typedef struct {
 extern "C" {
 #endif
 
-VKAPI_ATTR VkResult VKAPI_CALL vkNegotiateLoaderLayerInterfaceVersion(VkNegotiateLayerInterface *pVersionStruct);
+VKAPI_ATTR VkResult VKAPI_CALL vkNegotiateLoaderLayerInterfaceVersion ( VkNegotiateLayerInterface *pVersionStruct );
 
 typedef enum VkChainType {
     VK_CHAIN_TYPE_UNKNOWN = 0,
@@ -162,37 +162,40 @@ typedef struct VkChainHeader {
 
 typedef struct VkEnumerateInstanceExtensionPropertiesChain {
     VkChainHeader header;
-    VkResult(VKAPI_PTR *pfnNextLayer)(const struct VkEnumerateInstanceExtensionPropertiesChain *, const char *, uint32_t *,
-                                      VkExtensionProperties *);
+    VkResult ( VKAPI_PTR *pfnNextLayer ) ( const struct VkEnumerateInstanceExtensionPropertiesChain *, const char *, uint32_t *,
+                                           VkExtensionProperties * );
     const struct VkEnumerateInstanceExtensionPropertiesChain *pNextLink;
 
 #if defined(__cplusplus)
-    inline VkResult CallDown(const char *pLayerName, uint32_t *pPropertyCount, VkExtensionProperties *pProperties) const {
-        return pfnNextLayer(pNextLink, pLayerName, pPropertyCount, pProperties);
+    inline VkResult CallDown ( const char *pLayerName, uint32_t *pPropertyCount, VkExtensionProperties *pProperties ) const
+    {
+        return pfnNextLayer ( pNextLink, pLayerName, pPropertyCount, pProperties );
     }
 #endif
 } VkEnumerateInstanceExtensionPropertiesChain;
 
 typedef struct VkEnumerateInstanceLayerPropertiesChain {
     VkChainHeader header;
-    VkResult(VKAPI_PTR *pfnNextLayer)(const struct VkEnumerateInstanceLayerPropertiesChain *, uint32_t *, VkLayerProperties *);
+    VkResult ( VKAPI_PTR *pfnNextLayer ) ( const struct VkEnumerateInstanceLayerPropertiesChain *, uint32_t *, VkLayerProperties * );
     const struct VkEnumerateInstanceLayerPropertiesChain *pNextLink;
 
 #if defined(__cplusplus)
-    inline VkResult CallDown(uint32_t *pPropertyCount, VkLayerProperties *pProperties) const {
-        return pfnNextLayer(pNextLink, pPropertyCount, pProperties);
+    inline VkResult CallDown ( uint32_t *pPropertyCount, VkLayerProperties *pProperties ) const
+    {
+        return pfnNextLayer ( pNextLink, pPropertyCount, pProperties );
     }
 #endif
 } VkEnumerateInstanceLayerPropertiesChain;
 
 typedef struct VkEnumerateInstanceVersionChain {
     VkChainHeader header;
-    VkResult(VKAPI_PTR *pfnNextLayer)(const struct VkEnumerateInstanceVersionChain *, uint32_t *);
+    VkResult ( VKAPI_PTR *pfnNextLayer ) ( const struct VkEnumerateInstanceVersionChain *, uint32_t * );
     const struct VkEnumerateInstanceVersionChain *pNextLink;
 
 #if defined(__cplusplus)
-    inline VkResult CallDown(uint32_t *pApiVersion) const {
-        return pfnNextLayer(pNextLink, pApiVersion);
+    inline VkResult CallDown ( uint32_t *pApiVersion ) const
+    {
+        return pfnNextLayer ( pNextLink, pApiVersion );
     }
 #endif
 } VkEnumerateInstanceVersionChain;

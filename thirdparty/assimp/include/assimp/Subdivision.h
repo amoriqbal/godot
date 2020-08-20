@@ -53,13 +53,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 struct aiMesh;
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // ------------------------------------------------------------------------------
 /** Helper class to evaluate subdivision surfaces. Different algorithms
  *  are provided for choice. */
 // ------------------------------------------------------------------------------
-class ASSIMP_API Subdivider {
+class ASSIMP_API Subdivider
+{
 public:
 
     /** Enumerates all supported subvidision algorithms */
@@ -74,7 +76,7 @@ public:
      *
      *  @param algo Algorithm to be used for subdivision
      *  @return Subdivider instance. */
-    static Subdivider* Create (Algorithm algo);
+    static Subdivider* Create ( Algorithm algo );
 
     // ---------------------------------------------------------------
     /** Subdivide a mesh using the selected algorithm
@@ -89,8 +91,8 @@ public:
      *    to reuse the existing mesh for intermediate results.
      *  @pre out!=mesh*/
     virtual void Subdivide ( aiMesh* mesh,
-        aiMesh*& out, unsigned int num,
-        bool discard_input = false) = 0;
+                             aiMesh*& out, unsigned int num,
+                             bool discard_input = false ) = 0;
 
     // ---------------------------------------------------------------
     /** Subdivide multiple meshes using the selected algorithm. This
@@ -118,12 +120,13 @@ public:
         size_t nmesh,
         aiMesh** out,
         unsigned int num,
-        bool discard_input = false) = 0;
+        bool discard_input = false ) = 0;
 
 };
 
 inline
-Subdivider::~Subdivider() {
+Subdivider::~Subdivider()
+{
     // empty
 }
 

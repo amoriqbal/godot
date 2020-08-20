@@ -18,7 +18,7 @@ extern "C" {
 #endif
 
 struct VP8Common;
-void vp8_machine_specific_config(struct VP8Common *);
+void vp8_machine_specific_config ( struct VP8Common * );
 
 #ifdef __cplusplus
 }  // extern "C"

@@ -23,7 +23,8 @@ import java.util.regex.Pattern;
 /**
  * ResponseData from licensing server.
  */
-public class ResponseData {
+public class ResponseData
+{
 
     public int responseCode;
     public int nonce;
@@ -41,41 +42,43 @@ public class ResponseData {
      * @throws IllegalArgumentException upon parsing error
      * @return ResponseData object
      */
-    public static ResponseData parse(String responseData) {
+    public static ResponseData parse ( String responseData )
+    {
         // Must parse out main response data and response-specific data.
-        int index = responseData.indexOf(':');
+        int index = responseData.indexOf ( ':' );
         String mainData, extraData;
-        if (-1 == index) {
+        if ( -1 == index ) {
             mainData = responseData;
             extraData = "";
         } else {
-            mainData = responseData.substring(0, index);
-            extraData = index >= responseData.length() ? "" : responseData.substring(index + 1);
+            mainData = responseData.substring ( 0, index );
+            extraData = index >= responseData.length() ? "" : responseData.substring ( index + 1 );
         }
 
-        String[] fields = TextUtils.split(mainData, Pattern.quote("|"));
-        if (fields.length < 6) {
-            throw new IllegalArgumentException("Wrong number of fields.");
+        String[] fields = TextUtils.split ( mainData, Pattern.quote ( "|" ) );
+        if ( fields.length < 6 ) {
+            throw new IllegalArgumentException ( "Wrong number of fields." );
         }
 
         ResponseData data = new ResponseData();
         data.extra = extraData;
-        data.responseCode = Integer.parseInt(fields[0]);
-        data.nonce = Integer.parseInt(fields[1]);
+        data.responseCode = Integer.parseInt ( fields[0] );
+        data.nonce = Integer.parseInt ( fields[1] );
         data.packageName = fields[2];
         data.versionCode = fields[3];
         // Application-specific user identifier.
         data.userId = fields[4];
-        data.timestamp = Long.parseLong(fields[5]);
+        data.timestamp = Long.parseLong ( fields[5] );
 
         return data;
     }
 
     @Override
-    public String toString() {
-        return TextUtils.join("|", new Object[] {
-                responseCode, nonce, packageName, versionCode,
-                userId, timestamp
-        });
+    public String toString()
+    {
+        return TextUtils.join ( "|", new Object[] {
+                                    responseCode, nonce, packageName, versionCode,
+                                    userId, timestamp
+                                } );
     }
 }

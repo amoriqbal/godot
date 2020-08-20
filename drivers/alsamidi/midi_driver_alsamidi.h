@@ -41,27 +41,28 @@
 #include <alsa/asoundlib.h>
 #include <stdio.h>
 
-class MIDIDriverALSAMidi : public MIDIDriver {
-	Thread *thread;
-	Mutex mutex;
+class MIDIDriverALSAMidi : public MIDIDriver
+{
+    Thread *thread;
+    Mutex mutex;
 
-	Vector<snd_rawmidi_t *> connected_inputs;
+    Vector<snd_rawmidi_t *> connected_inputs;
 
-	bool exit_thread;
+    bool exit_thread;
 
-	static void thread_func(void *p_udata);
+    static void thread_func ( void *p_udata );
 
-	void lock() const;
-	void unlock() const;
+    void lock() const;
+    void unlock() const;
 
 public:
-	virtual Error open();
-	virtual void close();
+    virtual Error open();
+    virtual void close();
 
-	virtual PackedStringArray get_connected_inputs();
+    virtual PackedStringArray get_connected_inputs();
 
-	MIDIDriverALSAMidi();
-	virtual ~MIDIDriverALSAMidi();
+    MIDIDriverALSAMidi();
+    virtual ~MIDIDriverALSAMidi();
 };
 
 #endif // MIDI_DRIVER_ALSAMIDI_H

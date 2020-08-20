@@ -5,8 +5,8 @@ Copyright (c) 2003-2013 Erwin Coumans  http://bulletphysics.org
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
@@ -33,30 +33,29 @@ extern b3Scalar gContactBreakingThreshold;
 ///reduces the cache to 4 points, when more then 4 points are added, using following rules:
 ///the contact point with deepest penetration is always kept, and it tries to maximuze the area covered by the points
 ///note that some pairs of objects might have more then one contact manifold.
-B3_ATTRIBUTE_ALIGNED16(class)
-b3ContactCache
-{
-	/// sort cached points so most isolated points come first
-	int sortCachedPoints(const b3Vector3& pt);
+B3_ATTRIBUTE_ALIGNED16 ( class )
+b3ContactCache {
+    /// sort cached points so most isolated points come first
+    int sortCachedPoints ( const b3Vector3& pt );
 
 public:
-	B3_DECLARE_ALIGNED_ALLOCATOR();
+    B3_DECLARE_ALIGNED_ALLOCATOR();
 
-	int addManifoldPoint(const b3Vector3& newPoint);
+    int addManifoldPoint ( const b3Vector3& newPoint );
 
-	/*void replaceContactPoint(const b3Vector3& newPoint,int insertIndex)
-	{
-		b3Assert(validContactDistance(newPoint));
-		m_pointCache[insertIndex] = newPoint;
-	}
-	*/
+    /*void replaceContactPoint(const b3Vector3& newPoint,int insertIndex)
+    {
+    	b3Assert(validContactDistance(newPoint));
+    	m_pointCache[insertIndex] = newPoint;
+    }
+    */
 
-	static bool validContactDistance(const b3Vector3& pt);
+    static bool validContactDistance ( const b3Vector3& pt );
 
-	/// calculated new worldspace coordinates and depth, and reject points that exceed the collision margin
-	static void refreshContactPoints(const b3Transform& trA, const b3Transform& trB, struct b3Contact4Data& newContactCache);
+    /// calculated new worldspace coordinates and depth, and reject points that exceed the collision margin
+    static void refreshContactPoints ( const b3Transform& trA, const b3Transform& trB, struct b3Contact4Data& newContactCache );
 
-	static void removeContactPoint(struct b3Contact4Data & newContactCache, int i);
+    static void removeContactPoint ( struct b3Contact4Data & newContactCache, int i );
 };
 
 #endif  //B3_CONTACT_CACHE_H

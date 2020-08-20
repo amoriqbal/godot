@@ -40,14 +40,14 @@ typedef struct VkMacOSSurfaceCreateInfoMVK {
     const void*                     pView;
 } VkMacOSSurfaceCreateInfoMVK;
 
-typedef VkResult (VKAPI_PTR *PFN_vkCreateMacOSSurfaceMVK)(VkInstance instance, const VkMacOSSurfaceCreateInfoMVK* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface);
+typedef VkResult ( VKAPI_PTR *PFN_vkCreateMacOSSurfaceMVK ) ( VkInstance instance, const VkMacOSSurfaceCreateInfoMVK* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface );
 
 #ifndef VK_NO_PROTOTYPES
-VKAPI_ATTR VkResult VKAPI_CALL vkCreateMacOSSurfaceMVK(
+VKAPI_ATTR VkResult VKAPI_CALL vkCreateMacOSSurfaceMVK (
     VkInstance                                  instance,
     const VkMacOSSurfaceCreateInfoMVK*          pCreateInfo,
     const VkAllocationCallbacks*                pAllocator,
-    VkSurfaceKHR*                               pSurface);
+    VkSurfaceKHR*                               pSurface );
 #endif
 
 #ifdef __cplusplus

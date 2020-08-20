@@ -6,13 +6,13 @@
 
 namespace Javelin
 {
-	namespace Data
-	{
+namespace Data
+{
 //============================================================================
-		
-		extern const unsigned short MORTON_TABLE[256];
-		
+
+extern const unsigned short MORTON_TABLE[256];
+
 //============================================================================
-	} // namespace Data
+} // namespace Data
 } // namespace Javelin
 //============================================================================

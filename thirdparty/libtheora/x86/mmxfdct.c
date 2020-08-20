@@ -462,204 +462,205 @@
    mm7 = d3 c3 b3 a3*/ \
 
 /*MMX implementation of the fDCT.*/
-void oc_enc_fdct8x8_mmx(ogg_int16_t _y[64],const ogg_int16_t _x[64]){
-  ptrdiff_t a;
-  __asm__ __volatile__(
-    /*Add two extra bits of working precision to improve accuracy; any more and
-       we could overflow.*/
-    /*We also add biases to correct for some systematic error that remains in
-       the full fDCT->iDCT round trip.*/
-    "movq 0x00(%[x]),%%mm0\n\t"
-    "movq 0x10(%[x]),%%mm1\n\t"
-    "movq 0x20(%[x]),%%mm2\n\t"
-    "movq 0x30(%[x]),%%mm3\n\t"
-    "pcmpeqb %%mm4,%%mm4\n\t"
-    "pxor %%mm7,%%mm7\n\t"
-    "movq %%mm0,%%mm5\n\t"
-    "psllw $2,%%mm0\n\t"
-    "pcmpeqw %%mm7,%%mm5\n\t"
-    "movq 0x70(%[x]),%%mm7\n\t"
-    "psllw $2,%%mm1\n\t"
-    "psubw %%mm4,%%mm5\n\t"
-    "psllw $2,%%mm2\n\t"
-    "mov $1,%[a]\n\t"
-    "pslld $16,%%mm5\n\t"
-    "movd %[a],%%mm6\n\t"
-    "psllq $16,%%mm5\n\t"
-    "mov $0x10001,%[a]\n\t"
-    "psllw $2,%%mm3\n\t"
-    "movd %[a],%%mm4\n\t"
-    "punpckhwd %%mm6,%%mm5\n\t"
-    "psubw %%mm6,%%mm1\n\t"
-    "movq 0x60(%[x]),%%mm6\n\t"
-    "paddw %%mm5,%%mm0\n\t"
-    "movq 0x50(%[x]),%%mm5\n\t"
-    "paddw %%mm4,%%mm0\n\t"
-    "movq 0x40(%[x]),%%mm4\n\t"
-    /*We inline stage1 of the transform here so we can get better instruction
-       scheduling with the shifts.*/
-    /*mm0=t7'=t0-t7*/
-    "psllw $2,%%mm7\n\t"
-    "psubw %%mm7,%%mm0\n\t"
-    "psllw $2,%%mm6\n\t"
-    "paddw %%mm7,%%mm7\n\t"
-    /*mm1=t6'=t1-t6*/
-    "psllw $2,%%mm5\n\t"
-    "psubw %%mm6,%%mm1\n\t"
-    "psllw $2,%%mm4\n\t"
-    "paddw %%mm6,%%mm6\n\t"
-    /*mm2=t5'=t2-t5*/
-    "psubw %%mm5,%%mm2\n\t"
-    "paddw %%mm5,%%mm5\n\t"
-    /*mm3=t4'=t3-t4*/
-    "psubw %%mm4,%%mm3\n\t"
-    "paddw %%mm4,%%mm4\n\t"
-    /*mm7=t0'=t0+t7*/
-    "paddw %%mm0,%%mm7\n\t"
-    /*mm6=t1'=t1+t6*/
-    "paddw %%mm1,%%mm6\n\t"
-    /*mm5=t2'=t2+t5*/
-    "paddw %%mm2,%%mm5\n\t"
-    /*mm4=t3'=t3+t4*/
-    "paddw %%mm3,%%mm4\n\t"
-    OC_FDCT8x4("0x00","0x10","0x20","0x30","0x40","0x50","0x60","0x70")
-    OC_TRANSPOSE8x4("0x00","0x10","0x20","0x30","0x40","0x50","0x60","0x70")
-    /*Swap out this 8x4 block for the next one.*/
-    "movq 0x08(%[x]),%%mm0\n\t"
-    "movq %%mm7,0x30(%[y])\n\t"
-    "movq 0x78(%[x]),%%mm7\n\t"
-    "movq %%mm1,0x50(%[y])\n\t"
-    "movq 0x18(%[x]),%%mm1\n\t"
-    "movq %%mm6,0x20(%[y])\n\t"
-    "movq 0x68(%[x]),%%mm6\n\t"
-    "movq %%mm2,0x60(%[y])\n\t"
-    "movq 0x28(%[x]),%%mm2\n\t"
-    "movq %%mm5,0x10(%[y])\n\t"
-    "movq 0x58(%[x]),%%mm5\n\t"
-    "movq %%mm3,0x70(%[y])\n\t"
-    "movq 0x38(%[x]),%%mm3\n\t"
-    /*And increase its working precision, too.*/
-    "psllw $2,%%mm0\n\t"
-    "movq %%mm4,0x00(%[y])\n\t"
-    "psllw $2,%%mm7\n\t"
-    "movq 0x48(%[x]),%%mm4\n\t"
-    /*We inline stage1 of the transform here so we can get better instruction
-       scheduling with the shifts.*/
-    /*mm0=t7'=t0-t7*/
-    "psubw %%mm7,%%mm0\n\t"
-    "psllw $2,%%mm1\n\t"
-    "paddw %%mm7,%%mm7\n\t"
-    "psllw $2,%%mm6\n\t"
-    /*mm1=t6'=t1-t6*/
-    "psubw %%mm6,%%mm1\n\t"
-    "psllw $2,%%mm2\n\t"
-    "paddw %%mm6,%%mm6\n\t"
-    "psllw $2,%%mm5\n\t"
-    /*mm2=t5'=t2-t5*/
-    "psubw %%mm5,%%mm2\n\t"
-    "psllw $2,%%mm3\n\t"
-    "paddw %%mm5,%%mm5\n\t"
-    "psllw $2,%%mm4\n\t"
-    /*mm3=t4'=t3-t4*/
-    "psubw %%mm4,%%mm3\n\t"
-    "paddw %%mm4,%%mm4\n\t"
-    /*mm7=t0'=t0+t7*/
-    "paddw %%mm0,%%mm7\n\t"
-    /*mm6=t1'=t1+t6*/
-    "paddw %%mm1,%%mm6\n\t"
-    /*mm5=t2'=t2+t5*/
-    "paddw %%mm2,%%mm5\n\t"
-    /*mm4=t3'=t3+t4*/
-    "paddw %%mm3,%%mm4\n\t"
-    OC_FDCT8x4("0x08","0x18","0x28","0x38","0x48","0x58","0x68","0x78")
-    OC_TRANSPOSE8x4("0x08","0x18","0x28","0x38","0x48","0x58","0x68","0x78")
-    /*Here the first 4x4 block of output from the last transpose is the second
-       4x4 block of input for the next transform.
-      We have cleverly arranged that it already be in the appropriate place,
-       so we only have to do half the stores and loads.*/
-    "movq 0x00(%[y]),%%mm0\n\t"
-    "movq %%mm1,0x58(%[y])\n\t"
-    "movq 0x10(%[y]),%%mm1\n\t"
-    "movq %%mm2,0x68(%[y])\n\t"
-    "movq 0x20(%[y]),%%mm2\n\t"
-    "movq %%mm3,0x78(%[y])\n\t"
-    "movq 0x30(%[y]),%%mm3\n\t"
-    OC_FDCT_STAGE1_8x4
-    OC_FDCT8x4("0x00","0x10","0x20","0x30","0x08","0x18","0x28","0x38")
-    OC_TRANSPOSE8x4("0x00","0x10","0x20","0x30","0x08","0x18","0x28","0x38")
-    /*mm0={-2}x4*/
-    "pcmpeqw %%mm0,%%mm0\n\t"
-    "paddw %%mm0,%%mm0\n\t"
-    /*Round the results.*/
-    "psubw %%mm0,%%mm1\n\t"
-    "psubw %%mm0,%%mm2\n\t"
-    "psraw $2,%%mm1\n\t"
-    "psubw %%mm0,%%mm3\n\t"
-    "movq %%mm1,0x18(%[y])\n\t"
-    "psraw $2,%%mm2\n\t"
-    "psubw %%mm0,%%mm4\n\t"
-    "movq 0x08(%[y]),%%mm1\n\t"
-    "psraw $2,%%mm3\n\t"
-    "psubw %%mm0,%%mm5\n\t"
-    "psraw $2,%%mm4\n\t"
-    "psubw %%mm0,%%mm6\n\t"
-    "psraw $2,%%mm5\n\t"
-    "psubw %%mm0,%%mm7\n\t"
-    "psraw $2,%%mm6\n\t"
-    "psubw %%mm0,%%mm1\n\t"
-    "psraw $2,%%mm7\n\t"
-    "movq 0x40(%[y]),%%mm0\n\t"
-    "psraw $2,%%mm1\n\t"
-    "movq %%mm7,0x30(%[y])\n\t"
-    "movq 0x78(%[y]),%%mm7\n\t"
-    "movq %%mm1,0x08(%[y])\n\t"
-    "movq 0x50(%[y]),%%mm1\n\t"
-    "movq %%mm6,0x20(%[y])\n\t"
-    "movq 0x68(%[y]),%%mm6\n\t"
-    "movq %%mm2,0x28(%[y])\n\t"
-    "movq 0x60(%[y]),%%mm2\n\t"
-    "movq %%mm5,0x10(%[y])\n\t"
-    "movq 0x58(%[y]),%%mm5\n\t"
-    "movq %%mm3,0x38(%[y])\n\t"
-    "movq 0x70(%[y]),%%mm3\n\t"
-    "movq %%mm4,0x00(%[y])\n\t"
-    "movq 0x48(%[y]),%%mm4\n\t"
-    OC_FDCT_STAGE1_8x4
-    OC_FDCT8x4("0x40","0x50","0x60","0x70","0x48","0x58","0x68","0x78")
-    OC_TRANSPOSE8x4("0x40","0x50","0x60","0x70","0x48","0x58","0x68","0x78")
-    /*mm0={-2}x4*/
-    "pcmpeqw %%mm0,%%mm0\n\t"
-    "paddw %%mm0,%%mm0\n\t"
-    /*Round the results.*/
-    "psubw %%mm0,%%mm1\n\t"
-    "psubw %%mm0,%%mm2\n\t"
-    "psraw $2,%%mm1\n\t"
-    "psubw %%mm0,%%mm3\n\t"
-    "movq %%mm1,0x58(%[y])\n\t"
-    "psraw $2,%%mm2\n\t"
-    "psubw %%mm0,%%mm4\n\t"
-    "movq 0x48(%[y]),%%mm1\n\t"
-    "psraw $2,%%mm3\n\t"
-    "psubw %%mm0,%%mm5\n\t"
-    "movq %%mm2,0x68(%[y])\n\t"
-    "psraw $2,%%mm4\n\t"
-    "psubw %%mm0,%%mm6\n\t"
-    "movq %%mm3,0x78(%[y])\n\t"
-    "psraw $2,%%mm5\n\t"
-    "psubw %%mm0,%%mm7\n\t"
-    "movq %%mm4,0x40(%[y])\n\t"
-    "psraw $2,%%mm6\n\t"
-    "psubw %%mm0,%%mm1\n\t"
-    "movq %%mm5,0x50(%[y])\n\t"
-    "psraw $2,%%mm7\n\t"
-    "movq %%mm6,0x60(%[y])\n\t"
-    "psraw $2,%%mm1\n\t"
-    "movq %%mm7,0x70(%[y])\n\t"
-    "movq %%mm1,0x48(%[y])\n\t"
-    :[a]"=&r"(a)
-    :[y]"r"(_y),[x]"r"(_x)
-    :"memory"
-  );
+void oc_enc_fdct8x8_mmx ( ogg_int16_t _y[64],const ogg_int16_t _x[64] )
+{
+    ptrdiff_t a;
+    __asm__ __volatile__ (
+        /*Add two extra bits of working precision to improve accuracy; any more and
+           we could overflow.*/
+        /*We also add biases to correct for some systematic error that remains in
+           the full fDCT->iDCT round trip.*/
+        "movq 0x00(%[x]),%%mm0\n\t"
+        "movq 0x10(%[x]),%%mm1\n\t"
+        "movq 0x20(%[x]),%%mm2\n\t"
+        "movq 0x30(%[x]),%%mm3\n\t"
+        "pcmpeqb %%mm4,%%mm4\n\t"
+        "pxor %%mm7,%%mm7\n\t"
+        "movq %%mm0,%%mm5\n\t"
+        "psllw $2,%%mm0\n\t"
+        "pcmpeqw %%mm7,%%mm5\n\t"
+        "movq 0x70(%[x]),%%mm7\n\t"
+        "psllw $2,%%mm1\n\t"
+        "psubw %%mm4,%%mm5\n\t"
+        "psllw $2,%%mm2\n\t"
+        "mov $1,%[a]\n\t"
+        "pslld $16,%%mm5\n\t"
+        "movd %[a],%%mm6\n\t"
+        "psllq $16,%%mm5\n\t"
+        "mov $0x10001,%[a]\n\t"
+        "psllw $2,%%mm3\n\t"
+        "movd %[a],%%mm4\n\t"
+        "punpckhwd %%mm6,%%mm5\n\t"
+        "psubw %%mm6,%%mm1\n\t"
+        "movq 0x60(%[x]),%%mm6\n\t"
+        "paddw %%mm5,%%mm0\n\t"
+        "movq 0x50(%[x]),%%mm5\n\t"
+        "paddw %%mm4,%%mm0\n\t"
+        "movq 0x40(%[x]),%%mm4\n\t"
+        /*We inline stage1 of the transform here so we can get better instruction
+           scheduling with the shifts.*/
+        /*mm0=t7'=t0-t7*/
+        "psllw $2,%%mm7\n\t"
+        "psubw %%mm7,%%mm0\n\t"
+        "psllw $2,%%mm6\n\t"
+        "paddw %%mm7,%%mm7\n\t"
+        /*mm1=t6'=t1-t6*/
+        "psllw $2,%%mm5\n\t"
+        "psubw %%mm6,%%mm1\n\t"
+        "psllw $2,%%mm4\n\t"
+        "paddw %%mm6,%%mm6\n\t"
+        /*mm2=t5'=t2-t5*/
+        "psubw %%mm5,%%mm2\n\t"
+        "paddw %%mm5,%%mm5\n\t"
+        /*mm3=t4'=t3-t4*/
+        "psubw %%mm4,%%mm3\n\t"
+        "paddw %%mm4,%%mm4\n\t"
+        /*mm7=t0'=t0+t7*/
+        "paddw %%mm0,%%mm7\n\t"
+        /*mm6=t1'=t1+t6*/
+        "paddw %%mm1,%%mm6\n\t"
+        /*mm5=t2'=t2+t5*/
+        "paddw %%mm2,%%mm5\n\t"
+        /*mm4=t3'=t3+t4*/
+        "paddw %%mm3,%%mm4\n\t"
+        OC_FDCT8x4 ( "0x00","0x10","0x20","0x30","0x40","0x50","0x60","0x70" )
+        OC_TRANSPOSE8x4 ( "0x00","0x10","0x20","0x30","0x40","0x50","0x60","0x70" )
+        /*Swap out this 8x4 block for the next one.*/
+        "movq 0x08(%[x]),%%mm0\n\t"
+        "movq %%mm7,0x30(%[y])\n\t"
+        "movq 0x78(%[x]),%%mm7\n\t"
+        "movq %%mm1,0x50(%[y])\n\t"
+        "movq 0x18(%[x]),%%mm1\n\t"
+        "movq %%mm6,0x20(%[y])\n\t"
+        "movq 0x68(%[x]),%%mm6\n\t"
+        "movq %%mm2,0x60(%[y])\n\t"
+        "movq 0x28(%[x]),%%mm2\n\t"
+        "movq %%mm5,0x10(%[y])\n\t"
+        "movq 0x58(%[x]),%%mm5\n\t"
+        "movq %%mm3,0x70(%[y])\n\t"
+        "movq 0x38(%[x]),%%mm3\n\t"
+        /*And increase its working precision, too.*/
+        "psllw $2,%%mm0\n\t"
+        "movq %%mm4,0x00(%[y])\n\t"
+        "psllw $2,%%mm7\n\t"
+        "movq 0x48(%[x]),%%mm4\n\t"
+        /*We inline stage1 of the transform here so we can get better instruction
+           scheduling with the shifts.*/
+        /*mm0=t7'=t0-t7*/
+        "psubw %%mm7,%%mm0\n\t"
+        "psllw $2,%%mm1\n\t"
+        "paddw %%mm7,%%mm7\n\t"
+        "psllw $2,%%mm6\n\t"
+        /*mm1=t6'=t1-t6*/
+        "psubw %%mm6,%%mm1\n\t"
+        "psllw $2,%%mm2\n\t"
+        "paddw %%mm6,%%mm6\n\t"
+        "psllw $2,%%mm5\n\t"
+        /*mm2=t5'=t2-t5*/
+        "psubw %%mm5,%%mm2\n\t"
+        "psllw $2,%%mm3\n\t"
+        "paddw %%mm5,%%mm5\n\t"
+        "psllw $2,%%mm4\n\t"
+        /*mm3=t4'=t3-t4*/
+        "psubw %%mm4,%%mm3\n\t"
+        "paddw %%mm4,%%mm4\n\t"
+        /*mm7=t0'=t0+t7*/
+        "paddw %%mm0,%%mm7\n\t"
+        /*mm6=t1'=t1+t6*/
+        "paddw %%mm1,%%mm6\n\t"
+        /*mm5=t2'=t2+t5*/
+        "paddw %%mm2,%%mm5\n\t"
+        /*mm4=t3'=t3+t4*/
+        "paddw %%mm3,%%mm4\n\t"
+        OC_FDCT8x4 ( "0x08","0x18","0x28","0x38","0x48","0x58","0x68","0x78" )
+        OC_TRANSPOSE8x4 ( "0x08","0x18","0x28","0x38","0x48","0x58","0x68","0x78" )
+        /*Here the first 4x4 block of output from the last transpose is the second
+           4x4 block of input for the next transform.
+          We have cleverly arranged that it already be in the appropriate place,
+           so we only have to do half the stores and loads.*/
+        "movq 0x00(%[y]),%%mm0\n\t"
+        "movq %%mm1,0x58(%[y])\n\t"
+        "movq 0x10(%[y]),%%mm1\n\t"
+        "movq %%mm2,0x68(%[y])\n\t"
+        "movq 0x20(%[y]),%%mm2\n\t"
+        "movq %%mm3,0x78(%[y])\n\t"
+        "movq 0x30(%[y]),%%mm3\n\t"
+        OC_FDCT_STAGE1_8x4
+        OC_FDCT8x4 ( "0x00","0x10","0x20","0x30","0x08","0x18","0x28","0x38" )
+        OC_TRANSPOSE8x4 ( "0x00","0x10","0x20","0x30","0x08","0x18","0x28","0x38" )
+        /*mm0={-2}x4*/
+        "pcmpeqw %%mm0,%%mm0\n\t"
+        "paddw %%mm0,%%mm0\n\t"
+        /*Round the results.*/
+        "psubw %%mm0,%%mm1\n\t"
+        "psubw %%mm0,%%mm2\n\t"
+        "psraw $2,%%mm1\n\t"
+        "psubw %%mm0,%%mm3\n\t"
+        "movq %%mm1,0x18(%[y])\n\t"
+        "psraw $2,%%mm2\n\t"
+        "psubw %%mm0,%%mm4\n\t"
+        "movq 0x08(%[y]),%%mm1\n\t"
+        "psraw $2,%%mm3\n\t"
+        "psubw %%mm0,%%mm5\n\t"
+        "psraw $2,%%mm4\n\t"
+        "psubw %%mm0,%%mm6\n\t"
+        "psraw $2,%%mm5\n\t"
+        "psubw %%mm0,%%mm7\n\t"
+        "psraw $2,%%mm6\n\t"
+        "psubw %%mm0,%%mm1\n\t"
+        "psraw $2,%%mm7\n\t"
+        "movq 0x40(%[y]),%%mm0\n\t"
+        "psraw $2,%%mm1\n\t"
+        "movq %%mm7,0x30(%[y])\n\t"
+        "movq 0x78(%[y]),%%mm7\n\t"
+        "movq %%mm1,0x08(%[y])\n\t"
+        "movq 0x50(%[y]),%%mm1\n\t"
+        "movq %%mm6,0x20(%[y])\n\t"
+        "movq 0x68(%[y]),%%mm6\n\t"
+        "movq %%mm2,0x28(%[y])\n\t"
+        "movq 0x60(%[y]),%%mm2\n\t"
+        "movq %%mm5,0x10(%[y])\n\t"
+        "movq 0x58(%[y]),%%mm5\n\t"
+        "movq %%mm3,0x38(%[y])\n\t"
+        "movq 0x70(%[y]),%%mm3\n\t"
+        "movq %%mm4,0x00(%[y])\n\t"
+        "movq 0x48(%[y]),%%mm4\n\t"
+        OC_FDCT_STAGE1_8x4
+        OC_FDCT8x4 ( "0x40","0x50","0x60","0x70","0x48","0x58","0x68","0x78" )
+        OC_TRANSPOSE8x4 ( "0x40","0x50","0x60","0x70","0x48","0x58","0x68","0x78" )
+        /*mm0={-2}x4*/
+        "pcmpeqw %%mm0,%%mm0\n\t"
+        "paddw %%mm0,%%mm0\n\t"
+        /*Round the results.*/
+        "psubw %%mm0,%%mm1\n\t"
+        "psubw %%mm0,%%mm2\n\t"
+        "psraw $2,%%mm1\n\t"
+        "psubw %%mm0,%%mm3\n\t"
+        "movq %%mm1,0x58(%[y])\n\t"
+        "psraw $2,%%mm2\n\t"
+        "psubw %%mm0,%%mm4\n\t"
+        "movq 0x48(%[y]),%%mm1\n\t"
+        "psraw $2,%%mm3\n\t"
+        "psubw %%mm0,%%mm5\n\t"
+        "movq %%mm2,0x68(%[y])\n\t"
+        "psraw $2,%%mm4\n\t"
+        "psubw %%mm0,%%mm6\n\t"
+        "movq %%mm3,0x78(%[y])\n\t"
+        "psraw $2,%%mm5\n\t"
+        "psubw %%mm0,%%mm7\n\t"
+        "movq %%mm4,0x40(%[y])\n\t"
+        "psraw $2,%%mm6\n\t"
+        "psubw %%mm0,%%mm1\n\t"
+        "movq %%mm5,0x50(%[y])\n\t"
+        "psraw $2,%%mm7\n\t"
+        "movq %%mm6,0x60(%[y])\n\t"
+        "psraw $2,%%mm1\n\t"
+        "movq %%mm7,0x70(%[y])\n\t"
+        "movq %%mm1,0x48(%[y])\n\t"
+        :[a]"=&r" ( a )
+        :[y]"r" ( _y ),[x]"r" ( _x )
+        :"memory"
+    );
 }
 
 #endif

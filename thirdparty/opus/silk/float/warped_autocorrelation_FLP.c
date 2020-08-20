@@ -32,7 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "main_FLP.h"
 
 /* Autocorrelations for a warped frequency axis */
-void silk_warped_autocorrelation_FLP(
+void silk_warped_autocorrelation_FLP (
     silk_float                      *corr,                              /* O    Result [order + 1]                          */
     const silk_float                *input,                             /* I    Input data to correlate                     */
     const silk_float                warping,                            /* I    Warping coefficient                         */
@@ -46,13 +46,13 @@ void silk_warped_autocorrelation_FLP(
     double      C[     MAX_SHAPE_LPC_ORDER + 1 ] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
 
     /* Order must be even */
-    silk_assert( ( order & 1 ) == 0 );
+    silk_assert ( ( order & 1 ) == 0 );
 
     /* Loop over samples */
-    for( n = 0; n < length; n++ ) {
+    for ( n = 0; n < length; n++ ) {
         tmp1 = input[ n ];
         /* Loop over allpass sections */
-        for( i = 0; i < order; i += 2 ) {
+        for ( i = 0; i < order; i += 2 ) {
             /* Output of allpass section */
             tmp2 = state[ i ] + warping * ( state[ i + 1 ] - tmp1 );
             state[ i ] = tmp1;
@@ -67,7 +67,7 @@ void silk_warped_autocorrelation_FLP(
     }
 
     /* Copy correlations in silk_float output format */
-    for( i = 0; i < order + 1; i++ ) {
-        corr[ i ] = ( silk_float )C[ i ];
+    for ( i = 0; i < order + 1; i++ ) {
+        corr[ i ] = ( silk_float ) C[ i ];
     }
 }

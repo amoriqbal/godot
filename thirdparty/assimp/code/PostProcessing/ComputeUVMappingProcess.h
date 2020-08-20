@@ -53,7 +53,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class ComputeUVMappingTest;
 
-namespace Assimp {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /** ComputeUVMappingProcess - converts special mappings, such as spherical,
@@ -73,14 +74,14 @@ public:
     *   combination of #aiPostProcessSteps.
     * @return true if the process is present in this flag fields, false if not.
     */
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
     /** Executes the post processing step on the given imported data.
     * At the moment a process is not supposed to fail.
     * @param pScene The imported data to work at.
     */
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
 protected:
 
@@ -91,8 +92,8 @@ protected:
      *  @param axis Main axis
      *  @param out Receives output UV coordinates
     */
-    void ComputeSphereMapping(aiMesh* mesh,const aiVector3D& axis,
-        aiVector3D* out);
+    void ComputeSphereMapping ( aiMesh* mesh,const aiVector3D& axis,
+                                aiVector3D* out );
 
     // -------------------------------------------------------------------
     /** Computes cylindrical UV coordinates for a mesh
@@ -101,8 +102,8 @@ protected:
      *  @param axis Main axis
      *  @param out Receives output UV coordinates
     */
-    void ComputeCylinderMapping(aiMesh* mesh,const aiVector3D& axis,
-        aiVector3D* out);
+    void ComputeCylinderMapping ( aiMesh* mesh,const aiVector3D& axis,
+                                  aiVector3D* out );
 
     // -------------------------------------------------------------------
     /** Computes planar UV coordinates for a mesh
@@ -111,8 +112,8 @@ protected:
      *  @param axis Main axis
      *  @param out Receives output UV coordinates
     */
-    void ComputePlaneMapping(aiMesh* mesh,const aiVector3D& axis,
-        aiVector3D* out);
+    void ComputePlaneMapping ( aiMesh* mesh,const aiVector3D& axis,
+                               aiVector3D* out );
 
     // -------------------------------------------------------------------
     /** Computes cubic UV coordinates for a mesh
@@ -120,24 +121,23 @@ protected:
      *  @param mesh Mesh to be processed
      *  @param out Receives output UV coordinates
     */
-    void ComputeBoxMapping(aiMesh* mesh, aiVector3D* out);
+    void ComputeBoxMapping ( aiMesh* mesh, aiVector3D* out );
 
 private:
 
     // temporary structure to describe a mapping
-    struct MappingInfo
-    {
-        explicit MappingInfo(aiTextureMapping _type)
-            : type  (_type)
-            , axis  (0.f,1.f,0.f)
-            , uv    (0u)
+    struct MappingInfo {
+        explicit MappingInfo ( aiTextureMapping _type )
+            : type ( _type )
+            , axis ( 0.f,1.f,0.f )
+            , uv ( 0u )
         {}
 
         aiTextureMapping type;
         aiVector3D axis;
         unsigned int uv;
 
-        bool operator== (const MappingInfo& other)
+        bool operator== ( const MappingInfo& other )
         {
             return type == other.type && axis == other.axis;
         }

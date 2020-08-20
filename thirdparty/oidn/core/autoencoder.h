@@ -20,18 +20,19 @@
 #include "network.h"
 #include "transfer_function.h"
 
-namespace oidn {
+namespace oidn
+{
 
-  // --------------------------------------------------------------------------
-  // AutoencoderFilter - Direct-predicting autoencoder
-  // --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// AutoencoderFilter - Direct-predicting autoencoder
+// --------------------------------------------------------------------------
 
-  class AutoencoderFilter : public Filter
-  {
-  protected:
+class AutoencoderFilter : public Filter
+{
+protected:
     static constexpr int alignment       = 32;  // required spatial alignment in pixels (padding may be necessary)
     static constexpr int receptiveField  = 222; // receptive field in pixels
-    static constexpr int overlap         = roundUp(receptiveField / 2, alignment); // required spatial overlap between tiles in pixels
+    static constexpr int overlap         = roundUp ( receptiveField / 2, alignment ); // required spatial overlap between tiles in pixels
 
     static constexpr int estimatedBytesBase       = 16*1024*1024; // estimated base memory usage
     static constexpr int estimatedBytesPerPixel8  = 889;          // estimated memory usage per pixel for K=8
@@ -57,64 +58,66 @@ namespace oidn {
     std::shared_ptr<Node> inputReorder;
     std::shared_ptr<Node> outputReorder;
 
-    struct
-    {
-      void* ldr         = nullptr;
-      void* ldr_alb     = nullptr;
-      void* ldr_alb_nrm = nullptr;
-      void* hdr         = nullptr;
-      void* hdr_alb     = nullptr;
-      void* hdr_alb_nrm = nullptr;
+    struct {
+        void* ldr         = nullptr;
+        void* ldr_alb     = nullptr;
+        void* ldr_alb_nrm = nullptr;
+        void* hdr         = nullptr;
+        void* hdr_alb     = nullptr;
+        void* hdr_alb_nrm = nullptr;
     } weightData;
 
-    explicit AutoencoderFilter(const Ref<Device>& device);
+    explicit AutoencoderFilter ( const Ref<Device>& device );
     virtual std::shared_ptr<TransferFunction> makeTransferFunc();
 
-  public:
-    void setImage(const std::string& name, const Image& data) override;
-    void set1i(const std::string& name, int value) override;
-    int get1i(const std::string& name) override;
-    void set1f(const std::string& name, float value) override;
-    float get1f(const std::string& name) override;
+public:
+    void setImage ( const std::string& name, const Image& data ) override;
+    void set1i ( const std::string& name, int value ) override;
+    int get1i ( const std::string& name ) override;
+    void set1f ( const std::string& name, float value ) override;
+    float get1f ( const std::string& name ) override;
 
     void commit() override;
     void execute() override;
 
-  private:
+private:
     void computeTileSize();
 
     template<int K>
     std::shared_ptr<Executable> buildNet();
 
-    bool isCommitted() const { return bool(net); }
-  };
+    bool isCommitted() const
+    {
+        return bool ( net );
+    }
+};
 
-  // --------------------------------------------------------------------------
-  // RTFilter - Generic ray tracing denoiser
-  // --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// RTFilter - Generic ray tracing denoiser
+// --------------------------------------------------------------------------
 
 // -- GODOT start --
 // Godot doesn't need Raytracing filters. Removing them saves space in the weights files.
 #if 0
 // -- GODOT end --
-  class RTFilter : public AutoencoderFilter
-  {
-  public:
-    explicit RTFilter(const Ref<Device>& device);
-  };
+class RTFilter : public AutoencoderFilter
+{
+public:
+    explicit RTFilter ( const Ref<Device>& device );
+};
 // -- GODOT start --
 #endif
 // -- GODOT end --
 
-  // --------------------------------------------------------------------------
-  // RTLightmapFilter - Ray traced lightmap denoiser
-  // --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// RTLightmapFilter - Ray traced lightmap denoiser
+// --------------------------------------------------------------------------
 
-  class RTLightmapFilter : public AutoencoderFilter
-  {
-  public:
-    explicit RTLightmapFilter(const Ref<Device>& device);
+class RTLightmapFilter : public AutoencoderFilter
+{
+public:
+    explicit RTLightmapFilter ( const Ref<Device>& device );
     std::shared_ptr<TransferFunction> makeTransferFunc() override;
-  };
+};
 
 } // namespace oidn

@@ -391,8 +391,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *  See the documentation to #aiProcess_RemoveComponent for more details.
  */
-enum aiComponent
-{
+enum aiComponent {
     /** Normal vectors */
 #ifdef SWIG
     aiComponent_NORMALS = 0x2,
@@ -660,7 +659,7 @@ enum aiComponent
 
 // ---------------------------------------------------------------------------
 /** @brief  Set wether the importer shall not remove empty bones.
- *  
+ *
  *  Empty bone are often used to define connections for other models.
  */
 #define AI_CONFIG_IMPORT_REMOVE_EMPTY_BONES \
@@ -889,13 +888,13 @@ enum aiComponent
 #define AI_CONFIG_IMPORT_OGRE_TEXTURETYPE_FROM_FILENAME \
     "IMPORT_OGRE_TEXTURETYPE_FROM_FILENAME"
 
- /** @brief Specifies whether the Android JNI asset extraction is supported.
-  *
-  * Turn on this option if you want to manage assets in native
-  * Android application without having to keep the internal directory and asset
-  * manager pointer.
-  */
- #define AI_CONFIG_ANDROID_JNI_ASSIMP_MANAGER_SUPPORT "AI_CONFIG_ANDROID_JNI_ASSIMP_MANAGER_SUPPORT"
+/** @brief Specifies whether the Android JNI asset extraction is supported.
+ *
+ * Turn on this option if you want to manage assets in native
+ * Android application without having to keep the internal directory and asset
+ * manager pointer.
+ */
+#define AI_CONFIG_ANDROID_JNI_ASSIMP_MANAGER_SUPPORT "AI_CONFIG_ANDROID_JNI_ASSIMP_MANAGER_SUPPORT"
 
 // ---------------------------------------------------------------------------
 /** @brief Specifies whether the IFC loader skips over IfcSpace elements.
@@ -982,7 +981,7 @@ enum aiComponent
 #define AI_CONFIG_EXPORT_XFILE_64BIT "EXPORT_XFILE_64BIT"
 
 /** @brief Specifies whether the assimp export shall be able to export point clouds
- * 
+ *
  *  When this flag is not defined the render data has to contain valid faces.
  *  Point clouds are only a collection of vertices which have nor spatial organization
  *  by a face and the validation process will remove them. Enabling this feature will

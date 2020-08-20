@@ -58,7 +58,7 @@ extern "C" {
  *
  * \param[in] _buf #th_quant_info
  * \retval TH_EFAULT \a _enc_ctx is <tt>NULL</tt>.
- * \retval TH_EINVAL Encoding has already begun, \a _buf is 
+ * \retval TH_EINVAL Encoding has already begun, \a _buf is
  *                    <tt>NULL</tt> and \a _buf_sz is not zero,
  *                    or \a _buf is non-<tt>NULL</tt> and
  *                    \a _buf_sz is not <tt>sizeof(#th_quant_info)</tt>.
@@ -368,7 +368,7 @@ extern const th_quant_info TH_VP31_QUANT_INFO;
 
 /**The Huffman tables used by VP3.*/
 extern const th_huff_code
- TH_VP31_HUFF_CODES[TH_NHUFFMAN_TABLES][TH_NDCT_TOKENS];
+TH_VP31_HUFF_CODES[TH_NHUFFMAN_TABLES][TH_NDCT_TOKENS];
 
 
 
@@ -409,7 +409,7 @@ typedef struct th_enc_ctx    th_enc_ctx;
  * \param _info A #th_info struct filled with the desired encoding parameters.
  * \return The initialized #th_enc_ctx handle.
  * \retval NULL If the encoding parameters were invalid.*/
-extern th_enc_ctx *th_encode_alloc(const th_info *_info);
+extern th_enc_ctx *th_encode_alloc ( const th_info *_info );
 /**Encoder control function.
  * This is used to provide advanced control the encoding process.
  * \param _enc    A #th_enc_ctx handle.
@@ -418,7 +418,7 @@ extern th_enc_ctx *th_encode_alloc(const th_info *_info);
  *                 for details.
  * \param _buf    The parameters for this control code.
  * \param _buf_sz The size of the parameter buffer.*/
-extern int th_encode_ctl(th_enc_ctx *_enc,int _req,void *_buf,size_t _buf_sz);
+extern int th_encode_ctl ( th_enc_ctx *_enc,int _req,void *_buf,size_t _buf_sz );
 /**Outputs the next header packet.
  * This should be called repeatedly after encoder initialization until it
  *  returns 0 in order to get all of the header packets, in order, before
@@ -436,8 +436,8 @@ extern int th_encode_ctl(th_enc_ctx *_enc,int _req,void *_buf,size_t _buf_sz);
  *          produced.
  * \retval 0         No packet was produced, and no more header packets remain.
  * \retval TH_EFAULT \a _enc, \a _comments, or \a _op was <tt>NULL</tt>.*/
-extern int th_encode_flushheader(th_enc_ctx *_enc,
- th_comment *_comments,ogg_packet *_op);
+extern int th_encode_flushheader ( th_enc_ctx *_enc,
+                                   th_comment *_comments,ogg_packet *_op );
 /**Submits an uncompressed frame to the encoder.
  * \param _enc   A #th_enc_ctx handle.
  * \param _ycbcr A buffer of Y'CbCr data to encode.
@@ -446,7 +446,7 @@ extern int th_encode_flushheader(th_enc_ctx *_enc,
  * \retval TH_EINVAL The buffer size does not match the frame size the encoder
  *                    was initialized with, or encoding has already
  *                    completed.*/
-extern int th_encode_ycbcr_in(th_enc_ctx *_enc,th_ycbcr_buffer _ycbcr);
+extern int th_encode_ycbcr_in ( th_enc_ctx *_enc,th_ycbcr_buffer _ycbcr );
 /**Retrieves encoded video data packets.
  * This should be called repeatedly after each frame is submitted to flush any
  *  encoded packets, until it returns 0.
@@ -470,10 +470,10 @@ extern int th_encode_ycbcr_in(th_enc_ctx *_enc,th_ycbcr_buffer _ycbcr);
  * \retval 0         No packet was produced, and no more encoded video data
  *                    remains.
  * \retval TH_EFAULT \a _enc or \a _op was <tt>NULL</tt>.*/
-extern int th_encode_packetout(th_enc_ctx *_enc,int _last,ogg_packet *_op);
+extern int th_encode_packetout ( th_enc_ctx *_enc,int _last,ogg_packet *_op );
 /**Frees an allocated encoder instance.
  * \param _enc A #th_enc_ctx handle.*/
-extern void th_encode_free(th_enc_ctx *_enc);
+extern void th_encode_free ( th_enc_ctx *_enc );
 /*@}*/
 /*@}*/
 

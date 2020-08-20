@@ -1176,7 +1176,7 @@ int TriangulatorPartition::MonotonePartition(List<TriangulatorPoly> *inpolys, Li
 						vertextypes, edgeTreeIterators, &edgeTree, helpers);
 				vindex2 = newnumvertices-2;
 				v2 = &(vertices[vindex2]);
-				//helper(e j)�vi
+				//helper(e j)???vi
 				helpers[edgeIter->get().index] = vindex;
 				//Insert ei in T and set helper(ei) to vi.
 				newedge.p1 = v2->p;
@@ -1213,7 +1213,7 @@ int TriangulatorPartition::MonotonePartition(List<TriangulatorPoly> *inpolys, Li
 					AddDiagonal(vertices,&newnumvertices,vindex2,helpers[edgeIter->get().index],
 							vertextypes, edgeTreeIterators, &edgeTree, helpers);
 				}
-				//helper(e j)�vi
+				//helper(e j)???vi
 				helpers[edgeIter->get().index] = vindex2;
 				break;
 
@@ -1252,7 +1252,7 @@ int TriangulatorPartition::MonotonePartition(List<TriangulatorPoly> *inpolys, Li
 						AddDiagonal(vertices,&newnumvertices,vindex,helpers[edgeIter->get().index],
 								vertextypes, edgeTreeIterators, &edgeTree, helpers);
 					}
-					//helper(e j)�vi
+					//helper(e j)???vi
 					helpers[edgeIter->get().index] = vindex;
 				}
 				break;

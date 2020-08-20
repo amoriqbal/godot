@@ -155,12 +155,12 @@
 #include "mips/fixed_generic_mipsr1.h"
 #endif
 
-static OPUS_INLINE opus_val16 SIG2WORD16_generic(celt_sig x)
+static OPUS_INLINE opus_val16 SIG2WORD16_generic ( celt_sig x )
 {
-   x = PSHR32(x, SIG_SHIFT);
-   x = MAX32(x, -32768);
-   x = MIN32(x, 32767);
-   return EXTRACT16(x);
+    x = PSHR32 ( x, SIG_SHIFT );
+    x = MAX32 ( x, -32768 );
+    x = MIN32 ( x, 32767 );
+    return EXTRACT16 ( x );
 }
 #define SIG2WORD16(x) (SIG2WORD16_generic(x))
 

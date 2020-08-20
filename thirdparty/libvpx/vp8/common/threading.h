@@ -89,69 +89,66 @@ extern "C" {
 #define thread_sleep(nms) Sleep(nms)
 
 #elif defined(__OS2__)
-typedef struct
-{
+typedef struct {
     HEV  event;
     HMTX wait_mutex;
     HMTX count_mutex;
     int  count;
 } sem_t;
 
-static inline int sem_init(sem_t *sem, int pshared, unsigned int value)
+static inline int sem_init ( sem_t *sem, int pshared, unsigned int value )
 {
-    DosCreateEventSem(NULL, &sem->event, pshared ? DC_SEM_SHARED : 0,
-                      value > 0 ? TRUE : FALSE);
-    DosCreateMutexSem(NULL, &sem->wait_mutex, 0, FALSE);
-    DosCreateMutexSem(NULL, &sem->count_mutex, 0, FALSE);
+    DosCreateEventSem ( NULL, &sem->event, pshared ? DC_SEM_SHARED : 0,
+                        value > 0 ? TRUE : FALSE );
+    DosCreateMutexSem ( NULL, &sem->wait_mutex, 0, FALSE );
+    DosCreateMutexSem ( NULL, &sem->count_mutex, 0, FALSE );
 
     sem->count = value;
 
     return 0;
 }
 
-static inline int sem_wait(sem_t * sem)
+static inline int sem_wait ( sem_t * sem )
 {
-    DosRequestMutexSem(sem->wait_mutex, -1);
+    DosRequestMutexSem ( sem->wait_mutex, -1 );
 
-    DosWaitEventSem(sem->event, -1);
+    DosWaitEventSem ( sem->event, -1 );
 
-    DosRequestMutexSem(sem->count_mutex, -1);
+    DosRequestMutexSem ( sem->count_mutex, -1 );
 
     sem->count--;
-    if (sem->count == 0)
-    {
+    if ( sem->count == 0 ) {
         ULONG post_count;
 
-        DosResetEventSem(sem->event, &post_count);
+        DosResetEventSem ( sem->event, &post_count );
     }
 
-    DosReleaseMutexSem(sem->count_mutex);
+    DosReleaseMutexSem ( sem->count_mutex );
 
-    DosReleaseMutexSem(sem->wait_mutex);
+    DosReleaseMutexSem ( sem->wait_mutex );
 
     return 0;
 }
 
-static inline int sem_post(sem_t * sem)
+static inline int sem_post ( sem_t * sem )
 {
-    DosRequestMutexSem(sem->count_mutex, -1);
+    DosRequestMutexSem ( sem->count_mutex, -1 );
 
-    if (sem->count < 32768)
-    {
+    if ( sem->count < 32768 ) {
         sem->count++;
-        DosPostEventSem(sem->event);
+        DosPostEventSem ( sem->event );
     }
 
-    DosReleaseMutexSem(sem->count_mutex);
+    DosReleaseMutexSem ( sem->count_mutex );
 
     return 0;
 }
 
-static inline int sem_destroy(sem_t * sem)
+static inline int sem_destroy ( sem_t * sem )
 {
-    DosCloseEventSem(sem->event);
-    DosCloseMutexSem(sem->wait_mutex);
-    DosCloseMutexSem(sem->count_mutex);
+    DosCloseEventSem ( sem->event );
+    DosCloseMutexSem ( sem->wait_mutex );
+    DosCloseMutexSem ( sem->count_mutex );
 
     return 0;
 }
@@ -184,43 +181,48 @@ static inline int sem_destroy(sem_t * sem)
 
 #include "vpx_util/vpx_thread.h"
 
-static INLINE void mutex_lock(pthread_mutex_t *const mutex) {
+static INLINE void mutex_lock ( pthread_mutex_t *const mutex )
+{
     const int kMaxTryLocks = 4000;
     int locked = 0;
     int i;
 
-    for (i = 0; i < kMaxTryLocks; ++i) {
-        if (!pthread_mutex_trylock(mutex)) {
+    for ( i = 0; i < kMaxTryLocks; ++i ) {
+        if ( !pthread_mutex_trylock ( mutex ) ) {
             locked = 1;
             break;
         }
     }
 
-    if (!locked)
-        pthread_mutex_lock(mutex);
-}
-
-static INLINE int protected_read(pthread_mutex_t *const mutex, const int *p) {
-    int ret;
-    mutex_lock(mutex);
-    ret = *p;
-    pthread_mutex_unlock(mutex);
-    return ret;
-}
-
-static INLINE void sync_read(pthread_mutex_t *const mutex, int mb_col,
-                             const int *last_row_current_mb_col,
-                             const int nsync) {
-    while (mb_col > (protected_read(mutex, last_row_current_mb_col) - nsync)) {
-        x86_pause_hint();
-        thread_sleep(0);
+    if ( !locked ) {
+        pthread_mutex_lock ( mutex );
     }
 }
 
-static INLINE void protected_write(pthread_mutex_t *mutex, int *p, int v) {
-    mutex_lock(mutex);
+static INLINE int protected_read ( pthread_mutex_t *const mutex, const int *p )
+{
+    int ret;
+    mutex_lock ( mutex );
+    ret = *p;
+    pthread_mutex_unlock ( mutex );
+    return ret;
+}
+
+static INLINE void sync_read ( pthread_mutex_t *const mutex, int mb_col,
+                               const int *last_row_current_mb_col,
+                               const int nsync )
+{
+    while ( mb_col > ( protected_read ( mutex, last_row_current_mb_col ) - nsync ) ) {
+        x86_pause_hint();
+        thread_sleep ( 0 );
+    }
+}
+
+static INLINE void protected_write ( pthread_mutex_t *mutex, int *p, int v )
+{
+    mutex_lock ( mutex );
     *p = v;
-    pthread_mutex_unlock(mutex);
+    pthread_mutex_unlock ( mutex );
 }
 
 #endif /* CONFIG_OS_SUPPORT && CONFIG_MULTITHREAD */

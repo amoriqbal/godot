@@ -37,7 +37,8 @@ enum { B_DC_PRED = 0,   // 4x4 modes
        B_DC_PRED_NOTOP = 4,
        B_DC_PRED_NOLEFT = 5,
        B_DC_PRED_NOTOPLEFT = 6,
-       NUM_B_DC_MODES = 7 };
+       NUM_B_DC_MODES = 7
+     };
 
 enum { MB_FEATURE_TREE_PROBS = 3,
        NUM_MB_SEGMENTS = 4,

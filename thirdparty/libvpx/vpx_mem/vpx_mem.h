@@ -24,14 +24,14 @@
 extern "C" {
 #endif
 
-  void *vpx_memalign(size_t align, size_t size);
-  void *vpx_malloc(size_t size);
-  void *vpx_calloc(size_t num, size_t size);
-  void *vpx_realloc(void *memblk, size_t size);
-  void vpx_free(void *memblk);
+void *vpx_memalign ( size_t align, size_t size );
+void *vpx_malloc ( size_t size );
+void *vpx_calloc ( size_t num, size_t size );
+void *vpx_realloc ( void *memblk, size_t size );
+void vpx_free ( void *memblk );
 
 #if CONFIG_VP9_HIGHBITDEPTH
-  void *vpx_memset16(void *dest, int val, size_t length);
+void *vpx_memset16 ( void *dest, int val, size_t length );
 #endif
 
 #include <string.h>

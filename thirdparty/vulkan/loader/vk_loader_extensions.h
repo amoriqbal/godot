@@ -31,21 +31,21 @@ struct loader_icd_term;
 struct loader_dev_dispatch_table;
 
 // Device extension error function
-VKAPI_ATTR VkResult VKAPI_CALL vkDevExtError(VkDevice dev);
+VKAPI_ATTR VkResult VKAPI_CALL vkDevExtError ( VkDevice dev );
 
 // Extension interception for vkGetInstanceProcAddr function, so we can return
 // the appropriate information for any instance extensions we know about.
-bool extension_instance_gpa(struct loader_instance *ptr_instance, const char *name, void **addr);
+bool extension_instance_gpa ( struct loader_instance *ptr_instance, const char *name, void **addr );
 
 // Extension interception for vkCreateInstance function, so we can properly
 // detect and enable any instance extension information for extensions we know
 // about.
-void extensions_create_instance(struct loader_instance *ptr_instance, const VkInstanceCreateInfo *pCreateInfo);
+void extensions_create_instance ( struct loader_instance *ptr_instance, const VkInstanceCreateInfo *pCreateInfo );
 
 // Extension interception for vkGetDeviceProcAddr function, so we can return
 // an appropriate terminator if this is one of those few device commands requiring
 // a terminator.
-PFN_vkVoidFunction get_extension_device_proc_terminator(struct loader_device *dev, const char *pName);
+PFN_vkVoidFunction get_extension_device_proc_terminator ( struct loader_device *dev, const char *pName );
 
 // Dispatch table properly filled in with appropriate terminators for the
 // supported extensions.
@@ -54,102 +54,102 @@ extern const VkLayerInstanceDispatchTable instance_disp;
 // Array of extension strings for instance extensions we support.
 extern const char *const LOADER_INSTANCE_EXTENSIONS[];
 
-VKAPI_ATTR bool VKAPI_CALL loader_icd_init_entries(struct loader_icd_term *icd_term, VkInstance inst,
-                                                   const PFN_vkGetInstanceProcAddr fp_gipa);
+VKAPI_ATTR bool VKAPI_CALL loader_icd_init_entries ( struct loader_icd_term *icd_term, VkInstance inst,
+        const PFN_vkGetInstanceProcAddr fp_gipa );
 
 // Init Device function pointer dispatch table with core commands
-VKAPI_ATTR void VKAPI_CALL loader_init_device_dispatch_table(struct loader_dev_dispatch_table *dev_table, PFN_vkGetDeviceProcAddr gpa,
-                                                             VkDevice dev);
+VKAPI_ATTR void VKAPI_CALL loader_init_device_dispatch_table ( struct loader_dev_dispatch_table *dev_table, PFN_vkGetDeviceProcAddr gpa,
+        VkDevice dev );
 
 // Init Device function pointer dispatch table with extension commands
-VKAPI_ATTR void VKAPI_CALL loader_init_device_extension_dispatch_table(struct loader_dev_dispatch_table *dev_table,
-                                                                       PFN_vkGetInstanceProcAddr gipa,
-                                                                       PFN_vkGetDeviceProcAddr gdpa,
-                                                                       VkInstance inst,
-                                                                       VkDevice dev);
+VKAPI_ATTR void VKAPI_CALL loader_init_device_extension_dispatch_table ( struct loader_dev_dispatch_table *dev_table,
+        PFN_vkGetInstanceProcAddr gipa,
+        PFN_vkGetDeviceProcAddr gdpa,
+        VkInstance inst,
+        VkDevice dev );
 
 // Init Instance function pointer dispatch table with core commands
-VKAPI_ATTR void VKAPI_CALL loader_init_instance_core_dispatch_table(VkLayerInstanceDispatchTable *table, PFN_vkGetInstanceProcAddr gpa,
-                                                                    VkInstance inst);
+VKAPI_ATTR void VKAPI_CALL loader_init_instance_core_dispatch_table ( VkLayerInstanceDispatchTable *table, PFN_vkGetInstanceProcAddr gpa,
+        VkInstance inst );
 
 // Init Instance function pointer dispatch table with core commands
-VKAPI_ATTR void VKAPI_CALL loader_init_instance_extension_dispatch_table(VkLayerInstanceDispatchTable *table, PFN_vkGetInstanceProcAddr gpa,
-                                                                         VkInstance inst);
+VKAPI_ATTR void VKAPI_CALL loader_init_instance_extension_dispatch_table ( VkLayerInstanceDispatchTable *table, PFN_vkGetInstanceProcAddr gpa,
+        VkInstance inst );
 
 // Device command lookup function
-VKAPI_ATTR void* VKAPI_CALL loader_lookup_device_dispatch_table(const VkLayerDispatchTable *table, const char *name);
+VKAPI_ATTR void* VKAPI_CALL loader_lookup_device_dispatch_table ( const VkLayerDispatchTable *table, const char *name );
 
 // Instance command lookup function
-VKAPI_ATTR void* VKAPI_CALL loader_lookup_instance_dispatch_table(const VkLayerInstanceDispatchTable *table, const char *name,
-                                                                  bool *found_name);
+VKAPI_ATTR void* VKAPI_CALL loader_lookup_instance_dispatch_table ( const VkLayerInstanceDispatchTable *table, const char *name,
+        bool *found_name );
 
-VKAPI_ATTR bool VKAPI_CALL loader_icd_init_entries(struct loader_icd_term *icd_term, VkInstance inst,
-                                                   const PFN_vkGetInstanceProcAddr fp_gipa);
+VKAPI_ATTR bool VKAPI_CALL loader_icd_init_entries ( struct loader_icd_term *icd_term, VkInstance inst,
+        const PFN_vkGetInstanceProcAddr fp_gipa );
 
 // Loader core instance terminators
-VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateInstance(
+VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateInstance (
     const VkInstanceCreateInfo*                 pCreateInfo,
     const VkAllocationCallbacks*                pAllocator,
-    VkInstance*                                 pInstance);
-VKAPI_ATTR void VKAPI_CALL terminator_DestroyInstance(
+    VkInstance*                                 pInstance );
+VKAPI_ATTR void VKAPI_CALL terminator_DestroyInstance (
     VkInstance                                  instance,
-    const VkAllocationCallbacks*                pAllocator);
-VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumeratePhysicalDevices(
+    const VkAllocationCallbacks*                pAllocator );
+VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumeratePhysicalDevices (
     VkInstance                                  instance,
     uint32_t*                                   pPhysicalDeviceCount,
-    VkPhysicalDevice*                           pPhysicalDevices);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceFeatures(
+    VkPhysicalDevice*                           pPhysicalDevices );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceFeatures (
     VkPhysicalDevice                            physicalDevice,
-    VkPhysicalDeviceFeatures*                   pFeatures);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceFormatProperties(
+    VkPhysicalDeviceFeatures*                   pFeatures );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceFormatProperties (
     VkPhysicalDevice                            physicalDevice,
     VkFormat                                    format,
-    VkFormatProperties*                         pFormatProperties);
-VKAPI_ATTR VkResult VKAPI_CALL terminator_GetPhysicalDeviceImageFormatProperties(
+    VkFormatProperties*                         pFormatProperties );
+VKAPI_ATTR VkResult VKAPI_CALL terminator_GetPhysicalDeviceImageFormatProperties (
     VkPhysicalDevice                            physicalDevice,
     VkFormat                                    format,
     VkImageType                                 type,
     VkImageTiling                               tiling,
     VkImageUsageFlags                           usage,
     VkImageCreateFlags                          flags,
-    VkImageFormatProperties*                    pImageFormatProperties);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceProperties(
+    VkImageFormatProperties*                    pImageFormatProperties );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceProperties (
     VkPhysicalDevice                            physicalDevice,
-    VkPhysicalDeviceProperties*                 pProperties);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceQueueFamilyProperties(
+    VkPhysicalDeviceProperties*                 pProperties );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceQueueFamilyProperties (
     VkPhysicalDevice                            physicalDevice,
     uint32_t*                                   pQueueFamilyPropertyCount,
-    VkQueueFamilyProperties*                    pQueueFamilyProperties);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceMemoryProperties(
+    VkQueueFamilyProperties*                    pQueueFamilyProperties );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceMemoryProperties (
     VkPhysicalDevice                            physicalDevice,
-    VkPhysicalDeviceMemoryProperties*           pMemoryProperties);
-VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL terminator_GetInstanceProcAddr(
+    VkPhysicalDeviceMemoryProperties*           pMemoryProperties );
+VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL terminator_GetInstanceProcAddr (
     VkInstance                                  instance,
-    const char*                                 pName);
-VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateDevice(
+    const char*                                 pName );
+VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateDevice (
     VkPhysicalDevice                            physicalDevice,
     const VkDeviceCreateInfo*                   pCreateInfo,
     const VkAllocationCallbacks*                pAllocator,
-    VkDevice*                                   pDevice);
-VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateInstanceExtensionProperties(
+    VkDevice*                                   pDevice );
+VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateInstanceExtensionProperties (
     const VkEnumerateInstanceExtensionPropertiesChain* chain,
     const char*                                 pLayerName,
     uint32_t*                                   pPropertyCount,
-    VkExtensionProperties*                      pProperties);
-VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateDeviceExtensionProperties(
+    VkExtensionProperties*                      pProperties );
+VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateDeviceExtensionProperties (
     VkPhysicalDevice                            physicalDevice,
     const char*                                 pLayerName,
     uint32_t*                                   pPropertyCount,
-    VkExtensionProperties*                      pProperties);
-VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateInstanceLayerProperties(
+    VkExtensionProperties*                      pProperties );
+VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateInstanceLayerProperties (
     const VkEnumerateInstanceLayerPropertiesChain* chain,
     uint32_t*                                   pPropertyCount,
-    VkLayerProperties*                          pProperties);
-VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateDeviceLayerProperties(
+    VkLayerProperties*                          pProperties );
+VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateDeviceLayerProperties (
     VkPhysicalDevice                            physicalDevice,
     uint32_t*                                   pPropertyCount,
-    VkLayerProperties*                          pProperties);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceSparseImageFormatProperties(
+    VkLayerProperties*                          pProperties );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceSparseImageFormatProperties (
     VkPhysicalDevice                            physicalDevice,
     VkFormat                                    format,
     VkImageType                                 type,
@@ -157,52 +157,52 @@ VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceSparseImageFormatProperti
     VkImageUsageFlags                           usage,
     VkImageTiling                               tiling,
     uint32_t*                                   pPropertyCount,
-    VkSparseImageFormatProperties*              pProperties);
-VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateInstanceVersion(
+    VkSparseImageFormatProperties*              pProperties );
+VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateInstanceVersion (
     const VkEnumerateInstanceVersionChain* chain,
-    uint32_t*                                   pApiVersion);
-VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumeratePhysicalDeviceGroups(
+    uint32_t*                                   pApiVersion );
+VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumeratePhysicalDeviceGroups (
     VkInstance                                  instance,
     uint32_t*                                   pPhysicalDeviceGroupCount,
-    VkPhysicalDeviceGroupProperties*            pPhysicalDeviceGroupProperties);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceFeatures2(
+    VkPhysicalDeviceGroupProperties*            pPhysicalDeviceGroupProperties );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceFeatures2 (
     VkPhysicalDevice                            physicalDevice,
-    VkPhysicalDeviceFeatures2*                  pFeatures);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceProperties2(
+    VkPhysicalDeviceFeatures2*                  pFeatures );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceProperties2 (
     VkPhysicalDevice                            physicalDevice,
-    VkPhysicalDeviceProperties2*                pProperties);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceFormatProperties2(
+    VkPhysicalDeviceProperties2*                pProperties );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceFormatProperties2 (
     VkPhysicalDevice                            physicalDevice,
     VkFormat                                    format,
-    VkFormatProperties2*                        pFormatProperties);
-VKAPI_ATTR VkResult VKAPI_CALL terminator_GetPhysicalDeviceImageFormatProperties2(
+    VkFormatProperties2*                        pFormatProperties );
+VKAPI_ATTR VkResult VKAPI_CALL terminator_GetPhysicalDeviceImageFormatProperties2 (
     VkPhysicalDevice                            physicalDevice,
     const VkPhysicalDeviceImageFormatInfo2*     pImageFormatInfo,
-    VkImageFormatProperties2*                   pImageFormatProperties);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceQueueFamilyProperties2(
+    VkImageFormatProperties2*                   pImageFormatProperties );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceQueueFamilyProperties2 (
     VkPhysicalDevice                            physicalDevice,
     uint32_t*                                   pQueueFamilyPropertyCount,
-    VkQueueFamilyProperties2*                   pQueueFamilyProperties);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceMemoryProperties2(
+    VkQueueFamilyProperties2*                   pQueueFamilyProperties );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceMemoryProperties2 (
     VkPhysicalDevice                            physicalDevice,
-    VkPhysicalDeviceMemoryProperties2*          pMemoryProperties);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceSparseImageFormatProperties2(
+    VkPhysicalDeviceMemoryProperties2*          pMemoryProperties );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceSparseImageFormatProperties2 (
     VkPhysicalDevice                            physicalDevice,
     const VkPhysicalDeviceSparseImageFormatInfo2* pFormatInfo,
     uint32_t*                                   pPropertyCount,
-    VkSparseImageFormatProperties2*             pProperties);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceExternalBufferProperties(
+    VkSparseImageFormatProperties2*             pProperties );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceExternalBufferProperties (
     VkPhysicalDevice                            physicalDevice,
     const VkPhysicalDeviceExternalBufferInfo*   pExternalBufferInfo,
-    VkExternalBufferProperties*                 pExternalBufferProperties);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceExternalFenceProperties(
+    VkExternalBufferProperties*                 pExternalBufferProperties );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceExternalFenceProperties (
     VkPhysicalDevice                            physicalDevice,
     const VkPhysicalDeviceExternalFenceInfo*    pExternalFenceInfo,
-    VkExternalFenceProperties*                  pExternalFenceProperties);
-VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceExternalSemaphoreProperties(
+    VkExternalFenceProperties*                  pExternalFenceProperties );
+VKAPI_ATTR void VKAPI_CALL terminator_GetPhysicalDeviceExternalSemaphoreProperties (
     VkPhysicalDevice                            physicalDevice,
     const VkPhysicalDeviceExternalSemaphoreInfo* pExternalSemaphoreInfo,
-    VkExternalSemaphoreProperties*              pExternalSemaphoreProperties);
+    VkExternalSemaphoreProperties*              pExternalSemaphoreProperties );
 
 // ICD function pointer dispatch table
 struct loader_icd_term_dispatch {

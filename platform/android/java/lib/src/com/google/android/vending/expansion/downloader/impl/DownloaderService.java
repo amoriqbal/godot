@@ -63,10 +63,12 @@ import java.io.File;
  * Note that Android by default will kill off any process that has an open file
  * handle on the shared (SD Card) partition if the partition is unmounted.
  */
-public abstract class DownloaderService extends CustomIntentService implements IDownloaderService {
+public abstract class DownloaderService extends CustomIntentService implements IDownloaderService
+{
 
-    public DownloaderService() {
-        super("LVLDownloadService");
+    public DownloaderService()
+    {
+        super ( "LVLDownloadService" );
     }
 
     private static final String LOG_TAG = "LVLDL";
@@ -151,45 +153,51 @@ public abstract class DownloaderService extends CustomIntentService implements I
     /**
      * Returns whether the status is informational (i.e. 1xx).
      */
-    public static boolean isStatusInformational(int status) {
-        return (status >= 100 && status < 200);
+    public static boolean isStatusInformational ( int status )
+    {
+        return ( status >= 100 && status < 200 );
     }
 
     /**
      * Returns whether the status is a success (i.e. 2xx).
      */
-    public static boolean isStatusSuccess(int status) {
-        return (status >= 200 && status < 300);
+    public static boolean isStatusSuccess ( int status )
+    {
+        return ( status >= 200 && status < 300 );
     }
 
     /**
      * Returns whether the status is an error (i.e. 4xx or 5xx).
      */
-    public static boolean isStatusError(int status) {
-        return (status >= 400 && status < 600);
+    public static boolean isStatusError ( int status )
+    {
+        return ( status >= 400 && status < 600 );
     }
 
     /**
      * Returns whether the status is a client error (i.e. 4xx).
      */
-    public static boolean isStatusClientError(int status) {
-        return (status >= 400 && status < 500);
+    public static boolean isStatusClientError ( int status )
+    {
+        return ( status >= 400 && status < 500 );
     }
 
     /**
      * Returns whether the status is a server error (i.e. 5xx).
      */
-    public static boolean isStatusServerError(int status) {
-        return (status >= 500 && status < 600);
+    public static boolean isStatusServerError ( int status )
+    {
+        return ( status >= 500 && status < 600 );
     }
 
     /**
      * Returns whether the download has completed (either with success or
      * error).
      */
-    public static boolean isStatusCompleted(int status) {
-        return (status >= 200 && status < 300)
-                || (status >= 400 && status < 600);
+    public static boolean isStatusCompleted ( int status )
+    {
+        return ( status >= 200 && status < 300 )
+               || ( status >= 400 && status < 600 );
     }
 
     /**
@@ -395,8 +403,9 @@ public abstract class DownloaderService extends CustomIntentService implements I
     private static boolean sIsRunning;
 
     @Override
-    public IBinder onBind(Intent paramIntent) {
-        Log.d(Constants.TAG, "Service Bound");
+    public IBinder onBind ( Intent paramIntent )
+    {
+        Log.d ( Constants.TAG, "Service Bound" );
         return this.mServiceMessenger.getBinder();
     }
 
@@ -417,7 +426,8 @@ public abstract class DownloaderService extends CustomIntentService implements I
     private int mControl;
     private int mStatus;
 
-    public boolean isWiFi() {
+    public boolean isWiFi()
+    {
         return mIsConnected && !mIsCellularConnection;
     }
 
@@ -450,7 +460,7 @@ public abstract class DownloaderService extends CustomIntentService implements I
      * Our binding to the network state broadcasts
      */
     private BroadcastReceiver mConnReceiver;
-    final private IStub mServiceStub = DownloaderServiceMarshaller.CreateStub(this);
+    final private IStub mServiceStub = DownloaderServiceMarshaller.CreateStub ( this );
     final private Messenger mServiceMessenger = mServiceStub.getMessenger();
     private Messenger mClientMessenger;
     private DownloadNotification mNotification;
@@ -464,100 +474,102 @@ public abstract class DownloaderService extends CustomIntentService implements I
      * @param type
      * @param subType
      */
-    private void updateNetworkType(int type, int subType) {
-        switch (type) {
-            case ConnectivityManager.TYPE_WIFI:
-            case ConnectivityManager.TYPE_ETHERNET:
-            case ConnectivityManager.TYPE_BLUETOOTH:
-                mIsCellularConnection = false;
+    private void updateNetworkType ( int type, int subType )
+    {
+        switch ( type ) {
+        case ConnectivityManager.TYPE_WIFI:
+        case ConnectivityManager.TYPE_ETHERNET:
+        case ConnectivityManager.TYPE_BLUETOOTH:
+            mIsCellularConnection = false;
+            mIsAtLeast3G = false;
+            mIsAtLeast4G = false;
+            break;
+        case ConnectivityManager.TYPE_WIMAX:
+            mIsCellularConnection = true;
+            mIsAtLeast3G = true;
+            mIsAtLeast4G = true;
+            break;
+        case ConnectivityManager.TYPE_MOBILE:
+            mIsCellularConnection = true;
+            switch ( subType ) {
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+            case TelephonyManager.NETWORK_TYPE_CDMA:
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+            case TelephonyManager.NETWORK_TYPE_IDEN:
                 mIsAtLeast3G = false;
                 mIsAtLeast4G = false;
                 break;
-            case ConnectivityManager.TYPE_WIMAX:
-                mIsCellularConnection = true;
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+                mIsAtLeast3G = true;
+                mIsAtLeast4G = false;
+                break;
+            case TelephonyManager.NETWORK_TYPE_LTE: // 4G
+            case TelephonyManager.NETWORK_TYPE_EHRPD: // 3G ++ interop
+            // with 4G
+            case TelephonyManager.NETWORK_TYPE_HSPAP: // 3G ++ but
+                // marketed as
+                // 4G
                 mIsAtLeast3G = true;
                 mIsAtLeast4G = true;
                 break;
-            case ConnectivityManager.TYPE_MOBILE:
-                mIsCellularConnection = true;
-                switch (subType) {
-                    case TelephonyManager.NETWORK_TYPE_1xRTT:
-                    case TelephonyManager.NETWORK_TYPE_CDMA:
-                    case TelephonyManager.NETWORK_TYPE_EDGE:
-                    case TelephonyManager.NETWORK_TYPE_GPRS:
-                    case TelephonyManager.NETWORK_TYPE_IDEN:
-                        mIsAtLeast3G = false;
-                        mIsAtLeast4G = false;
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_HSDPA:
-                    case TelephonyManager.NETWORK_TYPE_HSUPA:
-                    case TelephonyManager.NETWORK_TYPE_HSPA:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_0:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_A:
-                    case TelephonyManager.NETWORK_TYPE_UMTS:
-                        mIsAtLeast3G = true;
-                        mIsAtLeast4G = false;
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_LTE: // 4G
-                    case TelephonyManager.NETWORK_TYPE_EHRPD: // 3G ++ interop
-                                                              // with 4G
-                    case TelephonyManager.NETWORK_TYPE_HSPAP: // 3G ++ but
-                                                              // marketed as
-                                                              // 4G
-                        mIsAtLeast3G = true;
-                        mIsAtLeast4G = true;
-                        break;
-                    default:
-                        mIsCellularConnection = false;
-                        mIsAtLeast3G = false;
-                        mIsAtLeast4G = false;
-                }
+            default:
+                mIsCellularConnection = false;
+                mIsAtLeast3G = false;
+                mIsAtLeast4G = false;
+            }
         }
     }
 
-    private void updateNetworkState(NetworkInfo info) {
+    private void updateNetworkState ( NetworkInfo info )
+    {
         boolean isConnected = mIsConnected;
         boolean isFailover = mIsFailover;
         boolean isCellularConnection = mIsCellularConnection;
         boolean isRoaming = mIsRoaming;
         boolean isAtLeast3G = mIsAtLeast3G;
-        if (null != info) {
+        if ( null != info ) {
             mIsRoaming = info.isRoaming();
             mIsFailover = info.isFailover();
             mIsConnected = info.isConnected();
-            updateNetworkType(info.getType(), info.getSubtype());
+            updateNetworkType ( info.getType(), info.getSubtype() );
         } else {
             mIsRoaming = false;
             mIsFailover = false;
             mIsConnected = false;
-            updateNetworkType(-1, -1);
+            updateNetworkType ( -1, -1 );
         }
-        mStateChanged = (mStateChanged || isConnected != mIsConnected
-                || isFailover != mIsFailover
-                || isCellularConnection != mIsCellularConnection
-                || isRoaming != mIsRoaming || isAtLeast3G != mIsAtLeast3G);
-        if (Constants.LOGVV) {
-            if (mStateChanged) {
-                Log.v(LOG_TAG, "Network state changed: ");
-                Log.v(LOG_TAG, "Starting State: " +
-                        (isConnected ? "Connected " : "Not Connected ") +
-                        (isCellularConnection ? "Cellular " : "WiFi ") +
-                        (isRoaming ? "Roaming " : "Local ") +
-                        (isAtLeast3G ? "3G+ " : "<3G "));
-                Log.v(LOG_TAG, "Ending State: " +
-                        (mIsConnected ? "Connected " : "Not Connected ") +
-                        (mIsCellularConnection ? "Cellular " : "WiFi ") +
-                        (mIsRoaming ? "Roaming " : "Local ") +
-                        (mIsAtLeast3G ? "3G+ " : "<3G "));
+        mStateChanged = ( mStateChanged || isConnected != mIsConnected
+                          || isFailover != mIsFailover
+                          || isCellularConnection != mIsCellularConnection
+                          || isRoaming != mIsRoaming || isAtLeast3G != mIsAtLeast3G );
+        if ( Constants.LOGVV ) {
+            if ( mStateChanged ) {
+                Log.v ( LOG_TAG, "Network state changed: " );
+                Log.v ( LOG_TAG, "Starting State: " +
+                        ( isConnected ? "Connected " : "Not Connected " ) +
+                        ( isCellularConnection ? "Cellular " : "WiFi " ) +
+                        ( isRoaming ? "Roaming " : "Local " ) +
+                        ( isAtLeast3G ? "3G+ " : "<3G " ) );
+                Log.v ( LOG_TAG, "Ending State: " +
+                        ( mIsConnected ? "Connected " : "Not Connected " ) +
+                        ( mIsCellularConnection ? "Cellular " : "WiFi " ) +
+                        ( mIsRoaming ? "Roaming " : "Local " ) +
+                        ( mIsAtLeast3G ? "3G+ " : "<3G " ) );
 
-                if (isServiceRunning()) {
-                    if (mIsRoaming) {
+                if ( isServiceRunning() ) {
+                    if ( mIsRoaming ) {
                         mStatus = STATUS_WAITING_FOR_NETWORK;
                         mControl = CONTROL_PAUSED;
-                    } else if (mIsCellularConnection) {
-                        DownloadsDB db = DownloadsDB.getDB(this);
+                    } else if ( mIsCellularConnection ) {
+                        DownloadsDB db = DownloadsDB.getDB ( this );
                         int flags = db.getFlags();
-                        if (0 == (flags & FLAGS_DOWNLOAD_OVER_CELLULAR)) {
+                        if ( 0 == ( flags & FLAGS_DOWNLOAD_OVER_CELLULAR ) ) {
                             mStatus = STATUS_QUEUED_FOR_WIFI;
                             mControl = CONTROL_PAUSED;
                         }
@@ -571,21 +583,22 @@ public abstract class DownloaderService extends CustomIntentService implements I
     /**
      * Polls the network state, setting the flags appropriately.
      */
-    void pollNetworkState() {
-        if (null == mConnectivityManager) {
-            mConnectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    void pollNetworkState()
+    {
+        if ( null == mConnectivityManager ) {
+            mConnectivityManager = ( ConnectivityManager ) getSystemService ( Context.CONNECTIVITY_SERVICE );
         }
-        if (null == mWifiManager) {
-            mWifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if ( null == mWifiManager ) {
+            mWifiManager = ( WifiManager ) getApplicationContext().getSystemService ( Context.WIFI_SERVICE );
         }
-        if (mConnectivityManager == null) {
-            Log.w(Constants.TAG,
-                    "couldn't get connectivity manager to poll network state");
+        if ( mConnectivityManager == null ) {
+            Log.w ( Constants.TAG,
+                    "couldn't get connectivity manager to poll network state" );
         } else {
-            @SuppressLint("MissingPermission")
+            @SuppressLint ( "MissingPermission" )
             NetworkInfo activeInfo = mConnectivityManager
-                    .getActiveNetworkInfo();
-            updateNetworkState(activeInfo);
+                                     .getActiveNetworkInfo();
+            updateNetworkState ( activeInfo );
         }
     }
 
@@ -604,10 +617,11 @@ public abstract class DownloaderService extends CustomIntentService implements I
      * @param pi the package info for the project
      * @return returns true if the filenames need to be returned
      */
-    private static boolean isLVLCheckRequired(DownloadsDB db, PackageInfo pi) {
+    private static boolean isLVLCheckRequired ( DownloadsDB db, PackageInfo pi )
+    {
         // we need to update the LVL check and get a successful status to
         // proceed
-        if (db.mVersionCode != pi.versionCode) {
+        if ( db.mVersionCode != pi.versionCode ) {
             return true;
         }
         return false;
@@ -618,31 +632,34 @@ public abstract class DownloaderService extends CustomIntentService implements I
      *
      * @return whether we think the service is running
      */
-    private static synchronized boolean isServiceRunning() {
+    private static synchronized boolean isServiceRunning()
+    {
         return sIsRunning;
     }
 
-    private static synchronized void setServiceRunning(boolean isRunning) {
+    private static synchronized void setServiceRunning ( boolean isRunning )
+    {
         sIsRunning = isRunning;
     }
 
-    public static int startDownloadServiceIfRequired(Context context,
-            Intent intent, Class<?> serviceClass) throws NameNotFoundException {
-        final PendingIntent pendingIntent = (PendingIntent) intent
-                .getParcelableExtra(EXTRA_PENDING_INTENT);
-        return startDownloadServiceIfRequired(context, pendingIntent,
-                serviceClass);
+    public static int startDownloadServiceIfRequired ( Context context,
+            Intent intent, Class<?> serviceClass ) throws NameNotFoundException
+    {
+        final PendingIntent pendingIntent = ( PendingIntent ) intent
+                                            .getParcelableExtra ( EXTRA_PENDING_INTENT );
+        return startDownloadServiceIfRequired ( context, pendingIntent,
+                                                serviceClass );
     }
 
-    public static int startDownloadServiceIfRequired(Context context,
-            PendingIntent pendingIntent, Class<?> serviceClass)
-            throws NameNotFoundException
+    public static int startDownloadServiceIfRequired ( Context context,
+            PendingIntent pendingIntent, Class<?> serviceClass )
+    throws NameNotFoundException
     {
         String packageName = context.getPackageName();
         String className = serviceClass.getName();
 
-        return startDownloadServiceIfRequired(context, pendingIntent,
-                packageName, className);
+        return startDownloadServiceIfRequired ( context, pendingIntent,
+                                                packageName, className );
     }
 
     /**
@@ -664,33 +681,34 @@ public abstract class DownloaderService extends CustomIntentService implements I
      *         downloader, false if the app can continue
      * @throws NameNotFoundException
      */
-    public static int startDownloadServiceIfRequired(Context context,
-            PendingIntent pendingIntent, String classPackage, String className)
-            throws NameNotFoundException {
+    public static int startDownloadServiceIfRequired ( Context context,
+            PendingIntent pendingIntent, String classPackage, String className )
+    throws NameNotFoundException
+    {
         // first: do we need to do an LVL update?
         // we begin by getting our APK version from the package manager
-        final PackageInfo pi = context.getPackageManager().getPackageInfo(
-                context.getPackageName(), 0);
+        final PackageInfo pi = context.getPackageManager().getPackageInfo (
+                                   context.getPackageName(), 0 );
 
         int status = NO_DOWNLOAD_REQUIRED;
 
         // the database automatically reads the metadata for version code
         // and download status when the instance is created
-        DownloadsDB db = DownloadsDB.getDB(context);
+        DownloadsDB db = DownloadsDB.getDB ( context );
 
         // we need to update the LVL check and get a successful status to
         // proceed
-        if (isLVLCheckRequired(db, pi)) {
+        if ( isLVLCheckRequired ( db, pi ) ) {
             status = LVL_CHECK_REQUIRED;
         }
         // we don't have to update LVL. do we still have a download to start?
-        if (db.mStatus == 0) {
+        if ( db.mStatus == 0 ) {
             DownloadInfo[] infos = db.getDownloads();
-            if (null != infos) {
-                for (DownloadInfo info : infos) {
-                    if (!Helpers.doesFileExist(context, info.mFileName, info.mTotalBytes, true)) {
+            if ( null != infos ) {
+                for ( DownloadInfo info : infos ) {
+                    if ( !Helpers.doesFileExist ( context, info.mFileName, info.mTotalBytes, true ) ) {
                         status = DOWNLOAD_REQUIRED;
-                        db.updateStatus(-1);
+                        db.updateStatus ( -1 );
                         break;
                     }
                 }
@@ -698,43 +716,47 @@ public abstract class DownloaderService extends CustomIntentService implements I
         } else {
             status = DOWNLOAD_REQUIRED;
         }
-        switch (status) {
-            case DOWNLOAD_REQUIRED:
-            case LVL_CHECK_REQUIRED:
-                Intent fileIntent = new Intent();
-                fileIntent.setClassName(classPackage, className);
-                fileIntent.putExtra(EXTRA_PENDING_INTENT, pendingIntent);
-                context.startService(fileIntent);
-                break;
+        switch ( status ) {
+        case DOWNLOAD_REQUIRED:
+        case LVL_CHECK_REQUIRED:
+            Intent fileIntent = new Intent();
+            fileIntent.setClassName ( classPackage, className );
+            fileIntent.putExtra ( EXTRA_PENDING_INTENT, pendingIntent );
+            context.startService ( fileIntent );
+            break;
         }
         return status;
     }
 
     @Override
-    public void requestAbortDownload() {
+    public void requestAbortDownload()
+    {
         mControl = CONTROL_PAUSED;
         mStatus = STATUS_CANCELED;
     }
 
     @Override
-    public void requestPauseDownload() {
+    public void requestPauseDownload()
+    {
         mControl = CONTROL_PAUSED;
         mStatus = STATUS_PAUSED_BY_APP;
     }
 
     @Override
-    public void setDownloadFlags(int flags) {
-        DownloadsDB.getDB(this).updateFlags(flags);
+    public void setDownloadFlags ( int flags )
+    {
+        DownloadsDB.getDB ( this ).updateFlags ( flags );
     }
 
     @Override
-    public void requestContinueDownload() {
-        if (mControl == CONTROL_PAUSED) {
+    public void requestContinueDownload()
+    {
+        if ( mControl == CONTROL_PAUSED ) {
             mControl = CONTROL_RUN;
         }
-        Intent fileIntent = new Intent(this, this.getClass());
-        fileIntent.putExtra(EXTRA_PENDING_INTENT, mPendingIntent);
-        this.startService(fileIntent);
+        Intent fileIntent = new Intent ( this, this.getClass() );
+        fileIntent.putExtra ( EXTRA_PENDING_INTENT, mPendingIntent );
+        this.startService ( fileIntent );
     }
 
     public abstract String getPublicKey();
@@ -743,8 +765,10 @@ public abstract class DownloaderService extends CustomIntentService implements I
 
     public abstract String getAlarmReceiverClassName();
 
-    private class LVLRunnable implements Runnable {
-        LVLRunnable(Context context, PendingIntent intent) {
+    private class LVLRunnable implements Runnable
+    {
+        LVLRunnable ( Context context, PendingIntent intent )
+        {
             mContext = context;
             mPendingIntent = intent;
         }
@@ -752,14 +776,15 @@ public abstract class DownloaderService extends CustomIntentService implements I
         final Context mContext;
 
         @Override
-        public void run() {
-            setServiceRunning(true);
-            mNotification.onDownloadStateChanged(IDownloaderClient.STATE_FETCHING_URL);
-            String deviceId = Secure.getString(mContext.getContentResolver(),
-                    Secure.ANDROID_ID);
+        public void run()
+        {
+            setServiceRunning ( true );
+            mNotification.onDownloadStateChanged ( IDownloaderClient.STATE_FETCHING_URL );
+            String deviceId = Secure.getString ( mContext.getContentResolver(),
+                                                 Secure.ANDROID_ID );
 
-            final APKExpansionPolicy aep = new APKExpansionPolicy(mContext,
-                    new AESObfuscator(getSALT(), mContext.getPackageName(), deviceId));
+            final APKExpansionPolicy aep = new APKExpansionPolicy ( mContext,
+                    new AESObfuscator ( getSALT(), mContext.getPackageName(), deviceId ) );
 
             // reset our policy back to the start of the world to force a
             // re-check
@@ -767,59 +792,59 @@ public abstract class DownloaderService extends CustomIntentService implements I
 
             // let's try and get the OBB file from LVL first
             // Construct the LicenseChecker with a Policy.
-            final LicenseChecker checker = new LicenseChecker(mContext, aep,
+            final LicenseChecker checker = new LicenseChecker ( mContext, aep,
                     getPublicKey() // Your public licensing key.
-            );
-            checker.checkAccess(new LicenseCheckerCallback() {
+                                                              );
+            checker.checkAccess ( new LicenseCheckerCallback() {
 
                 @Override
-                public void allow(int reason) {
+                public void allow ( int reason ) {
                     try {
                         int count = aep.getExpansionURLCount();
-                        DownloadsDB db = DownloadsDB.getDB(mContext);
+                        DownloadsDB db = DownloadsDB.getDB ( mContext );
                         int status = 0;
-                        if (count != 0) {
-                            for (int i = 0; i < count; i++) {
+                        if ( count != 0 ) {
+                            for ( int i = 0; i < count; i++ ) {
                                 String currentFileName = aep
-                                        .getExpansionFileName(i);
-                                if (null != currentFileName) {
-                                    DownloadInfo di = new DownloadInfo(i,
-                                            currentFileName, mContext.getPackageName());
+                                                         .getExpansionFileName ( i );
+                                if ( null != currentFileName ) {
+                                    DownloadInfo di = new DownloadInfo ( i,
+                                                                         currentFileName, mContext.getPackageName() );
 
-                                    long fileSize = aep.getExpansionFileSize(i);
-                                    if (handleFileUpdated(db, i, currentFileName,
-                                            fileSize)) {
+                                    long fileSize = aep.getExpansionFileSize ( i );
+                                    if ( handleFileUpdated ( db, i, currentFileName,
+                                                             fileSize ) ) {
                                         status |= -1;
                                         di.resetDownload();
-                                        di.mUri = aep.getExpansionURL(i);
+                                        di.mUri = aep.getExpansionURL ( i );
                                         di.mTotalBytes = fileSize;
                                         di.mStatus = status;
-                                        db.updateDownload(di);
+                                        db.updateDownload ( di );
                                     } else {
                                         // we need to read the download
                                         // information
                                         // from
                                         // the database
                                         DownloadInfo dbdi = db
-                                                .getDownloadInfoByFileName(di.mFileName);
-                                        if (null == dbdi) {
+                                                            .getDownloadInfoByFileName ( di.mFileName );
+                                        if ( null == dbdi ) {
                                             // the file exists already and is
                                             // the
                                             // correct size
                                             // was delivered by Market or
                                             // through
                                             // another mechanism
-                                            Log.d(LOG_TAG, "file " + di.mFileName
-                                                    + " found. Not downloading.");
+                                            Log.d ( LOG_TAG, "file " + di.mFileName
+                                                    + " found. Not downloading." );
                                             di.mStatus = STATUS_SUCCESS;
                                             di.mTotalBytes = fileSize;
                                             di.mCurrentBytes = fileSize;
-                                            di.mUri = aep.getExpansionURL(i);
-                                            db.updateDownload(di);
-                                        } else if (dbdi.mStatus != STATUS_SUCCESS) {
+                                            di.mUri = aep.getExpansionURL ( i );
+                                            db.updateDownload ( di );
+                                        } else if ( dbdi.mStatus != STATUS_SUCCESS ) {
                                             // we just update the URL
-                                            dbdi.mUri = aep.getExpansionURL(i);
-                                            db.updateDownload(dbdi);
+                                            dbdi.mUri = aep.getExpansionURL ( i );
+                                            db.updateDownload ( dbdi );
                                             status |= -1;
                                         }
                                     }
@@ -831,70 +856,69 @@ public abstract class DownloaderService extends CustomIntentService implements I
                         // manager
                         PackageInfo pi;
                         try {
-                            pi = mContext.getPackageManager().getPackageInfo(
-                                    mContext.getPackageName(), 0);
-                            db.updateMetadata(pi.versionCode, status);
+                            pi = mContext.getPackageManager().getPackageInfo (
+                                     mContext.getPackageName(), 0 );
+                            db.updateMetadata ( pi.versionCode, status );
                             Class<?> serviceClass = DownloaderService.this.getClass();
-                            switch (startDownloadServiceIfRequired(mContext, mPendingIntent,
-                                    serviceClass)) {
-                                case NO_DOWNLOAD_REQUIRED:
-                                    mNotification
-                                            .onDownloadStateChanged(IDownloaderClient.STATE_COMPLETED);
-                                    break;
-                                case LVL_CHECK_REQUIRED:
-                                    // DANGER WILL ROBINSON!
-                                    Log.e(LOG_TAG, "In LVL checking loop!");
-                                    mNotification
-                                            .onDownloadStateChanged(IDownloaderClient.STATE_FAILED_UNLICENSED);
-                                    throw new RuntimeException(
-                                            "Error with LVL checking and database integrity");
-                                case DOWNLOAD_REQUIRED:
-                                    // do nothing. the download will notify the
-                                    // application
-                                    // when things are done
-                                    break;
+                            switch ( startDownloadServiceIfRequired ( mContext, mPendingIntent,
+                                     serviceClass ) ) {
+                            case NO_DOWNLOAD_REQUIRED:
+                                mNotification
+                                .onDownloadStateChanged ( IDownloaderClient.STATE_COMPLETED );
+                                break;
+                            case LVL_CHECK_REQUIRED:
+                                // DANGER WILL ROBINSON!
+                                Log.e ( LOG_TAG, "In LVL checking loop!" );
+                                mNotification
+                                .onDownloadStateChanged ( IDownloaderClient.STATE_FAILED_UNLICENSED );
+                                throw new RuntimeException (
+                                    "Error with LVL checking and database integrity" );
+                            case DOWNLOAD_REQUIRED:
+                                // do nothing. the download will notify the
+                                // application
+                                // when things are done
+                                break;
                             }
-                        } catch (NameNotFoundException e1) {
+                        } catch ( NameNotFoundException e1 ) {
                             e1.printStackTrace();
-                            throw new RuntimeException(
-                                    "Error with getting information from package name");
+                            throw new RuntimeException (
+                                "Error with getting information from package name" );
                         }
                     } finally {
-                        setServiceRunning(false);
+                        setServiceRunning ( false );
                     }
                 }
 
                 @Override
-                public void dontAllow(int reason) {
-                    try
-                    {
-                        switch (reason) {
-                            case Policy.NOT_LICENSED:
-                                mNotification
-                                        .onDownloadStateChanged(IDownloaderClient.STATE_FAILED_UNLICENSED);
-                                break;
-                            case Policy.RETRY:
-                                mNotification
-                                        .onDownloadStateChanged(IDownloaderClient.STATE_FAILED_FETCHING_URL);
-                                break;
+                public void dontAllow ( int reason ) {
+                    try {
+                        switch ( reason ) {
+                        case Policy.NOT_LICENSED:
+                            mNotification
+                            .onDownloadStateChanged ( IDownloaderClient.STATE_FAILED_UNLICENSED );
+                            break;
+                        case Policy.RETRY:
+                            mNotification
+                            .onDownloadStateChanged ( IDownloaderClient.STATE_FAILED_FETCHING_URL );
+                            break;
                         }
                     } finally {
-                        setServiceRunning(false);
+                        setServiceRunning ( false );
                     }
 
                 }
 
                 @Override
-                public void applicationError(int errorCode) {
+                public void applicationError ( int errorCode ) {
                     try {
                         mNotification
-                                .onDownloadStateChanged(IDownloaderClient.STATE_FAILED_FETCHING_URL);
+                        .onDownloadStateChanged ( IDownloaderClient.STATE_FAILED_FETCHING_URL );
                     } finally {
-                        setServiceRunning(false);
+                        setServiceRunning ( false );
                     }
                 }
 
-            });
+            } );
 
         }
 
@@ -905,10 +929,11 @@ public abstract class DownloaderService extends CustomIntentService implements I
      *
      * @param context
      */
-    public void updateLVL(final Context context) {
+    public void updateLVL ( final Context context )
+    {
         Context c = context.getApplicationContext();
-        Handler h = new Handler(c.getMainLooper());
-        h.post(new LVLRunnable(c, mPendingIntent));
+        Handler h = new Handler ( c.getMainLooper() );
+        h.post ( new LVLRunnable ( c, mPendingIntent ) );
     }
 
     /**
@@ -923,59 +948,63 @@ public abstract class DownloaderService extends CustomIntentService implements I
      * @param fileSize the size of the new file
      * @return
      */
-    public boolean handleFileUpdated(DownloadsDB db, int index,
-            String filename, long fileSize) {
-        DownloadInfo di = db.getDownloadInfoByFileName(filename);
-        if (null != di) {
+    public boolean handleFileUpdated ( DownloadsDB db, int index,
+                                       String filename, long fileSize )
+    {
+        DownloadInfo di = db.getDownloadInfoByFileName ( filename );
+        if ( null != di ) {
             String oldFile = di.mFileName;
             // cleanup
-            if (null != oldFile) {
-                if (filename.equals(oldFile)) {
+            if ( null != oldFile ) {
+                if ( filename.equals ( oldFile ) ) {
                     return false;
                 }
 
                 // remove partially downloaded file if it is there
-                String deleteFile = Helpers.generateSaveFileName(this, oldFile);
-                File f = new File(deleteFile);
-                if (f.exists())
+                String deleteFile = Helpers.generateSaveFileName ( this, oldFile );
+                File f = new File ( deleteFile );
+                if ( f.exists() ) {
                     f.delete();
+                }
             }
         }
-        return !Helpers.doesFileExist(this, filename, fileSize, true);
+        return !Helpers.doesFileExist ( this, filename, fileSize, true );
     }
 
-    private void scheduleAlarm(long wakeUp) {
-        AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        if (alarms == null) {
-            Log.e(Constants.TAG, "couldn't get alarm manager");
+    private void scheduleAlarm ( long wakeUp )
+    {
+        AlarmManager alarms = ( AlarmManager ) getSystemService ( Context.ALARM_SERVICE );
+        if ( alarms == null ) {
+            Log.e ( Constants.TAG, "couldn't get alarm manager" );
             return;
         }
 
-        if (Constants.LOGV) {
-            Log.v(Constants.TAG, "scheduling retry in " + wakeUp + "ms");
+        if ( Constants.LOGV ) {
+            Log.v ( Constants.TAG, "scheduling retry in " + wakeUp + "ms" );
         }
 
         String className = getAlarmReceiverClassName();
-        Intent intent = new Intent(Constants.ACTION_RETRY);
-        intent.putExtra(EXTRA_PENDING_INTENT, mPendingIntent);
-        intent.setClassName(this.getPackageName(),
-                className);
-        mAlarmIntent = PendingIntent.getBroadcast(this, 0, intent,
-                PendingIntent.FLAG_ONE_SHOT);
-        alarms.set(
-                AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis() + wakeUp, mAlarmIntent
-                );
+        Intent intent = new Intent ( Constants.ACTION_RETRY );
+        intent.putExtra ( EXTRA_PENDING_INTENT, mPendingIntent );
+        intent.setClassName ( this.getPackageName(),
+                              className );
+        mAlarmIntent = PendingIntent.getBroadcast ( this, 0, intent,
+                       PendingIntent.FLAG_ONE_SHOT );
+        alarms.set (
+            AlarmManager.RTC_WAKEUP,
+            System.currentTimeMillis() + wakeUp, mAlarmIntent
+        );
     }
 
-    private void cancelAlarms() {
-        if (null != mAlarmIntent) {
-            AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            if (alarms == null) {
-                Log.e(Constants.TAG, "couldn't get alarm manager");
+    private void cancelAlarms()
+    {
+        if ( null != mAlarmIntent ) {
+            AlarmManager alarms = ( AlarmManager ) getSystemService ( Context.ALARM_SERVICE );
+            if ( alarms == null ) {
+                Log.e ( Constants.TAG, "couldn't get alarm manager" );
                 return;
             }
-            alarms.cancel(mAlarmIntent);
+            alarms.cancel ( mAlarmIntent );
             mAlarmIntent = null;
         }
     }
@@ -984,23 +1013,26 @@ public abstract class DownloaderService extends CustomIntentService implements I
      * We use this to track network state, such as when WiFi, Cellular, etc. is
      * enabled when downloads are paused or in progress.
      */
-    private class InnerBroadcastReceiver extends BroadcastReceiver {
+    private class InnerBroadcastReceiver extends BroadcastReceiver
+    {
         final Service mService;
 
-        InnerBroadcastReceiver(Service service) {
+        InnerBroadcastReceiver ( Service service )
+        {
             mService = service;
         }
 
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive ( Context context, Intent intent )
+        {
             pollNetworkState();
-            if (mStateChanged
-                    && !isServiceRunning()) {
-                Log.d(Constants.TAG, "InnerBroadcastReceiver Called");
-                Intent fileIntent = new Intent(context, mService.getClass());
-                fileIntent.putExtra(EXTRA_PENDING_INTENT, mPendingIntent);
+            if ( mStateChanged
+                    && !isServiceRunning() ) {
+                Log.d ( Constants.TAG, "InnerBroadcastReceiver Called" );
+                Intent fileIntent = new Intent ( context, mService.getClass() );
+                fileIntent.putExtra ( EXTRA_PENDING_INTENT, mPendingIntent );
                 // send a new intent to the service
-                context.startService(fileIntent);
+                context.startService ( fileIntent );
             }
         }
     };
@@ -1010,30 +1042,30 @@ public abstract class DownloaderService extends CustomIntentService implements I
      * for queuing up downloads and other goodness.
      */
     @Override
-    protected void onHandleIntent(Intent intent) {
-        setServiceRunning(true);
+    protected void onHandleIntent ( Intent intent )
+    {
+        setServiceRunning ( true );
         try {
             // the database automatically reads the metadata for version code
             // and download status when the instance is created
-            DownloadsDB db = DownloadsDB.getDB(this);
-            final PendingIntent pendingIntent = (PendingIntent) intent
-                    .getParcelableExtra(EXTRA_PENDING_INTENT);
+            DownloadsDB db = DownloadsDB.getDB ( this );
+            final PendingIntent pendingIntent = ( PendingIntent ) intent
+                                                .getParcelableExtra ( EXTRA_PENDING_INTENT );
 
-            if (null != pendingIntent)
-            {
-                mNotification.setClientIntent(pendingIntent);
+            if ( null != pendingIntent ) {
+                mNotification.setClientIntent ( pendingIntent );
                 mPendingIntent = pendingIntent;
-            } else if (null != mPendingIntent) {
-                mNotification.setClientIntent(mPendingIntent);
+            } else if ( null != mPendingIntent ) {
+                mNotification.setClientIntent ( mPendingIntent );
             } else {
-                Log.e(LOG_TAG, "Downloader started in bad state without notification intent.");
+                Log.e ( LOG_TAG, "Downloader started in bad state without notification intent." );
                 return;
             }
 
             // when the LVL check completes, a successful response will update
             // the service
-            if (isLVLCheckRequired(db, mPackageInfo)) {
-                updateLVL(this);
+            if ( isLVLCheckRequired ( db, mPackageInfo ) ) {
+                updateLVL ( this );
                 return;
             }
 
@@ -1042,12 +1074,12 @@ public abstract class DownloaderService extends CustomIntentService implements I
             mBytesSoFar = 0;
             mTotalLength = 0;
             mFileCount = infos.length;
-            for (DownloadInfo info : infos) {
+            for ( DownloadInfo info : infos ) {
                 // We do an (simple) integrity check on each file, just to make
                 // sure
-                if (info.mStatus == STATUS_SUCCESS) {
+                if ( info.mStatus == STATUS_SUCCESS ) {
                     // verify that the file matches the state
-                    if (!Helpers.doesFileExist(this, info.mFileName, info.mTotalBytes, true)) {
+                    if ( !Helpers.doesFileExist ( this, info.mFileName, info.mTotalBytes, true ) ) {
                         info.mStatus = 0;
                         info.mCurrentBytes = 0;
                     }
@@ -1059,125 +1091,129 @@ public abstract class DownloaderService extends CustomIntentService implements I
 
             // loop through all downloads and fetch them
             pollNetworkState();
-            if (null == mConnReceiver) {
+            if ( null == mConnReceiver ) {
 
                 /**
                  * We use this to track network state, such as when WiFi,
                  * Cellular, etc. is enabled when downloads are paused or in
                  * progress.
                  */
-                mConnReceiver = new InnerBroadcastReceiver(this);
-                IntentFilter intentFilter = new IntentFilter(
-                        ConnectivityManager.CONNECTIVITY_ACTION);
-                intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-                registerReceiver(mConnReceiver, intentFilter);
+                mConnReceiver = new InnerBroadcastReceiver ( this );
+                IntentFilter intentFilter = new IntentFilter (
+                    ConnectivityManager.CONNECTIVITY_ACTION );
+                intentFilter.addAction ( WifiManager.WIFI_STATE_CHANGED_ACTION );
+                registerReceiver ( mConnReceiver, intentFilter );
             }
 
-            for (DownloadInfo info : infos) {
+            for ( DownloadInfo info : infos ) {
                 long startingCount = info.mCurrentBytes;
 
-                if (info.mStatus != STATUS_SUCCESS) {
-                    DownloadThread dt = new DownloadThread(info, this, mNotification);
+                if ( info.mStatus != STATUS_SUCCESS ) {
+                    DownloadThread dt = new DownloadThread ( info, this, mNotification );
                     cancelAlarms();
-                    scheduleAlarm(Constants.ACTIVE_THREAD_WATCHDOG);
+                    scheduleAlarm ( Constants.ACTIVE_THREAD_WATCHDOG );
                     dt.run();
                     cancelAlarms();
                 }
-                db.updateFromDb(info);
+                db.updateFromDb ( info );
                 boolean setWakeWatchdog = false;
                 int notifyStatus;
-                switch (info.mStatus) {
-                    case STATUS_FORBIDDEN:
-                        // the URL is out of date
-                        updateLVL(this);
-                        return;
-                    case STATUS_SUCCESS:
-                        mBytesSoFar += info.mCurrentBytes - startingCount;
-                        db.updateMetadata(mPackageInfo.versionCode, 0);
-                        continue;
-                    case STATUS_FILE_DELIVERED_INCORRECTLY:
-                        // we may be on a network that is returning us a web
-                        // page on redirect
-                        notifyStatus = IDownloaderClient.STATE_PAUSED_NETWORK_SETUP_FAILURE;
-                        info.mCurrentBytes = 0;
-                        db.updateDownload(info);
-                        setWakeWatchdog = true;
-                        break;
-                    case STATUS_PAUSED_BY_APP:
-                        notifyStatus = IDownloaderClient.STATE_PAUSED_BY_REQUEST;
-                        break;
-                    case STATUS_WAITING_FOR_NETWORK:
-                    case STATUS_WAITING_TO_RETRY:
-                        notifyStatus = IDownloaderClient.STATE_PAUSED_NETWORK_UNAVAILABLE;
-                        setWakeWatchdog = true;
-                        break;
-                    case STATUS_QUEUED_FOR_WIFI_OR_CELLULAR_PERMISSION:
-                    case STATUS_QUEUED_FOR_WIFI:
-                        // look for more detail here
-                        if (null != mWifiManager) {
-                            if (!mWifiManager.isWifiEnabled()) {
-                                notifyStatus = IDownloaderClient.STATE_PAUSED_WIFI_DISABLED_NEED_CELLULAR_PERMISSION;
-                                setWakeWatchdog = true;
-                                break;
-                            }
+                switch ( info.mStatus ) {
+                case STATUS_FORBIDDEN:
+                    // the URL is out of date
+                    updateLVL ( this );
+                    return;
+                case STATUS_SUCCESS:
+                    mBytesSoFar += info.mCurrentBytes - startingCount;
+                    db.updateMetadata ( mPackageInfo.versionCode, 0 );
+                    continue;
+                case STATUS_FILE_DELIVERED_INCORRECTLY:
+                    // we may be on a network that is returning us a web
+                    // page on redirect
+                    notifyStatus = IDownloaderClient.STATE_PAUSED_NETWORK_SETUP_FAILURE;
+                    info.mCurrentBytes = 0;
+                    db.updateDownload ( info );
+                    setWakeWatchdog = true;
+                    break;
+                case STATUS_PAUSED_BY_APP:
+                    notifyStatus = IDownloaderClient.STATE_PAUSED_BY_REQUEST;
+                    break;
+                case STATUS_WAITING_FOR_NETWORK:
+                case STATUS_WAITING_TO_RETRY:
+                    notifyStatus = IDownloaderClient.STATE_PAUSED_NETWORK_UNAVAILABLE;
+                    setWakeWatchdog = true;
+                    break;
+                case STATUS_QUEUED_FOR_WIFI_OR_CELLULAR_PERMISSION:
+                case STATUS_QUEUED_FOR_WIFI:
+                    // look for more detail here
+                    if ( null != mWifiManager ) {
+                        if ( !mWifiManager.isWifiEnabled() ) {
+                            notifyStatus = IDownloaderClient.STATE_PAUSED_WIFI_DISABLED_NEED_CELLULAR_PERMISSION;
+                            setWakeWatchdog = true;
+                            break;
                         }
-                        notifyStatus = IDownloaderClient.STATE_PAUSED_NEED_CELLULAR_PERMISSION;
-                        setWakeWatchdog = true;
-                        break;
-                    case STATUS_CANCELED:
-                        notifyStatus = IDownloaderClient.STATE_FAILED_CANCELED;
-                        setWakeWatchdog = true;
-                        break;
+                    }
+                    notifyStatus = IDownloaderClient.STATE_PAUSED_NEED_CELLULAR_PERMISSION;
+                    setWakeWatchdog = true;
+                    break;
+                case STATUS_CANCELED:
+                    notifyStatus = IDownloaderClient.STATE_FAILED_CANCELED;
+                    setWakeWatchdog = true;
+                    break;
 
-                    case STATUS_INSUFFICIENT_SPACE_ERROR:
-                        notifyStatus = IDownloaderClient.STATE_FAILED_SDCARD_FULL;
-                        setWakeWatchdog = true;
-                        break;
+                case STATUS_INSUFFICIENT_SPACE_ERROR:
+                    notifyStatus = IDownloaderClient.STATE_FAILED_SDCARD_FULL;
+                    setWakeWatchdog = true;
+                    break;
 
-                    case STATUS_DEVICE_NOT_FOUND_ERROR:
-                        notifyStatus = IDownloaderClient.STATE_PAUSED_SDCARD_UNAVAILABLE;
-                        setWakeWatchdog = true;
-                        break;
+                case STATUS_DEVICE_NOT_FOUND_ERROR:
+                    notifyStatus = IDownloaderClient.STATE_PAUSED_SDCARD_UNAVAILABLE;
+                    setWakeWatchdog = true;
+                    break;
 
-                    default:
-                        notifyStatus = IDownloaderClient.STATE_FAILED;
-                        break;
+                default:
+                    notifyStatus = IDownloaderClient.STATE_FAILED;
+                    break;
                 }
-                if (setWakeWatchdog) {
-                    scheduleAlarm(Constants.WATCHDOG_WAKE_TIMER);
+                if ( setWakeWatchdog ) {
+                    scheduleAlarm ( Constants.WATCHDOG_WAKE_TIMER );
                 } else {
                     cancelAlarms();
                 }
                 // failure or pause state
-                mNotification.onDownloadStateChanged(notifyStatus);
+                mNotification.onDownloadStateChanged ( notifyStatus );
                 return;
             }
 
             // all downloads complete
-            mNotification.onDownloadStateChanged(IDownloaderClient.STATE_COMPLETED);
+            mNotification.onDownloadStateChanged ( IDownloaderClient.STATE_COMPLETED );
         } finally {
-            setServiceRunning(false);
+            setServiceRunning ( false );
         }
     }
 
     @Override
-    public void onDestroy() {
-        if (null != mConnReceiver) {
-            unregisterReceiver(mConnReceiver);
+    public void onDestroy()
+    {
+        if ( null != mConnReceiver ) {
+            unregisterReceiver ( mConnReceiver );
             mConnReceiver = null;
         }
-        mServiceStub.disconnect(this);
+        mServiceStub.disconnect ( this );
         super.onDestroy();
     }
 
-    public int getNetworkAvailabilityState(DownloadsDB db) {
-        if (mIsConnected) {
-            if (!mIsCellularConnection)
+    public int getNetworkAvailabilityState ( DownloadsDB db )
+    {
+        if ( mIsConnected ) {
+            if ( !mIsCellularConnection ) {
                 return NETWORK_OK;
+            }
             int flags = db.mFlags;
-            if (mIsRoaming)
+            if ( mIsRoaming ) {
                 return NETWORK_CANNOT_USE_ROAMING;
-            if (0 != (flags & FLAGS_DOWNLOAD_OVER_CELLULAR)) {
+            }
+            if ( 0 != ( flags & FLAGS_DOWNLOAD_OVER_CELLULAR ) ) {
                 return NETWORK_OK;
             } else {
                 return NETWORK_TYPE_DISALLOWED_BY_REQUESTOR;
@@ -1187,16 +1223,17 @@ public abstract class DownloaderService extends CustomIntentService implements I
     }
 
     @Override
-    public void onCreate() {
+    public void onCreate()
+    {
         super.onCreate();
         try {
-            mPackageInfo = getPackageManager().getPackageInfo(
-                    getPackageName(), 0);
+            mPackageInfo = getPackageManager().getPackageInfo (
+                               getPackageName(), 0 );
             ApplicationInfo ai = getApplicationInfo();
-            CharSequence applicationLabel = getPackageManager().getApplicationLabel(ai);
-            mNotification = new DownloadNotification(this, applicationLabel);
+            CharSequence applicationLabel = getPackageManager().getApplicationLabel ( ai );
+            mNotification = new DownloadNotification ( this, applicationLabel );
 
-        } catch (NameNotFoundException e) {
+        } catch ( NameNotFoundException e ) {
             e.printStackTrace();
         }
     }
@@ -1205,12 +1242,14 @@ public abstract class DownloaderService extends CustomIntentService implements I
      * Exception thrown from methods called by generateSaveFile() for any fatal
      * error.
      */
-    public static class GenerateSaveFileError extends Exception {
+    public static class GenerateSaveFileError extends Exception
+    {
         private static final long serialVersionUID = 3465966015408936540L;
         int mStatus;
         String mMessage;
 
-        public GenerateSaveFileError(int status, String message) {
+        public GenerateSaveFileError ( int status, String message )
+        {
             mStatus = status;
             mMessage = message;
         }
@@ -1220,9 +1259,10 @@ public abstract class DownloaderService extends CustomIntentService implements I
      * Returns the filename (where the file should be saved) from info about a
      * download
      */
-    public String generateTempSaveFileName(String fileName) {
-        String path = Helpers.getSaveFilePath(this)
-                + File.separator + fileName + TEMP_EXT;
+    public String generateTempSaveFileName ( String fileName )
+    {
+        String path = Helpers.getSaveFilePath ( this )
+                      + File.separator + fileName + TEMP_EXT;
         return path;
     }
 
@@ -1230,24 +1270,25 @@ public abstract class DownloaderService extends CustomIntentService implements I
      * Creates a filename (where the file should be saved) from info about a
      * download.
      */
-    public String generateSaveFile(String filename, long filesize)
-            throws GenerateSaveFileError {
-        String path = generateTempSaveFileName(filename);
-        File expPath = new File(path);
-        if (!Helpers.isExternalMediaMounted()) {
-            Log.d(Constants.TAG, "External media not mounted: " + path);
-            throw new GenerateSaveFileError(STATUS_DEVICE_NOT_FOUND_ERROR,
-                    "external media is not yet mounted");
+    public String generateSaveFile ( String filename, long filesize )
+    throws GenerateSaveFileError
+    {
+        String path = generateTempSaveFileName ( filename );
+        File expPath = new File ( path );
+        if ( !Helpers.isExternalMediaMounted() ) {
+            Log.d ( Constants.TAG, "External media not mounted: " + path );
+            throw new GenerateSaveFileError ( STATUS_DEVICE_NOT_FOUND_ERROR,
+                                              "external media is not yet mounted" );
 
         }
-        if (expPath.exists()) {
-            Log.d(Constants.TAG, "File already exists: " + path);
-            throw new GenerateSaveFileError(STATUS_FILE_ALREADY_EXISTS_ERROR,
-                    "requested destination file already exists");
+        if ( expPath.exists() ) {
+            Log.d ( Constants.TAG, "File already exists: " + path );
+            throw new GenerateSaveFileError ( STATUS_FILE_ALREADY_EXISTS_ERROR,
+                                              "requested destination file already exists" );
         }
-        if (Helpers.getAvailableBytes(Helpers.getFilesystemRoot(path)) < filesize) {
-            throw new GenerateSaveFileError(STATUS_INSUFFICIENT_SPACE_ERROR,
-                    "insufficient space on external storage");
+        if ( Helpers.getAvailableBytes ( Helpers.getFilesystemRoot ( path ) ) < filesize ) {
+            throw new GenerateSaveFileError ( STATUS_INSUFFICIENT_SPACE_ERROR,
+                                              "insufficient space on external storage" );
         }
         return path;
     }
@@ -1256,33 +1297,36 @@ public abstract class DownloaderService extends CustomIntentService implements I
      * @return a non-localized string appropriate for logging corresponding to
      *         one of the NETWORK_* constants.
      */
-    public String getLogMessageForNetworkError(int networkError) {
-        switch (networkError) {
-            case NETWORK_RECOMMENDED_UNUSABLE_DUE_TO_SIZE:
-                return "download size exceeds recommended limit for mobile network";
+    public String getLogMessageForNetworkError ( int networkError )
+    {
+        switch ( networkError ) {
+        case NETWORK_RECOMMENDED_UNUSABLE_DUE_TO_SIZE:
+            return "download size exceeds recommended limit for mobile network";
 
-            case NETWORK_UNUSABLE_DUE_TO_SIZE:
-                return "download size exceeds limit for mobile network";
+        case NETWORK_UNUSABLE_DUE_TO_SIZE:
+            return "download size exceeds limit for mobile network";
 
-            case NETWORK_NO_CONNECTION:
-                return "no network connection available";
+        case NETWORK_NO_CONNECTION:
+            return "no network connection available";
 
-            case NETWORK_CANNOT_USE_ROAMING:
-                return "download cannot use the current network connection because it is roaming";
+        case NETWORK_CANNOT_USE_ROAMING:
+            return "download cannot use the current network connection because it is roaming";
 
-            case NETWORK_TYPE_DISALLOWED_BY_REQUESTOR:
-                return "download was requested to not use the current network type";
+        case NETWORK_TYPE_DISALLOWED_BY_REQUESTOR:
+            return "download was requested to not use the current network type";
 
-            default:
-                return "unknown error with network connectivity";
+        default:
+            return "unknown error with network connectivity";
         }
     }
 
-    public int getControl() {
+    public int getControl()
+    {
         return mControl;
     }
 
-    public int getStatus() {
+    public int getStatus()
+    {
         return mStatus;
     }
 
@@ -1292,55 +1336,59 @@ public abstract class DownloaderService extends CustomIntentService implements I
      */
     static private final float SMOOTHING_FACTOR = 0.005f;
 
-    public void notifyUpdateBytes(long totalBytesSoFar) {
+    public void notifyUpdateBytes ( long totalBytesSoFar )
+    {
         long timeRemaining;
         long currentTime = SystemClock.uptimeMillis();
-        if (0 != mMillisecondsAtSample) {
+        if ( 0 != mMillisecondsAtSample ) {
             // we have a sample.
             long timePassed = currentTime - mMillisecondsAtSample;
             long bytesInSample = totalBytesSoFar - mBytesAtSample;
-            float currentSpeedSample = (float) bytesInSample / (float) timePassed;
-            if (0 != mAverageDownloadSpeed) {
+            float currentSpeedSample = ( float ) bytesInSample / ( float ) timePassed;
+            if ( 0 != mAverageDownloadSpeed ) {
                 mAverageDownloadSpeed = SMOOTHING_FACTOR * currentSpeedSample
-                        + (1 - SMOOTHING_FACTOR) * mAverageDownloadSpeed;
+                                        + ( 1 - SMOOTHING_FACTOR ) * mAverageDownloadSpeed;
             } else {
                 mAverageDownloadSpeed = currentSpeedSample;
             }
-            timeRemaining = (long) ((mTotalLength - totalBytesSoFar) / mAverageDownloadSpeed);
+            timeRemaining = ( long ) ( ( mTotalLength - totalBytesSoFar ) / mAverageDownloadSpeed );
         } else {
             timeRemaining = -1;
         }
         mMillisecondsAtSample = currentTime;
         mBytesAtSample = totalBytesSoFar;
-        mNotification.onDownloadProgress(
-                new DownloadProgressInfo(mTotalLength,
-                        totalBytesSoFar,
-                        timeRemaining,
-                        mAverageDownloadSpeed)
-                );
+        mNotification.onDownloadProgress (
+            new DownloadProgressInfo ( mTotalLength,
+                                       totalBytesSoFar,
+                                       timeRemaining,
+                                       mAverageDownloadSpeed )
+        );
 
     }
 
     @Override
-    protected boolean shouldStop() {
+    protected boolean shouldStop()
+    {
         // the database automatically reads the metadata for version code
         // and download status when the instance is created
-        DownloadsDB db = DownloadsDB.getDB(this);
-        if (db.mStatus == 0) {
+        DownloadsDB db = DownloadsDB.getDB ( this );
+        if ( db.mStatus == 0 ) {
             return true;
         }
         return false;
     }
 
     @Override
-    public void requestDownloadStatus() {
+    public void requestDownloadStatus()
+    {
         mNotification.resendState();
     }
 
     @Override
-    public void onClientUpdated(Messenger clientMessenger) {
+    public void onClientUpdated ( Messenger clientMessenger )
+    {
         this.mClientMessenger = clientMessenger;
-        mNotification.setMessenger(mClientMessenger);
+        mNotification.setMessenger ( mClientMessenger );
     }
 
 }

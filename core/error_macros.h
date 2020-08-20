@@ -36,37 +36,37 @@
 class String;
 
 enum ErrorHandlerType {
-	ERR_HANDLER_ERROR,
-	ERR_HANDLER_WARNING,
-	ERR_HANDLER_SCRIPT,
-	ERR_HANDLER_SHADER,
+    ERR_HANDLER_ERROR,
+    ERR_HANDLER_WARNING,
+    ERR_HANDLER_SCRIPT,
+    ERR_HANDLER_SHADER,
 };
 
 // Pointer to the error handler printing function. Reassign to any function to have errors printed.
 // Parameters: userdata, function, file, line, error, explanation, type.
-typedef void (*ErrorHandlerFunc)(void *, const char *, const char *, int p_line, const char *, const char *, ErrorHandlerType p_type);
+typedef void ( *ErrorHandlerFunc ) ( void *, const char *, const char *, int p_line, const char *, const char *, ErrorHandlerType p_type );
 
 struct ErrorHandlerList {
-	ErrorHandlerFunc errfunc = nullptr;
-	void *userdata = nullptr;
+    ErrorHandlerFunc errfunc = nullptr;
+    void *userdata = nullptr;
 
-	ErrorHandlerList *next = nullptr;
+    ErrorHandlerList *next = nullptr;
 
-	ErrorHandlerList() {}
+    ErrorHandlerList() {}
 };
 
-void add_error_handler(ErrorHandlerList *p_handler);
-void remove_error_handler(ErrorHandlerList *p_handler);
+void add_error_handler ( ErrorHandlerList *p_handler );
+void remove_error_handler ( ErrorHandlerList *p_handler );
 
 // Functions used by the error macros.
-void _err_print_error(const char *p_function, const char *p_file, int p_line, const char *p_error, ErrorHandlerType p_type = ERR_HANDLER_ERROR);
-void _err_print_error(const char *p_function, const char *p_file, int p_line, const String &p_error, ErrorHandlerType p_type = ERR_HANDLER_ERROR);
-void _err_print_error(const char *p_function, const char *p_file, int p_line, const char *p_error, const char *p_message, ErrorHandlerType p_type = ERR_HANDLER_ERROR);
-void _err_print_error(const char *p_function, const char *p_file, int p_line, const String &p_error, const char *p_message, ErrorHandlerType p_type = ERR_HANDLER_ERROR);
-void _err_print_error(const char *p_function, const char *p_file, int p_line, const char *p_error, const String &p_message, ErrorHandlerType p_type = ERR_HANDLER_ERROR);
-void _err_print_error(const char *p_function, const char *p_file, int p_line, const String &p_error, const String &p_message, ErrorHandlerType p_type = ERR_HANDLER_ERROR);
-void _err_print_index_error(const char *p_function, const char *p_file, int p_line, int64_t p_index, int64_t p_size, const char *p_index_str, const char *p_size_str, const char *p_message = "", bool fatal = false);
-void _err_print_index_error(const char *p_function, const char *p_file, int p_line, int64_t p_index, int64_t p_size, const char *p_index_str, const char *p_size_str, const String &p_message, bool fatal = false);
+void _err_print_error ( const char *p_function, const char *p_file, int p_line, const char *p_error, ErrorHandlerType p_type = ERR_HANDLER_ERROR );
+void _err_print_error ( const char *p_function, const char *p_file, int p_line, const String &p_error, ErrorHandlerType p_type = ERR_HANDLER_ERROR );
+void _err_print_error ( const char *p_function, const char *p_file, int p_line, const char *p_error, const char *p_message, ErrorHandlerType p_type = ERR_HANDLER_ERROR );
+void _err_print_error ( const char *p_function, const char *p_file, int p_line, const String &p_error, const char *p_message, ErrorHandlerType p_type = ERR_HANDLER_ERROR );
+void _err_print_error ( const char *p_function, const char *p_file, int p_line, const char *p_error, const String &p_message, ErrorHandlerType p_type = ERR_HANDLER_ERROR );
+void _err_print_error ( const char *p_function, const char *p_file, int p_line, const String &p_error, const String &p_message, ErrorHandlerType p_type = ERR_HANDLER_ERROR );
+void _err_print_index_error ( const char *p_function, const char *p_file, int p_line, int64_t p_index, int64_t p_size, const char *p_index_str, const char *p_size_str, const char *p_message = "", bool fatal = false );
+void _err_print_index_error ( const char *p_function, const char *p_file, int p_line, int64_t p_index, int64_t p_size, const char *p_index_str, const char *p_size_str, const String &p_message, bool fatal = false );
 
 #ifdef __GNUC__
 //#define FUNCTION_STR __PRETTY_FUNCTION__ - too annoying

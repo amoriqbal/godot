@@ -62,15 +62,15 @@ struct aiFileIO;
 struct aiFile;
 
 // aiFile callbacks
-typedef size_t          (*aiFileWriteProc) (C_STRUCT aiFile*,   const char*, size_t, size_t);
-typedef size_t          (*aiFileReadProc)  (C_STRUCT aiFile*,   char*, size_t,size_t);
-typedef size_t          (*aiFileTellProc)  (C_STRUCT aiFile*);
-typedef void            (*aiFileFlushProc) (C_STRUCT aiFile*);
-typedef C_ENUM aiReturn (*aiFileSeek)      (C_STRUCT aiFile*, size_t, C_ENUM aiOrigin);
+typedef size_t ( *aiFileWriteProc ) ( C_STRUCT aiFile*,   const char*, size_t, size_t );
+typedef size_t ( *aiFileReadProc ) ( C_STRUCT aiFile*,   char*, size_t,size_t );
+typedef size_t ( *aiFileTellProc ) ( C_STRUCT aiFile* );
+typedef void ( *aiFileFlushProc ) ( C_STRUCT aiFile* );
+typedef C_ENUM aiReturn ( *aiFileSeek ) ( C_STRUCT aiFile*, size_t, C_ENUM aiOrigin );
 
 // aiFileIO callbacks
-typedef C_STRUCT aiFile* (*aiFileOpenProc)  (C_STRUCT aiFileIO*, const char*, const char*);
-typedef void             (*aiFileCloseProc) (C_STRUCT aiFileIO*, C_STRUCT aiFile*);
+typedef C_STRUCT aiFile* ( *aiFileOpenProc ) ( C_STRUCT aiFileIO*, const char*, const char* );
+typedef void ( *aiFileCloseProc ) ( C_STRUCT aiFileIO*, C_STRUCT aiFile* );
 
 // Represents user-defined data
 typedef char* aiUserData;
@@ -82,8 +82,7 @@ typedef char* aiUserData;
  *  the import function. If you don't, a default implementation is used. Use custom
  *  file systems to enable reading from other sources, such as ZIPs
  *  or memory locations. */
-struct aiFileIO
-{
+struct aiFileIO {
     /** Function used to open a new file
      */
     aiFileOpenProc OpenProc;
@@ -106,8 +105,7 @@ struct aiFileIO
  *  the CRT. However, you can supply a custom implementation to Assimp by
  *  delivering a custom aiFileIO. Use this to enable reading from other sources,
  *  such as ZIP archives or memory locations. */
-struct aiFile
-{
+struct aiFile {
     /** Callback to read from a file */
     aiFileReadProc ReadProc;
 

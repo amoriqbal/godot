@@ -52,11 +52,13 @@
 // - The compute velocity function now need the timeStep.
 // - Moved the `Plane` class here.
 // - Added a new parameter `ignore_y_` in the `Agent`. This parameter is used to control a godot feature that allows to avoid collisions by moving on the horizontal plane.
-namespace RVO {
+namespace RVO
+{
 /**
      * \brief   Defines a plane.
      */
-class Plane {
+class Plane
+{
 public:
     /**
          * \brief   A point on the plane.
@@ -72,31 +74,32 @@ public:
 /**
      * \brief   Defines an agent in the simulation.
      */
-class Agent {
+class Agent
+{
 
 public:
     /**
-		 * \brief   Constructs an agent instance.
-		 * \param   sim  The simulator instance.
-		 */
+    	 * \brief   Constructs an agent instance.
+    	 * \param   sim  The simulator instance.
+    	 */
     explicit Agent();
 
     /**
-		 * \brief   Computes the neighbors of this agent.
-		 */
-    void computeNeighbors(class KdTree *kdTree_);
+    	 * \brief   Computes the neighbors of this agent.
+    	 */
+    void computeNeighbors ( class KdTree *kdTree_ );
 
     /**
-		 * \brief   Computes the new velocity of this agent.
-		 */
-    void computeNewVelocity(float timeStep);
+    	 * \brief   Computes the new velocity of this agent.
+    	 */
+    void computeNewVelocity ( float timeStep );
 
     /**
-		 * \brief   Inserts an agent neighbor into the set of neighbors of this agent.
-		 * \param   agent    A pointer to the agent to be inserted.
-		 * \param   rangeSq  The squared range around this agent.
-		 */
-    void insertAgentNeighbor(const Agent *agent, float &rangeSq);
+    	 * \brief   Inserts an agent neighbor into the set of neighbors of this agent.
+    	 * \param   agent    A pointer to the agent to be inserted.
+    	 * \param   rangeSq  The squared range around this agent.
+    	 */
+    void insertAgentNeighbor ( const Agent *agent, float &rangeSq );
 
     Vector3 newVelocity_;
     Vector3 position_;

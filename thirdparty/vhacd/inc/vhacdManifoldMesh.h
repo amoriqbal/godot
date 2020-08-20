@@ -18,18 +18,20 @@ All rights reserved.
 #include "vhacdCircularList.h"
 #include "vhacdSArray.h"
 #include "vhacdVector.h"
-namespace VHACD {
+namespace VHACD
+{
 class TMMTriangle;
 class TMMEdge;
 class TMMesh;
 class ICHull;
 
 //!    Vertex data structure used in a triangular manifold mesh (TMM).
-class TMMVertex {
+class TMMVertex
+{
 public:
     void Initialize();
-    TMMVertex(void);
-    ~TMMVertex(void);
+    TMMVertex ( void );
+    ~TMMVertex ( void );
 
 private:
     Vec3<double> m_pos;
@@ -38,7 +40,7 @@ private:
     CircularListElement<TMMEdge>* m_duplicate; // pointer to incident cone edge (or NULL)
     bool m_onHull;
     bool m_tag;
-    TMMVertex(const TMMVertex& rhs);
+    TMMVertex ( const TMMVertex& rhs );
     friend class ICHull;
     friend class TMMesh;
     friend class TMMTriangle;
@@ -46,18 +48,19 @@ private:
 };
 
 //!    Edge data structure used in a triangular manifold mesh (TMM).
-class TMMEdge {
+class TMMEdge
+{
 public:
     void Initialize();
-    TMMEdge(void);
-    ~TMMEdge(void);
+    TMMEdge ( void );
+    ~TMMEdge ( void );
 
 private:
     size_t m_id;
     CircularListElement<TMMTriangle>* m_triangles[2];
     CircularListElement<TMMVertex>* m_vertices[2];
     CircularListElement<TMMTriangle>* m_newFace;
-    TMMEdge(const TMMEdge& rhs);
+    TMMEdge ( const TMMEdge& rhs );
     friend class ICHull;
     friend class TMMTriangle;
     friend class TMMVertex;
@@ -65,11 +68,12 @@ private:
 };
 
 //!    Triangle data structure used in a triangular manifold mesh (TMM).
-class TMMTriangle {
+class TMMTriangle
+{
 public:
     void Initialize();
-    TMMTriangle(void);
-    ~TMMTriangle(void);
+    TMMTriangle ( void );
+    ~TMMTriangle ( void );
 
 private:
     size_t m_id;
@@ -77,47 +81,84 @@ private:
     CircularListElement<TMMVertex>* m_vertices[3];
     bool m_visible;
 
-    TMMTriangle(const TMMTriangle& rhs);
+    TMMTriangle ( const TMMTriangle& rhs );
     friend class ICHull;
     friend class TMMesh;
     friend class TMMVertex;
     friend class TMMEdge;
 };
 //!    triangular manifold mesh data structure.
-class TMMesh {
+class TMMesh
+{
 public:
     //! Returns the number of vertices>
-    inline size_t GetNVertices() const { return m_vertices.GetSize(); }
+    inline size_t GetNVertices() const
+    {
+        return m_vertices.GetSize();
+    }
     //! Returns the number of edges
-    inline size_t GetNEdges() const { return m_edges.GetSize(); }
+    inline size_t GetNEdges() const
+    {
+        return m_edges.GetSize();
+    }
     //! Returns the number of triangles
-    inline size_t GetNTriangles() const { return m_triangles.GetSize(); }
+    inline size_t GetNTriangles() const
+    {
+        return m_triangles.GetSize();
+    }
     //! Returns the vertices circular list
-    inline const CircularList<TMMVertex>& GetVertices() const { return m_vertices; }
+    inline const CircularList<TMMVertex>& GetVertices() const
+    {
+        return m_vertices;
+    }
     //! Returns the edges circular list
-    inline const CircularList<TMMEdge>& GetEdges() const { return m_edges; }
+    inline const CircularList<TMMEdge>& GetEdges() const
+    {
+        return m_edges;
+    }
     //! Returns the triangles circular list
-    inline const CircularList<TMMTriangle>& GetTriangles() const { return m_triangles; }
+    inline const CircularList<TMMTriangle>& GetTriangles() const
+    {
+        return m_triangles;
+    }
     //! Returns the vertices circular list
-    inline CircularList<TMMVertex>& GetVertices() { return m_vertices; }
+    inline CircularList<TMMVertex>& GetVertices()
+    {
+        return m_vertices;
+    }
     //! Returns the edges circular list
-    inline CircularList<TMMEdge>& GetEdges() { return m_edges; }
+    inline CircularList<TMMEdge>& GetEdges()
+    {
+        return m_edges;
+    }
     //! Returns the triangles circular list
-    inline CircularList<TMMTriangle>& GetTriangles() { return m_triangles; }
+    inline CircularList<TMMTriangle>& GetTriangles()
+    {
+        return m_triangles;
+    }
     //! Add vertex to the mesh
-    CircularListElement<TMMVertex>* AddVertex() { return m_vertices.Add(); }
+    CircularListElement<TMMVertex>* AddVertex()
+    {
+        return m_vertices.Add();
+    }
     //! Add vertex to the mesh
-    CircularListElement<TMMEdge>* AddEdge() { return m_edges.Add(); }
+    CircularListElement<TMMEdge>* AddEdge()
+    {
+        return m_edges.Add();
+    }
     //! Add vertex to the mesh
-    CircularListElement<TMMTriangle>* AddTriangle() { return m_triangles.Add(); }
+    CircularListElement<TMMTriangle>* AddTriangle()
+    {
+        return m_triangles.Add();
+    }
     //! Print mesh information
     void Print();
     //!
-    void GetIFS(Vec3<double>* const points, Vec3<int32_t>* const triangles);
+    void GetIFS ( Vec3<double>* const points, Vec3<int32_t>* const triangles );
     //!
     void Clear();
     //!
-    void Copy(TMMesh& mesh);
+    void Copy ( TMMesh& mesh );
     //!
     bool CheckConsistancy();
     //!
@@ -127,7 +168,7 @@ public:
     //!    Constructor
     TMMesh();
     //! Destructor
-    virtual ~TMMesh(void);
+    virtual ~TMMesh ( void );
 
 private:
     CircularList<TMMVertex> m_vertices;
@@ -135,7 +176,7 @@ private:
     CircularList<TMMTriangle> m_triangles;
 
     // not defined
-    TMMesh(const TMMesh& rhs);
+    TMMesh ( const TMMesh& rhs );
     friend class ICHull;
 };
 }

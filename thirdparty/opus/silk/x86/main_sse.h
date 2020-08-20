@@ -36,7 +36,7 @@
 
 #  define OVERRIDE_silk_VQ_WMat_EC
 
-void silk_VQ_WMat_EC_sse4_1(
+void silk_VQ_WMat_EC_sse4_1 (
     opus_int8                   *ind,                           /* O    index of best codebook vector               */
     opus_int32                  *rate_dist_Q14,                 /* O    best weighted quant error + mu * rate       */
     opus_int                    *gain_Q7,                       /* O    sum of absolute LTP coefficients            */
@@ -59,7 +59,7 @@ void silk_VQ_WMat_EC_sse4_1(
 
 #else
 
-extern void (*const SILK_VQ_WMAT_EC_IMPL[OPUS_ARCHMASK + 1])(
+extern void ( *const SILK_VQ_WMAT_EC_IMPL[OPUS_ARCHMASK + 1] ) (
     opus_int8                   *ind,                           /* O    index of best codebook vector               */
     opus_int32                  *rate_dist_Q14,                 /* O    best weighted quant error + mu * rate       */
     opus_int                    *gain_Q7,                       /* O    sum of absolute LTP coefficients            */
@@ -82,7 +82,7 @@ extern void (*const SILK_VQ_WMAT_EC_IMPL[OPUS_ARCHMASK + 1])(
 
 #  define OVERRIDE_silk_NSQ
 
-void silk_NSQ_sse4_1(
+void silk_NSQ_sse4_1 (
     const silk_encoder_state    *psEncC,                                    /* I/O  Encoder State                   */
     silk_nsq_state              *NSQ,                                       /* I/O  NSQ state                       */
     SideInfoIndices             *psIndices,                                 /* I/O  Quantization Indices            */
@@ -109,7 +109,7 @@ void silk_NSQ_sse4_1(
 
 #else
 
-extern void (*const SILK_NSQ_IMPL[OPUS_ARCHMASK + 1])(
+extern void ( *const SILK_NSQ_IMPL[OPUS_ARCHMASK + 1] ) (
     const silk_encoder_state    *psEncC,                                    /* I/O  Encoder State                   */
     silk_nsq_state              *NSQ,                                       /* I/O  NSQ state                       */
     SideInfoIndices             *psIndices,                                 /* I/O  Quantization Indices            */
@@ -136,7 +136,7 @@ extern void (*const SILK_NSQ_IMPL[OPUS_ARCHMASK + 1])(
 
 #  define OVERRIDE_silk_NSQ_del_dec
 
-void silk_NSQ_del_dec_sse4_1(
+void silk_NSQ_del_dec_sse4_1 (
     const silk_encoder_state    *psEncC,                                    /* I/O  Encoder State                   */
     silk_nsq_state              *NSQ,                                       /* I/O  NSQ state                       */
     SideInfoIndices             *psIndices,                                 /* I/O  Quantization Indices            */
@@ -163,7 +163,7 @@ void silk_NSQ_del_dec_sse4_1(
 
 #else
 
-extern void (*const SILK_NSQ_DEL_DEC_IMPL[OPUS_ARCHMASK + 1])(
+extern void ( *const SILK_NSQ_DEL_DEC_IMPL[OPUS_ARCHMASK + 1] ) (
     const silk_encoder_state    *psEncC,                                    /* I/O  Encoder State                   */
     silk_nsq_state              *NSQ,                                       /* I/O  NSQ state                       */
     SideInfoIndices             *psIndices,                                 /* I/O  Quantization Indices            */
@@ -188,7 +188,7 @@ extern void (*const SILK_NSQ_DEL_DEC_IMPL[OPUS_ARCHMASK + 1])(
 
 #endif
 
-void silk_noise_shape_quantizer(
+void silk_noise_shape_quantizer (
     silk_nsq_state      *NSQ,                   /* I/O  NSQ state                       */
     opus_int            signalType,             /* I    Signal type                     */
     const opus_int32    x_sc_Q10[],             /* I                                    */
@@ -214,14 +214,14 @@ void silk_noise_shape_quantizer(
 /**************************/
 /* Noise level estimation */
 /**************************/
-void silk_VAD_GetNoiseLevels(
+void silk_VAD_GetNoiseLevels (
     const opus_int32            pX[ VAD_N_BANDS ],  /* I    subband energies                            */
     silk_VAD_state              *psSilk_VAD         /* I/O  Pointer to Silk VAD state                   */
 );
 
 #  define OVERRIDE_silk_VAD_GetSA_Q8
 
-opus_int silk_VAD_GetSA_Q8_sse4_1(
+opus_int silk_VAD_GetSA_Q8_sse4_1 (
     silk_encoder_state *psEnC,
     const opus_int16   pIn[]
 );
@@ -234,17 +234,17 @@ opus_int silk_VAD_GetSA_Q8_sse4_1(
 #  define silk_VAD_GetSA_Q8(psEnC, pIn, arch) \
      ((*SILK_VAD_GETSA_Q8_IMPL[(arch) & OPUS_ARCHMASK])(psEnC, pIn))
 
-extern opus_int (*const SILK_VAD_GETSA_Q8_IMPL[OPUS_ARCHMASK + 1])(
-     silk_encoder_state *psEnC,
-     const opus_int16   pIn[]);
+extern opus_int ( *const SILK_VAD_GETSA_Q8_IMPL[OPUS_ARCHMASK + 1] ) (
+    silk_encoder_state *psEnC,
+    const opus_int16   pIn[] );
 
 #  define OVERRIDE_silk_warped_LPC_analysis_filter_FIX
 
 #endif
 
-void silk_warped_LPC_analysis_filter_FIX_sse4_1(
-          opus_int32            state[],                    /* I/O  State [order + 1]                   */
-          opus_int32            res_Q2[],                   /* O    Residual signal [length]            */
+void silk_warped_LPC_analysis_filter_FIX_sse4_1 (
+    opus_int32            state[],                    /* I/O  State [order + 1]                   */
+    opus_int32            res_Q2[],                   /* O    Residual signal [length]            */
     const opus_int16            coef_Q13[],                 /* I    Coefficients [order]                */
     const opus_int16            input[],                    /* I    Input signal [length]               */
     const opus_int16            lambda_Q16,                 /* I    Warping factor                      */
@@ -258,9 +258,9 @@ void silk_warped_LPC_analysis_filter_FIX_sse4_1(
 
 #else
 
-extern void (*const SILK_WARPED_LPC_ANALYSIS_FILTER_FIX_IMPL[OPUS_ARCHMASK + 1])(
-          opus_int32            state[],                    /* I/O  State [order + 1]                   */
-          opus_int32            res_Q2[],                   /* O    Residual signal [length]            */
+extern void ( *const SILK_WARPED_LPC_ANALYSIS_FILTER_FIX_IMPL[OPUS_ARCHMASK + 1] ) (
+    opus_int32            state[],                    /* I/O  State [order + 1]                   */
+    opus_int32            res_Q2[],                   /* O    Residual signal [length]            */
     const opus_int16            coef_Q13[],                 /* I    Coefficients [order]                */
     const opus_int16            input[],                    /* I    Input signal [length]               */
     const opus_int16            lambda_Q16,                 /* I    Warping factor                      */

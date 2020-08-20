@@ -44,29 +44,30 @@
 
 #include "editor_scale.h"
 
-class EditorAbout : public AcceptDialog {
-	GDCLASS(EditorAbout, AcceptDialog);
+class EditorAbout : public AcceptDialog
+{
+    GDCLASS ( EditorAbout, AcceptDialog );
 
 private:
-	void _license_tree_selected();
-	ScrollContainer *_populate_list(const String &p_name, const List<String> &p_sections, const char *const *const p_src[], const int p_flag_single_column = 0);
+    void _license_tree_selected();
+    ScrollContainer *_populate_list ( const String &p_name, const List<String> &p_sections, const char *const *const p_src[], const int p_flag_single_column = 0 );
 
-	Tree *_tpl_tree;
-	RichTextLabel *_license_text;
-	RichTextLabel *_tpl_text;
-	TextureRect *_logo;
+    Tree *_tpl_tree;
+    RichTextLabel *_license_text;
+    RichTextLabel *_tpl_text;
+    TextureRect *_logo;
 
-	void _theme_changed();
+    void _theme_changed();
 
 protected:
-	void _notification(int p_what);
-	static void _bind_methods();
+    void _notification ( int p_what );
+    static void _bind_methods();
 
 public:
-	TextureRect *get_logo() const;
+    TextureRect *get_logo() const;
 
-	EditorAbout();
-	~EditorAbout();
+    EditorAbout();
+    ~EditorAbout();
 };
 
 #endif

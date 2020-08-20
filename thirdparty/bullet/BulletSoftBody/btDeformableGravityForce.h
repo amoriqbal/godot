@@ -1,6 +1,6 @@
 /*
  Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
- 
+
  Bullet Continuous Collision Detection and Physics Library
  Copyright (c) 2019 Google Inc. http://bulletphysics.org
  This software is provided 'as-is', without any express or implied warranty.
@@ -23,85 +23,78 @@ class btDeformableGravityForce : public btDeformableLagrangianForce
 public:
     typedef btAlignedObjectArray<btVector3> TVStack;
     btVector3 m_gravity;
-    
-    btDeformableGravityForce(const btVector3& g) : m_gravity(g)
+
+    btDeformableGravityForce ( const btVector3& g ) : m_gravity ( g )
     {
     }
-    
-    virtual void addScaledForces(btScalar scale, TVStack& force)
+
+    virtual void addScaledForces ( btScalar scale, TVStack& force )
     {
-        addScaledGravityForce(scale, force);
+        addScaledGravityForce ( scale, force );
     }
-    
-    virtual void addScaledExplicitForce(btScalar scale, TVStack& force)
+
+    virtual void addScaledExplicitForce ( btScalar scale, TVStack& force )
     {
-        addScaledGravityForce(scale, force);
+        addScaledGravityForce ( scale, force );
     }
-    
-    virtual void addScaledDampingForce(btScalar scale, TVStack& force)
-    {
-    }
-    
-    virtual void addScaledElasticForceDifferential(btScalar scale, const TVStack& dx, TVStack& df)
+
+    virtual void addScaledDampingForce ( btScalar scale, TVStack& force )
     {
     }
-    
-    virtual void addScaledDampingForceDifferential(btScalar scale, const TVStack& dv, TVStack& df)
+
+    virtual void addScaledElasticForceDifferential ( btScalar scale, const TVStack& dx, TVStack& df )
     {
     }
-    
-    virtual void buildDampingForceDifferentialDiagonal(btScalar scale, TVStack& diagA){}
-    
-    virtual void addScaledGravityForce(btScalar scale, TVStack& force)
+
+    virtual void addScaledDampingForceDifferential ( btScalar scale, const TVStack& dv, TVStack& df )
+    {
+    }
+
+    virtual void buildDampingForceDifferentialDiagonal ( btScalar scale, TVStack& diagA ) {}
+
+    virtual void addScaledGravityForce ( btScalar scale, TVStack& force )
     {
         int numNodes = getNumNodes();
-        btAssert(numNodes <= force.size());
-        for (int i = 0; i < m_softBodies.size(); ++i)
-        {
+        btAssert ( numNodes <= force.size() );
+        for ( int i = 0; i < m_softBodies.size(); ++i ) {
             btSoftBody* psb = m_softBodies[i];
-            if (!psb->isActive())
-            {
+            if ( !psb->isActive() ) {
                 continue;
             }
-            for (int j = 0; j < psb->m_nodes.size(); ++j)
-            {
+            for ( int j = 0; j < psb->m_nodes.size(); ++j ) {
                 btSoftBody::Node& n = psb->m_nodes[j];
                 size_t id = n.index;
-                btScalar mass = (n.m_im == 0) ? 0 : 1. / n.m_im;
+                btScalar mass = ( n.m_im == 0 ) ? 0 : 1. / n.m_im;
                 btVector3 scaled_force = scale * m_gravity * mass;
                 force[id] += scaled_force;
             }
         }
     }
-    
+
     virtual btDeformableLagrangianForceType getForceType()
     {
         return BT_GRAVITY_FORCE;
     }
 
     // the gravitational potential energy
-    virtual double totalEnergy(btScalar dt)
+    virtual double totalEnergy ( btScalar dt )
     {
         double e = 0;
-        for (int i = 0; i<m_softBodies.size();++i)
-        {
+        for ( int i = 0; i<m_softBodies.size(); ++i ) {
             btSoftBody* psb = m_softBodies[i];
-            if (!psb->isActive())
-            {
+            if ( !psb->isActive() ) {
                 continue;
             }
-            for (int j = 0; j < psb->m_nodes.size(); ++j)
-            {
+            for ( int j = 0; j < psb->m_nodes.size(); ++j ) {
                 const btSoftBody::Node& node = psb->m_nodes[j];
-                if (node.m_im > 0)
-                {
-                    e -= m_gravity.dot(node.m_q)/node.m_im;
+                if ( node.m_im > 0 ) {
+                    e -= m_gravity.dot ( node.m_q ) /node.m_im;
                 }
             }
         }
         return e;
     }
-    
-    
+
+
 };
 #endif /* BT_DEFORMABLE_GRAVITY_FORCE_H */

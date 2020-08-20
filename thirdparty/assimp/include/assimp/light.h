@@ -62,8 +62,7 @@ extern "C" {
 // ---------------------------------------------------------------------------
 /** Enumerates all supported types of light sources.
  */
-enum aiLightSourceType
-{
+enum aiLightSourceType {
     aiLightSource_UNDEFINED     = 0x0,
 
     //! A directional light source has a well-defined direction
@@ -115,8 +114,7 @@ enum aiLightSourceType
  *  then, the transformation tracks of the main node make the
  *  spot light already point in the right direction.
 */
-struct aiLight
-{
+struct aiLight {
     /** The name of the light source.
      *
      *  There must be a node in the scenegraph with the same name.
@@ -242,13 +240,14 @@ struct aiLight
 #ifdef __cplusplus
 
     aiLight() AI_NO_EXCEPT
-        :   mType                 (aiLightSource_UNDEFINED)
-        ,   mAttenuationConstant  (0.f)
-        ,   mAttenuationLinear    (1.f)
-        ,   mAttenuationQuadratic (0.f)
-        ,   mAngleInnerCone       ((float)AI_MATH_TWO_PI)
-        ,   mAngleOuterCone       ((float)AI_MATH_TWO_PI)
-        ,   mSize                 (0.f, 0.f)
+:
+    mType ( aiLightSource_UNDEFINED )
+    ,   mAttenuationConstant ( 0.f )
+    ,   mAttenuationLinear ( 1.f )
+    ,   mAttenuationQuadratic ( 0.f )
+    ,   mAngleInnerCone ( ( float ) AI_MATH_TWO_PI )
+    ,   mAngleOuterCone ( ( float ) AI_MATH_TWO_PI )
+    ,   mSize ( 0.f, 0.f )
     {
     }
 
@@ -257,7 +256,7 @@ struct aiLight
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 
 #endif // !! AI_LIGHT_H_INC

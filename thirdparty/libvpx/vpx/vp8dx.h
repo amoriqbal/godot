@@ -34,7 +34,7 @@ extern "C" {
  * @{
  */
 extern vpx_codec_iface_t  vpx_codec_vp8_dx_algo;
-extern vpx_codec_iface_t *vpx_codec_vp8_dx(void);
+extern vpx_codec_iface_t *vpx_codec_vp8_dx ( void );
 /*!@} - end algorithm interface member group*/
 
 /*!\name Algorithm interface for VP9
@@ -43,7 +43,7 @@ extern vpx_codec_iface_t *vpx_codec_vp8_dx(void);
  * @{
  */
 extern vpx_codec_iface_t  vpx_codec_vp9_dx_algo;
-extern vpx_codec_iface_t *vpx_codec_vp9_dx(void);
+extern vpx_codec_iface_t *vpx_codec_vp9_dx ( void );
 /*!@} - end algorithm interface member group*/
 
 /*!\enum vp8_dec_control_id
@@ -55,71 +55,71 @@ extern vpx_codec_iface_t *vpx_codec_vp9_dx(void);
  * \sa #vpx_codec_control
  */
 enum vp8_dec_control_id {
-  /** control function to get info on which reference frames were updated
-   *  by the last decode
-   */
-  VP8D_GET_LAST_REF_UPDATES = VP8_DECODER_CTRL_ID_START,
+    /** control function to get info on which reference frames were updated
+     *  by the last decode
+     */
+    VP8D_GET_LAST_REF_UPDATES = VP8_DECODER_CTRL_ID_START,
 
-  /** check if the indicated frame is corrupted */
-  VP8D_GET_FRAME_CORRUPTED,
+    /** check if the indicated frame is corrupted */
+    VP8D_GET_FRAME_CORRUPTED,
 
-  /** control function to get info on which reference frames were used
-   *  by the last decode
-   */
-  VP8D_GET_LAST_REF_USED,
+    /** control function to get info on which reference frames were used
+     *  by the last decode
+     */
+    VP8D_GET_LAST_REF_USED,
 
-  /** decryption function to decrypt encoded buffer data immediately
-   * before decoding. Takes a vpx_decrypt_init, which contains
-   * a callback function and opaque context pointer.
-   */
-  VPXD_SET_DECRYPTOR,
-  VP8D_SET_DECRYPTOR = VPXD_SET_DECRYPTOR,
+    /** decryption function to decrypt encoded buffer data immediately
+     * before decoding. Takes a vpx_decrypt_init, which contains
+     * a callback function and opaque context pointer.
+     */
+    VPXD_SET_DECRYPTOR,
+    VP8D_SET_DECRYPTOR = VPXD_SET_DECRYPTOR,
 
-  /** control function to get the dimensions that the current frame is decoded
-   * at. This may be different to the intended display size for the frame as
-   * specified in the wrapper or frame header (see VP9D_GET_DISPLAY_SIZE). */
-  VP9D_GET_FRAME_SIZE,
+    /** control function to get the dimensions that the current frame is decoded
+     * at. This may be different to the intended display size for the frame as
+     * specified in the wrapper or frame header (see VP9D_GET_DISPLAY_SIZE). */
+    VP9D_GET_FRAME_SIZE,
 
-  /** control function to get the current frame's intended display dimensions
-   * (as specified in the wrapper or frame header). This may be different to
-   * the decoded dimensions of this frame (see VP9D_GET_FRAME_SIZE). */
-  VP9D_GET_DISPLAY_SIZE,
+    /** control function to get the current frame's intended display dimensions
+     * (as specified in the wrapper or frame header). This may be different to
+     * the decoded dimensions of this frame (see VP9D_GET_FRAME_SIZE). */
+    VP9D_GET_DISPLAY_SIZE,
 
-  /** control function to get the bit depth of the stream. */
-  VP9D_GET_BIT_DEPTH,
+    /** control function to get the bit depth of the stream. */
+    VP9D_GET_BIT_DEPTH,
 
-  /** control function to set the byte alignment of the planes in the reference
-   * buffers. Valid values are power of 2, from 32 to 1024. A value of 0 sets
-   * legacy alignment. I.e. Y plane is aligned to 32 bytes, U plane directly
-   * follows Y plane, and V plane directly follows U plane. Default value is 0.
-   */
-  VP9_SET_BYTE_ALIGNMENT,
+    /** control function to set the byte alignment of the planes in the reference
+     * buffers. Valid values are power of 2, from 32 to 1024. A value of 0 sets
+     * legacy alignment. I.e. Y plane is aligned to 32 bytes, U plane directly
+     * follows Y plane, and V plane directly follows U plane. Default value is 0.
+     */
+    VP9_SET_BYTE_ALIGNMENT,
 
-  /** control function to invert the decoding order to from right to left. The
-   * function is used in a test to confirm the decoding independence of tile
-   * columns. The function may be used in application where this order
-   * of decoding is desired.
-   *
-   * TODO(yaowu): Rework the unit test that uses this control, and in a future
-   *              release, this test-only control shall be removed.
-   */
-  VP9_INVERT_TILE_DECODE_ORDER,
+    /** control function to invert the decoding order to from right to left. The
+     * function is used in a test to confirm the decoding independence of tile
+     * columns. The function may be used in application where this order
+     * of decoding is desired.
+     *
+     * TODO(yaowu): Rework the unit test that uses this control, and in a future
+     *              release, this test-only control shall be removed.
+     */
+    VP9_INVERT_TILE_DECODE_ORDER,
 
-  /** control function to set the skip loop filter flag. Valid values are
-   * integers. The decoder will skip the loop filter when its value is set to
-   * nonzero. If the loop filter is skipped the decoder may accumulate decode
-   * artifacts. The default value is 0.
-   */
-  VP9_SET_SKIP_LOOP_FILTER,
+    /** control function to set the skip loop filter flag. Valid values are
+     * integers. The decoder will skip the loop filter when its value is set to
+     * nonzero. If the loop filter is skipped the decoder may accumulate decode
+     * artifacts. The default value is 0.
+     */
+    VP9_SET_SKIP_LOOP_FILTER,
 
-  VP8_DECODER_CTRL_ID_MAX
+    VP8_DECODER_CTRL_ID_MAX
 };
 
 /** Decrypt n bytes of data from input -> output, using the decrypt_state
  *  passed in VPXD_SET_DECRYPTOR.
  */
-typedef void (*vpx_decrypt_cb)(void *decrypt_state, const unsigned char *input,
-                               unsigned char *output, int count);
+typedef void ( *vpx_decrypt_cb ) ( void *decrypt_state, const unsigned char *input,
+                                   unsigned char *output, int count );
 
 /*!\brief Structure to hold decryption state
  *
@@ -147,23 +147,23 @@ typedef vpx_decrypt_init vp8_decrypt_init;
  */
 
 
-VPX_CTRL_USE_TYPE(VP8D_GET_LAST_REF_UPDATES,    int *)
+VPX_CTRL_USE_TYPE ( VP8D_GET_LAST_REF_UPDATES,    int * )
 #define VPX_CTRL_VP8D_GET_LAST_REF_UPDATES
-VPX_CTRL_USE_TYPE(VP8D_GET_FRAME_CORRUPTED,     int *)
+VPX_CTRL_USE_TYPE ( VP8D_GET_FRAME_CORRUPTED,     int * )
 #define VPX_CTRL_VP8D_GET_FRAME_CORRUPTED
-VPX_CTRL_USE_TYPE(VP8D_GET_LAST_REF_USED,       int *)
+VPX_CTRL_USE_TYPE ( VP8D_GET_LAST_REF_USED,       int * )
 #define VPX_CTRL_VP8D_GET_LAST_REF_USED
-VPX_CTRL_USE_TYPE(VPXD_SET_DECRYPTOR,           vpx_decrypt_init *)
+VPX_CTRL_USE_TYPE ( VPXD_SET_DECRYPTOR,           vpx_decrypt_init * )
 #define VPX_CTRL_VPXD_SET_DECRYPTOR
-VPX_CTRL_USE_TYPE(VP8D_SET_DECRYPTOR,           vpx_decrypt_init *)
+VPX_CTRL_USE_TYPE ( VP8D_SET_DECRYPTOR,           vpx_decrypt_init * )
 #define VPX_CTRL_VP8D_SET_DECRYPTOR
-VPX_CTRL_USE_TYPE(VP9D_GET_DISPLAY_SIZE,        int *)
+VPX_CTRL_USE_TYPE ( VP9D_GET_DISPLAY_SIZE,        int * )
 #define VPX_CTRL_VP9D_GET_DISPLAY_SIZE
-VPX_CTRL_USE_TYPE(VP9D_GET_BIT_DEPTH,           unsigned int *)
+VPX_CTRL_USE_TYPE ( VP9D_GET_BIT_DEPTH,           unsigned int * )
 #define VPX_CTRL_VP9D_GET_BIT_DEPTH
-VPX_CTRL_USE_TYPE(VP9D_GET_FRAME_SIZE,          int *)
+VPX_CTRL_USE_TYPE ( VP9D_GET_FRAME_SIZE,          int * )
 #define VPX_CTRL_VP9D_GET_FRAME_SIZE
-VPX_CTRL_USE_TYPE(VP9_INVERT_TILE_DECODE_ORDER, int)
+VPX_CTRL_USE_TYPE ( VP9_INVERT_TILE_DECODE_ORDER, int )
 #define VPX_CTRL_VP9_INVERT_TILE_DECODE_ORDER
 
 /*!\endcond */

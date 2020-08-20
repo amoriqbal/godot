@@ -22,26 +22,26 @@ struct btSolverInfo;
 class btMultiBodyJointLimitConstraint : public btMultiBodyConstraint
 {
 protected:
-	btScalar m_lowerBound;
-	btScalar m_upperBound;
+    btScalar m_lowerBound;
+    btScalar m_upperBound;
 
 public:
-	btMultiBodyJointLimitConstraint(btMultiBody* body, int link, btScalar lower, btScalar upper);
-	virtual ~btMultiBodyJointLimitConstraint();
+    btMultiBodyJointLimitConstraint ( btMultiBody* body, int link, btScalar lower, btScalar upper );
+    virtual ~btMultiBodyJointLimitConstraint();
 
-	virtual void finalizeMultiDof();
+    virtual void finalizeMultiDof();
 
-	virtual int getIslandIdA() const;
-	virtual int getIslandIdB() const;
+    virtual int getIslandIdA() const;
+    virtual int getIslandIdB() const;
 
-	virtual void createConstraintRows(btMultiBodyConstraintArray& constraintRows,
-									  btMultiBodyJacobianData& data,
-									  const btContactSolverInfo& infoGlobal);
+    virtual void createConstraintRows ( btMultiBodyConstraintArray& constraintRows,
+                                        btMultiBodyJacobianData& data,
+                                        const btContactSolverInfo& infoGlobal );
 
-	virtual void debugDraw(class btIDebugDraw* drawer)
-	{
-		//todo(erwincoumans)
-	}
+    virtual void debugDraw ( class btIDebugDraw* drawer )
+    {
+        //todo(erwincoumans)
+    }
 };
 
 #endif  //BT_MULTIBODY_JOINT_LIMIT_CONSTRAINT_H

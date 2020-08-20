@@ -35,45 +35,58 @@
 #include "gd_mono_header.h"
 #include "i_mono_class_member.h"
 
-class GDMonoProperty : public IMonoClassMember {
-	GDMonoClass *owner;
-	MonoProperty *mono_property;
+class GDMonoProperty : public IMonoClassMember
+{
+    GDMonoClass *owner;
+    MonoProperty *mono_property;
 
-	StringName name;
-	ManagedType type;
+    StringName name;
+    ManagedType type;
 
-	bool attrs_fetched;
-	MonoCustomAttrInfo *attributes;
+    bool attrs_fetched;
+    MonoCustomAttrInfo *attributes;
 
 public:
-	virtual GDMonoClass *get_enclosing_class() const final { return owner; }
+    virtual GDMonoClass *get_enclosing_class() const final
+    {
+        return owner;
+    }
 
-	virtual MemberType get_member_type() const final { return MEMBER_TYPE_PROPERTY; }
+    virtual MemberType get_member_type() const final
+    {
+        return MEMBER_TYPE_PROPERTY;
+    }
 
-	virtual StringName get_name() const final { return name; }
+    virtual StringName get_name() const final
+    {
+        return name;
+    }
 
-	virtual bool is_static() final;
-	virtual Visibility get_visibility() final;
+    virtual bool is_static() final;
+    virtual Visibility get_visibility() final;
 
-	virtual bool has_attribute(GDMonoClass *p_attr_class) final;
-	virtual MonoObject *get_attribute(GDMonoClass *p_attr_class) final;
-	void fetch_attributes();
+    virtual bool has_attribute ( GDMonoClass *p_attr_class ) final;
+    virtual MonoObject *get_attribute ( GDMonoClass *p_attr_class ) final;
+    void fetch_attributes();
 
-	bool has_getter();
-	bool has_setter();
+    bool has_getter();
+    bool has_setter();
 
-	_FORCE_INLINE_ ManagedType get_type() const { return type; }
+    _FORCE_INLINE_ ManagedType get_type() const
+    {
+        return type;
+    }
 
-	void set_value(MonoObject *p_object, MonoObject *p_value, MonoException **r_exc = nullptr);
-	void set_value(MonoObject *p_object, void **p_params, MonoException **r_exc = nullptr);
-	MonoObject *get_value(MonoObject *p_object, MonoException **r_exc = nullptr);
+    void set_value ( MonoObject *p_object, MonoObject *p_value, MonoException **r_exc = nullptr );
+    void set_value ( MonoObject *p_object, void **p_params, MonoException **r_exc = nullptr );
+    MonoObject *get_value ( MonoObject *p_object, MonoException **r_exc = nullptr );
 
-	bool get_bool_value(MonoObject *p_object);
-	int get_int_value(MonoObject *p_object);
-	String get_string_value(MonoObject *p_object);
+    bool get_bool_value ( MonoObject *p_object );
+    int get_int_value ( MonoObject *p_object );
+    String get_string_value ( MonoObject *p_object );
 
-	GDMonoProperty(MonoProperty *p_mono_property, GDMonoClass *p_owner);
-	~GDMonoProperty();
+    GDMonoProperty ( MonoProperty *p_mono_property, GDMonoClass *p_owner );
+    ~GDMonoProperty();
 };
 
 #endif // GD_MONO_PROPERTY_H

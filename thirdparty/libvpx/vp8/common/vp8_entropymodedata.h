@@ -18,8 +18,7 @@ extern "C" {
 /*Generated file, included by entropymode.c*/
 
 
-const struct vp8_token_struct vp8_bmode_encodings[VP8_BINTRAMODES] =
-{
+const struct vp8_token_struct vp8_bmode_encodings[VP8_BINTRAMODES] = {
     { 0, 1 },
     { 2, 2 },
     { 6, 3 },
@@ -32,8 +31,7 @@ const struct vp8_token_struct vp8_bmode_encodings[VP8_BINTRAMODES] =
     { 127, 7 }
 };
 
-const struct vp8_token_struct vp8_ymode_encodings[VP8_YMODES] =
-{
+const struct vp8_token_struct vp8_ymode_encodings[VP8_YMODES] = {
     { 0, 1 },
     { 4, 3 },
     { 5, 3 },
@@ -41,8 +39,7 @@ const struct vp8_token_struct vp8_ymode_encodings[VP8_YMODES] =
     { 7, 3 }
 };
 
-const struct vp8_token_struct vp8_kf_ymode_encodings[VP8_YMODES] =
-{
+const struct vp8_token_struct vp8_kf_ymode_encodings[VP8_YMODES] = {
     { 4, 3 },
     { 5, 3 },
     { 6, 3 },
@@ -50,24 +47,21 @@ const struct vp8_token_struct vp8_kf_ymode_encodings[VP8_YMODES] =
     { 0, 1 }
 };
 
-const struct vp8_token_struct vp8_uv_mode_encodings[VP8_UV_MODES] =
-{
+const struct vp8_token_struct vp8_uv_mode_encodings[VP8_UV_MODES] = {
     { 0, 1 },
     { 2, 2 },
     { 6, 3 },
     { 7, 3 }
 };
 
-const struct vp8_token_struct vp8_mbsplit_encodings[VP8_NUMMBSPLITS] =
-{
+const struct vp8_token_struct vp8_mbsplit_encodings[VP8_NUMMBSPLITS] = {
     { 6, 3 },
     { 7, 3 },
     { 2, 2 },
     { 0, 1 }
 };
 
-const struct vp8_token_struct vp8_mv_ref_encoding_array[VP8_MVREFS] =
-{
+const struct vp8_token_struct vp8_mv_ref_encoding_array[VP8_MVREFS] = {
     { 2, 2 },
     { 6, 3 },
     { 0, 1 },
@@ -75,16 +69,14 @@ const struct vp8_token_struct vp8_mv_ref_encoding_array[VP8_MVREFS] =
     { 15, 4 }
 };
 
-const struct vp8_token_struct vp8_sub_mv_ref_encoding_array[VP8_SUBMVREFS] =
-{
+const struct vp8_token_struct vp8_sub_mv_ref_encoding_array[VP8_SUBMVREFS] = {
     { 0, 1 },
     { 2, 2 },
     { 6, 3 },
     { 7, 3 }
 };
 
-const struct vp8_token_struct vp8_small_mvencodings[8] =
-{
+const struct vp8_token_struct vp8_small_mvencodings[8] = {
     { 0, 3 },
     { 1, 3 },
     { 2, 3 },
@@ -95,36 +87,30 @@ const struct vp8_token_struct vp8_small_mvencodings[8] =
     { 7, 3 }
 };
 
-const vp8_prob vp8_ymode_prob[VP8_YMODES-1] =
-{
+const vp8_prob vp8_ymode_prob[VP8_YMODES-1] = {
     112, 86, 140, 37
 };
 
-const vp8_prob vp8_kf_ymode_prob[VP8_YMODES-1] =
-{
+const vp8_prob vp8_kf_ymode_prob[VP8_YMODES-1] = {
     145, 156, 163, 128
 };
 
-const vp8_prob vp8_uv_mode_prob[VP8_UV_MODES-1] =
-{
+const vp8_prob vp8_uv_mode_prob[VP8_UV_MODES-1] = {
     162, 101, 204
 };
 
-const vp8_prob vp8_kf_uv_mode_prob[VP8_UV_MODES-1] =
-{
+const vp8_prob vp8_kf_uv_mode_prob[VP8_UV_MODES-1] = {
     142, 114, 183
 };
 
-const vp8_prob vp8_bmode_prob[VP8_BINTRAMODES-1] =
-{
+const vp8_prob vp8_bmode_prob[VP8_BINTRAMODES-1] = {
     120, 90, 79, 133, 87, 85, 80, 111, 151
 };
 
 
 
 const vp8_prob vp8_kf_bmode_prob
-[VP8_BINTRAMODES] [VP8_BINTRAMODES] [VP8_BINTRAMODES-1] =
-{
+[VP8_BINTRAMODES] [VP8_BINTRAMODES] [VP8_BINTRAMODES-1] = {
     {
         { 231, 120,  48,  89, 115, 113, 120, 152, 112 },
         { 152, 179,  64, 126, 170, 118,  46,  70,  95 },

@@ -55,8 +55,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "FBXCompileConfig.h"
 #include "FBXTokenizer.h"
 
-namespace Assimp {
-namespace FBX {
+namespace Assimp
+{
+namespace FBX
+{
 
 class Scope;
 class Parser;
@@ -86,18 +88,21 @@ typedef std::pair<ElementMap::const_iterator,ElementMap::const_iterator> Element
 class Element
 {
 public:
-    Element(const Token& key_token, Parser& parser);
+    Element ( const Token& key_token, Parser& parser );
     ~Element();
 
-    const Scope* Compound() const {
+    const Scope* Compound() const
+    {
         return compound.get();
     }
 
-    const Token& KeyToken() const {
+    const Token& KeyToken() const
+    {
         return key_token;
     }
 
-    const TokenList& Tokens() const {
+    const TokenList& Tokens() const
+    {
         return tokens;
     }
 
@@ -121,30 +126,33 @@ private:
 class Scope
 {
 public:
-    Scope(Parser& parser, bool topLevel = false);
+    Scope ( Parser& parser, bool topLevel = false );
     ~Scope();
 
-    const Element* operator[] (const std::string& index) const {
-        ElementMap::const_iterator it = elements.find(index);
-        return it == elements.end() ? NULL : (*it).second;
+    const Element* operator[] ( const std::string& index ) const
+    {
+        ElementMap::const_iterator it = elements.find ( index );
+        return it == elements.end() ? NULL : ( *it ).second;
     }
 
-	const Element* FindElementCaseInsensitive(const std::string& elementName) const {
-		const char* elementNameCStr = elementName.c_str();
-		for (auto element = elements.begin(); element != elements.end(); ++element)
-		{
-			if (!ASSIMP_strincmp(element->first.c_str(), elementNameCStr, MAXLEN)) {
-				return element->second;
-			}
-		}
-		return NULL;
-	}
-
-    ElementCollection GetCollection(const std::string& index) const {
-        return elements.equal_range(index);
+    const Element* FindElementCaseInsensitive ( const std::string& elementName ) const
+    {
+        const char* elementNameCStr = elementName.c_str();
+        for ( auto element = elements.begin(); element != elements.end(); ++element ) {
+            if ( !ASSIMP_strincmp ( element->first.c_str(), elementNameCStr, MAXLEN ) ) {
+                return element->second;
+            }
+        }
+        return NULL;
     }
 
-    const ElementMap& Elements() const  {
+    ElementCollection GetCollection ( const std::string& index ) const
+    {
+        return elements.equal_range ( index );
+    }
+
+    const ElementMap& Elements() const
+    {
         return elements;
     }
 
@@ -159,14 +167,16 @@ class Parser
 public:
     /** Parse given a token list. Does not take ownership of the tokens -
      *  the objects must persist during the entire parser lifetime */
-    Parser (const TokenList& tokens,bool is_binary);
+    Parser ( const TokenList& tokens,bool is_binary );
     ~Parser();
 
-    const Scope& GetRootScope() const {
+    const Scope& GetRootScope() const
+    {
         return *root.get();
     }
 
-    bool IsBinary() const {
+    bool IsBinary() const
+    {
         return is_binary;
     }
 
@@ -190,44 +200,44 @@ private:
 
 
 /* token parsing - this happens when building the DOM out of the parse-tree*/
-uint64_t ParseTokenAsID(const Token& t, const char*& err_out);
-size_t ParseTokenAsDim(const Token& t, const char*& err_out);
+uint64_t ParseTokenAsID ( const Token& t, const char*& err_out );
+size_t ParseTokenAsDim ( const Token& t, const char*& err_out );
 
-float ParseTokenAsFloat(const Token& t, const char*& err_out);
-int ParseTokenAsInt(const Token& t, const char*& err_out);
-int64_t ParseTokenAsInt64(const Token& t, const char*& err_out);
-std::string ParseTokenAsString(const Token& t, const char*& err_out);
+float ParseTokenAsFloat ( const Token& t, const char*& err_out );
+int ParseTokenAsInt ( const Token& t, const char*& err_out );
+int64_t ParseTokenAsInt64 ( const Token& t, const char*& err_out );
+std::string ParseTokenAsString ( const Token& t, const char*& err_out );
 
 /* wrapper around ParseTokenAsXXX() with DOMError handling */
-uint64_t ParseTokenAsID(const Token& t);
-size_t ParseTokenAsDim(const Token& t);
-float ParseTokenAsFloat(const Token& t);
-int ParseTokenAsInt(const Token& t);
-int64_t ParseTokenAsInt64(const Token& t);
-std::string ParseTokenAsString(const Token& t);
+uint64_t ParseTokenAsID ( const Token& t );
+size_t ParseTokenAsDim ( const Token& t );
+float ParseTokenAsFloat ( const Token& t );
+int ParseTokenAsInt ( const Token& t );
+int64_t ParseTokenAsInt64 ( const Token& t );
+std::string ParseTokenAsString ( const Token& t );
 
 /* read data arrays */
-void ParseVectorDataArray(std::vector<aiVector3D>& out, const Element& el);
-void ParseVectorDataArray(std::vector<aiColor4D>& out, const Element& el);
-void ParseVectorDataArray(std::vector<aiVector2D>& out, const Element& el);
-void ParseVectorDataArray(std::vector<int>& out, const Element& el);
-void ParseVectorDataArray(std::vector<float>& out, const Element& el);
-void ParseVectorDataArray(std::vector<unsigned int>& out, const Element& el);
-void ParseVectorDataArray(std::vector<uint64_t>& out, const Element& e);
-void ParseVectorDataArray(std::vector<int64_t>& out, const Element& el);
+void ParseVectorDataArray ( std::vector<aiVector3D>& out, const Element& el );
+void ParseVectorDataArray ( std::vector<aiColor4D>& out, const Element& el );
+void ParseVectorDataArray ( std::vector<aiVector2D>& out, const Element& el );
+void ParseVectorDataArray ( std::vector<int>& out, const Element& el );
+void ParseVectorDataArray ( std::vector<float>& out, const Element& el );
+void ParseVectorDataArray ( std::vector<unsigned int>& out, const Element& el );
+void ParseVectorDataArray ( std::vector<uint64_t>& out, const Element& e );
+void ParseVectorDataArray ( std::vector<int64_t>& out, const Element& el );
 
-bool HasElement( const Scope& sc, const std::string& index );
+bool HasElement ( const Scope& sc, const std::string& index );
 
 // extract a required element from a scope, abort if the element cannot be found
-const Element& GetRequiredElement(const Scope& sc, const std::string& index, const Element* element = NULL);
+const Element& GetRequiredElement ( const Scope& sc, const std::string& index, const Element* element = NULL );
 
 // extract required compound scope
-const Scope& GetRequiredScope(const Element& el);
+const Scope& GetRequiredScope ( const Element& el );
 // get token at a particular index
-const Token& GetRequiredToken(const Element& el, unsigned int index);
+const Token& GetRequiredToken ( const Element& el, unsigned int index );
 
 // read a 4x4 matrix from an array of 16 floats
-aiMatrix4x4 ReadMatrix(const Element& element);
+aiMatrix4x4 ReadMatrix ( const Element& element );
 
 } // ! FBX
 } // ! Assimp

@@ -56,18 +56,21 @@ struct aiAABB {
 #ifdef __cplusplus
 
     aiAABB()
-    : mMin()
-    , mMax() {
+        : mMin()
+        , mMax()
+    {
         // empty
     }
 
-    aiAABB(const aiVector3D &min, const aiVector3D &max )
-    : mMin(min)
-    , mMax(max) {
+    aiAABB ( const aiVector3D &min, const aiVector3D &max )
+        : mMin ( min )
+        , mMax ( max )
+    {
         // empty
     }
 
-    ~aiAABB() {
+    ~aiAABB()
+    {
         // empty
     }
 

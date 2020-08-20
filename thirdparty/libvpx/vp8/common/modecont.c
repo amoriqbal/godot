@@ -11,8 +11,7 @@
 
 #include "entropy.h"
 
-const int vp8_mode_contexts[6][4] =
-{
+const int vp8_mode_contexts[6][4] = {
     {
         /* 0 */
         7,     1,     1,   143,

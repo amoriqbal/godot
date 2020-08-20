@@ -34,13 +34,14 @@
 #include "servers/camera/camera_feed.h"
 #include "servers/camera_server.h"
 
-class CameraWindows : public CameraServer {
+class CameraWindows : public CameraServer
+{
 private:
-	void add_active_cameras();
+    void add_active_cameras();
 
 public:
-	CameraWindows();
-	~CameraWindows() {}
+    CameraWindows();
+    ~CameraWindows() {}
 };
 
 #endif /* CAMERAWIN_H */

@@ -43,7 +43,8 @@
 #include "SymbolTable.h"
 #include "Versions.h"
 
-namespace glslang {
+namespace glslang
+{
 
 //
 // This is made to hold parseable strings for almost all the built-in
@@ -56,18 +57,25 @@ namespace glslang {
 //    commonBuiltins:  intersection of all stages' built-ins, processed just once
 //    stageBuiltins[]: anything a stage needs that's not in commonBuiltins
 //
-class TBuiltInParseables {
+class TBuiltInParseables
+{
 public:
-    POOL_ALLOCATOR_NEW_DELETE(GetThreadPoolAllocator())
+    POOL_ALLOCATOR_NEW_DELETE ( GetThreadPoolAllocator() )
     TBuiltInParseables();
     virtual ~TBuiltInParseables();
-    virtual void initialize(int version, EProfile, const SpvVersion& spvVersion) = 0;
-    virtual void initialize(const TBuiltInResource& resources, int version, EProfile, const SpvVersion& spvVersion, EShLanguage) = 0;
-    virtual const TString& getCommonString() const { return commonBuiltins; }
-    virtual const TString& getStageString(EShLanguage language) const { return stageBuiltins[language]; }
+    virtual void initialize ( int version, EProfile, const SpvVersion& spvVersion ) = 0;
+    virtual void initialize ( const TBuiltInResource& resources, int version, EProfile, const SpvVersion& spvVersion, EShLanguage ) = 0;
+    virtual const TString& getCommonString() const
+    {
+        return commonBuiltins;
+    }
+    virtual const TString& getStageString ( EShLanguage language ) const
+    {
+        return stageBuiltins[language];
+    }
 
-    virtual void identifyBuiltIns(int version, EProfile profile, const SpvVersion& spvVersion, EShLanguage language, TSymbolTable& symbolTable) = 0;
-    virtual void identifyBuiltIns(int version, EProfile profile, const SpvVersion& spvVersion, EShLanguage language, TSymbolTable& symbolTable, const TBuiltInResource &resources) = 0;
+    virtual void identifyBuiltIns ( int version, EProfile profile, const SpvVersion& spvVersion, EShLanguage language, TSymbolTable& symbolTable ) = 0;
+    virtual void identifyBuiltIns ( int version, EProfile profile, const SpvVersion& spvVersion, EShLanguage language, TSymbolTable& symbolTable, const TBuiltInResource &resources ) = 0;
 
 protected:
     TString commonBuiltins;
@@ -79,26 +87,27 @@ protected:
 // interface and match other similar code, it is called TBuiltIns, rather
 // than TBuiltInParseablesGlsl.
 //
-class TBuiltIns : public TBuiltInParseables {
+class TBuiltIns : public TBuiltInParseables
+{
 public:
-    POOL_ALLOCATOR_NEW_DELETE(GetThreadPoolAllocator())
+    POOL_ALLOCATOR_NEW_DELETE ( GetThreadPoolAllocator() )
     TBuiltIns();
     virtual ~TBuiltIns();
-    void initialize(int version, EProfile, const SpvVersion& spvVersion);
-    void initialize(const TBuiltInResource& resources, int version, EProfile, const SpvVersion& spvVersion, EShLanguage);
+    void initialize ( int version, EProfile, const SpvVersion& spvVersion );
+    void initialize ( const TBuiltInResource& resources, int version, EProfile, const SpvVersion& spvVersion, EShLanguage );
 
-    void identifyBuiltIns(int version, EProfile profile, const SpvVersion& spvVersion, EShLanguage language, TSymbolTable& symbolTable);
-    void identifyBuiltIns(int version, EProfile profile, const SpvVersion& spvVersion, EShLanguage language, TSymbolTable& symbolTable, const TBuiltInResource &resources);
+    void identifyBuiltIns ( int version, EProfile profile, const SpvVersion& spvVersion, EShLanguage language, TSymbolTable& symbolTable );
+    void identifyBuiltIns ( int version, EProfile profile, const SpvVersion& spvVersion, EShLanguage language, TSymbolTable& symbolTable, const TBuiltInResource &resources );
 
 protected:
-    void addTabledBuiltins(int version, EProfile profile, const SpvVersion& spvVersion);
-    void relateTabledBuiltins(int version, EProfile profile, const SpvVersion& spvVersion, EShLanguage, TSymbolTable&);
-    void add2ndGenerationSamplingImaging(int version, EProfile profile, const SpvVersion& spvVersion);
-    void addSubpassSampling(TSampler, const TString& typeName, int version, EProfile profile);
-    void addQueryFunctions(TSampler, const TString& typeName, int version, EProfile profile);
-    void addImageFunctions(TSampler, const TString& typeName, int version, EProfile profile);
-    void addSamplingFunctions(TSampler, const TString& typeName, int version, EProfile profile);
-    void addGatherFunctions(TSampler, const TString& typeName, int version, EProfile profile);
+    void addTabledBuiltins ( int version, EProfile profile, const SpvVersion& spvVersion );
+    void relateTabledBuiltins ( int version, EProfile profile, const SpvVersion& spvVersion, EShLanguage, TSymbolTable& );
+    void add2ndGenerationSamplingImaging ( int version, EProfile profile, const SpvVersion& spvVersion );
+    void addSubpassSampling ( TSampler, const TString& typeName, int version, EProfile profile );
+    void addQueryFunctions ( TSampler, const TString& typeName, int version, EProfile profile );
+    void addImageFunctions ( TSampler, const TString& typeName, int version, EProfile profile );
+    void addSamplingFunctions ( TSampler, const TString& typeName, int version, EProfile profile );
+    void addGatherFunctions ( TSampler, const TString& typeName, int version, EProfile profile );
 
     // Helpers for making textual representations of the permutations
     // of texturing/imaging functions.

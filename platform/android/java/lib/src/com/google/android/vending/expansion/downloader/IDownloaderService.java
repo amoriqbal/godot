@@ -30,7 +30,8 @@ import android.os.Messenger;
  * {@link IDownloaderClient#onServiceConnected} callback. At which point, you
  * should immediately call {@link #onClientUpdated}.
  */
-public interface IDownloaderService {
+public interface IDownloaderService
+{
     /**
      * Set this flag in response to the
      * IDownloaderClient.STATE_PAUSED_NEED_CELLULAR_PERMISSION state and then
@@ -64,7 +65,7 @@ public interface IDownloaderService {
      *
      * @param flags
      */
-    void setDownloadFlags(int flags);
+    void setDownloadFlags ( int flags );
 
     /**
      * Requests that the download status be sent to the client.
@@ -79,5 +80,5 @@ public interface IDownloaderService {
      *
      * @param clientMessenger
      */
-    void onClientUpdated(Messenger clientMessenger);
+    void onClientUpdated ( Messenger clientMessenger );
 }

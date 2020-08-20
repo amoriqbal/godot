@@ -18,12 +18,11 @@
 extern "C" {
 #endif
 
-enum
-{
+enum {
     mv_max  = 1023,              /* max absolute value of a MV component */
-    MVvals = (2 * mv_max) + 1,   /* # possible values "" */
+    MVvals = ( 2 * mv_max ) + 1, /* # possible values "" */
     mvfp_max  = 255,              /* max absolute value of a full pixel MV component */
-    MVfpvals = (2 * mvfp_max) +1, /* # possible full pixel MV values */
+    MVfpvals = ( 2 * mvfp_max ) +1, /* # possible full pixel MV values */
 
     mvlong_width = 10,       /* Large MVs have 9 bit magnitudes */
     mvnum_short = 8,         /* magnitudes 0 through 7 */
@@ -38,8 +37,7 @@ enum
     MVPcount = MVPbits + mvlong_width    /* (with independent probabilities) */
 };
 
-typedef struct mv_context
-{
+typedef struct mv_context {
     vp8_prob prob[MVPcount];  /* often come in row, col pairs */
 } MV_CONTEXT;
 

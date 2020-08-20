@@ -48,151 +48,195 @@
 // A reflection database and its interface, consistent with the OpenGL API reflection queries.
 //
 
-namespace glslang {
+namespace glslang
+{
 
 class TIntermediate;
 class TIntermAggregate;
 class TReflectionTraverser;
 
 // The full reflection database
-class TReflection {
+class TReflection
+{
 public:
-    TReflection(EShReflectionOptions opts, EShLanguage first, EShLanguage last)
-        : options(opts), firstStage(first), lastStage(last), badReflection(TObjectReflection::badReflection())
-    { 
-        for (int dim=0; dim<3; ++dim)
+    TReflection ( EShReflectionOptions opts, EShLanguage first, EShLanguage last )
+        : options ( opts ), firstStage ( first ), lastStage ( last ), badReflection ( TObjectReflection::badReflection() )
+    {
+        for ( int dim=0; dim<3; ++dim ) {
             localSize[dim] = 0;
+        }
     }
 
     virtual ~TReflection() {}
 
     // grow the reflection stage by stage
-    bool addStage(EShLanguage, const TIntermediate&);
+    bool addStage ( EShLanguage, const TIntermediate& );
 
     // for mapping a uniform index to a uniform object's description
-    int getNumUniforms() { return (int)indexToUniform.size(); }
-    const TObjectReflection& getUniform(int i) const
+    int getNumUniforms()
     {
-        if (i >= 0 && i < (int)indexToUniform.size())
+        return ( int ) indexToUniform.size();
+    }
+    const TObjectReflection& getUniform ( int i ) const
+    {
+        if ( i >= 0 && i < ( int ) indexToUniform.size() ) {
             return indexToUniform[i];
-        else
+        } else {
             return badReflection;
+        }
     }
 
     // for mapping a block index to the block's description
-    int getNumUniformBlocks() const { return (int)indexToUniformBlock.size(); }
-    const TObjectReflection& getUniformBlock(int i) const
+    int getNumUniformBlocks() const
     {
-        if (i >= 0 && i < (int)indexToUniformBlock.size())
+        return ( int ) indexToUniformBlock.size();
+    }
+    const TObjectReflection& getUniformBlock ( int i ) const
+    {
+        if ( i >= 0 && i < ( int ) indexToUniformBlock.size() ) {
             return indexToUniformBlock[i];
-        else
+        } else {
             return badReflection;
+        }
     }
 
     // for mapping an pipeline input index to the input's description
-    int getNumPipeInputs() { return (int)indexToPipeInput.size(); }
-    const TObjectReflection& getPipeInput(int i) const
+    int getNumPipeInputs()
     {
-        if (i >= 0 && i < (int)indexToPipeInput.size())
+        return ( int ) indexToPipeInput.size();
+    }
+    const TObjectReflection& getPipeInput ( int i ) const
+    {
+        if ( i >= 0 && i < ( int ) indexToPipeInput.size() ) {
             return indexToPipeInput[i];
-        else
+        } else {
             return badReflection;
+        }
     }
 
     // for mapping an pipeline output index to the output's description
-    int getNumPipeOutputs() { return (int)indexToPipeOutput.size(); }
-    const TObjectReflection& getPipeOutput(int i) const
+    int getNumPipeOutputs()
     {
-        if (i >= 0 && i < (int)indexToPipeOutput.size())
+        return ( int ) indexToPipeOutput.size();
+    }
+    const TObjectReflection& getPipeOutput ( int i ) const
+    {
+        if ( i >= 0 && i < ( int ) indexToPipeOutput.size() ) {
             return indexToPipeOutput[i];
-        else
+        } else {
             return badReflection;
+        }
     }
 
     // for mapping from an atomic counter to the uniform index
-    int getNumAtomicCounters() const { return (int)atomicCounterUniformIndices.size(); }
-    const TObjectReflection& getAtomicCounter(int i) const
+    int getNumAtomicCounters() const
     {
-        if (i >= 0 && i < (int)atomicCounterUniformIndices.size())
-            return getUniform(atomicCounterUniformIndices[i]);
-        else
+        return ( int ) atomicCounterUniformIndices.size();
+    }
+    const TObjectReflection& getAtomicCounter ( int i ) const
+    {
+        if ( i >= 0 && i < ( int ) atomicCounterUniformIndices.size() ) {
+            return getUniform ( atomicCounterUniformIndices[i] );
+        } else {
             return badReflection;
+        }
     }
 
     // for mapping a buffer variable index to a buffer variable object's description
-    int getNumBufferVariables() { return (int)indexToBufferVariable.size(); }
-    const TObjectReflection& getBufferVariable(int i) const
+    int getNumBufferVariables()
     {
-        if (i >= 0 && i < (int)indexToBufferVariable.size())
-            return indexToBufferVariable[i];
-        else
-            return badReflection;
+        return ( int ) indexToBufferVariable.size();
     }
-    
-    // for mapping a storage block index to the storage block's description
-    int getNumStorageBuffers() const { return (int)indexToBufferBlock.size(); }
-    const TObjectReflection&  getStorageBufferBlock(int i) const
+    const TObjectReflection& getBufferVariable ( int i ) const
     {
-        if (i >= 0 && i < (int)indexToBufferBlock.size())
-            return indexToBufferBlock[i];
-        else
+        if ( i >= 0 && i < ( int ) indexToBufferVariable.size() ) {
+            return indexToBufferVariable[i];
+        } else {
             return badReflection;
+        }
+    }
+
+    // for mapping a storage block index to the storage block's description
+    int getNumStorageBuffers() const
+    {
+        return ( int ) indexToBufferBlock.size();
+    }
+    const TObjectReflection&  getStorageBufferBlock ( int i ) const
+    {
+        if ( i >= 0 && i < ( int ) indexToBufferBlock.size() ) {
+            return indexToBufferBlock[i];
+        } else {
+            return badReflection;
+        }
     }
 
     // for mapping any name to its index (block names, uniform names and input/output names)
-    int getIndex(const char* name) const
+    int getIndex ( const char* name ) const
     {
-        TNameToIndex::const_iterator it = nameToIndex.find(name);
-        if (it == nameToIndex.end())
+        TNameToIndex::const_iterator it = nameToIndex.find ( name );
+        if ( it == nameToIndex.end() ) {
             return -1;
-        else
+        } else {
             return it->second;
+        }
     }
 
     // see getIndex(const char*)
-    int getIndex(const TString& name) const { return getIndex(name.c_str()); }
+    int getIndex ( const TString& name ) const
+    {
+        return getIndex ( name.c_str() );
+    }
 
 
     // for mapping any name to its index (only pipe input/output names)
-    int getPipeIOIndex(const char* name, const bool inOrOut) const
+    int getPipeIOIndex ( const char* name, const bool inOrOut ) const
     {
-        TNameToIndex::const_iterator it = inOrOut ? pipeInNameToIndex.find(name) : pipeOutNameToIndex.find(name);
-        if (it == (inOrOut ? pipeInNameToIndex.end() : pipeOutNameToIndex.end()))
+        TNameToIndex::const_iterator it = inOrOut ? pipeInNameToIndex.find ( name ) : pipeOutNameToIndex.find ( name );
+        if ( it == ( inOrOut ? pipeInNameToIndex.end() : pipeOutNameToIndex.end() ) ) {
             return -1;
-        else
+        } else {
             return it->second;
+        }
     }
 
     // see gePipeIOIndex(const char*, const bool)
-    int getPipeIOIndex(const TString& name, const bool inOrOut) const { return getPipeIOIndex(name.c_str(), inOrOut); }
+    int getPipeIOIndex ( const TString& name, const bool inOrOut ) const
+    {
+        return getPipeIOIndex ( name.c_str(), inOrOut );
+    }
 
     // Thread local size
-    unsigned getLocalSize(int dim) const { return dim <= 2 ? localSize[dim] : 0; }
+    unsigned getLocalSize ( int dim ) const
+    {
+        return dim <= 2 ? localSize[dim] : 0;
+    }
 
     void dump();
 
 protected:
     friend class glslang::TReflectionTraverser;
 
-    void buildCounterIndices(const TIntermediate&);
-    void buildUniformStageMask(const TIntermediate& intermediate);
-    void buildAttributeReflection(EShLanguage, const TIntermediate&);
+    void buildCounterIndices ( const TIntermediate& );
+    void buildUniformStageMask ( const TIntermediate& intermediate );
+    void buildAttributeReflection ( EShLanguage, const TIntermediate& );
 
     // Need a TString hash: typedef std::unordered_map<TString, int> TNameToIndex;
     typedef std::map<std::string, int> TNameToIndex;
     typedef std::vector<TObjectReflection> TMapIndexToReflection;
     typedef std::vector<int> TIndices;
 
-    TMapIndexToReflection& GetBlockMapForStorage(TStorageQualifier storage)
+    TMapIndexToReflection& GetBlockMapForStorage ( TStorageQualifier storage )
     {
-        if ((options & EShReflectionSeparateBuffers) && storage == EvqBuffer)
+        if ( ( options & EShReflectionSeparateBuffers ) && storage == EvqBuffer ) {
             return indexToBufferBlock;
+        }
         return indexToUniformBlock;
     }
-    TMapIndexToReflection& GetVariableMapForStorage(TStorageQualifier storage)
+    TMapIndexToReflection& GetVariableMapForStorage ( TStorageQualifier storage )
     {
-        if ((options & EShReflectionSeparateBuffers) && storage == EvqBuffer)
+        if ( ( options & EShReflectionSeparateBuffers ) && storage == EvqBuffer ) {
             return indexToBufferVariable;
+        }
         return indexToUniform;
     }
 

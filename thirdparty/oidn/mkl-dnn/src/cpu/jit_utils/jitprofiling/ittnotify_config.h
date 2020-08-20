@@ -266,10 +266,10 @@ typedef pthread_mutex_t   mutex_t;
 #define __itt_thread_yield()      SwitchToThread()
 #ifndef ITT_SIMPLE_INIT
 ITT_INLINE long
-__itt_interlocked_increment(volatile long* ptr) ITT_INLINE_ATTRIBUTE;
-ITT_INLINE long __itt_interlocked_increment(volatile long* ptr)
+__itt_interlocked_increment ( volatile long* ptr ) ITT_INLINE_ATTRIBUTE;
+ITT_INLINE long __itt_interlocked_increment ( volatile long* ptr )
 {
-    return InterlockedIncrement(ptr);
+    return InterlockedIncrement ( ptr );
 }
 #endif /* ITT_SIMPLE_INIT */
 
@@ -328,14 +328,14 @@ ITT_INLINE long __itt_interlocked_increment(volatile long* ptr)
 #endif /* __INTEL_COMPILER */
 #elif ITT_ARCH==ITT_ARCH_IA32 || ITT_ARCH==ITT_ARCH_IA32E /* ITT_ARCH!=ITT_ARCH_IA64 */
 ITT_INLINE long
-__TBB_machine_fetchadd4(volatile void* ptr, long addend) ITT_INLINE_ATTRIBUTE;
-ITT_INLINE long __TBB_machine_fetchadd4(volatile void* ptr, long addend)
+__TBB_machine_fetchadd4 ( volatile void* ptr, long addend ) ITT_INLINE_ATTRIBUTE;
+ITT_INLINE long __TBB_machine_fetchadd4 ( volatile void* ptr, long addend )
 {
     long result;
-    __asm__ __volatile__("lock\nxadd %0,%1"
-                          : "=r"(result),"=m"(*(int*)ptr)
-                          : "0"(addend), "m"(*(int*)ptr)
-                          : "memory");
+    __asm__ __volatile__ ( "lock\nxadd %0,%1"
+                           : "=r" ( result ),"=m" ( * ( int* ) ptr )
+                           : "0" ( addend ), "m" ( * ( int* ) ptr )
+                           : "memory" );
     return result;
 }
 #elif ITT_ARCH==ITT_ARCH_ARM || ITT_ARCH==ITT_ARCH_PPC64
@@ -343,26 +343,26 @@ ITT_INLINE long __TBB_machine_fetchadd4(volatile void* ptr, long addend)
 #endif /* ITT_ARCH==ITT_ARCH_IA64 */
 #ifndef ITT_SIMPLE_INIT
 ITT_INLINE long
-__itt_interlocked_increment(volatile long* ptr) ITT_INLINE_ATTRIBUTE;
-ITT_INLINE long __itt_interlocked_increment(volatile long* ptr)
+__itt_interlocked_increment ( volatile long* ptr ) ITT_INLINE_ATTRIBUTE;
+ITT_INLINE long __itt_interlocked_increment ( volatile long* ptr )
 {
-    return __TBB_machine_fetchadd4(ptr, 1) + 1L;
+    return __TBB_machine_fetchadd4 ( ptr, 1 ) + 1L;
 }
 #endif /* ITT_SIMPLE_INIT */
 
-void* dlopen(const char*, int) __attribute__((weak));
-void* dlsym(void*, const char*) __attribute__((weak));
-int dlclose(void*) __attribute__((weak));
+void* dlopen ( const char*, int ) __attribute__ ( ( weak ) );
+void* dlsym ( void*, const char* ) __attribute__ ( ( weak ) );
+int dlclose ( void* ) __attribute__ ( ( weak ) );
 #define DL_SYMBOLS (dlopen && dlsym && dlclose)
 
-int pthread_mutex_init(pthread_mutex_t*, const pthread_mutexattr_t*) __attribute__((weak));
-int pthread_mutex_lock(pthread_mutex_t*) __attribute__((weak));
-int pthread_mutex_unlock(pthread_mutex_t*) __attribute__((weak));
-int pthread_mutex_destroy(pthread_mutex_t*) __attribute__((weak));
-int pthread_mutexattr_init(pthread_mutexattr_t*) __attribute__((weak));
-int pthread_mutexattr_settype(pthread_mutexattr_t*, int) __attribute__((weak));
-int pthread_mutexattr_destroy(pthread_mutexattr_t*) __attribute__((weak));
-pthread_t pthread_self(void) __attribute__((weak));
+int pthread_mutex_init ( pthread_mutex_t*, const pthread_mutexattr_t* ) __attribute__ ( ( weak ) );
+int pthread_mutex_lock ( pthread_mutex_t* ) __attribute__ ( ( weak ) );
+int pthread_mutex_unlock ( pthread_mutex_t* ) __attribute__ ( ( weak ) );
+int pthread_mutex_destroy ( pthread_mutex_t* ) __attribute__ ( ( weak ) );
+int pthread_mutexattr_init ( pthread_mutexattr_t* ) __attribute__ ( ( weak ) );
+int pthread_mutexattr_settype ( pthread_mutexattr_t*, int ) __attribute__ ( ( weak ) );
+int pthread_mutexattr_destroy ( pthread_mutexattr_t* ) __attribute__ ( ( weak ) );
+pthread_t pthread_self ( void ) __attribute__ ( ( weak ) );
 #define PTHREAD_SYMBOLS (pthread_mutex_init && pthread_mutex_lock && pthread_mutex_unlock && pthread_mutex_destroy && pthread_mutexattr_init && pthread_mutexattr_settype && pthread_mutexattr_destroy && pthread_self)
 
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
@@ -379,8 +379,7 @@ typedef enum {
 
 #pragma pack(push, 8)
 
-typedef struct ___itt_thread_info
-{
+typedef struct ___itt_thread_info {
     const char* nameA; /*!< Copy of original name in ASCII. */
 #if defined(UNICODE) || defined(_UNICODE)
     const wchar_t* nameW; /*!< Copy of original name in UNICODE. */
@@ -396,16 +395,14 @@ typedef struct ___itt_thread_info
 
 #include "ittnotify_types.h" /* For __itt_group_id definition */
 
-typedef struct ___itt_api_info_20101001
-{
+typedef struct ___itt_api_info_20101001 {
     const char*    name;
     void**         func_ptr;
     void*          init_func;
     __itt_group_id group;
 }  __itt_api_info_20101001;
 
-typedef struct ___itt_api_info
-{
+typedef struct ___itt_api_info {
     const char*    name;
     void**         func_ptr;
     void*          init_func;
@@ -413,8 +410,7 @@ typedef struct ___itt_api_info
     __itt_group_id group;
 }  __itt_api_info;
 
-typedef struct __itt_counter_info
-{
+typedef struct __itt_counter_info {
     const char* nameA;  /*!< Copy of original name in ASCII. */
 #if defined(UNICODE) || defined(_UNICODE)
     const wchar_t* nameW; /*!< Copy of original name in UNICODE. */
@@ -437,8 +433,7 @@ typedef struct __itt_counter_info
 struct ___itt_domain;
 struct ___itt_string_handle;
 
-typedef struct ___itt_global
-{
+typedef struct ___itt_global {
     unsigned char          magic[8];
     unsigned long          version_major;
     unsigned long          version_minor;

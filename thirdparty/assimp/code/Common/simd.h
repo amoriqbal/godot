@@ -44,7 +44,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <assimp/defs.h>
 
-namespace Assimp {
+namespace Assimp
+{
 
 /// @brief  Checks if the platform supports SSE2 optimization
 /// @return true, if SSE2 is supported. false if SSE2 is not supported.

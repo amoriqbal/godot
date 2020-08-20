@@ -38,7 +38,8 @@
 
 #include "Versions.h"
 
-namespace glslang {
+namespace glslang
+{
 
 // Use a global end-of-input character, so no translation is needed across
 // layers of encapsulation.  Characters are all 8 bit, and positive, so there is
@@ -49,26 +50,28 @@ const int EndOfInput = -1;
 // A character scanner that seamlessly, on read-only strings, reads across an
 // array of strings without assuming null termination.
 //
-class TInputScanner {
+class TInputScanner
+{
 public:
-    TInputScanner(int n, const char* const s[], size_t L[], const char* const* names = nullptr,
-                  int b = 0, int f = 0, bool single = false) :
-        numSources(n),
-         // up to this point, common usage is "char*", but now we need positive 8-bit characters
-        sources(reinterpret_cast<const unsigned char* const *>(s)),
-        lengths(L), currentSource(0), currentChar(0), stringBias(b), finale(f), singleLogical(single),
-        endOfFileReached(false)
+    TInputScanner ( int n, const char* const s[], size_t L[], const char* const* names = nullptr,
+                    int b = 0, int f = 0, bool single = false ) :
+        numSources ( n ),
+        // up to this point, common usage is "char*", but now we need positive 8-bit characters
+        sources ( reinterpret_cast<const unsigned char* const *> ( s ) ),
+        lengths ( L ), currentSource ( 0 ), currentChar ( 0 ), stringBias ( b ), finale ( f ), singleLogical ( single ),
+        endOfFileReached ( false )
     {
         loc = new TSourceLoc[numSources];
-        for (int i = 0; i < numSources; ++i) {
-            loc[i].init(i - stringBias);
+        for ( int i = 0; i < numSources; ++i ) {
+            loc[i].init ( i - stringBias );
         }
-        if (names != nullptr) {
-            for (int i = 0; i < numSources; ++i)
-                loc[i].name = names[i] != nullptr ? NewPoolTString(names[i]) : nullptr;
+        if ( names != nullptr ) {
+            for ( int i = 0; i < numSources; ++i ) {
+                loc[i].name = names[i] != nullptr ? NewPoolTString ( names[i] ) : nullptr;
+            }
         }
         loc[currentSource].line = 1;
-        logicalSourceLoc.init(1);
+        logicalSourceLoc.init ( 1 );
         logicalSourceLoc.name = loc[0].name;
     }
 
@@ -81,11 +84,12 @@ public:
     int get()
     {
         int ret = peek();
-        if (ret == EndOfInput)
+        if ( ret == EndOfInput ) {
             return ret;
+        }
         ++loc[currentSource].column;
         ++logicalSourceLoc.column;
-        if (ret == '\n') {
+        if ( ret == '\n' ) {
             ++loc[currentSource].line;
             ++logicalSourceLoc.line;
             logicalSourceLoc.column = 0;
@@ -99,7 +103,7 @@ public:
     // retrieve the next character, no advance
     int peek()
     {
-        if (currentSource >= numSources) {
+        if ( currentSource >= numSources ) {
             endOfFileReached = true;
             return EndOfInput;
         }
@@ -107,10 +111,10 @@ public:
         // N.B. Sources can have a length of 0.
         int sourceToRead = currentSource;
         size_t charToRead = currentChar;
-        while(charToRead >= lengths[sourceToRead]) {
+        while ( charToRead >= lengths[sourceToRead] ) {
             charToRead = 0;
             sourceToRead += 1;
-            if (sourceToRead >= numSources) {
+            if ( sourceToRead >= numSources ) {
                 return EndOfInput;
             }
         }
@@ -123,68 +127,70 @@ public:
     void unget()
     {
         // Do not roll back once we've reached the end of the file.
-        if (endOfFileReached)
+        if ( endOfFileReached ) {
             return;
+        }
 
-        if (currentChar > 0) {
+        if ( currentChar > 0 ) {
             --currentChar;
             --loc[currentSource].column;
             --logicalSourceLoc.column;
-            if (loc[currentSource].column < 0) {
+            if ( loc[currentSource].column < 0 ) {
                 // We've moved back past a new line. Find the
                 // previous newline (or start of the file) to compute
                 // the column count on the now current line.
                 size_t chIndex = currentChar;
-                while (chIndex > 0) {
-                    if (sources[currentSource][chIndex] == '\n') {
+                while ( chIndex > 0 ) {
+                    if ( sources[currentSource][chIndex] == '\n' ) {
                         break;
                     }
                     --chIndex;
                 }
-                logicalSourceLoc.column = (int)(currentChar - chIndex);
-                loc[currentSource].column = (int)(currentChar - chIndex);
+                logicalSourceLoc.column = ( int ) ( currentChar - chIndex );
+                loc[currentSource].column = ( int ) ( currentChar - chIndex );
             }
         } else {
             do {
                 --currentSource;
-            } while (currentSource > 0 && lengths[currentSource] == 0);
-            if (lengths[currentSource] == 0) {
+            } while ( currentSource > 0 && lengths[currentSource] == 0 );
+            if ( lengths[currentSource] == 0 ) {
                 // set to 0 if we've backed up to the start of an empty string
                 currentChar = 0;
-            } else
+            } else {
                 currentChar = lengths[currentSource] - 1;
+            }
         }
-        if (peek() == '\n') {
+        if ( peek() == '\n' ) {
             --loc[currentSource].line;
             --logicalSourceLoc.line;
         }
     }
 
     // for #line override
-    void setLine(int newLine)
+    void setLine ( int newLine )
     {
         logicalSourceLoc.line = newLine;
         loc[getLastValidSourceIndex()].line = newLine;
     }
 
     // for #line override in filename based parsing
-    void setFile(const char* filename)
+    void setFile ( const char* filename )
     {
-        TString* fn_tstr = NewPoolTString(filename);
+        TString* fn_tstr = NewPoolTString ( filename );
         logicalSourceLoc.name = fn_tstr;
         loc[getLastValidSourceIndex()].name = fn_tstr;
     }
 
-    void setFile(const char* filename, int i)
+    void setFile ( const char* filename, int i )
     {
-        TString* fn_tstr = NewPoolTString(filename);
-        if (i == getLastValidSourceIndex()) {
+        TString* fn_tstr = NewPoolTString ( filename );
+        if ( i == getLastValidSourceIndex() ) {
             logicalSourceLoc.name = fn_tstr;
         }
         loc[i].name = fn_tstr;
     }
 
-    void setString(int newString)
+    void setString ( int newString )
     {
         logicalSourceLoc.string = newString;
         loc[getLastValidSourceIndex()].string = newString;
@@ -193,7 +199,7 @@ public:
     }
 
     // for #include content indentation
-    void setColumn(int col)
+    void setColumn ( int col )
     {
         logicalSourceLoc.column = col;
         loc[getLastValidSourceIndex()].column = col;
@@ -205,23 +211,29 @@ public:
         currentSource = numSources;
     }
 
-    bool atEndOfInput() const { return endOfFileReached; }
+    bool atEndOfInput() const
+    {
+        return endOfFileReached;
+    }
 
     const TSourceLoc& getSourceLoc() const
     {
-        if (singleLogical) {
+        if ( singleLogical ) {
             return logicalSourceLoc;
         } else {
-            return loc[std::max(0, std::min(currentSource, numSources - finale - 1))];
+            return loc[std::max ( 0, std::min ( currentSource, numSources - finale - 1 ) )];
         }
     }
     // Returns the index (starting from 0) of the most recent valid source string we are reading from.
-    int getLastValidSourceIndex() const { return std::min(currentSource, numSources - 1); }
+    int getLastValidSourceIndex() const
+    {
+        return std::min ( currentSource, numSources - 1 );
+    }
 
-    void consumeWhiteSpace(bool& foundNonSpaceTab);
+    void consumeWhiteSpace ( bool& foundNonSpaceTab );
     bool consumeComment();
-    void consumeWhitespaceComment(bool& foundNonSpaceTab);
-    bool scanVersion(int& version, EProfile& profile, bool& notFirstToken);
+    void consumeWhitespaceComment ( bool& foundNonSpaceTab );
+    bool scanVersion ( int& version, EProfile& profile, bool& notFirstToken );
 
 protected:
 
@@ -229,16 +241,16 @@ protected:
     void advance()
     {
         ++currentChar;
-        if (currentChar >= lengths[currentSource]) {
+        if ( currentChar >= lengths[currentSource] ) {
             ++currentSource;
-            if (currentSource < numSources) {
+            if ( currentSource < numSources ) {
                 loc[currentSource].string = loc[currentSource - 1].string + 1;
                 loc[currentSource].line = 1;
                 loc[currentSource].column = 0;
             }
-            while (currentSource < numSources && lengths[currentSource] == 0) {
+            while ( currentSource < numSources && lengths[currentSource] == 0 ) {
                 ++currentSource;
-                if (currentSource < numSources) {
+                if ( currentSource < numSources ) {
                     loc[currentSource].string = loc[currentSource - 1].string + 1;
                     loc[currentSource].line = 1;
                     loc[currentSource].column = 0;
@@ -264,7 +276,7 @@ protected:
 
     TSourceLoc logicalSourceLoc;
     bool singleLogical; // treats the strings as a single logical string.
-                        // locations will be reported from the first string.
+    // locations will be reported from the first string.
 
     // Set to true once peek() returns EndOfFile, so that we won't roll back
     // once we've reached EndOfFile.

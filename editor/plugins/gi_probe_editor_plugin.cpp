@@ -68,7 +68,7 @@ void GIProbeEditorPlugin::_notification(int p_what) {
 		}
 
 		const Vector3i size = gi_probe->get_estimated_cell_size();
-		String text = vformat(String::utf8("%d × %d × %d"), size.x, size.y, size.z);
+		String text = vformat(String::utf8("%d ?? %d ?? %d"), size.x, size.y, size.z);
 		int data_size = 4;
 		if (GLOBAL_GET("rendering/quality/gi_probes/anisotropic")) {
 			data_size += 4;

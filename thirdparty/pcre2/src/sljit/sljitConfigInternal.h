@@ -557,14 +557,14 @@ determine the next executed instruction after return. */
 /***************************************************/
 
 #if (defined SLJIT_EXECUTABLE_ALLOCATOR && SLJIT_EXECUTABLE_ALLOCATOR)
-SLJIT_API_FUNC_ATTRIBUTE void* sljit_malloc_exec(sljit_uw size);
-SLJIT_API_FUNC_ATTRIBUTE void sljit_free_exec(void* ptr);
-SLJIT_API_FUNC_ATTRIBUTE void sljit_free_unused_memory_exec(void);
+SLJIT_API_FUNC_ATTRIBUTE void* sljit_malloc_exec ( sljit_uw size );
+SLJIT_API_FUNC_ATTRIBUTE void sljit_free_exec ( void* ptr );
+SLJIT_API_FUNC_ATTRIBUTE void sljit_free_unused_memory_exec ( void );
 #define SLJIT_MALLOC_EXEC(size) sljit_malloc_exec(size)
 #define SLJIT_FREE_EXEC(ptr) sljit_free_exec(ptr)
 
 #if (defined SLJIT_PROT_EXECUTABLE_ALLOCATOR && SLJIT_PROT_EXECUTABLE_ALLOCATOR)
-SLJIT_API_FUNC_ATTRIBUTE sljit_sw sljit_exec_offset(void* ptr);
+SLJIT_API_FUNC_ATTRIBUTE sljit_sw sljit_exec_offset ( void* ptr );
 #define SLJIT_EXEC_OFFSET(ptr) sljit_exec_offset(ptr)
 #else
 #define SLJIT_EXEC_OFFSET(ptr) 0

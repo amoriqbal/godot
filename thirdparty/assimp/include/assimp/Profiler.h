@@ -57,8 +57,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <map>
 
-namespace Assimp {
-namespace Profiling {
+namespace Assimp
+{
+namespace Profiling
+{
 
 using namespace Formatter;
 
@@ -66,29 +68,33 @@ using namespace Formatter;
 /** Simple wrapper around boost::timer to simplify reporting. Timings are automatically
  *  dumped to the log file.
  */
-class Profiler {
+class Profiler
+{
 public:
-    Profiler() {
+    Profiler()
+    {
         // empty
     }
 
 
     /** Start a named timer */
-    void BeginRegion(const std::string& region) {
+    void BeginRegion ( const std::string& region )
+    {
         regions[region] = std::chrono::system_clock::now();
-        ASSIMP_LOG_DEBUG((format("START `"),region,"`"));
+        ASSIMP_LOG_DEBUG ( ( format ( "START `" ),region,"`" ) );
     }
 
 
     /** End a specific named timer and write its end time to the log */
-    void EndRegion(const std::string& region) {
-        RegionMap::const_iterator it = regions.find(region);
-        if (it == regions.end()) {
+    void EndRegion ( const std::string& region )
+    {
+        RegionMap::const_iterator it = regions.find ( region );
+        if ( it == regions.end() ) {
             return;
         }
 
         std::chrono::duration<double> elapsedSeconds = std::chrono::system_clock::now() - regions[region];
-        ASSIMP_LOG_DEBUG((format("END   `"),region,"`, dt= ", elapsedSeconds.count()," s"));
+        ASSIMP_LOG_DEBUG ( ( format ( "END   `" ),region,"`, dt= ", elapsedSeconds.count()," s" ) );
     }
 
 private:

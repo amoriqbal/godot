@@ -33,7 +33,8 @@
 
 #include "core/os/main_loop.h"
 
-namespace TestGUI {
+namespace TestGUI
+{
 
 MainLoop *test();
 }

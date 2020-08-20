@@ -1382,7 +1382,7 @@ bool CSharpLanguage::setup_csharp_script_binding(CSharpScriptBinding &r_script_b
 
 	StringName type_name = p_object->get_class_name();
 
-	// ¯\_(ツ)_/¯
+	// ??\_(???)_/??
 	const ClassDB::ClassInfo *classinfo = ClassDB::classes.getptr(type_name);
 	while (classinfo && !classinfo->exposed) {
 		classinfo = classinfo->inherits_ptr;

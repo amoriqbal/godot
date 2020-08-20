@@ -51,24 +51,26 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assimp/LogStream.hpp>
 #include <ostream>
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /** @class  StdOStreamLogStream
  *  @brief  Logs into a std::ostream
  */
-class StdOStreamLogStream : public LogStream {
+class StdOStreamLogStream : public LogStream
+{
 public:
     /** @brief  Construction from an existing std::ostream
      *  @param _ostream Output stream to be used
     */
-    explicit StdOStreamLogStream(std::ostream& _ostream);
+    explicit StdOStreamLogStream ( std::ostream& _ostream );
 
     /** @brief  Destructor  */
     ~StdOStreamLogStream();
 
     /** @brief  Writer  */
-    void write(const char* message);
+    void write ( const char* message );
 
 private:
     std::ostream& mOstream;
@@ -76,20 +78,23 @@ private:
 
 // ---------------------------------------------------------------------------
 //  Default constructor
-inline StdOStreamLogStream::StdOStreamLogStream(std::ostream& _ostream)
-: mOstream   (_ostream){
+inline StdOStreamLogStream::StdOStreamLogStream ( std::ostream& _ostream )
+    : mOstream ( _ostream )
+{
     // empty
 }
 
 // ---------------------------------------------------------------------------
 //  Default constructor
-inline StdOStreamLogStream::~StdOStreamLogStream() {
+inline StdOStreamLogStream::~StdOStreamLogStream()
+{
     // empty
 }
 
 // ---------------------------------------------------------------------------
 //  Write method
-inline void StdOStreamLogStream::write(const char* message) {
+inline void StdOStreamLogStream::write ( const char* message )
+{
     mOstream << message;
     mOstream.flush();
 }

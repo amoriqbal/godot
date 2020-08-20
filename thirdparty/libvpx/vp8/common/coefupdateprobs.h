@@ -18,8 +18,7 @@ extern "C" {
 /* Update probabilities for the nodes in the token entropy tree.
    Generated file included by entropy.c */
 
-const vp8_prob vp8_coef_update_probs [BLOCK_TYPES] [COEF_BANDS] [PREV_COEF_CONTEXTS] [ENTROPY_NODES] =
-{
+const vp8_prob vp8_coef_update_probs [BLOCK_TYPES] [COEF_BANDS] [PREV_COEF_CONTEXTS] [ENTROPY_NODES] = {
     {
         {
             {255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, },

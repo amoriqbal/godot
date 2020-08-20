@@ -54,7 +54,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #   define ai_assert_entry()     assert( false )
 #else
 #   define  ai_assert(expression)
-#   define  ai_assert_entry() 
+#   define  ai_assert_entry()
 #endif // ASSIMP_BUILD_DEBUG
 
 #endif // AI_ASSERT_H_INC

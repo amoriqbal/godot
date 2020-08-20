@@ -5,28 +5,27 @@ using System.Threading.Tasks;
 
 namespace GodotTools.IdeMessaging.Utils
 {
-    public static class SemaphoreExtensions
+public static class SemaphoreExtensions
+{
+    public static ConfiguredTaskAwaitable<IDisposable> UseAsync ( this SemaphoreSlim semaphoreSlim, CancellationToken cancellationToken = default ( CancellationToken ) )
     {
-        public static ConfiguredTaskAwaitable<IDisposable> UseAsync(this SemaphoreSlim semaphoreSlim, CancellationToken cancellationToken = default(CancellationToken))
+        var wrapper = new SemaphoreSlimWaitReleaseWrapper ( semaphoreSlim, out Task waitAsyncTask, cancellationToken );
+        return waitAsyncTask.ContinueWith<IDisposable> ( t => wrapper, cancellationToken ).ConfigureAwait ( false );
+    }
+
+    private struct SemaphoreSlimWaitReleaseWrapper : IDisposable {
+        private readonly SemaphoreSlim semaphoreSlim;
+
+        public SemaphoreSlimWaitReleaseWrapper ( SemaphoreSlim semaphoreSlim, out Task waitAsyncTask, CancellationToken cancellationToken = default ( CancellationToken ) )
         {
-            var wrapper = new SemaphoreSlimWaitReleaseWrapper(semaphoreSlim, out Task waitAsyncTask, cancellationToken);
-            return waitAsyncTask.ContinueWith<IDisposable>(t => wrapper, cancellationToken).ConfigureAwait(false);
+            this.semaphoreSlim = semaphoreSlim;
+            waitAsyncTask = this.semaphoreSlim.WaitAsync ( cancellationToken );
         }
 
-        private struct SemaphoreSlimWaitReleaseWrapper : IDisposable
+        public void Dispose()
         {
-            private readonly SemaphoreSlim semaphoreSlim;
-
-            public SemaphoreSlimWaitReleaseWrapper(SemaphoreSlim semaphoreSlim, out Task waitAsyncTask, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                this.semaphoreSlim = semaphoreSlim;
-                waitAsyncTask = this.semaphoreSlim.WaitAsync(cancellationToken);
-            }
-
-            public void Dispose()
-            {
-                semaphoreSlim.Release();
-            }
+            semaphoreSlim.Release();
         }
     }
+}
 }

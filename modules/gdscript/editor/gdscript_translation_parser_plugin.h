@@ -34,23 +34,24 @@
 #include "editor/editor_translation_parser.h"
 #include "modules/regex/regex.h"
 
-class GDScriptEditorTranslationParserPlugin : public EditorTranslationParserPlugin {
-	GDCLASS(GDScriptEditorTranslationParserPlugin, EditorTranslationParserPlugin);
+class GDScriptEditorTranslationParserPlugin : public EditorTranslationParserPlugin
+{
+    GDCLASS ( GDScriptEditorTranslationParserPlugin, EditorTranslationParserPlugin );
 
-	// Regex and search patterns that are used to match translation strings.
-	const String text = "((?:[^\"\\\\]|\\\\[\\s\\S])*(?:\"[\\s\\\\]*\\+[\\s\\\\]*\"(?:[^\"\\\\]|\\\\[\\s\\S])*)*)";
-	RegEx regex;
-	Vector<String> patterns;
-	Vector<String> file_dialog_patterns;
+    // Regex and search patterns that are used to match translation strings.
+    const String text = "((?:[^\"\\\\]|\\\\[\\s\\S])*(?:\"[\\s\\\\]*\\+[\\s\\\\]*\"(?:[^\"\\\\]|\\\\[\\s\\S])*)*)";
+    RegEx regex;
+    Vector<String> patterns;
+    Vector<String> file_dialog_patterns;
 
-	void _parse_file_dialog(const String &p_source_code, Vector<String> *r_output);
-	void _get_captured_strings(const Array &p_results, Vector<String> *r_output);
+    void _parse_file_dialog ( const String &p_source_code, Vector<String> *r_output );
+    void _get_captured_strings ( const Array &p_results, Vector<String> *r_output );
 
 public:
-	virtual Error parse_file(const String &p_path, Vector<String> *r_extracted_strings) override;
-	virtual void get_recognized_extensions(List<String> *r_extensions) const override;
+    virtual Error parse_file ( const String &p_path, Vector<String> *r_extracted_strings ) override;
+    virtual void get_recognized_extensions ( List<String> *r_extensions ) const override;
 
-	GDScriptEditorTranslationParserPlugin();
+    GDScriptEditorTranslationParserPlugin();
 };
 
 #endif // GDSCRIPT_TRANSLATION_PARSER_PLUGIN_H

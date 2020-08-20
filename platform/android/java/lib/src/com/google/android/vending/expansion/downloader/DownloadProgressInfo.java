@@ -30,49 +30,55 @@ import android.os.Parcelable;
  * your activity's UI with information about the download progress, such
  * as the progress so far, time remaining and current speed.
  */
-public class DownloadProgressInfo implements Parcelable {
+public class DownloadProgressInfo implements Parcelable
+{
     public long mOverallTotal;
     public long mOverallProgress;
     public long mTimeRemaining; // time remaining
     public float mCurrentSpeed; // speed in KB/S
 
     @Override
-    public int describeContents() {
+    public int describeContents()
+    {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel p, int i) {
-        p.writeLong(mOverallTotal);
-        p.writeLong(mOverallProgress);
-        p.writeLong(mTimeRemaining);
-        p.writeFloat(mCurrentSpeed);
+    public void writeToParcel ( Parcel p, int i )
+    {
+        p.writeLong ( mOverallTotal );
+        p.writeLong ( mOverallProgress );
+        p.writeLong ( mTimeRemaining );
+        p.writeFloat ( mCurrentSpeed );
     }
 
-    public DownloadProgressInfo(Parcel p) {
+    public DownloadProgressInfo ( Parcel p )
+    {
         mOverallTotal = p.readLong();
         mOverallProgress = p.readLong();
         mTimeRemaining = p.readLong();
         mCurrentSpeed = p.readFloat();
     }
 
-    public DownloadProgressInfo(long overallTotal, long overallProgress,
-            long timeRemaining,
-            float currentSpeed) {
+    public DownloadProgressInfo ( long overallTotal, long overallProgress,
+                                  long timeRemaining,
+                                  float currentSpeed )
+    {
         this.mOverallTotal = overallTotal;
         this.mOverallProgress = overallProgress;
         this.mTimeRemaining = timeRemaining;
         this.mCurrentSpeed = currentSpeed;
     }
 
-    public static final Creator<DownloadProgressInfo> CREATOR = new Creator<DownloadProgressInfo>() {
+    public static final Creator<DownloadProgressInfo> CREATOR = new Creator<DownloadProgressInfo>()
+    {
         @Override
-        public DownloadProgressInfo createFromParcel(Parcel parcel) {
-            return new DownloadProgressInfo(parcel);
+        public DownloadProgressInfo createFromParcel ( Parcel parcel ) {
+            return new DownloadProgressInfo ( parcel );
         }
 
         @Override
-        public DownloadProgressInfo[] newArray(int i) {
+        public DownloadProgressInfo[] newArray ( int i ) {
             return new DownloadProgressInfo[i];
         }
     };

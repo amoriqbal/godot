@@ -41,296 +41,305 @@
 	Base class for all the classes in this file, handles a number of code functions that are shared among all meshes.
 	This class is set apart that it assumes a single surface is always generated for our mesh.
 */
-class PrimitiveMesh : public Mesh {
-	GDCLASS(PrimitiveMesh, Mesh);
+class PrimitiveMesh : public Mesh
+{
+    GDCLASS ( PrimitiveMesh, Mesh );
 
 private:
-	RID mesh;
-	mutable AABB aabb;
-	AABB custom_aabb;
+    RID mesh;
+    mutable AABB aabb;
+    AABB custom_aabb;
 
-	mutable int array_len;
-	mutable int index_array_len;
+    mutable int array_len;
+    mutable int index_array_len;
 
-	Ref<Material> material;
-	bool flip_faces;
+    Ref<Material> material;
+    bool flip_faces;
 
-	mutable bool pending_request;
-	void _update() const;
+    mutable bool pending_request;
+    void _update() const;
 
 protected:
-	Mesh::PrimitiveType primitive_type;
+    Mesh::PrimitiveType primitive_type;
 
-	static void _bind_methods();
+    static void _bind_methods();
 
-	virtual void _create_mesh_array(Array &p_arr) const = 0;
-	void _request_update();
+    virtual void _create_mesh_array ( Array &p_arr ) const = 0;
+    void _request_update();
 
 public:
-	virtual int get_surface_count() const override;
-	virtual int surface_get_array_len(int p_idx) const override;
-	virtual int surface_get_array_index_len(int p_idx) const override;
-	virtual Array surface_get_arrays(int p_surface) const override;
-	virtual Array surface_get_blend_shape_arrays(int p_surface) const override;
-	virtual Dictionary surface_get_lods(int p_surface) const override;
-	virtual uint32_t surface_get_format(int p_idx) const override;
-	virtual Mesh::PrimitiveType surface_get_primitive_type(int p_idx) const override;
-	virtual void surface_set_material(int p_idx, const Ref<Material> &p_material) override;
-	virtual Ref<Material> surface_get_material(int p_idx) const override;
-	virtual int get_blend_shape_count() const override;
-	virtual StringName get_blend_shape_name(int p_index) const override;
-	virtual AABB get_aabb() const override;
-	virtual RID get_rid() const override;
+    virtual int get_surface_count() const override;
+    virtual int surface_get_array_len ( int p_idx ) const override;
+    virtual int surface_get_array_index_len ( int p_idx ) const override;
+    virtual Array surface_get_arrays ( int p_surface ) const override;
+    virtual Array surface_get_blend_shape_arrays ( int p_surface ) const override;
+    virtual Dictionary surface_get_lods ( int p_surface ) const override;
+    virtual uint32_t surface_get_format ( int p_idx ) const override;
+    virtual Mesh::PrimitiveType surface_get_primitive_type ( int p_idx ) const override;
+    virtual void surface_set_material ( int p_idx, const Ref<Material> &p_material ) override;
+    virtual Ref<Material> surface_get_material ( int p_idx ) const override;
+    virtual int get_blend_shape_count() const override;
+    virtual StringName get_blend_shape_name ( int p_index ) const override;
+    virtual AABB get_aabb() const override;
+    virtual RID get_rid() const override;
 
-	void set_material(const Ref<Material> &p_material);
-	Ref<Material> get_material() const;
+    void set_material ( const Ref<Material> &p_material );
+    Ref<Material> get_material() const;
 
-	Array get_mesh_arrays() const;
+    Array get_mesh_arrays() const;
 
-	void set_custom_aabb(const AABB &p_custom);
-	AABB get_custom_aabb() const;
+    void set_custom_aabb ( const AABB &p_custom );
+    AABB get_custom_aabb() const;
 
-	void set_flip_faces(bool p_enable);
-	bool get_flip_faces() const;
+    void set_flip_faces ( bool p_enable );
+    bool get_flip_faces() const;
 
-	PrimitiveMesh();
-	~PrimitiveMesh();
+    PrimitiveMesh();
+    ~PrimitiveMesh();
 };
 
 /**
 	Mesh for a simple capsule
 */
-class CapsuleMesh : public PrimitiveMesh {
-	GDCLASS(CapsuleMesh, PrimitiveMesh);
+class CapsuleMesh : public PrimitiveMesh
+{
+    GDCLASS ( CapsuleMesh, PrimitiveMesh );
 
 private:
-	float radius;
-	float mid_height;
-	int radial_segments;
-	int rings;
+    float radius;
+    float mid_height;
+    int radial_segments;
+    int rings;
 
 protected:
-	static void _bind_methods();
-	virtual void _create_mesh_array(Array &p_arr) const override;
+    static void _bind_methods();
+    virtual void _create_mesh_array ( Array &p_arr ) const override;
 
 public:
-	void set_radius(const float p_radius);
-	float get_radius() const;
+    void set_radius ( const float p_radius );
+    float get_radius() const;
 
-	void set_mid_height(const float p_mid_height);
-	float get_mid_height() const;
+    void set_mid_height ( const float p_mid_height );
+    float get_mid_height() const;
 
-	void set_radial_segments(const int p_segments);
-	int get_radial_segments() const;
+    void set_radial_segments ( const int p_segments );
+    int get_radial_segments() const;
 
-	void set_rings(const int p_rings);
-	int get_rings() const;
+    void set_rings ( const int p_rings );
+    int get_rings() const;
 
-	CapsuleMesh();
+    CapsuleMesh();
 };
 
 /**
 	Similar to test cube but with subdivision support and different texture coordinates
 */
-class CubeMesh : public PrimitiveMesh {
-	GDCLASS(CubeMesh, PrimitiveMesh);
+class CubeMesh : public PrimitiveMesh
+{
+    GDCLASS ( CubeMesh, PrimitiveMesh );
 
 private:
-	Vector3 size;
-	int subdivide_w;
-	int subdivide_h;
-	int subdivide_d;
+    Vector3 size;
+    int subdivide_w;
+    int subdivide_h;
+    int subdivide_d;
 
 protected:
-	static void _bind_methods();
-	virtual void _create_mesh_array(Array &p_arr) const override;
+    static void _bind_methods();
+    virtual void _create_mesh_array ( Array &p_arr ) const override;
 
 public:
-	void set_size(const Vector3 &p_size);
-	Vector3 get_size() const;
+    void set_size ( const Vector3 &p_size );
+    Vector3 get_size() const;
 
-	void set_subdivide_width(const int p_divisions);
-	int get_subdivide_width() const;
+    void set_subdivide_width ( const int p_divisions );
+    int get_subdivide_width() const;
 
-	void set_subdivide_height(const int p_divisions);
-	int get_subdivide_height() const;
+    void set_subdivide_height ( const int p_divisions );
+    int get_subdivide_height() const;
 
-	void set_subdivide_depth(const int p_divisions);
-	int get_subdivide_depth() const;
+    void set_subdivide_depth ( const int p_divisions );
+    int get_subdivide_depth() const;
 
-	CubeMesh();
+    CubeMesh();
 };
 
 /**
 	A cylinder
 */
 
-class CylinderMesh : public PrimitiveMesh {
-	GDCLASS(CylinderMesh, PrimitiveMesh);
+class CylinderMesh : public PrimitiveMesh
+{
+    GDCLASS ( CylinderMesh, PrimitiveMesh );
 
 private:
-	float top_radius;
-	float bottom_radius;
-	float height;
-	int radial_segments;
-	int rings;
+    float top_radius;
+    float bottom_radius;
+    float height;
+    int radial_segments;
+    int rings;
 
 protected:
-	static void _bind_methods();
-	virtual void _create_mesh_array(Array &p_arr) const override;
+    static void _bind_methods();
+    virtual void _create_mesh_array ( Array &p_arr ) const override;
 
 public:
-	void set_top_radius(const float p_radius);
-	float get_top_radius() const;
+    void set_top_radius ( const float p_radius );
+    float get_top_radius() const;
 
-	void set_bottom_radius(const float p_radius);
-	float get_bottom_radius() const;
+    void set_bottom_radius ( const float p_radius );
+    float get_bottom_radius() const;
 
-	void set_height(const float p_height);
-	float get_height() const;
+    void set_height ( const float p_height );
+    float get_height() const;
 
-	void set_radial_segments(const int p_segments);
-	int get_radial_segments() const;
+    void set_radial_segments ( const int p_segments );
+    int get_radial_segments() const;
 
-	void set_rings(const int p_rings);
-	int get_rings() const;
+    void set_rings ( const int p_rings );
+    int get_rings() const;
 
-	CylinderMesh();
+    CylinderMesh();
 };
 
 /**
 	Similar to quadmesh but with tessellation support
 */
-class PlaneMesh : public PrimitiveMesh {
-	GDCLASS(PlaneMesh, PrimitiveMesh);
+class PlaneMesh : public PrimitiveMesh
+{
+    GDCLASS ( PlaneMesh, PrimitiveMesh );
 
 private:
-	Size2 size;
-	int subdivide_w;
-	int subdivide_d;
+    Size2 size;
+    int subdivide_w;
+    int subdivide_d;
 
 protected:
-	static void _bind_methods();
-	virtual void _create_mesh_array(Array &p_arr) const override;
+    static void _bind_methods();
+    virtual void _create_mesh_array ( Array &p_arr ) const override;
 
 public:
-	void set_size(const Size2 &p_size);
-	Size2 get_size() const;
+    void set_size ( const Size2 &p_size );
+    Size2 get_size() const;
 
-	void set_subdivide_width(const int p_divisions);
-	int get_subdivide_width() const;
+    void set_subdivide_width ( const int p_divisions );
+    int get_subdivide_width() const;
 
-	void set_subdivide_depth(const int p_divisions);
-	int get_subdivide_depth() const;
+    void set_subdivide_depth ( const int p_divisions );
+    int get_subdivide_depth() const;
 
-	PlaneMesh();
+    PlaneMesh();
 };
 
 /**
 	A prism shapen, handy for ramps, triangles, etc.
 */
-class PrismMesh : public PrimitiveMesh {
-	GDCLASS(PrismMesh, PrimitiveMesh);
+class PrismMesh : public PrimitiveMesh
+{
+    GDCLASS ( PrismMesh, PrimitiveMesh );
 
 private:
-	float left_to_right;
-	Vector3 size;
-	int subdivide_w;
-	int subdivide_h;
-	int subdivide_d;
+    float left_to_right;
+    Vector3 size;
+    int subdivide_w;
+    int subdivide_h;
+    int subdivide_d;
 
 protected:
-	static void _bind_methods();
-	virtual void _create_mesh_array(Array &p_arr) const override;
+    static void _bind_methods();
+    virtual void _create_mesh_array ( Array &p_arr ) const override;
 
 public:
-	void set_left_to_right(const float p_left_to_right);
-	float get_left_to_right() const;
+    void set_left_to_right ( const float p_left_to_right );
+    float get_left_to_right() const;
 
-	void set_size(const Vector3 &p_size);
-	Vector3 get_size() const;
+    void set_size ( const Vector3 &p_size );
+    Vector3 get_size() const;
 
-	void set_subdivide_width(const int p_divisions);
-	int get_subdivide_width() const;
+    void set_subdivide_width ( const int p_divisions );
+    int get_subdivide_width() const;
 
-	void set_subdivide_height(const int p_divisions);
-	int get_subdivide_height() const;
+    void set_subdivide_height ( const int p_divisions );
+    int get_subdivide_height() const;
 
-	void set_subdivide_depth(const int p_divisions);
-	int get_subdivide_depth() const;
+    void set_subdivide_depth ( const int p_divisions );
+    int get_subdivide_depth() const;
 
-	PrismMesh();
+    PrismMesh();
 };
 
 /**
 	Our original quadmesh...
 */
 
-class QuadMesh : public PrimitiveMesh {
-	GDCLASS(QuadMesh, PrimitiveMesh);
+class QuadMesh : public PrimitiveMesh
+{
+    GDCLASS ( QuadMesh, PrimitiveMesh );
 
 private:
-	Size2 size;
+    Size2 size;
 
 protected:
-	static void _bind_methods();
-	virtual void _create_mesh_array(Array &p_arr) const override;
+    static void _bind_methods();
+    virtual void _create_mesh_array ( Array &p_arr ) const override;
 
 public:
-	QuadMesh();
+    QuadMesh();
 
-	void set_size(const Size2 &p_size);
-	Size2 get_size() const;
+    void set_size ( const Size2 &p_size );
+    Size2 get_size() const;
 };
 
 /**
 	A sphere..
 */
-class SphereMesh : public PrimitiveMesh {
-	GDCLASS(SphereMesh, PrimitiveMesh);
+class SphereMesh : public PrimitiveMesh
+{
+    GDCLASS ( SphereMesh, PrimitiveMesh );
 
 private:
-	float radius;
-	float height;
-	int radial_segments;
-	int rings;
-	bool is_hemisphere;
+    float radius;
+    float height;
+    int radial_segments;
+    int rings;
+    bool is_hemisphere;
 
 protected:
-	static void _bind_methods();
-	virtual void _create_mesh_array(Array &p_arr) const override;
+    static void _bind_methods();
+    virtual void _create_mesh_array ( Array &p_arr ) const override;
 
 public:
-	void set_radius(const float p_radius);
-	float get_radius() const;
+    void set_radius ( const float p_radius );
+    float get_radius() const;
 
-	void set_height(const float p_height);
-	float get_height() const;
+    void set_height ( const float p_height );
+    float get_height() const;
 
-	void set_radial_segments(const int p_radial_segments);
-	int get_radial_segments() const;
+    void set_radial_segments ( const int p_radial_segments );
+    int get_radial_segments() const;
 
-	void set_rings(const int p_rings);
-	int get_rings() const;
+    void set_rings ( const int p_rings );
+    int get_rings() const;
 
-	void set_is_hemisphere(const bool p_is_hemisphere);
-	bool get_is_hemisphere() const;
+    void set_is_hemisphere ( const bool p_is_hemisphere );
+    bool get_is_hemisphere() const;
 
-	SphereMesh();
+    SphereMesh();
 };
 
 /**
 	A single point for use in particle systems
 */
 
-class PointMesh : public PrimitiveMesh {
-	GDCLASS(PointMesh, PrimitiveMesh)
+class PointMesh : public PrimitiveMesh
+{
+    GDCLASS ( PointMesh, PrimitiveMesh )
 
 protected:
-	virtual void _create_mesh_array(Array &p_arr) const override;
+    virtual void _create_mesh_array ( Array &p_arr ) const override;
 
 public:
-	PointMesh();
+    PointMesh();
 };
 
 #endif

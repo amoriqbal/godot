@@ -105,10 +105,10 @@ static void FUNC_NAME(const uint8_t* y,                                        \
   }                                                                            \
 }
 
-ROW_FUNC(YuvToRgbRow_MIPSdspR2,      3, 0, 1, 2, 0)
-ROW_FUNC(YuvToRgbaRow_MIPSdspR2,     4, 0, 1, 2, 3)
-ROW_FUNC(YuvToBgrRow_MIPSdspR2,      3, 2, 1, 0, 0)
-ROW_FUNC(YuvToBgraRow_MIPSdspR2,     4, 2, 1, 0, 3)
+ROW_FUNC ( YuvToRgbRow_MIPSdspR2,      3, 0, 1, 2, 0 )
+ROW_FUNC ( YuvToRgbaRow_MIPSdspR2,     4, 0, 1, 2, 3 )
+ROW_FUNC ( YuvToBgrRow_MIPSdspR2,      3, 2, 1, 0, 0 )
+ROW_FUNC ( YuvToBgraRow_MIPSdspR2,     4, 2, 1, 0, 3 )
 
 #undef ROW_FUNC
 #undef ASM_CLOBBER_LIST
@@ -118,17 +118,18 @@ ROW_FUNC(YuvToBgraRow_MIPSdspR2,     4, 2, 1, 0, 3)
 //------------------------------------------------------------------------------
 // Entry point
 
-extern void WebPInitSamplersMIPSdspR2(void);
+extern void WebPInitSamplersMIPSdspR2 ( void );
 
-WEBP_TSAN_IGNORE_FUNCTION void WebPInitSamplersMIPSdspR2(void) {
-  WebPSamplers[MODE_RGB]  = YuvToRgbRow_MIPSdspR2;
-  WebPSamplers[MODE_RGBA] = YuvToRgbaRow_MIPSdspR2;
-  WebPSamplers[MODE_BGR]  = YuvToBgrRow_MIPSdspR2;
-  WebPSamplers[MODE_BGRA] = YuvToBgraRow_MIPSdspR2;
+WEBP_TSAN_IGNORE_FUNCTION void WebPInitSamplersMIPSdspR2 ( void )
+{
+    WebPSamplers[MODE_RGB]  = YuvToRgbRow_MIPSdspR2;
+    WebPSamplers[MODE_RGBA] = YuvToRgbaRow_MIPSdspR2;
+    WebPSamplers[MODE_BGR]  = YuvToBgrRow_MIPSdspR2;
+    WebPSamplers[MODE_BGRA] = YuvToBgraRow_MIPSdspR2;
 }
 
 #else  // !WEBP_USE_MIPS_DSP_R2
 
-WEBP_DSP_INIT_STUB(WebPInitSamplersMIPSdspR2)
+WEBP_DSP_INIT_STUB ( WebPInitSamplersMIPSdspR2 )
 
 #endif  // WEBP_USE_MIPS_DSP_R2

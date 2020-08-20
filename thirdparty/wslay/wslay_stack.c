@@ -29,58 +29,58 @@
 
 struct wslay_stack* wslay_stack_new()
 {
-  struct wslay_stack *stack = (struct wslay_stack*)malloc
-    (sizeof(struct wslay_stack));
-  if(!stack) {
-    return NULL;
-  }
-  stack->top = NULL;
-  return stack;
+    struct wslay_stack *stack = ( struct wslay_stack* ) malloc
+                                ( sizeof ( struct wslay_stack ) );
+    if ( !stack ) {
+        return NULL;
+    }
+    stack->top = NULL;
+    return stack;
 }
 
-void wslay_stack_free(struct wslay_stack *stack)
+void wslay_stack_free ( struct wslay_stack *stack )
 {
-  struct wslay_stack_cell *p;
-  if(!stack) {
-    return;
-  }
-  p = stack->top;
-  while(p) {
-    struct wslay_stack_cell *next = p->next;
-    free(p);
-    p = next;
-  }
-  free(stack);
+    struct wslay_stack_cell *p;
+    if ( !stack ) {
+        return;
+    }
+    p = stack->top;
+    while ( p ) {
+        struct wslay_stack_cell *next = p->next;
+        free ( p );
+        p = next;
+    }
+    free ( stack );
 }
 
-int wslay_stack_push(struct wslay_stack *stack, void *data)
+int wslay_stack_push ( struct wslay_stack *stack, void *data )
 {
-  struct wslay_stack_cell *new_cell = (struct wslay_stack_cell*)malloc
-    (sizeof(struct wslay_stack_cell));
-  if(!new_cell) {
-    return WSLAY_ERR_NOMEM;
-  }
-  new_cell->data = data;
-  new_cell->next = stack->top;
-  stack->top = new_cell;
-  return 0;
+    struct wslay_stack_cell *new_cell = ( struct wslay_stack_cell* ) malloc
+                                        ( sizeof ( struct wslay_stack_cell ) );
+    if ( !new_cell ) {
+        return WSLAY_ERR_NOMEM;
+    }
+    new_cell->data = data;
+    new_cell->next = stack->top;
+    stack->top = new_cell;
+    return 0;
 }
 
-void wslay_stack_pop(struct wslay_stack *stack)
+void wslay_stack_pop ( struct wslay_stack *stack )
 {
-  struct wslay_stack_cell *top = stack->top;
-  assert(top);
-  stack->top = top->next;
-  free(top);
+    struct wslay_stack_cell *top = stack->top;
+    assert ( top );
+    stack->top = top->next;
+    free ( top );
 }
 
-void* wslay_stack_top(struct wslay_stack *stack)
+void* wslay_stack_top ( struct wslay_stack *stack )
 {
-  assert(stack->top);
-  return stack->top->data;
+    assert ( stack->top );
+    return stack->top->data;
 }
 
-int wslay_stack_empty(struct wslay_stack *stack)
+int wslay_stack_empty ( struct wslay_stack *stack )
 {
-  return stack->top == NULL;
+    return stack->top == NULL;
 }

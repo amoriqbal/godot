@@ -5,85 +5,86 @@ using System.Text;
 
 namespace Godot
 {
-    internal static class DebuggingUtils
+internal static class DebuggingUtils
+{
+    internal static void AppendTypeName ( this StringBuilder sb, Type type )
     {
-        internal static void AppendTypeName(this StringBuilder sb, Type type)
-        {
-            if (type.IsPrimitive)
-                sb.Append(type.Name);
-            else if (type == typeof(void))
-                sb.Append("void");
-            else
-                sb.Append(type);
-
-            sb.Append(" ");
+        if ( type.IsPrimitive ) {
+            sb.Append ( type.Name );
+        } else if ( type == typeof ( void ) ) {
+            sb.Append ( "void" );
+        } else {
+            sb.Append ( type );
         }
 
-        public static void InstallTraceListener()
-        {
-            Trace.Listeners.Clear();
-            Trace.Listeners.Add(new GodotTraceListener());
+        sb.Append ( " " );
+    }
+
+    public static void InstallTraceListener()
+    {
+        Trace.Listeners.Clear();
+        Trace.Listeners.Add ( new GodotTraceListener() );
+    }
+
+    public static void GetStackFrameInfo ( StackFrame frame, out string fileName, out int fileLineNumber, out string methodDecl )
+    {
+        fileName = frame.GetFileName();
+        fileLineNumber = frame.GetFileLineNumber();
+
+        MethodBase methodBase = frame.GetMethod();
+
+        if ( methodBase == null ) {
+            methodDecl = string.Empty;
+            return;
         }
 
-        public static void GetStackFrameInfo(StackFrame frame, out string fileName, out int fileLineNumber, out string methodDecl)
-        {
-            fileName = frame.GetFileName();
-            fileLineNumber = frame.GetFileLineNumber();
+        var sb = new StringBuilder();
 
-            MethodBase methodBase = frame.GetMethod();
+        if ( methodBase is MethodInfo ) {
+            sb.AppendTypeName ( ( ( MethodInfo ) methodBase ).ReturnType );
+        }
 
-            if (methodBase == null)
-            {
-                methodDecl = string.Empty;
-                return;
-            }
+        sb.Append ( methodBase.DeclaringType.FullName );
+        sb.Append ( "." );
+        sb.Append ( methodBase.Name );
 
-            var sb = new StringBuilder();
+        if ( methodBase.IsGenericMethod ) {
+            Type[] genericParams = methodBase.GetGenericArguments();
 
-            if (methodBase is MethodInfo)
-                sb.AppendTypeName(((MethodInfo)methodBase).ReturnType);
+            sb.Append ( "<" );
 
-            sb.Append(methodBase.DeclaringType.FullName);
-            sb.Append(".");
-            sb.Append(methodBase.Name);
-
-            if (methodBase.IsGenericMethod)
-            {
-                Type[] genericParams = methodBase.GetGenericArguments();
-
-                sb.Append("<");
-
-                for (int j = 0; j < genericParams.Length; j++)
-                {
-                    if (j > 0)
-                        sb.Append(", ");
-
-                    sb.AppendTypeName(genericParams[j]);
+            for ( int j = 0; j < genericParams.Length; j++ ) {
+                if ( j > 0 ) {
+                    sb.Append ( ", " );
                 }
 
-                sb.Append(">");
+                sb.AppendTypeName ( genericParams[j] );
             }
 
-            sb.Append("(");
-
-            bool varArgs = (methodBase.CallingConvention & CallingConventions.VarArgs) != 0;
-
-            ParameterInfo[] parameter = methodBase.GetParameters();
-
-            for (int i = 0; i < parameter.Length; i++)
-            {
-                if (i > 0)
-                    sb.Append(", ");
-
-                if (i == parameter.Length - 1 && varArgs)
-                    sb.Append("params ");
-
-                sb.AppendTypeName(parameter[i].ParameterType);
-            }
-
-            sb.Append(")");
-
-            methodDecl = sb.ToString();
+            sb.Append ( ">" );
         }
+
+        sb.Append ( "(" );
+
+        bool varArgs = ( methodBase.CallingConvention & CallingConventions.VarArgs ) != 0;
+
+        ParameterInfo[] parameter = methodBase.GetParameters();
+
+        for ( int i = 0; i < parameter.Length; i++ ) {
+            if ( i > 0 ) {
+                sb.Append ( ", " );
+            }
+
+            if ( i == parameter.Length - 1 && varArgs ) {
+                sb.Append ( "params " );
+            }
+
+            sb.AppendTypeName ( parameter[i].ParameterType );
+        }
+
+        sb.Append ( ")" );
+
+        methodDecl = sb.ToString();
     }
+}
 }

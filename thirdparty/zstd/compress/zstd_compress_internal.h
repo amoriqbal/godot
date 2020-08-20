@@ -64,14 +64,14 @@ typedef struct {
 } ZSTD_localDict;
 
 typedef struct {
-    U32 CTable[HUF_CTABLE_SIZE_U32(255)];
+    U32 CTable[HUF_CTABLE_SIZE_U32 ( 255 )];
     HUF_repeat repeatMode;
 } ZSTD_hufCTables_t;
 
 typedef struct {
-    FSE_CTable offcodeCTable[FSE_CTABLE_SIZE_U32(OffFSELog, MaxOff)];
-    FSE_CTable matchlengthCTable[FSE_CTABLE_SIZE_U32(MLFSELog, MaxML)];
-    FSE_CTable litlengthCTable[FSE_CTABLE_SIZE_U32(LLFSELog, MaxLL)];
+    FSE_CTable offcodeCTable[FSE_CTABLE_SIZE_U32 ( OffFSELog, MaxOff )];
+    FSE_CTable matchlengthCTable[FSE_CTABLE_SIZE_U32 ( MLFSELog, MaxML )];
+    FSE_CTable litlengthCTable[FSE_CTABLE_SIZE_U32 ( LLFSELog, MaxLL )];
     FSE_repeat offcode_repeatMode;
     FSE_repeat matchlength_repeatMode;
     FSE_repeat litlength_repeatMode;
@@ -120,8 +120,8 @@ typedef struct {
 } optState_t;
 
 typedef struct {
-  ZSTD_entropyCTables_t entropy;
-  U32 rep[ZSTD_REP_NUM];
+    ZSTD_entropyCTables_t entropy;
+    U32 rep[ZSTD_REP_NUM];
 } ZSTD_compressedBlockState_t;
 
 typedef struct {
@@ -187,10 +187,10 @@ typedef struct {
 } rawSeq;
 
 typedef struct {
-  rawSeq* seq;     /* The start of the sequences */
-  size_t pos;      /* The position where reading stopped. <= size. */
-  size_t size;     /* The number of sequences. <= capacity. */
-  size_t capacity; /* The capacity starting from `seq` pointer */
+    rawSeq* seq;     /* The start of the sequences */
+    size_t pos;      /* The position where reading stopped. <= size. */
+    size_t size;     /* The number of sequences. <= capacity. */
+    size_t capacity; /* The capacity starting from `seq` pointer */
 } rawSeqStore_t;
 
 typedef struct {
@@ -287,52 +287,60 @@ typedef enum { ZSTD_dtlm_fast, ZSTD_dtlm_full } ZSTD_dictTableLoadMethod_e;
 typedef enum { ZSTD_noDict = 0, ZSTD_extDict = 1, ZSTD_dictMatchState = 2 } ZSTD_dictMode_e;
 
 
-typedef size_t (*ZSTD_blockCompressor) (
-        ZSTD_matchState_t* bs, seqStore_t* seqStore, U32 rep[ZSTD_REP_NUM],
-        void const* src, size_t srcSize);
-ZSTD_blockCompressor ZSTD_selectBlockCompressor(ZSTD_strategy strat, ZSTD_dictMode_e dictMode);
+typedef size_t ( *ZSTD_blockCompressor ) (
+    ZSTD_matchState_t* bs, seqStore_t* seqStore, U32 rep[ZSTD_REP_NUM],
+    void const* src, size_t srcSize );
+ZSTD_blockCompressor ZSTD_selectBlockCompressor ( ZSTD_strategy strat, ZSTD_dictMode_e dictMode );
 
 
-MEM_STATIC U32 ZSTD_LLcode(U32 litLength)
+MEM_STATIC U32 ZSTD_LLcode ( U32 litLength )
 {
     static const BYTE LL_Code[64] = {  0,  1,  2,  3,  4,  5,  6,  7,
                                        8,  9, 10, 11, 12, 13, 14, 15,
-                                      16, 16, 17, 17, 18, 18, 19, 19,
-                                      20, 20, 20, 20, 21, 21, 21, 21,
-                                      22, 22, 22, 22, 22, 22, 22, 22,
-                                      23, 23, 23, 23, 23, 23, 23, 23,
-                                      24, 24, 24, 24, 24, 24, 24, 24,
-                                      24, 24, 24, 24, 24, 24, 24, 24 };
+                                       16, 16, 17, 17, 18, 18, 19, 19,
+                                       20, 20, 20, 20, 21, 21, 21, 21,
+                                       22, 22, 22, 22, 22, 22, 22, 22,
+                                       23, 23, 23, 23, 23, 23, 23, 23,
+                                       24, 24, 24, 24, 24, 24, 24, 24,
+                                       24, 24, 24, 24, 24, 24, 24, 24
+                                    };
     static const U32 LL_deltaCode = 19;
-    return (litLength > 63) ? ZSTD_highbit32(litLength) + LL_deltaCode : LL_Code[litLength];
+    return ( litLength > 63 ) ? ZSTD_highbit32 ( litLength ) + LL_deltaCode : LL_Code[litLength];
 }
 
 /* ZSTD_MLcode() :
  * note : mlBase = matchLength - MINMATCH;
  *        because it's the format it's stored in seqStore->sequences */
-MEM_STATIC U32 ZSTD_MLcode(U32 mlBase)
+MEM_STATIC U32 ZSTD_MLcode ( U32 mlBase )
 {
     static const BYTE ML_Code[128] = { 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15,
-                                      16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-                                      32, 32, 33, 33, 34, 34, 35, 35, 36, 36, 36, 36, 37, 37, 37, 37,
-                                      38, 38, 38, 38, 38, 38, 38, 38, 39, 39, 39, 39, 39, 39, 39, 39,
-                                      40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
-                                      41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41,
-                                      42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42,
-                                      42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42 };
+                                       16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+                                       32, 32, 33, 33, 34, 34, 35, 35, 36, 36, 36, 36, 37, 37, 37, 37,
+                                       38, 38, 38, 38, 38, 38, 38, 38, 39, 39, 39, 39, 39, 39, 39, 39,
+                                       40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
+                                       41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41,
+                                       42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42,
+                                       42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42
+                                     };
     static const U32 ML_deltaCode = 36;
-    return (mlBase > 127) ? ZSTD_highbit32(mlBase) + ML_deltaCode : ML_Code[mlBase];
+    return ( mlBase > 127 ) ? ZSTD_highbit32 ( mlBase ) + ML_deltaCode : ML_Code[mlBase];
 }
 
 /* ZSTD_cParam_withinBounds:
  * @return 1 if value is within cParam bounds,
  * 0 otherwise */
-MEM_STATIC int ZSTD_cParam_withinBounds(ZSTD_cParameter cParam, int value)
+MEM_STATIC int ZSTD_cParam_withinBounds ( ZSTD_cParameter cParam, int value )
 {
-    ZSTD_bounds const bounds = ZSTD_cParam_getBounds(cParam);
-    if (ZSTD_isError(bounds.error)) return 0;
-    if (value < bounds.lowerBound) return 0;
-    if (value > bounds.upperBound) return 0;
+    ZSTD_bounds const bounds = ZSTD_cParam_getBounds ( cParam );
+    if ( ZSTD_isError ( bounds.error ) ) {
+        return 0;
+    }
+    if ( value < bounds.lowerBound ) {
+        return 0;
+    }
+    if ( value > bounds.upperBound ) {
+        return 0;
+    }
     return 1;
 }
 
@@ -340,12 +348,12 @@ MEM_STATIC int ZSTD_cParam_withinBounds(ZSTD_cParameter cParam, int value)
  * minimum compression required
  * to generate a compress block or a compressed literals section.
  * note : use same formula for both situations */
-MEM_STATIC size_t ZSTD_minGain(size_t srcSize, ZSTD_strategy strat)
+MEM_STATIC size_t ZSTD_minGain ( size_t srcSize, ZSTD_strategy strat )
 {
-    U32 const minlog = (strat>=ZSTD_btultra) ? (U32)(strat) - 1 : 6;
-    ZSTD_STATIC_ASSERT(ZSTD_btultra == 8);
-    assert(ZSTD_cParam_withinBounds(ZSTD_c_strategy, strat));
-    return (srcSize >> minlog) + 2;
+    U32 const minlog = ( strat>=ZSTD_btultra ) ? ( U32 ) ( strat ) - 1 : 6;
+    ZSTD_STATIC_ASSERT ( ZSTD_btultra == 8 );
+    assert ( ZSTD_cParam_withinBounds ( ZSTD_c_strategy, strat ) );
+    return ( srcSize >> minlog ) + 2;
 }
 
 /*! ZSTD_safecopyLiterals() :
@@ -353,14 +361,17 @@ MEM_STATIC size_t ZSTD_minGain(size_t srcSize, ZSTD_strategy strat)
  *  Only called when the sequence ends past ilimit_w, so it only needs to be optimized for single
  *  large copies.
  */
-static void ZSTD_safecopyLiterals(BYTE* op, BYTE const* ip, BYTE const* const iend, BYTE const* ilimit_w) {
-    assert(iend > ilimit_w);
-    if (ip <= ilimit_w) {
-        ZSTD_wildcopy(op, ip, ilimit_w - ip, ZSTD_no_overlap);
+static void ZSTD_safecopyLiterals ( BYTE* op, BYTE const* ip, BYTE const* const iend, BYTE const* ilimit_w )
+{
+    assert ( iend > ilimit_w );
+    if ( ip <= ilimit_w ) {
+        ZSTD_wildcopy ( op, ip, ilimit_w - ip, ZSTD_no_overlap );
         op += ilimit_w - ip;
         ip = ilimit_w;
     }
-    while (ip < iend) *op++ = *ip++;
+    while ( ip < iend ) {
+        *op++ = *ip++;
+    }
 }
 
 /*! ZSTD_storeSeq() :
@@ -370,55 +381,58 @@ static void ZSTD_safecopyLiterals(BYTE* op, BYTE const* ip, BYTE const* const ie
  *  Allowed to overread literals up to litLimit.
 */
 HINT_INLINE UNUSED_ATTR
-void ZSTD_storeSeq(seqStore_t* seqStorePtr, size_t litLength, const BYTE* literals, const BYTE* litLimit, U32 offCode, size_t mlBase)
+void ZSTD_storeSeq ( seqStore_t* seqStorePtr, size_t litLength, const BYTE* literals, const BYTE* litLimit, U32 offCode, size_t mlBase )
 {
     BYTE const* const litLimit_w = litLimit - WILDCOPY_OVERLENGTH;
     BYTE const* const litEnd = literals + litLength;
 #if defined(DEBUGLEVEL) && (DEBUGLEVEL >= 6)
     static const BYTE* g_start = NULL;
-    if (g_start==NULL) g_start = (const BYTE*)literals;  /* note : index only works for compression within a single segment */
-    {   U32 const pos = (U32)((const BYTE*)literals - g_start);
-        DEBUGLOG(6, "Cpos%7u :%3u literals, match%4u bytes at offCode%7u",
-               pos, (U32)litLength, (U32)mlBase+MINMATCH, (U32)offCode);
+    if ( g_start==NULL ) {
+        g_start = ( const BYTE* ) literals;    /* note : index only works for compression within a single segment */
+    }
+    {
+        U32 const pos = ( U32 ) ( ( const BYTE* ) literals - g_start );
+        DEBUGLOG ( 6, "Cpos%7u :%3u literals, match%4u bytes at offCode%7u",
+                   pos, ( U32 ) litLength, ( U32 ) mlBase+MINMATCH, ( U32 ) offCode );
     }
 #endif
-    assert((size_t)(seqStorePtr->sequences - seqStorePtr->sequencesStart) < seqStorePtr->maxNbSeq);
+    assert ( ( size_t ) ( seqStorePtr->sequences - seqStorePtr->sequencesStart ) < seqStorePtr->maxNbSeq );
     /* copy Literals */
-    assert(seqStorePtr->maxNbLit <= 128 KB);
-    assert(seqStorePtr->lit + litLength <= seqStorePtr->litStart + seqStorePtr->maxNbLit);
-    assert(literals + litLength <= litLimit);
-    if (litEnd <= litLimit_w) {
+    assert ( seqStorePtr->maxNbLit <= 128 KB );
+    assert ( seqStorePtr->lit + litLength <= seqStorePtr->litStart + seqStorePtr->maxNbLit );
+    assert ( literals + litLength <= litLimit );
+    if ( litEnd <= litLimit_w ) {
         /* Common case we can use wildcopy.
-	 * First copy 16 bytes, because literals are likely short.
-	 */
-        assert(WILDCOPY_OVERLENGTH >= 16);
-        ZSTD_copy16(seqStorePtr->lit, literals);
-        if (litLength > 16) {
-            ZSTD_wildcopy(seqStorePtr->lit+16, literals+16, (ptrdiff_t)litLength-16, ZSTD_no_overlap);
+        * First copy 16 bytes, because literals are likely short.
+         */
+        assert ( WILDCOPY_OVERLENGTH >= 16 );
+        ZSTD_copy16 ( seqStorePtr->lit, literals );
+        if ( litLength > 16 ) {
+            ZSTD_wildcopy ( seqStorePtr->lit+16, literals+16, ( ptrdiff_t ) litLength-16, ZSTD_no_overlap );
         }
     } else {
-        ZSTD_safecopyLiterals(seqStorePtr->lit, literals, litEnd, litLimit_w);
+        ZSTD_safecopyLiterals ( seqStorePtr->lit, literals, litEnd, litLimit_w );
     }
     seqStorePtr->lit += litLength;
 
     /* literal Length */
-    if (litLength>0xFFFF) {
-        assert(seqStorePtr->longLengthID == 0); /* there can only be a single long length */
+    if ( litLength>0xFFFF ) {
+        assert ( seqStorePtr->longLengthID == 0 ); /* there can only be a single long length */
         seqStorePtr->longLengthID = 1;
-        seqStorePtr->longLengthPos = (U32)(seqStorePtr->sequences - seqStorePtr->sequencesStart);
+        seqStorePtr->longLengthPos = ( U32 ) ( seqStorePtr->sequences - seqStorePtr->sequencesStart );
     }
-    seqStorePtr->sequences[0].litLength = (U16)litLength;
+    seqStorePtr->sequences[0].litLength = ( U16 ) litLength;
 
     /* match offset */
     seqStorePtr->sequences[0].offset = offCode + 1;
 
     /* match Length */
-    if (mlBase>0xFFFF) {
-        assert(seqStorePtr->longLengthID == 0); /* there can only be a single long length */
+    if ( mlBase>0xFFFF ) {
+        assert ( seqStorePtr->longLengthID == 0 ); /* there can only be a single long length */
         seqStorePtr->longLengthID = 2;
-        seqStorePtr->longLengthPos = (U32)(seqStorePtr->sequences - seqStorePtr->sequencesStart);
+        seqStorePtr->longLengthPos = ( U32 ) ( seqStorePtr->sequences - seqStorePtr->sequencesStart );
     }
-    seqStorePtr->sequences[0].matchLength = (U16)mlBase;
+    seqStorePtr->sequences[0].matchLength = ( U16 ) mlBase;
 
     seqStorePtr->sequences++;
 }
@@ -427,16 +441,16 @@ void ZSTD_storeSeq(seqStore_t* seqStorePtr, size_t litLength, const BYTE* litera
 /*-*************************************
 *  Match length counter
 ***************************************/
-static unsigned ZSTD_NbCommonBytes (size_t val)
+static unsigned ZSTD_NbCommonBytes ( size_t val )
 {
-    if (MEM_isLittleEndian()) {
-        if (MEM_64bits()) {
+    if ( MEM_isLittleEndian() ) {
+        if ( MEM_64bits() ) {
 #       if defined(_MSC_VER) && defined(_WIN64)
             unsigned long r = 0;
-            _BitScanForward64( &r, (U64)val );
-            return (unsigned)(r>>3);
+            _BitScanForward64 ( &r, ( U64 ) val );
+            return ( unsigned ) ( r>>3 );
 #       elif defined(__GNUC__) && (__GNUC__ >= 4)
-            return (__builtin_ctzll((U64)val) >> 3);
+            return ( __builtin_ctzll ( ( U64 ) val ) >> 3 );
 #       else
             static const int DeBruijnBytePos[64] = { 0, 0, 0, 0, 0, 1, 1, 2,
                                                      0, 3, 1, 3, 1, 4, 2, 7,
@@ -445,76 +459,113 @@ static unsigned ZSTD_NbCommonBytes (size_t val)
                                                      7, 0, 1, 2, 3, 3, 4, 6,
                                                      2, 6, 5, 5, 3, 4, 5, 6,
                                                      7, 1, 2, 4, 6, 4, 4, 5,
-                                                     7, 2, 6, 5, 7, 6, 7, 7 };
-            return DeBruijnBytePos[((U64)((val & -(long long)val) * 0x0218A392CDABBD3FULL)) >> 58];
+                                                     7, 2, 6, 5, 7, 6, 7, 7
+                                                   };
+            return DeBruijnBytePos[ ( ( U64 ) ( ( val & - ( long long ) val ) * 0x0218A392CDABBD3FULL ) ) >> 58];
 #       endif
         } else { /* 32 bits */
 #       if defined(_MSC_VER)
             unsigned long r=0;
-            _BitScanForward( &r, (U32)val );
-            return (unsigned)(r>>3);
+            _BitScanForward ( &r, ( U32 ) val );
+            return ( unsigned ) ( r>>3 );
 #       elif defined(__GNUC__) && (__GNUC__ >= 3)
-            return (__builtin_ctz((U32)val) >> 3);
+            return ( __builtin_ctz ( ( U32 ) val ) >> 3 );
 #       else
             static const int DeBruijnBytePos[32] = { 0, 0, 3, 0, 3, 1, 3, 0,
                                                      3, 2, 2, 1, 3, 2, 0, 1,
                                                      3, 3, 1, 2, 2, 2, 2, 0,
-                                                     3, 1, 2, 0, 1, 0, 1, 1 };
-            return DeBruijnBytePos[((U32)((val & -(S32)val) * 0x077CB531U)) >> 27];
+                                                     3, 1, 2, 0, 1, 0, 1, 1
+                                                   };
+            return DeBruijnBytePos[ ( ( U32 ) ( ( val & - ( S32 ) val ) * 0x077CB531U ) ) >> 27];
 #       endif
         }
     } else {  /* Big Endian CPU */
-        if (MEM_64bits()) {
+        if ( MEM_64bits() ) {
 #       if defined(_MSC_VER) && defined(_WIN64)
             unsigned long r = 0;
-            _BitScanReverse64( &r, val );
-            return (unsigned)(r>>3);
+            _BitScanReverse64 ( &r, val );
+            return ( unsigned ) ( r>>3 );
 #       elif defined(__GNUC__) && (__GNUC__ >= 4)
-            return (__builtin_clzll(val) >> 3);
+            return ( __builtin_clzll ( val ) >> 3 );
 #       else
             unsigned r;
-            const unsigned n32 = sizeof(size_t)*4;   /* calculate this way due to compiler complaining in 32-bits mode */
-            if (!(val>>n32)) { r=4; } else { r=0; val>>=n32; }
-            if (!(val>>16)) { r+=2; val>>=8; } else { val>>=24; }
-            r += (!val);
+            const unsigned n32 = sizeof ( size_t ) *4; /* calculate this way due to compiler complaining in 32-bits mode */
+            if ( ! ( val>>n32 ) ) {
+                r=4;
+            } else {
+                r=0;
+                val>>=n32;
+            }
+            if ( ! ( val>>16 ) ) {
+                r+=2;
+                val>>=8;
+            } else {
+                val>>=24;
+            }
+            r += ( !val );
             return r;
 #       endif
         } else { /* 32 bits */
 #       if defined(_MSC_VER)
             unsigned long r = 0;
-            _BitScanReverse( &r, (unsigned long)val );
-            return (unsigned)(r>>3);
+            _BitScanReverse ( &r, ( unsigned long ) val );
+            return ( unsigned ) ( r>>3 );
 #       elif defined(__GNUC__) && (__GNUC__ >= 3)
-            return (__builtin_clz((U32)val) >> 3);
+            return ( __builtin_clz ( ( U32 ) val ) >> 3 );
 #       else
             unsigned r;
-            if (!(val>>16)) { r=2; val>>=8; } else { r=0; val>>=24; }
-            r += (!val);
+            if ( ! ( val>>16 ) ) {
+                r=2;
+                val>>=8;
+            } else {
+                r=0;
+                val>>=24;
+            }
+            r += ( !val );
             return r;
 #       endif
-    }   }
+        }
+    }
 }
 
 
-MEM_STATIC size_t ZSTD_count(const BYTE* pIn, const BYTE* pMatch, const BYTE* const pInLimit)
+MEM_STATIC size_t ZSTD_count ( const BYTE* pIn, const BYTE* pMatch, const BYTE* const pInLimit )
 {
     const BYTE* const pStart = pIn;
-    const BYTE* const pInLoopLimit = pInLimit - (sizeof(size_t)-1);
+    const BYTE* const pInLoopLimit = pInLimit - ( sizeof ( size_t )-1 );
 
-    if (pIn < pInLoopLimit) {
-        { size_t const diff = MEM_readST(pMatch) ^ MEM_readST(pIn);
-          if (diff) return ZSTD_NbCommonBytes(diff); }
-        pIn+=sizeof(size_t); pMatch+=sizeof(size_t);
-        while (pIn < pInLoopLimit) {
-            size_t const diff = MEM_readST(pMatch) ^ MEM_readST(pIn);
-            if (!diff) { pIn+=sizeof(size_t); pMatch+=sizeof(size_t); continue; }
-            pIn += ZSTD_NbCommonBytes(diff);
-            return (size_t)(pIn - pStart);
-    }   }
-    if (MEM_64bits() && (pIn<(pInLimit-3)) && (MEM_read32(pMatch) == MEM_read32(pIn))) { pIn+=4; pMatch+=4; }
-    if ((pIn<(pInLimit-1)) && (MEM_read16(pMatch) == MEM_read16(pIn))) { pIn+=2; pMatch+=2; }
-    if ((pIn<pInLimit) && (*pMatch == *pIn)) pIn++;
-    return (size_t)(pIn - pStart);
+    if ( pIn < pInLoopLimit ) {
+        {
+            size_t const diff = MEM_readST ( pMatch ) ^ MEM_readST ( pIn );
+            if ( diff ) {
+                return ZSTD_NbCommonBytes ( diff );
+            }
+        }
+        pIn+=sizeof ( size_t );
+        pMatch+=sizeof ( size_t );
+        while ( pIn < pInLoopLimit ) {
+            size_t const diff = MEM_readST ( pMatch ) ^ MEM_readST ( pIn );
+            if ( !diff ) {
+                pIn+=sizeof ( size_t );
+                pMatch+=sizeof ( size_t );
+                continue;
+            }
+            pIn += ZSTD_NbCommonBytes ( diff );
+            return ( size_t ) ( pIn - pStart );
+        }
+    }
+    if ( MEM_64bits() && ( pIn< ( pInLimit-3 ) ) && ( MEM_read32 ( pMatch ) == MEM_read32 ( pIn ) ) ) {
+        pIn+=4;
+        pMatch+=4;
+    }
+    if ( ( pIn< ( pInLimit-1 ) ) && ( MEM_read16 ( pMatch ) == MEM_read16 ( pIn ) ) ) {
+        pIn+=2;
+        pMatch+=2;
+    }
+    if ( ( pIn<pInLimit ) && ( *pMatch == *pIn ) ) {
+        pIn++;
+    }
+    return ( size_t ) ( pIn - pStart );
 }
 
 /** ZSTD_count_2segments() :
@@ -522,18 +573,20 @@ MEM_STATIC size_t ZSTD_count(const BYTE* pIn, const BYTE* pMatch, const BYTE* co
  *  convention : on reaching mEnd, match count continue starting from iStart
  */
 MEM_STATIC size_t
-ZSTD_count_2segments(const BYTE* ip, const BYTE* match,
-                     const BYTE* iEnd, const BYTE* mEnd, const BYTE* iStart)
+ZSTD_count_2segments ( const BYTE* ip, const BYTE* match,
+                       const BYTE* iEnd, const BYTE* mEnd, const BYTE* iStart )
 {
-    const BYTE* const vEnd = MIN( ip + (mEnd - match), iEnd);
-    size_t const matchLength = ZSTD_count(ip, match, vEnd);
-    if (match + matchLength != mEnd) return matchLength;
-    DEBUGLOG(7, "ZSTD_count_2segments: found a 2-parts match (current length==%zu)", matchLength);
-    DEBUGLOG(7, "distance from match beginning to end dictionary = %zi", mEnd - match);
-    DEBUGLOG(7, "distance from current pos to end buffer = %zi", iEnd - ip);
-    DEBUGLOG(7, "next byte : ip==%02X, istart==%02X", ip[matchLength], *iStart);
-    DEBUGLOG(7, "final match length = %zu", matchLength + ZSTD_count(ip+matchLength, iStart, iEnd));
-    return matchLength + ZSTD_count(ip+matchLength, iStart, iEnd);
+    const BYTE* const vEnd = MIN ( ip + ( mEnd - match ), iEnd );
+    size_t const matchLength = ZSTD_count ( ip, match, vEnd );
+    if ( match + matchLength != mEnd ) {
+        return matchLength;
+    }
+    DEBUGLOG ( 7, "ZSTD_count_2segments: found a 2-parts match (current length==%zu)", matchLength );
+    DEBUGLOG ( 7, "distance from match beginning to end dictionary = %zi", mEnd - match );
+    DEBUGLOG ( 7, "distance from current pos to end buffer = %zi", iEnd - ip );
+    DEBUGLOG ( 7, "next byte : ip==%02X, istart==%02X", ip[matchLength], *iStart );
+    DEBUGLOG ( 7, "final match length = %zu", matchLength + ZSTD_count ( ip+matchLength, iStart, iEnd ) );
+    return matchLength + ZSTD_count ( ip+matchLength, iStart, iEnd );
 }
 
 
@@ -541,52 +594,94 @@ ZSTD_count_2segments(const BYTE* ip, const BYTE* match,
  *  Hashes
  ***************************************/
 static const U32 prime3bytes = 506832829U;
-static U32    ZSTD_hash3(U32 u, U32 h) { return ((u << (32-24)) * prime3bytes)  >> (32-h) ; }
-MEM_STATIC size_t ZSTD_hash3Ptr(const void* ptr, U32 h) { return ZSTD_hash3(MEM_readLE32(ptr), h); } /* only in zstd_opt.h */
+static U32    ZSTD_hash3 ( U32 u, U32 h )
+{
+    return ( ( u << ( 32-24 ) ) * prime3bytes )  >> ( 32-h ) ;
+}
+MEM_STATIC size_t ZSTD_hash3Ptr ( const void* ptr, U32 h )
+{
+    return ZSTD_hash3 ( MEM_readLE32 ( ptr ), h );    /* only in zstd_opt.h */
+}
 
 static const U32 prime4bytes = 2654435761U;
-static U32    ZSTD_hash4(U32 u, U32 h) { return (u * prime4bytes) >> (32-h) ; }
-static size_t ZSTD_hash4Ptr(const void* ptr, U32 h) { return ZSTD_hash4(MEM_read32(ptr), h); }
+static U32    ZSTD_hash4 ( U32 u, U32 h )
+{
+    return ( u * prime4bytes ) >> ( 32-h ) ;
+}
+static size_t ZSTD_hash4Ptr ( const void* ptr, U32 h )
+{
+    return ZSTD_hash4 ( MEM_read32 ( ptr ), h );
+}
 
 static const U64 prime5bytes = 889523592379ULL;
-static size_t ZSTD_hash5(U64 u, U32 h) { return (size_t)(((u  << (64-40)) * prime5bytes) >> (64-h)) ; }
-static size_t ZSTD_hash5Ptr(const void* p, U32 h) { return ZSTD_hash5(MEM_readLE64(p), h); }
+static size_t ZSTD_hash5 ( U64 u, U32 h )
+{
+    return ( size_t ) ( ( ( u  << ( 64-40 ) ) * prime5bytes ) >> ( 64-h ) ) ;
+}
+static size_t ZSTD_hash5Ptr ( const void* p, U32 h )
+{
+    return ZSTD_hash5 ( MEM_readLE64 ( p ), h );
+}
 
 static const U64 prime6bytes = 227718039650203ULL;
-static size_t ZSTD_hash6(U64 u, U32 h) { return (size_t)(((u  << (64-48)) * prime6bytes) >> (64-h)) ; }
-static size_t ZSTD_hash6Ptr(const void* p, U32 h) { return ZSTD_hash6(MEM_readLE64(p), h); }
+static size_t ZSTD_hash6 ( U64 u, U32 h )
+{
+    return ( size_t ) ( ( ( u  << ( 64-48 ) ) * prime6bytes ) >> ( 64-h ) ) ;
+}
+static size_t ZSTD_hash6Ptr ( const void* p, U32 h )
+{
+    return ZSTD_hash6 ( MEM_readLE64 ( p ), h );
+}
 
 static const U64 prime7bytes = 58295818150454627ULL;
-static size_t ZSTD_hash7(U64 u, U32 h) { return (size_t)(((u  << (64-56)) * prime7bytes) >> (64-h)) ; }
-static size_t ZSTD_hash7Ptr(const void* p, U32 h) { return ZSTD_hash7(MEM_readLE64(p), h); }
+static size_t ZSTD_hash7 ( U64 u, U32 h )
+{
+    return ( size_t ) ( ( ( u  << ( 64-56 ) ) * prime7bytes ) >> ( 64-h ) ) ;
+}
+static size_t ZSTD_hash7Ptr ( const void* p, U32 h )
+{
+    return ZSTD_hash7 ( MEM_readLE64 ( p ), h );
+}
 
 static const U64 prime8bytes = 0xCF1BBCDCB7A56463ULL;
-static size_t ZSTD_hash8(U64 u, U32 h) { return (size_t)(((u) * prime8bytes) >> (64-h)) ; }
-static size_t ZSTD_hash8Ptr(const void* p, U32 h) { return ZSTD_hash8(MEM_readLE64(p), h); }
-
-MEM_STATIC size_t ZSTD_hashPtr(const void* p, U32 hBits, U32 mls)
+static size_t ZSTD_hash8 ( U64 u, U32 h )
 {
-    switch(mls)
-    {
+    return ( size_t ) ( ( ( u ) * prime8bytes ) >> ( 64-h ) ) ;
+}
+static size_t ZSTD_hash8Ptr ( const void* p, U32 h )
+{
+    return ZSTD_hash8 ( MEM_readLE64 ( p ), h );
+}
+
+MEM_STATIC size_t ZSTD_hashPtr ( const void* p, U32 hBits, U32 mls )
+{
+    switch ( mls ) {
     default:
-    case 4: return ZSTD_hash4Ptr(p, hBits);
-    case 5: return ZSTD_hash5Ptr(p, hBits);
-    case 6: return ZSTD_hash6Ptr(p, hBits);
-    case 7: return ZSTD_hash7Ptr(p, hBits);
-    case 8: return ZSTD_hash8Ptr(p, hBits);
+    case 4:
+        return ZSTD_hash4Ptr ( p, hBits );
+    case 5:
+        return ZSTD_hash5Ptr ( p, hBits );
+    case 6:
+        return ZSTD_hash6Ptr ( p, hBits );
+    case 7:
+        return ZSTD_hash7Ptr ( p, hBits );
+    case 8:
+        return ZSTD_hash8Ptr ( p, hBits );
     }
 }
 
 /** ZSTD_ipow() :
  * Return base^exponent.
  */
-static U64 ZSTD_ipow(U64 base, U64 exponent)
+static U64 ZSTD_ipow ( U64 base, U64 exponent )
 {
     U64 power = 1;
-    while (exponent) {
-      if (exponent & 1) power *= base;
-      exponent >>= 1;
-      base *= base;
+    while ( exponent ) {
+        if ( exponent & 1 ) {
+            power *= base;
+        }
+        exponent >>= 1;
+        base *= base;
     }
     return power;
 }
@@ -596,11 +691,11 @@ static U64 ZSTD_ipow(U64 base, U64 exponent)
 /** ZSTD_rollingHash_append() :
  * Add the buffer to the hash value.
  */
-static U64 ZSTD_rollingHash_append(U64 hash, void const* buf, size_t size)
+static U64 ZSTD_rollingHash_append ( U64 hash, void const* buf, size_t size )
 {
-    BYTE const* istart = (BYTE const*)buf;
+    BYTE const* istart = ( BYTE const* ) buf;
     size_t pos;
-    for (pos = 0; pos < size; ++pos) {
+    for ( pos = 0; pos < size; ++pos ) {
         hash *= prime8bytes;
         hash += istart[pos] + ZSTD_ROLL_HASH_CHAR_OFFSET;
     }
@@ -610,26 +705,26 @@ static U64 ZSTD_rollingHash_append(U64 hash, void const* buf, size_t size)
 /** ZSTD_rollingHash_compute() :
  * Compute the rolling hash value of the buffer.
  */
-MEM_STATIC U64 ZSTD_rollingHash_compute(void const* buf, size_t size)
+MEM_STATIC U64 ZSTD_rollingHash_compute ( void const* buf, size_t size )
 {
-    return ZSTD_rollingHash_append(0, buf, size);
+    return ZSTD_rollingHash_append ( 0, buf, size );
 }
 
 /** ZSTD_rollingHash_primePower() :
  * Compute the primePower to be passed to ZSTD_rollingHash_rotate() for a hash
  * over a window of length bytes.
  */
-MEM_STATIC U64 ZSTD_rollingHash_primePower(U32 length)
+MEM_STATIC U64 ZSTD_rollingHash_primePower ( U32 length )
 {
-    return ZSTD_ipow(prime8bytes, length - 1);
+    return ZSTD_ipow ( prime8bytes, length - 1 );
 }
 
 /** ZSTD_rollingHash_rotate() :
  * Rotate the rolling hash by one byte.
  */
-MEM_STATIC U64 ZSTD_rollingHash_rotate(U64 hash, BYTE toRemove, BYTE toAdd, U64 primePower)
+MEM_STATIC U64 ZSTD_rollingHash_rotate ( U64 hash, BYTE toRemove, BYTE toAdd, U64 primePower )
 {
-    hash -= (toRemove + ZSTD_ROLL_HASH_CHAR_OFFSET) * primePower;
+    hash -= ( toRemove + ZSTD_ROLL_HASH_CHAR_OFFSET ) * primePower;
     hash *= prime8bytes;
     hash += toAdd + ZSTD_ROLL_HASH_CHAR_OFFSET;
     return hash;
@@ -652,10 +747,10 @@ MEM_STATIC U64 ZSTD_rollingHash_rotate(U64 hash, BYTE toRemove, BYTE toAdd, U64 
  * ZSTD_window_clear():
  * Clears the window containing the history by simply setting it to empty.
  */
-MEM_STATIC void ZSTD_window_clear(ZSTD_window_t* window)
+MEM_STATIC void ZSTD_window_clear ( ZSTD_window_t* window )
 {
-    size_t const endT = (size_t)(window->nextSrc - window->base);
-    U32 const end = (U32)endT;
+    size_t const endT = ( size_t ) ( window->nextSrc - window->base );
+    U32 const end = ( U32 ) endT;
 
     window->lowLimit = end;
     window->dictLimit = end;
@@ -665,7 +760,7 @@ MEM_STATIC void ZSTD_window_clear(ZSTD_window_t* window)
  * ZSTD_window_hasExtDict():
  * Returns non-zero if the window has a non-empty extDict.
  */
-MEM_STATIC U32 ZSTD_window_hasExtDict(ZSTD_window_t const window)
+MEM_STATIC U32 ZSTD_window_hasExtDict ( ZSTD_window_t const window )
 {
     return window.lowLimit < window.dictLimit;
 }
@@ -675,13 +770,13 @@ MEM_STATIC U32 ZSTD_window_hasExtDict(ZSTD_window_t const window)
  * Inspects the provided matchState and figures out what dictMode should be
  * passed to the compressor.
  */
-MEM_STATIC ZSTD_dictMode_e ZSTD_matchState_dictMode(const ZSTD_matchState_t *ms)
+MEM_STATIC ZSTD_dictMode_e ZSTD_matchState_dictMode ( const ZSTD_matchState_t *ms )
 {
-    return ZSTD_window_hasExtDict(ms->window) ?
-        ZSTD_extDict :
-        ms->dictMatchState != NULL ?
-            ZSTD_dictMatchState :
-            ZSTD_noDict;
+    return ZSTD_window_hasExtDict ( ms->window ) ?
+           ZSTD_extDict :
+           ms->dictMatchState != NULL ?
+           ZSTD_dictMatchState :
+           ZSTD_noDict;
 }
 
 /**
@@ -689,10 +784,10 @@ MEM_STATIC ZSTD_dictMode_e ZSTD_matchState_dictMode(const ZSTD_matchState_t *ms)
  * Returns non-zero if the indices are getting too large and need overflow
  * protection.
  */
-MEM_STATIC U32 ZSTD_window_needOverflowCorrection(ZSTD_window_t const window,
-                                                  void const* srcEnd)
+MEM_STATIC U32 ZSTD_window_needOverflowCorrection ( ZSTD_window_t const window,
+        void const* srcEnd )
 {
-    U32 const current = (U32)((BYTE const*)srcEnd - window.base);
+    U32 const current = ( U32 ) ( ( BYTE const* ) srcEnd - window.base );
     return current > ZSTD_CURRENT_MAX;
 }
 
@@ -706,8 +801,8 @@ MEM_STATIC U32 ZSTD_window_needOverflowCorrection(ZSTD_window_t const window,
  * which may be 0. Every index up to maxDist in the past must be valid.
  * NOTE: (maxDist & cycleMask) must be zero.
  */
-MEM_STATIC U32 ZSTD_window_correctOverflow(ZSTD_window_t* window, U32 cycleLog,
-                                           U32 maxDist, void const* src)
+MEM_STATIC U32 ZSTD_window_correctOverflow ( ZSTD_window_t* window, U32 cycleLog,
+        U32 maxDist, void const* src )
 {
     /* preemptive overflow correction:
      * 1. correction is large enough:
@@ -728,22 +823,22 @@ MEM_STATIC U32 ZSTD_window_correctOverflow(ZSTD_window_t* window, U32 cycleLog,
      * 3. (cctx->lowLimit + 1<<windowLog) < 1<<32:
      *    windowLog <= 31 ==> 3<<29 + 1<<windowLog < 7<<29 < 1<<32.
      */
-    U32 const cycleMask = (1U << cycleLog) - 1;
-    U32 const current = (U32)((BYTE const*)src - window->base);
-    U32 const newCurrent = (current & cycleMask) + maxDist;
+    U32 const cycleMask = ( 1U << cycleLog ) - 1;
+    U32 const current = ( U32 ) ( ( BYTE const* ) src - window->base );
+    U32 const newCurrent = ( current & cycleMask ) + maxDist;
     U32 const correction = current - newCurrent;
-    assert((maxDist & cycleMask) == 0);
-    assert(current > newCurrent);
+    assert ( ( maxDist & cycleMask ) == 0 );
+    assert ( current > newCurrent );
     /* Loose bound, should be around 1<<29 (see above) */
-    assert(correction > 1<<28);
+    assert ( correction > 1<<28 );
 
     window->base += correction;
     window->dictBase += correction;
     window->lowLimit -= correction;
     window->dictLimit -= correction;
 
-    DEBUGLOG(4, "Correction of 0x%x bytes to lowLimit=0x%x", correction,
-             window->lowLimit);
+    DEBUGLOG ( 4, "Correction of 0x%x bytes to lowLimit=0x%x", correction,
+               window->lowLimit );
     return correction;
 }
 
@@ -771,16 +866,16 @@ MEM_STATIC U32 ZSTD_window_correctOverflow(ZSTD_window_t* window, U32 cycleLog,
  * forceWindow and dictMatchState are therefore incompatible.
  */
 MEM_STATIC void
-ZSTD_window_enforceMaxDist(ZSTD_window_t* window,
-                     const void* blockEnd,
-                           U32   maxDist,
-                           U32*  loadedDictEndPtr,
-                     const ZSTD_matchState_t** dictMatchStatePtr)
+ZSTD_window_enforceMaxDist ( ZSTD_window_t* window,
+                             const void* blockEnd,
+                             U32   maxDist,
+                             U32*  loadedDictEndPtr,
+                             const ZSTD_matchState_t** dictMatchStatePtr )
 {
-    U32 const blockEndIdx = (U32)((BYTE const*)blockEnd - window->base);
-    U32 const loadedDictEnd = (loadedDictEndPtr != NULL) ? *loadedDictEndPtr : 0;
-    DEBUGLOG(5, "ZSTD_window_enforceMaxDist: blockEndIdx=%u, maxDist=%u, loadedDictEnd=%u",
-                (unsigned)blockEndIdx, (unsigned)maxDist, (unsigned)loadedDictEnd);
+    U32 const blockEndIdx = ( U32 ) ( ( BYTE const* ) blockEnd - window->base );
+    U32 const loadedDictEnd = ( loadedDictEndPtr != NULL ) ? *loadedDictEndPtr : 0;
+    DEBUGLOG ( 5, "ZSTD_window_enforceMaxDist: blockEndIdx=%u, maxDist=%u, loadedDictEnd=%u",
+               ( unsigned ) blockEndIdx, ( unsigned ) maxDist, ( unsigned ) loadedDictEnd );
 
     /* - When there is no dictionary : loadedDictEnd == 0.
          In which case, the test (blockEndIdx > maxDist) is merely to avoid
@@ -795,17 +890,23 @@ ZSTD_window_enforceMaxDist(ZSTD_window_t* window,
          loadedDictEnd is expressed within the referential of the context,
          so it can be directly compared against blockEndIdx.
     */
-    if (blockEndIdx > maxDist + loadedDictEnd) {
+    if ( blockEndIdx > maxDist + loadedDictEnd ) {
         U32 const newLowLimit = blockEndIdx - maxDist;
-        if (window->lowLimit < newLowLimit) window->lowLimit = newLowLimit;
-        if (window->dictLimit < window->lowLimit) {
-            DEBUGLOG(5, "Update dictLimit to match lowLimit, from %u to %u",
-                        (unsigned)window->dictLimit, (unsigned)window->lowLimit);
+        if ( window->lowLimit < newLowLimit ) {
+            window->lowLimit = newLowLimit;
+        }
+        if ( window->dictLimit < window->lowLimit ) {
+            DEBUGLOG ( 5, "Update dictLimit to match lowLimit, from %u to %u",
+                       ( unsigned ) window->dictLimit, ( unsigned ) window->lowLimit );
             window->dictLimit = window->lowLimit;
         }
         /* On reaching window size, dictionaries are invalidated */
-        if (loadedDictEndPtr) *loadedDictEndPtr = 0;
-        if (dictMatchStatePtr) *dictMatchStatePtr = NULL;
+        if ( loadedDictEndPtr ) {
+            *loadedDictEndPtr = 0;
+        }
+        if ( dictMatchStatePtr ) {
+            *dictMatchStatePtr = NULL;
+        }
     }
 }
 
@@ -816,32 +917,35 @@ ZSTD_window_enforceMaxDist(ZSTD_window_t* window,
  *              loadedDictEnd uses same referential as window->base
  *              maxDist is the window size */
 MEM_STATIC void
-ZSTD_checkDictValidity(const ZSTD_window_t* window,
-                       const void* blockEnd,
-                             U32   maxDist,
-                             U32*  loadedDictEndPtr,
-                       const ZSTD_matchState_t** dictMatchStatePtr)
+ZSTD_checkDictValidity ( const ZSTD_window_t* window,
+                         const void* blockEnd,
+                         U32   maxDist,
+                         U32*  loadedDictEndPtr,
+                         const ZSTD_matchState_t** dictMatchStatePtr )
 {
-    assert(loadedDictEndPtr != NULL);
-    assert(dictMatchStatePtr != NULL);
-    {   U32 const blockEndIdx = (U32)((BYTE const*)blockEnd - window->base);
+    assert ( loadedDictEndPtr != NULL );
+    assert ( dictMatchStatePtr != NULL );
+    {
+        U32 const blockEndIdx = ( U32 ) ( ( BYTE const* ) blockEnd - window->base );
         U32 const loadedDictEnd = *loadedDictEndPtr;
-        DEBUGLOG(5, "ZSTD_checkDictValidity: blockEndIdx=%u, maxDist=%u, loadedDictEnd=%u",
-                    (unsigned)blockEndIdx, (unsigned)maxDist, (unsigned)loadedDictEnd);
-        assert(blockEndIdx >= loadedDictEnd);
+        DEBUGLOG ( 5, "ZSTD_checkDictValidity: blockEndIdx=%u, maxDist=%u, loadedDictEnd=%u",
+                   ( unsigned ) blockEndIdx, ( unsigned ) maxDist, ( unsigned ) loadedDictEnd );
+        assert ( blockEndIdx >= loadedDictEnd );
 
-        if (blockEndIdx > loadedDictEnd + maxDist) {
+        if ( blockEndIdx > loadedDictEnd + maxDist ) {
             /* On reaching window size, dictionaries are invalidated.
              * For simplification, if window size is reached anywhere within next block,
              * the dictionary is invalidated for the full block.
              */
-            DEBUGLOG(6, "invalidating dictionary for current block (distance > windowSize)");
+            DEBUGLOG ( 6, "invalidating dictionary for current block (distance > windowSize)" );
             *loadedDictEndPtr = 0;
             *dictMatchStatePtr = NULL;
         } else {
-            if (*loadedDictEndPtr != 0) {
-                DEBUGLOG(6, "dictionary considered valid for current block");
-    }   }   }
+            if ( *loadedDictEndPtr != 0 ) {
+                DEBUGLOG ( 6, "dictionary considered valid for current block" );
+            }
+        }
+    }
 }
 
 /**
@@ -851,44 +955,46 @@ ZSTD_checkDictValidity(const ZSTD_window_t* window,
  * forget about the extDict. Handles overlap of the prefix and extDict.
  * Returns non-zero if the segment is contiguous.
  */
-MEM_STATIC U32 ZSTD_window_update(ZSTD_window_t* window,
-                                  void const* src, size_t srcSize)
+MEM_STATIC U32 ZSTD_window_update ( ZSTD_window_t* window,
+                                    void const* src, size_t srcSize )
 {
-    BYTE const* const ip = (BYTE const*)src;
+    BYTE const* const ip = ( BYTE const* ) src;
     U32 contiguous = 1;
-    DEBUGLOG(5, "ZSTD_window_update");
+    DEBUGLOG ( 5, "ZSTD_window_update" );
     /* Check if blocks follow each other */
-    if (src != window->nextSrc) {
+    if ( src != window->nextSrc ) {
         /* not contiguous */
-        size_t const distanceFromBase = (size_t)(window->nextSrc - window->base);
-        DEBUGLOG(5, "Non contiguous blocks, new segment starts at %u", window->dictLimit);
+        size_t const distanceFromBase = ( size_t ) ( window->nextSrc - window->base );
+        DEBUGLOG ( 5, "Non contiguous blocks, new segment starts at %u", window->dictLimit );
         window->lowLimit = window->dictLimit;
-        assert(distanceFromBase == (size_t)(U32)distanceFromBase);  /* should never overflow */
-        window->dictLimit = (U32)distanceFromBase;
+        assert ( distanceFromBase == ( size_t ) ( U32 ) distanceFromBase ); /* should never overflow */
+        window->dictLimit = ( U32 ) distanceFromBase;
         window->dictBase = window->base;
         window->base = ip - distanceFromBase;
         // ms->nextToUpdate = window->dictLimit;
-        if (window->dictLimit - window->lowLimit < HASH_READ_SIZE) window->lowLimit = window->dictLimit;   /* too small extDict */
+        if ( window->dictLimit - window->lowLimit < HASH_READ_SIZE ) {
+            window->lowLimit = window->dictLimit;    /* too small extDict */
+        }
         contiguous = 0;
     }
     window->nextSrc = ip + srcSize;
     /* if input and dictionary overlap : reduce dictionary (area presumed modified by input) */
-    if ( (ip+srcSize > window->dictBase + window->lowLimit)
-       & (ip < window->dictBase + window->dictLimit)) {
-        ptrdiff_t const highInputIdx = (ip + srcSize) - window->dictBase;
-        U32 const lowLimitMax = (highInputIdx > (ptrdiff_t)window->dictLimit) ? window->dictLimit : (U32)highInputIdx;
+    if ( ( ip+srcSize > window->dictBase + window->lowLimit )
+            & ( ip < window->dictBase + window->dictLimit ) ) {
+        ptrdiff_t const highInputIdx = ( ip + srcSize ) - window->dictBase;
+        U32 const lowLimitMax = ( highInputIdx > ( ptrdiff_t ) window->dictLimit ) ? window->dictLimit : ( U32 ) highInputIdx;
         window->lowLimit = lowLimitMax;
-        DEBUGLOG(5, "Overlapping extDict and input : new lowLimit = %u", window->lowLimit);
+        DEBUGLOG ( 5, "Overlapping extDict and input : new lowLimit = %u", window->lowLimit );
     }
     return contiguous;
 }
 
-MEM_STATIC U32 ZSTD_getLowestMatchIndex(const ZSTD_matchState_t* ms, U32 current, unsigned windowLog)
+MEM_STATIC U32 ZSTD_getLowestMatchIndex ( const ZSTD_matchState_t* ms, U32 current, unsigned windowLog )
 {
     U32    const maxDistance = 1U << windowLog;
     U32    const lowestValid = ms->window.lowLimit;
-    U32    const withinWindow = (current - lowestValid > maxDistance) ? current - maxDistance : lowestValid;
-    U32    const isDictionary = (ms->loadedDictEnd != 0);
+    U32    const withinWindow = ( current - lowestValid > maxDistance ) ? current - maxDistance : lowestValid;
+    U32    const isDictionary = ( ms->loadedDictEnd != 0 );
     U32    const matchLowest = isDictionary ? lowestValid : withinWindow;
     return matchLowest;
 }
@@ -898,29 +1004,31 @@ MEM_STATIC U32 ZSTD_getLowestMatchIndex(const ZSTD_matchState_t* ms, U32 current
 /* debug functions */
 #if (DEBUGLEVEL>=2)
 
-MEM_STATIC double ZSTD_fWeight(U32 rawStat)
+MEM_STATIC double ZSTD_fWeight ( U32 rawStat )
 {
     U32 const fp_accuracy = 8;
-    U32 const fp_multiplier = (1 << fp_accuracy);
+    U32 const fp_multiplier = ( 1 << fp_accuracy );
     U32 const newStat = rawStat + 1;
-    U32 const hb = ZSTD_highbit32(newStat);
+    U32 const hb = ZSTD_highbit32 ( newStat );
     U32 const BWeight = hb * fp_multiplier;
-    U32 const FWeight = (newStat << fp_accuracy) >> hb;
+    U32 const FWeight = ( newStat << fp_accuracy ) >> hb;
     U32 const weight = BWeight + FWeight;
-    assert(hb + fp_accuracy < 31);
-    return (double)weight / fp_multiplier;
+    assert ( hb + fp_accuracy < 31 );
+    return ( double ) weight / fp_multiplier;
 }
 
 /* display a table content,
  * listing each element, its frequency, and its predicted bit cost */
-MEM_STATIC void ZSTD_debugTable(const U32* table, U32 max)
+MEM_STATIC void ZSTD_debugTable ( const U32* table, U32 max )
 {
     unsigned u, sum;
-    for (u=0, sum=0; u<=max; u++) sum += table[u];
-    DEBUGLOG(2, "total nb elts: %u", sum);
-    for (u=0; u<=max; u++) {
-        DEBUGLOG(2, "%2u: %5u  (%.2f)",
-                u, table[u], ZSTD_fWeight(sum) - ZSTD_fWeight(table[u]) );
+    for ( u=0, sum=0; u<=max; u++ ) {
+        sum += table[u];
+    }
+    DEBUGLOG ( 2, "total nb elts: %u", sum );
+    for ( u=0; u<=max; u++ ) {
+        DEBUGLOG ( 2, "%2u: %5u  (%.2f)",
+                   u, table[u], ZSTD_fWeight ( sum ) - ZSTD_fWeight ( table[u] ) );
     }
 }
 
@@ -941,42 +1049,42 @@ MEM_STATIC void ZSTD_debugTable(const U32* table, U32 max)
  * cParams are built depending on compressionLevel, src size hints,
  * LDM and manually set compression parameters.
  */
-ZSTD_compressionParameters ZSTD_getCParamsFromCCtxParams(
-        const ZSTD_CCtx_params* CCtxParams, U64 srcSizeHint, size_t dictSize);
+ZSTD_compressionParameters ZSTD_getCParamsFromCCtxParams (
+    const ZSTD_CCtx_params* CCtxParams, U64 srcSizeHint, size_t dictSize );
 
 /*! ZSTD_initCStream_internal() :
  *  Private use only. Init streaming operation.
  *  expects params to be valid.
  *  must receive dict, or cdict, or none, but not both.
  *  @return : 0, or an error code */
-size_t ZSTD_initCStream_internal(ZSTD_CStream* zcs,
-                     const void* dict, size_t dictSize,
-                     const ZSTD_CDict* cdict,
-                     const ZSTD_CCtx_params* params, unsigned long long pledgedSrcSize);
+size_t ZSTD_initCStream_internal ( ZSTD_CStream* zcs,
+                                   const void* dict, size_t dictSize,
+                                   const ZSTD_CDict* cdict,
+                                   const ZSTD_CCtx_params* params, unsigned long long pledgedSrcSize );
 
-void ZSTD_resetSeqStore(seqStore_t* ssPtr);
+void ZSTD_resetSeqStore ( seqStore_t* ssPtr );
 
 /*! ZSTD_getCParamsFromCDict() :
  *  as the name implies */
-ZSTD_compressionParameters ZSTD_getCParamsFromCDict(const ZSTD_CDict* cdict);
+ZSTD_compressionParameters ZSTD_getCParamsFromCDict ( const ZSTD_CDict* cdict );
 
 /* ZSTD_compressBegin_advanced_internal() :
  * Private use only. To be called from zstdmt_compress.c. */
-size_t ZSTD_compressBegin_advanced_internal(ZSTD_CCtx* cctx,
-                                    const void* dict, size_t dictSize,
-                                    ZSTD_dictContentType_e dictContentType,
-                                    ZSTD_dictTableLoadMethod_e dtlm,
-                                    const ZSTD_CDict* cdict,
-                                    const ZSTD_CCtx_params* params,
-                                    unsigned long long pledgedSrcSize);
+size_t ZSTD_compressBegin_advanced_internal ( ZSTD_CCtx* cctx,
+        const void* dict, size_t dictSize,
+        ZSTD_dictContentType_e dictContentType,
+        ZSTD_dictTableLoadMethod_e dtlm,
+        const ZSTD_CDict* cdict,
+        const ZSTD_CCtx_params* params,
+        unsigned long long pledgedSrcSize );
 
 /* ZSTD_compress_advanced_internal() :
  * Private use only. To be called from zstdmt_compress.c. */
-size_t ZSTD_compress_advanced_internal(ZSTD_CCtx* cctx,
-                                       void* dst, size_t dstCapacity,
-                                 const void* src, size_t srcSize,
-                                 const void* dict,size_t dictSize,
-                                 const ZSTD_CCtx_params* params);
+size_t ZSTD_compress_advanced_internal ( ZSTD_CCtx* cctx,
+        void* dst, size_t dstCapacity,
+        const void* src, size_t srcSize,
+        const void* dict,size_t dictSize,
+        const ZSTD_CCtx_params* params );
 
 
 /* ZSTD_writeLastEmptyBlock() :
@@ -984,7 +1092,7 @@ size_t ZSTD_compress_advanced_internal(ZSTD_CCtx* cctx,
  * @return : size of data written into `dst` (== ZSTD_blockHeaderSize (defined in zstd_internal.h))
  *           or an error code if `dstCapacity` is too small (<ZSTD_blockHeaderSize)
  */
-size_t ZSTD_writeLastEmptyBlock(void* dst, size_t dstCapacity);
+size_t ZSTD_writeLastEmptyBlock ( void* dst, size_t dstCapacity );
 
 
 /* ZSTD_referenceExternalSequences() :
@@ -997,7 +1105,7 @@ size_t ZSTD_writeLastEmptyBlock(void* dst, size_t dstCapacity);
  * NOTE: seqs are not verified! Invalid sequences can cause out-of-bounds memory
  * access and data corruption.
  */
-size_t ZSTD_referenceExternalSequences(ZSTD_CCtx* cctx, rawSeq* seq, size_t nbSeq);
+size_t ZSTD_referenceExternalSequences ( ZSTD_CCtx* cctx, rawSeq* seq, size_t nbSeq );
 
 
 #endif /* ZSTD_COMPRESS_H */

@@ -18,53 +18,56 @@
 
 namespace basisu
 {
-	class basisu_file
-	{
-		BASISU_NO_EQUALS_OR_COPY_CONSTRUCT(basisu_file);
+class basisu_file
+{
+    BASISU_NO_EQUALS_OR_COPY_CONSTRUCT ( basisu_file );
 
-	public:
-		basisu_file()
-		{
-		}
+public:
+    basisu_file()
+    {
+    }
 
-		void clear()
-		{
-			m_comp_data.clear();
+    void clear()
+    {
+        m_comp_data.clear();
 
-			clear_obj(m_header);
-			m_images_descs.clear();
+        clear_obj ( m_header );
+        m_images_descs.clear();
 
-			m_header_file_ofs = 0;
-			m_slice_descs_file_ofs = 0;
-			m_endpoint_cb_file_ofs = 0;
-			m_selector_cb_file_ofs = 0;
-			m_tables_file_ofs = 0;
-			m_first_image_file_ofs = 0;
-			m_total_file_size = 0;
-		}
+        m_header_file_ofs = 0;
+        m_slice_descs_file_ofs = 0;
+        m_endpoint_cb_file_ofs = 0;
+        m_selector_cb_file_ofs = 0;
+        m_tables_file_ofs = 0;
+        m_first_image_file_ofs = 0;
+        m_total_file_size = 0;
+    }
 
-		bool init(const basisu_backend_output& encoder_output, basist::basis_texture_type tex_type, uint32_t userdata0, uint32_t userdata1, bool y_flipped, uint32_t us_per_frame);
+    bool init ( const basisu_backend_output& encoder_output, basist::basis_texture_type tex_type, uint32_t userdata0, uint32_t userdata1, bool y_flipped, uint32_t us_per_frame );
 
-		const uint8_vec &get_compressed_data() const { return m_comp_data; }
+    const uint8_vec &get_compressed_data() const
+    {
+        return m_comp_data;
+    }
 
-	private:
-		basist::basis_file_header m_header;
-		std::vector<basist::basis_slice_desc> m_images_descs;
+private:
+    basist::basis_file_header m_header;
+    std::vector<basist::basis_slice_desc> m_images_descs;
 
-		uint8_vec m_comp_data;
+    uint8_vec m_comp_data;
 
-		uint32_t m_header_file_ofs;
-		uint32_t m_slice_descs_file_ofs;
-		uint32_t m_endpoint_cb_file_ofs;
-		uint32_t m_selector_cb_file_ofs;
-		uint32_t m_tables_file_ofs;
-		uint32_t m_first_image_file_ofs;
-		uint32_t m_total_file_size;
+    uint32_t m_header_file_ofs;
+    uint32_t m_slice_descs_file_ofs;
+    uint32_t m_endpoint_cb_file_ofs;
+    uint32_t m_selector_cb_file_ofs;
+    uint32_t m_tables_file_ofs;
+    uint32_t m_first_image_file_ofs;
+    uint32_t m_total_file_size;
 
-		void create_header(const basisu_backend_output& encoder_output,  basist::basis_texture_type tex_type, uint32_t userdata0, uint32_t userdata1, bool y_flipped, uint32_t us_per_frame);
-		bool create_image_descs(const basisu_backend_output& encoder_output);
-		void create_comp_data(const basisu_backend_output& encoder_output);
-		void fixup_crcs();
-	};
+    void create_header ( const basisu_backend_output& encoder_output,  basist::basis_texture_type tex_type, uint32_t userdata0, uint32_t userdata1, bool y_flipped, uint32_t us_per_frame );
+    bool create_image_descs ( const basisu_backend_output& encoder_output );
+    void create_comp_data ( const basisu_backend_output& encoder_output );
+    void fixup_crcs();
+};
 
 } // namespace basisu

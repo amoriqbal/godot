@@ -48,15 +48,16 @@
 #define __INTERMEDIATE_H
 
 #if defined(_MSC_VER) && _MSC_VER >= 1900
-    #pragma warning(disable : 4464) // relative include path contains '..'
-    #pragma warning(disable : 5026) // 'glslang::TIntermUnary': move constructor was implicitly defined as deleted
+#pragma warning(disable : 4464) // relative include path contains '..'
+#pragma warning(disable : 5026) // 'glslang::TIntermUnary': move constructor was implicitly defined as deleted
 #endif
 
 #include "../Include/Common.h"
 #include "../Include/Types.h"
 #include "../Include/ConstantUnion.h"
 
-namespace glslang {
+namespace glslang
+{
 
 class TIntermediate;
 
@@ -1024,48 +1025,131 @@ class TIntermLoop;
 //
 // (Put outside the glslang namespace, as it's used as part of the external interface.)
 //
-class TIntermNode {
+class TIntermNode
+{
 public:
-    POOL_ALLOCATOR_NEW_DELETE(glslang::GetThreadPoolAllocator())
+    POOL_ALLOCATOR_NEW_DELETE ( glslang::GetThreadPoolAllocator() )
 
-    TIntermNode() { loc.init(); }
-    virtual const glslang::TSourceLoc& getLoc() const { return loc; }
-    virtual void setLoc(const glslang::TSourceLoc& l) { loc = l; }
-    virtual void traverse(glslang::TIntermTraverser*) = 0;
-    virtual       glslang::TIntermTyped*         getAsTyped()               { return 0; }
-    virtual       glslang::TIntermOperator*      getAsOperator()            { return 0; }
-    virtual       glslang::TIntermConstantUnion* getAsConstantUnion()       { return 0; }
-    virtual       glslang::TIntermAggregate*     getAsAggregate()           { return 0; }
-    virtual       glslang::TIntermUnary*         getAsUnaryNode()           { return 0; }
-    virtual       glslang::TIntermBinary*        getAsBinaryNode()          { return 0; }
-    virtual       glslang::TIntermSelection*     getAsSelectionNode()       { return 0; }
-    virtual       glslang::TIntermSwitch*        getAsSwitchNode()          { return 0; }
-    virtual       glslang::TIntermMethod*        getAsMethodNode()          { return 0; }
-    virtual       glslang::TIntermSymbol*        getAsSymbolNode()          { return 0; }
-    virtual       glslang::TIntermBranch*        getAsBranchNode()          { return 0; }
-    virtual       glslang::TIntermLoop*          getAsLoopNode()            { return 0; }
+    TIntermNode()
+    {
+        loc.init();
+    }
+    virtual const glslang::TSourceLoc& getLoc() const
+    {
+        return loc;
+    }
+    virtual void setLoc ( const glslang::TSourceLoc& l )
+    {
+        loc = l;
+    }
+    virtual void traverse ( glslang::TIntermTraverser* ) = 0;
+    virtual       glslang::TIntermTyped*         getAsTyped()
+    {
+        return 0;
+    }
+    virtual       glslang::TIntermOperator*      getAsOperator()
+    {
+        return 0;
+    }
+    virtual       glslang::TIntermConstantUnion* getAsConstantUnion()
+    {
+        return 0;
+    }
+    virtual       glslang::TIntermAggregate*     getAsAggregate()
+    {
+        return 0;
+    }
+    virtual       glslang::TIntermUnary*         getAsUnaryNode()
+    {
+        return 0;
+    }
+    virtual       glslang::TIntermBinary*        getAsBinaryNode()
+    {
+        return 0;
+    }
+    virtual       glslang::TIntermSelection*     getAsSelectionNode()
+    {
+        return 0;
+    }
+    virtual       glslang::TIntermSwitch*        getAsSwitchNode()
+    {
+        return 0;
+    }
+    virtual       glslang::TIntermMethod*        getAsMethodNode()
+    {
+        return 0;
+    }
+    virtual       glslang::TIntermSymbol*        getAsSymbolNode()
+    {
+        return 0;
+    }
+    virtual       glslang::TIntermBranch*        getAsBranchNode()
+    {
+        return 0;
+    }
+    virtual       glslang::TIntermLoop*          getAsLoopNode()
+    {
+        return 0;
+    }
 
-    virtual const glslang::TIntermTyped*         getAsTyped()         const { return 0; }
-    virtual const glslang::TIntermOperator*      getAsOperator()      const { return 0; }
-    virtual const glslang::TIntermConstantUnion* getAsConstantUnion() const { return 0; }
-    virtual const glslang::TIntermAggregate*     getAsAggregate()     const { return 0; }
-    virtual const glslang::TIntermUnary*         getAsUnaryNode()     const { return 0; }
-    virtual const glslang::TIntermBinary*        getAsBinaryNode()    const { return 0; }
-    virtual const glslang::TIntermSelection*     getAsSelectionNode() const { return 0; }
-    virtual const glslang::TIntermSwitch*        getAsSwitchNode()    const { return 0; }
-    virtual const glslang::TIntermMethod*        getAsMethodNode()    const { return 0; }
-    virtual const glslang::TIntermSymbol*        getAsSymbolNode()    const { return 0; }
-    virtual const glslang::TIntermBranch*        getAsBranchNode()    const { return 0; }
-    virtual const glslang::TIntermLoop*          getAsLoopNode()      const { return 0; }
+    virtual const glslang::TIntermTyped*         getAsTyped()         const
+    {
+        return 0;
+    }
+    virtual const glslang::TIntermOperator*      getAsOperator()      const
+    {
+        return 0;
+    }
+    virtual const glslang::TIntermConstantUnion* getAsConstantUnion() const
+    {
+        return 0;
+    }
+    virtual const glslang::TIntermAggregate*     getAsAggregate()     const
+    {
+        return 0;
+    }
+    virtual const glslang::TIntermUnary*         getAsUnaryNode()     const
+    {
+        return 0;
+    }
+    virtual const glslang::TIntermBinary*        getAsBinaryNode()    const
+    {
+        return 0;
+    }
+    virtual const glslang::TIntermSelection*     getAsSelectionNode() const
+    {
+        return 0;
+    }
+    virtual const glslang::TIntermSwitch*        getAsSwitchNode()    const
+    {
+        return 0;
+    }
+    virtual const glslang::TIntermMethod*        getAsMethodNode()    const
+    {
+        return 0;
+    }
+    virtual const glslang::TIntermSymbol*        getAsSymbolNode()    const
+    {
+        return 0;
+    }
+    virtual const glslang::TIntermBranch*        getAsBranchNode()    const
+    {
+        return 0;
+    }
+    virtual const glslang::TIntermLoop*          getAsLoopNode()      const
+    {
+        return 0;
+    }
     virtual ~TIntermNode() { }
 
 protected:
-    TIntermNode(const TIntermNode&);
-    TIntermNode& operator=(const TIntermNode&);
+    TIntermNode ( const TIntermNode& );
+    TIntermNode& operator= ( const TIntermNode& );
     glslang::TSourceLoc loc;
 };
 
-namespace glslang {
+namespace glslang
+{
 
 //
 // This is just to help yacc.
@@ -1078,97 +1162,229 @@ struct TIntermNodePair {
 //
 // Intermediate class for nodes that have a type.
 //
-class TIntermTyped : public TIntermNode {
+class TIntermTyped : public TIntermNode
+{
 public:
-    TIntermTyped(const TType& t) { type.shallowCopy(t); }
-    TIntermTyped(TBasicType basicType) { TType bt(basicType); type.shallowCopy(bt); }
-    virtual       TIntermTyped* getAsTyped()       { return this; }
-    virtual const TIntermTyped* getAsTyped() const { return this; }
-    virtual void setType(const TType& t) { type.shallowCopy(t); }
-    virtual const TType& getType() const { return type; }
-    virtual TType& getWritableType() { return type; }
+    TIntermTyped ( const TType& t )
+    {
+        type.shallowCopy ( t );
+    }
+    TIntermTyped ( TBasicType basicType )
+    {
+        TType bt ( basicType );
+        type.shallowCopy ( bt );
+    }
+    virtual       TIntermTyped* getAsTyped()
+    {
+        return this;
+    }
+    virtual const TIntermTyped* getAsTyped() const
+    {
+        return this;
+    }
+    virtual void setType ( const TType& t )
+    {
+        type.shallowCopy ( t );
+    }
+    virtual const TType& getType() const
+    {
+        return type;
+    }
+    virtual TType& getWritableType()
+    {
+        return type;
+    }
 
-    virtual TBasicType getBasicType() const { return type.getBasicType(); }
-    virtual TQualifier& getQualifier() { return type.getQualifier(); }
-    virtual const TQualifier& getQualifier() const { return type.getQualifier(); }
-    virtual void propagatePrecision(TPrecisionQualifier);
-    virtual int getVectorSize() const { return type.getVectorSize(); }
-    virtual int getMatrixCols() const { return type.getMatrixCols(); }
-    virtual int getMatrixRows() const { return type.getMatrixRows(); }
-    virtual bool isMatrix() const { return type.isMatrix(); }
-    virtual bool isArray()  const { return type.isArray(); }
-    virtual bool isVector() const { return type.isVector(); }
-    virtual bool isScalar() const { return type.isScalar(); }
-    virtual bool isStruct() const { return type.isStruct(); }
-    virtual bool isFloatingDomain() const { return type.isFloatingDomain(); }
-    virtual bool isIntegerDomain() const { return type.isIntegerDomain(); }
-    bool isAtomic() const { return type.isAtomic(); }
-    bool isReference() const { return type.isReference(); }
-    TString getCompleteString() const { return type.getCompleteString(); }
+    virtual TBasicType getBasicType() const
+    {
+        return type.getBasicType();
+    }
+    virtual TQualifier& getQualifier()
+    {
+        return type.getQualifier();
+    }
+    virtual const TQualifier& getQualifier() const
+    {
+        return type.getQualifier();
+    }
+    virtual void propagatePrecision ( TPrecisionQualifier );
+    virtual int getVectorSize() const
+    {
+        return type.getVectorSize();
+    }
+    virtual int getMatrixCols() const
+    {
+        return type.getMatrixCols();
+    }
+    virtual int getMatrixRows() const
+    {
+        return type.getMatrixRows();
+    }
+    virtual bool isMatrix() const
+    {
+        return type.isMatrix();
+    }
+    virtual bool isArray()  const
+    {
+        return type.isArray();
+    }
+    virtual bool isVector() const
+    {
+        return type.isVector();
+    }
+    virtual bool isScalar() const
+    {
+        return type.isScalar();
+    }
+    virtual bool isStruct() const
+    {
+        return type.isStruct();
+    }
+    virtual bool isFloatingDomain() const
+    {
+        return type.isFloatingDomain();
+    }
+    virtual bool isIntegerDomain() const
+    {
+        return type.isIntegerDomain();
+    }
+    bool isAtomic() const
+    {
+        return type.isAtomic();
+    }
+    bool isReference() const
+    {
+        return type.isReference();
+    }
+    TString getCompleteString() const
+    {
+        return type.getCompleteString();
+    }
 
 protected:
-    TIntermTyped& operator=(const TIntermTyped&);
+    TIntermTyped& operator= ( const TIntermTyped& );
     TType type;
 };
 
 //
 // Handle for, do-while, and while loops.
 //
-class TIntermLoop : public TIntermNode {
+class TIntermLoop : public TIntermNode
+{
 public:
-    TIntermLoop(TIntermNode* aBody, TIntermTyped* aTest, TIntermTyped* aTerminal, bool testFirst) :
-        body(aBody),
-        test(aTest),
-        terminal(aTerminal),
-        first(testFirst),
-        unroll(false),
-        dontUnroll(false),
-        dependency(0),
-        minIterations(0),
-        maxIterations(iterationsInfinite),
-        iterationMultiple(1),
-        peelCount(0),
-        partialCount(0)
+    TIntermLoop ( TIntermNode* aBody, TIntermTyped* aTest, TIntermTyped* aTerminal, bool testFirst ) :
+        body ( aBody ),
+        test ( aTest ),
+        terminal ( aTerminal ),
+        first ( testFirst ),
+        unroll ( false ),
+        dontUnroll ( false ),
+        dependency ( 0 ),
+        minIterations ( 0 ),
+        maxIterations ( iterationsInfinite ),
+        iterationMultiple ( 1 ),
+        peelCount ( 0 ),
+        partialCount ( 0 )
     { }
 
-    virtual       TIntermLoop* getAsLoopNode() { return this; }
-    virtual const TIntermLoop* getAsLoopNode() const { return this; }
-    virtual void traverse(TIntermTraverser*);
-    TIntermNode*  getBody() const { return body; }
-    TIntermTyped* getTest() const { return test; }
-    TIntermTyped* getTerminal() const { return terminal; }
-    bool testFirst() const { return first; }
+    virtual       TIntermLoop* getAsLoopNode()
+    {
+        return this;
+    }
+    virtual const TIntermLoop* getAsLoopNode() const
+    {
+        return this;
+    }
+    virtual void traverse ( TIntermTraverser* );
+    TIntermNode*  getBody() const
+    {
+        return body;
+    }
+    TIntermTyped* getTest() const
+    {
+        return test;
+    }
+    TIntermTyped* getTerminal() const
+    {
+        return terminal;
+    }
+    bool testFirst() const
+    {
+        return first;
+    }
 
-    void setUnroll()     { unroll = true; }
-    void setDontUnroll() {
+    void setUnroll()
+    {
+        unroll = true;
+    }
+    void setDontUnroll()
+    {
         dontUnroll = true;
         peelCount = 0;
         partialCount = 0;
     }
-    bool getUnroll()     const { return unroll; }
-    bool getDontUnroll() const { return dontUnroll; }
+    bool getUnroll()     const
+    {
+        return unroll;
+    }
+    bool getDontUnroll() const
+    {
+        return dontUnroll;
+    }
 
     static const unsigned int dependencyInfinite = 0xFFFFFFFF;
     static const unsigned int iterationsInfinite = 0xFFFFFFFF;
-    void setLoopDependency(int d) { dependency = d; }
-    int getLoopDependency() const { return dependency; }
+    void setLoopDependency ( int d )
+    {
+        dependency = d;
+    }
+    int getLoopDependency() const
+    {
+        return dependency;
+    }
 
-    void setMinIterations(unsigned int v) { minIterations = v; }
-    unsigned int getMinIterations() const { return minIterations; }
-    void setMaxIterations(unsigned int v) { maxIterations = v; }
-    unsigned int getMaxIterations() const { return maxIterations; }
-    void setIterationMultiple(unsigned int v) { iterationMultiple = v; }
-    unsigned int getIterationMultiple() const { return iterationMultiple; }
-    void setPeelCount(unsigned int v) {
+    void setMinIterations ( unsigned int v )
+    {
+        minIterations = v;
+    }
+    unsigned int getMinIterations() const
+    {
+        return minIterations;
+    }
+    void setMaxIterations ( unsigned int v )
+    {
+        maxIterations = v;
+    }
+    unsigned int getMaxIterations() const
+    {
+        return maxIterations;
+    }
+    void setIterationMultiple ( unsigned int v )
+    {
+        iterationMultiple = v;
+    }
+    unsigned int getIterationMultiple() const
+    {
+        return iterationMultiple;
+    }
+    void setPeelCount ( unsigned int v )
+    {
         peelCount = v;
         dontUnroll = false;
     }
-    unsigned int getPeelCount() const { return peelCount; }
-    void setPartialCount(unsigned int v) {
+    unsigned int getPeelCount() const
+    {
+        return peelCount;
+    }
+    void setPartialCount ( unsigned int v )
+    {
         partialCount = v;
         dontUnroll = false;
     }
-    unsigned int getPartialCount() const { return partialCount; }
+    unsigned int getPartialCount() const
+    {
+        return partialCount;
+    }
 
 protected:
     TIntermNode* body;       // code to loop over
@@ -1188,17 +1404,33 @@ protected:
 //
 // Handle case, break, continue, return, and kill.
 //
-class TIntermBranch : public TIntermNode {
+class TIntermBranch : public TIntermNode
+{
 public:
-    TIntermBranch(TOperator op, TIntermTyped* e) :
-        flowOp(op),
-        expression(e) { }
-    virtual       TIntermBranch* getAsBranchNode()       { return this; }
-    virtual const TIntermBranch* getAsBranchNode() const { return this; }
-    virtual void traverse(TIntermTraverser*);
-    TOperator getFlowOp() const { return flowOp; }
-    TIntermTyped* getExpression() const { return expression; }
-    void setExpression(TIntermTyped* pExpression) { expression = pExpression; }
+    TIntermBranch ( TOperator op, TIntermTyped* e ) :
+        flowOp ( op ),
+        expression ( e ) { }
+    virtual       TIntermBranch* getAsBranchNode()
+    {
+        return this;
+    }
+    virtual const TIntermBranch* getAsBranchNode() const
+    {
+        return this;
+    }
+    virtual void traverse ( TIntermTraverser* );
+    TOperator getFlowOp() const
+    {
+        return flowOp;
+    }
+    TIntermTyped* getExpression() const
+    {
+        return expression;
+    }
+    void setExpression ( TIntermTyped* pExpression )
+    {
+        expression = pExpression;
+    }
 protected:
     TOperator flowOp;
     TIntermTyped* expression;
@@ -1209,14 +1441,27 @@ protected:
 // or resolving them to operations.  Just an expression as the base object
 // and a textural name.
 //
-class TIntermMethod : public TIntermTyped {
+class TIntermMethod : public TIntermTyped
+{
 public:
-    TIntermMethod(TIntermTyped* o, const TType& t, const TString& m) : TIntermTyped(t), object(o), method(m) { }
-    virtual       TIntermMethod* getAsMethodNode()       { return this; }
-    virtual const TIntermMethod* getAsMethodNode() const { return this; }
-    virtual const TString& getMethodName() const { return method; }
-    virtual TIntermTyped* getObject() const { return object; }
-    virtual void traverse(TIntermTraverser*);
+    TIntermMethod ( TIntermTyped* o, const TType& t, const TString& m ) : TIntermTyped ( t ), object ( o ), method ( m ) { }
+    virtual       TIntermMethod* getAsMethodNode()
+    {
+        return this;
+    }
+    virtual const TIntermMethod* getAsMethodNode() const
+    {
+        return this;
+    }
+    virtual const TString& getMethodName() const
+    {
+        return method;
+    }
+    virtual TIntermTyped* getObject() const
+    {
+        return object;
+    }
+    virtual void traverse ( TIntermTraverser* );
 protected:
     TIntermTyped* object;
     TString method;
@@ -1225,36 +1470,75 @@ protected:
 //
 // Nodes that correspond to symbols or constants in the source code.
 //
-class TIntermSymbol : public TIntermTyped {
+class TIntermSymbol : public TIntermTyped
+{
 public:
     // if symbol is initialized as symbol(sym), the memory comes from the pool allocator of sym. If sym comes from
     // per process threadPoolAllocator, then it causes increased memory usage per compile
     // it is essential to use "symbol = sym" to assign to symbol
-    TIntermSymbol(int i, const TString& n, const TType& t)
-        : TIntermTyped(t), id(i),
+    TIntermSymbol ( int i, const TString& n, const TType& t )
+        : TIntermTyped ( t ), id ( i ),
 #ifndef GLSLANG_WEB
-        flattenSubset(-1),
+          flattenSubset ( -1 ),
 #endif
-        constSubtree(nullptr)
-          { name = n; }
-    virtual int getId() const { return id; }
-    virtual void changeId(int i) { id = i; }
-    virtual const TString& getName() const { return name; }
-    virtual void traverse(TIntermTraverser*);
-    virtual       TIntermSymbol* getAsSymbolNode()       { return this; }
-    virtual const TIntermSymbol* getAsSymbolNode() const { return this; }
-    void setConstArray(const TConstUnionArray& c) { constArray = c; }
-    const TConstUnionArray& getConstArray() const { return constArray; }
-    void setConstSubtree(TIntermTyped* subtree) { constSubtree = subtree; }
-    TIntermTyped* getConstSubtree() const { return constSubtree; }
+          constSubtree ( nullptr )
+    {
+        name = n;
+    }
+    virtual int getId() const
+    {
+        return id;
+    }
+    virtual void changeId ( int i )
+    {
+        id = i;
+    }
+    virtual const TString& getName() const
+    {
+        return name;
+    }
+    virtual void traverse ( TIntermTraverser* );
+    virtual       TIntermSymbol* getAsSymbolNode()
+    {
+        return this;
+    }
+    virtual const TIntermSymbol* getAsSymbolNode() const
+    {
+        return this;
+    }
+    void setConstArray ( const TConstUnionArray& c )
+    {
+        constArray = c;
+    }
+    const TConstUnionArray& getConstArray() const
+    {
+        return constArray;
+    }
+    void setConstSubtree ( TIntermTyped* subtree )
+    {
+        constSubtree = subtree;
+    }
+    TIntermTyped* getConstSubtree() const
+    {
+        return constSubtree;
+    }
 #ifndef GLSLANG_WEB
-    void setFlattenSubset(int subset) { flattenSubset = subset; }
-    int getFlattenSubset() const { return flattenSubset; } // -1 means full object
+    void setFlattenSubset ( int subset )
+    {
+        flattenSubset = subset;
+    }
+    int getFlattenSubset() const
+    {
+        return flattenSubset;    // -1 means full object
+    }
 #endif
 
     // This is meant for cases where a node has already been constructed, and
     // later on, it becomes necessary to switch to a different symbol.
-    virtual void switchId(int newId) { id = newId; }
+    virtual void switchId ( int newId )
+    {
+        id = newId;
+    }
 
 protected:
     int id;                      // the unique id of the symbol this node represents
@@ -1266,21 +1550,40 @@ protected:
     TIntermTyped* constSubtree;
 };
 
-class TIntermConstantUnion : public TIntermTyped {
+class TIntermConstantUnion : public TIntermTyped
+{
 public:
-    TIntermConstantUnion(const TConstUnionArray& ua, const TType& t) : TIntermTyped(t), constArray(ua), literal(false) { }
-    const TConstUnionArray& getConstArray() const { return constArray; }
-    virtual       TIntermConstantUnion* getAsConstantUnion()       { return this; }
-    virtual const TIntermConstantUnion* getAsConstantUnion() const { return this; }
-    virtual void traverse(TIntermTraverser*);
-    virtual TIntermTyped* fold(TOperator, const TIntermTyped*) const;
-    virtual TIntermTyped* fold(TOperator, const TType&) const;
-    void setLiteral() { literal = true; }
-    void setExpression() { literal = false; }
-    bool isLiteral() const { return literal; }
+    TIntermConstantUnion ( const TConstUnionArray& ua, const TType& t ) : TIntermTyped ( t ), constArray ( ua ), literal ( false ) { }
+    const TConstUnionArray& getConstArray() const
+    {
+        return constArray;
+    }
+    virtual       TIntermConstantUnion* getAsConstantUnion()
+    {
+        return this;
+    }
+    virtual const TIntermConstantUnion* getAsConstantUnion() const
+    {
+        return this;
+    }
+    virtual void traverse ( TIntermTraverser* );
+    virtual TIntermTyped* fold ( TOperator, const TIntermTyped* ) const;
+    virtual TIntermTyped* fold ( TOperator, const TType& ) const;
+    void setLiteral()
+    {
+        literal = true;
+    }
+    void setExpression()
+    {
+        literal = false;
+    }
+    bool isLiteral() const
+    {
+        return literal;
+    }
 
 protected:
-    TIntermConstantUnion& operator=(const TIntermConstantUnion&);
+    TIntermConstantUnion& operator= ( const TIntermConstantUnion& );
 
     const TConstUnionArray constArray;
     bool literal;  // true if node represents a literal in the source code
@@ -1304,47 +1607,102 @@ struct TCrackedTextureOp {
 //
 // Intermediate class for node types that hold operators.
 //
-class TIntermOperator : public TIntermTyped {
+class TIntermOperator : public TIntermTyped
+{
 public:
-    virtual       TIntermOperator* getAsOperator()       { return this; }
-    virtual const TIntermOperator* getAsOperator() const { return this; }
-    TOperator getOp() const { return op; }
-    void setOp(TOperator newOp) { op = newOp; }
+    virtual       TIntermOperator* getAsOperator()
+    {
+        return this;
+    }
+    virtual const TIntermOperator* getAsOperator() const
+    {
+        return this;
+    }
+    TOperator getOp() const
+    {
+        return op;
+    }
+    void setOp ( TOperator newOp )
+    {
+        op = newOp;
+    }
     bool modifiesState() const;
     bool isConstructor() const;
-    bool isTexture()  const { return op > EOpTextureGuardBegin  && op < EOpTextureGuardEnd; }
-    bool isSampling() const { return op > EOpSamplingGuardBegin && op < EOpSamplingGuardEnd; }
+    bool isTexture()  const
+    {
+        return op > EOpTextureGuardBegin  && op < EOpTextureGuardEnd;
+    }
+    bool isSampling() const
+    {
+        return op > EOpSamplingGuardBegin && op < EOpSamplingGuardEnd;
+    }
 #ifdef GLSLANG_WEB
-    bool isImage()          const { return false; }
-    bool isSparseTexture()  const { return false; }
-    bool isImageFootprint() const { return false; }
-    bool isSparseImage()    const { return false; }
-    bool isSubgroup()       const { return false; }
+    bool isImage()          const
+    {
+        return false;
+    }
+    bool isSparseTexture()  const
+    {
+        return false;
+    }
+    bool isImageFootprint() const
+    {
+        return false;
+    }
+    bool isSparseImage()    const
+    {
+        return false;
+    }
+    bool isSubgroup()       const
+    {
+        return false;
+    }
 #else
-    bool isImage()    const { return op > EOpImageGuardBegin    && op < EOpImageGuardEnd; }
-    bool isSparseTexture() const { return op > EOpSparseTextureGuardBegin && op < EOpSparseTextureGuardEnd; }
-    bool isImageFootprint() const { return op > EOpImageFootprintGuardBegin && op < EOpImageFootprintGuardEnd; }
-    bool isSparseImage()   const { return op == EOpSparseImageLoad; }
-    bool isSubgroup() const { return op > EOpSubgroupGuardStart && op < EOpSubgroupGuardStop; }
+    bool isImage()    const
+    {
+        return op > EOpImageGuardBegin    && op < EOpImageGuardEnd;
+    }
+    bool isSparseTexture() const
+    {
+        return op > EOpSparseTextureGuardBegin && op < EOpSparseTextureGuardEnd;
+    }
+    bool isImageFootprint() const
+    {
+        return op > EOpImageFootprintGuardBegin && op < EOpImageFootprintGuardEnd;
+    }
+    bool isSparseImage()   const
+    {
+        return op == EOpSparseImageLoad;
+    }
+    bool isSubgroup() const
+    {
+        return op > EOpSubgroupGuardStart && op < EOpSubgroupGuardStop;
+    }
 #endif
 
-    void setOperationPrecision(TPrecisionQualifier p) { operationPrecision = p; }
-    TPrecisionQualifier getOperationPrecision() const { return operationPrecision != EpqNone ?
-                                                                                     operationPrecision :
-                                                                                     type.getQualifier().precision; }
+    void setOperationPrecision ( TPrecisionQualifier p )
+    {
+        operationPrecision = p;
+    }
+    TPrecisionQualifier getOperationPrecision() const
+    {
+        return operationPrecision != EpqNone ?
+               operationPrecision :
+               type.getQualifier().precision;
+    }
     TString getCompleteString() const
     {
         TString cs = type.getCompleteString();
-        if (getOperationPrecision() != type.getQualifier().precision) {
+        if ( getOperationPrecision() != type.getQualifier().precision ) {
             cs += ", operation at ";
-            cs += GetPrecisionQualifierString(getOperationPrecision());
+            cs += GetPrecisionQualifierString ( getOperationPrecision() );
         }
 
         return cs;
     }
 
     // Crack the op into the individual dimensions of texturing operation.
-    void crackTexture(TSampler sampler, TCrackedTextureOp& cracked) const
+    void crackTexture ( TSampler sampler, TCrackedTextureOp& cracked ) const
     {
         cracked.query = false;
         cracked.proj = false;
@@ -1358,7 +1716,7 @@ public:
         cracked.lodClamp = false;
         cracked.fragMask = false;
 
-        switch (op) {
+        switch ( op ) {
         case EOpImageQuerySize:
         case EOpImageQuerySamples:
         case EOpTextureQuerySize:
@@ -1385,15 +1743,17 @@ public:
         case EOpTextureFetch:
         case EOpSparseTextureFetch:
             cracked.fetch = true;
-            if (sampler.is1D() || (sampler.dim == Esd2D && ! sampler.isMultiSample()) || sampler.dim == Esd3D)
+            if ( sampler.is1D() || ( sampler.dim == Esd2D && ! sampler.isMultiSample() ) || sampler.dim == Esd3D ) {
                 cracked.lod = true;
+            }
             break;
         case EOpTextureFetchOffset:
         case EOpSparseTextureFetchOffset:
             cracked.fetch = true;
             cracked.offset = true;
-            if (sampler.is1D() || (sampler.dim == Esd2D && ! sampler.isMultiSample()) || sampler.dim == Esd3D)
+            if ( sampler.is1D() || ( sampler.dim == Esd2D && ! sampler.isMultiSample() ) || sampler.dim == Esd3D ) {
                 cracked.lod = true;
+            }
             break;
         case EOpTextureProjOffset:
             cracked.offset = true;
@@ -1522,8 +1882,8 @@ public:
     }
 
 protected:
-    TIntermOperator(TOperator o) : TIntermTyped(EbtFloat), op(o), operationPrecision(EpqNone) {}
-    TIntermOperator(TOperator o, TType& t) : TIntermTyped(t), op(o), operationPrecision(EpqNone) {}
+    TIntermOperator ( TOperator o ) : TIntermTyped ( EbtFloat ), op ( o ), operationPrecision ( EpqNone ) {}
+    TIntermOperator ( TOperator o, TType& t ) : TIntermTyped ( t ), op ( o ), operationPrecision ( EpqNone ) {}
     TOperator op;
     // The result precision is in the inherited TType, and is usually meant to be both
     // the operation precision and the result precision. However, some more complex things,
@@ -1536,16 +1896,35 @@ protected:
 //
 // Nodes for all the basic binary math operators.
 //
-class TIntermBinary : public TIntermOperator {
+class TIntermBinary : public TIntermOperator
+{
 public:
-    TIntermBinary(TOperator o) : TIntermOperator(o) {}
-    virtual void traverse(TIntermTraverser*);
-    virtual void setLeft(TIntermTyped* n) { left = n; }
-    virtual void setRight(TIntermTyped* n) { right = n; }
-    virtual TIntermTyped* getLeft() const { return left; }
-    virtual TIntermTyped* getRight() const { return right; }
-    virtual       TIntermBinary* getAsBinaryNode()       { return this; }
-    virtual const TIntermBinary* getAsBinaryNode() const { return this; }
+    TIntermBinary ( TOperator o ) : TIntermOperator ( o ) {}
+    virtual void traverse ( TIntermTraverser* );
+    virtual void setLeft ( TIntermTyped* n )
+    {
+        left = n;
+    }
+    virtual void setRight ( TIntermTyped* n )
+    {
+        right = n;
+    }
+    virtual TIntermTyped* getLeft() const
+    {
+        return left;
+    }
+    virtual TIntermTyped* getRight() const
+    {
+        return right;
+    }
+    virtual       TIntermBinary* getAsBinaryNode()
+    {
+        return this;
+    }
+    virtual const TIntermBinary* getAsBinaryNode() const
+    {
+        return this;
+    }
     virtual void updatePrecision();
 protected:
     TIntermTyped* left;
@@ -1555,16 +1934,32 @@ protected:
 //
 // Nodes for unary math operators.
 //
-class TIntermUnary : public TIntermOperator {
+class TIntermUnary : public TIntermOperator
+{
 public:
-    TIntermUnary(TOperator o, TType& t) : TIntermOperator(o, t), operand(0) {}
-    TIntermUnary(TOperator o) : TIntermOperator(o), operand(0) {}
-    virtual void traverse(TIntermTraverser*);
-    virtual void setOperand(TIntermTyped* o) { operand = o; }
-    virtual       TIntermTyped* getOperand() { return operand; }
-    virtual const TIntermTyped* getOperand() const { return operand; }
-    virtual       TIntermUnary* getAsUnaryNode()       { return this; }
-    virtual const TIntermUnary* getAsUnaryNode() const { return this; }
+    TIntermUnary ( TOperator o, TType& t ) : TIntermOperator ( o, t ), operand ( 0 ) {}
+    TIntermUnary ( TOperator o ) : TIntermOperator ( o ), operand ( 0 ) {}
+    virtual void traverse ( TIntermTraverser* );
+    virtual void setOperand ( TIntermTyped* o )
+    {
+        operand = o;
+    }
+    virtual       TIntermTyped* getOperand()
+    {
+        return operand;
+    }
+    virtual const TIntermTyped* getOperand() const
+    {
+        return operand;
+    }
+    virtual       TIntermUnary* getAsUnaryNode()
+    {
+        return this;
+    }
+    virtual const TIntermUnary* getAsUnaryNode() const
+    {
+        return this;
+    }
     virtual void updatePrecision();
 protected:
     TIntermTyped* operand;
@@ -1575,32 +1970,84 @@ typedef TVector<TStorageQualifier> TQualifierList;
 //
 // Nodes that operate on an arbitrary sized set of children.
 //
-class TIntermAggregate : public TIntermOperator {
+class TIntermAggregate : public TIntermOperator
+{
 public:
-    TIntermAggregate() : TIntermOperator(EOpNull), userDefined(false), pragmaTable(nullptr) { }
-    TIntermAggregate(TOperator o) : TIntermOperator(o), pragmaTable(nullptr) { }
-    ~TIntermAggregate() { delete pragmaTable; }
-    virtual       TIntermAggregate* getAsAggregate()       { return this; }
-    virtual const TIntermAggregate* getAsAggregate() const { return this; }
-    virtual void setOperator(TOperator o) { op = o; }
-    virtual       TIntermSequence& getSequence()       { return sequence; }
-    virtual const TIntermSequence& getSequence() const { return sequence; }
-    virtual void setName(const TString& n) { name = n; }
-    virtual const TString& getName() const { return name; }
-    virtual void traverse(TIntermTraverser*);
-    virtual void setUserDefined() { userDefined = true; }
-    virtual bool isUserDefined() { return userDefined; }
-    virtual TQualifierList& getQualifierList() { return qualifier; }
-    virtual const TQualifierList& getQualifierList() const { return qualifier; }
-    void setOptimize(bool o) { optimize = o; }
-    void setDebug(bool d) { debug = d; }
-    bool getOptimize() const { return optimize; }
-    bool getDebug() const { return debug; }
-    void setPragmaTable(const TPragmaTable& pTable);
-    const TPragmaTable& getPragmaTable() const { return *pragmaTable; }
+    TIntermAggregate() : TIntermOperator ( EOpNull ), userDefined ( false ), pragmaTable ( nullptr ) { }
+    TIntermAggregate ( TOperator o ) : TIntermOperator ( o ), pragmaTable ( nullptr ) { }
+    ~TIntermAggregate()
+    {
+        delete pragmaTable;
+    }
+    virtual       TIntermAggregate* getAsAggregate()
+    {
+        return this;
+    }
+    virtual const TIntermAggregate* getAsAggregate() const
+    {
+        return this;
+    }
+    virtual void setOperator ( TOperator o )
+    {
+        op = o;
+    }
+    virtual       TIntermSequence& getSequence()
+    {
+        return sequence;
+    }
+    virtual const TIntermSequence& getSequence() const
+    {
+        return sequence;
+    }
+    virtual void setName ( const TString& n )
+    {
+        name = n;
+    }
+    virtual const TString& getName() const
+    {
+        return name;
+    }
+    virtual void traverse ( TIntermTraverser* );
+    virtual void setUserDefined()
+    {
+        userDefined = true;
+    }
+    virtual bool isUserDefined()
+    {
+        return userDefined;
+    }
+    virtual TQualifierList& getQualifierList()
+    {
+        return qualifier;
+    }
+    virtual const TQualifierList& getQualifierList() const
+    {
+        return qualifier;
+    }
+    void setOptimize ( bool o )
+    {
+        optimize = o;
+    }
+    void setDebug ( bool d )
+    {
+        debug = d;
+    }
+    bool getOptimize() const
+    {
+        return optimize;
+    }
+    bool getDebug() const
+    {
+        return debug;
+    }
+    void setPragmaTable ( const TPragmaTable& pTable );
+    const TPragmaTable& getPragmaTable() const
+    {
+        return *pragmaTable;
+    }
 protected:
-    TIntermAggregate(const TIntermAggregate&); // disallow copy constructor
-    TIntermAggregate& operator=(const TIntermAggregate&); // disallow assignment operator
+    TIntermAggregate ( const TIntermAggregate& ); // disallow copy constructor
+    TIntermAggregate& operator= ( const TIntermAggregate& ); // disallow assignment operator
     TIntermSequence sequence;
     TQualifierList qualifier;
     TString name;
@@ -1613,30 +2060,64 @@ protected:
 //
 // For if tests.
 //
-class TIntermSelection : public TIntermTyped {
+class TIntermSelection : public TIntermTyped
+{
 public:
-    TIntermSelection(TIntermTyped* cond, TIntermNode* trueB, TIntermNode* falseB) :
-        TIntermTyped(EbtVoid), condition(cond), trueBlock(trueB), falseBlock(falseB),
-        shortCircuit(true),
-        flatten(false), dontFlatten(false) {}
-    TIntermSelection(TIntermTyped* cond, TIntermNode* trueB, TIntermNode* falseB, const TType& type) :
-        TIntermTyped(type), condition(cond), trueBlock(trueB), falseBlock(falseB),
-        shortCircuit(true),
-        flatten(false), dontFlatten(false) {}
-    virtual void traverse(TIntermTraverser*);
-    virtual TIntermTyped* getCondition() const { return condition; }
-    virtual TIntermNode* getTrueBlock() const { return trueBlock; }
-    virtual TIntermNode* getFalseBlock() const { return falseBlock; }
-    virtual       TIntermSelection* getAsSelectionNode()       { return this; }
-    virtual const TIntermSelection* getAsSelectionNode() const { return this; }
+    TIntermSelection ( TIntermTyped* cond, TIntermNode* trueB, TIntermNode* falseB ) :
+        TIntermTyped ( EbtVoid ), condition ( cond ), trueBlock ( trueB ), falseBlock ( falseB ),
+        shortCircuit ( true ),
+        flatten ( false ), dontFlatten ( false ) {}
+    TIntermSelection ( TIntermTyped* cond, TIntermNode* trueB, TIntermNode* falseB, const TType& type ) :
+        TIntermTyped ( type ), condition ( cond ), trueBlock ( trueB ), falseBlock ( falseB ),
+        shortCircuit ( true ),
+        flatten ( false ), dontFlatten ( false ) {}
+    virtual void traverse ( TIntermTraverser* );
+    virtual TIntermTyped* getCondition() const
+    {
+        return condition;
+    }
+    virtual TIntermNode* getTrueBlock() const
+    {
+        return trueBlock;
+    }
+    virtual TIntermNode* getFalseBlock() const
+    {
+        return falseBlock;
+    }
+    virtual       TIntermSelection* getAsSelectionNode()
+    {
+        return this;
+    }
+    virtual const TIntermSelection* getAsSelectionNode() const
+    {
+        return this;
+    }
 
-    void setNoShortCircuit() { shortCircuit = false; }
-    bool getShortCircuit() const { return shortCircuit; }
+    void setNoShortCircuit()
+    {
+        shortCircuit = false;
+    }
+    bool getShortCircuit() const
+    {
+        return shortCircuit;
+    }
 
-    void setFlatten()     { flatten = true; }
-    void setDontFlatten() { dontFlatten = true; }
-    bool getFlatten()     const { return flatten; }
-    bool getDontFlatten() const { return dontFlatten; }
+    void setFlatten()
+    {
+        flatten = true;
+    }
+    void setDontFlatten()
+    {
+        dontFlatten = true;
+    }
+    bool getFlatten()     const
+    {
+        return flatten;
+    }
+    bool getDontFlatten() const
+    {
+        return dontFlatten;
+    }
 
 protected:
     TIntermTyped* condition;
@@ -1653,20 +2134,45 @@ protected:
 // in between (if any) consecutive case/defaults.  So, a traversal need only deal with
 // 0 or 1 nodes per case/default statement.
 //
-class TIntermSwitch : public TIntermNode {
+class TIntermSwitch : public TIntermNode
+{
 public:
-    TIntermSwitch(TIntermTyped* cond, TIntermAggregate* b) : condition(cond), body(b),
-        flatten(false), dontFlatten(false) {}
-    virtual void traverse(TIntermTraverser*);
-    virtual TIntermNode* getCondition() const { return condition; }
-    virtual TIntermAggregate* getBody() const { return body; }
-    virtual       TIntermSwitch* getAsSwitchNode()       { return this; }
-    virtual const TIntermSwitch* getAsSwitchNode() const { return this; }
+    TIntermSwitch ( TIntermTyped* cond, TIntermAggregate* b ) : condition ( cond ), body ( b ),
+        flatten ( false ), dontFlatten ( false ) {}
+    virtual void traverse ( TIntermTraverser* );
+    virtual TIntermNode* getCondition() const
+    {
+        return condition;
+    }
+    virtual TIntermAggregate* getBody() const
+    {
+        return body;
+    }
+    virtual       TIntermSwitch* getAsSwitchNode()
+    {
+        return this;
+    }
+    virtual const TIntermSwitch* getAsSwitchNode() const
+    {
+        return this;
+    }
 
-    void setFlatten()     { flatten = true; }
-    void setDontFlatten() { dontFlatten = true; }
-    bool getFlatten()     const { return flatten; }
-    bool getDontFlatten() const { return dontFlatten; }
+    void setFlatten()
+    {
+        flatten = true;
+    }
+    void setDontFlatten()
+    {
+        dontFlatten = true;
+    }
+    bool getFlatten()     const
+    {
+        return flatten;
+    }
+    bool getDontFlatten() const
+    {
+        return dontFlatten;
+    }
 
 protected:
     TIntermTyped* condition;
@@ -1675,8 +2181,7 @@ protected:
     bool dontFlatten; // true if requested to not flatten
 };
 
-enum TVisit
-{
+enum TVisit {
     EvPreVisit,
     EvInVisit,
     EvPostVisit
@@ -1703,35 +2208,60 @@ enum TVisit
 //
 // If you process children yourself, or don't want them processed, return false.
 //
-class TIntermTraverser {
+class TIntermTraverser
+{
 public:
-    POOL_ALLOCATOR_NEW_DELETE(glslang::GetThreadPoolAllocator())
-    TIntermTraverser(bool preVisit = true, bool inVisit = false, bool postVisit = false, bool rightToLeft = false) :
-            preVisit(preVisit),
-            inVisit(inVisit),
-            postVisit(postVisit),
-            rightToLeft(rightToLeft),
-            depth(0),
-            maxDepth(0) { }
+    POOL_ALLOCATOR_NEW_DELETE ( glslang::GetThreadPoolAllocator() )
+    TIntermTraverser ( bool preVisit = true, bool inVisit = false, bool postVisit = false, bool rightToLeft = false ) :
+        preVisit ( preVisit ),
+        inVisit ( inVisit ),
+        postVisit ( postVisit ),
+        rightToLeft ( rightToLeft ),
+        depth ( 0 ),
+        maxDepth ( 0 ) { }
     virtual ~TIntermTraverser() { }
 
-    virtual void visitSymbol(TIntermSymbol*)               { }
-    virtual void visitConstantUnion(TIntermConstantUnion*) { }
-    virtual bool visitBinary(TVisit, TIntermBinary*)       { return true; }
-    virtual bool visitUnary(TVisit, TIntermUnary*)         { return true; }
-    virtual bool visitSelection(TVisit, TIntermSelection*) { return true; }
-    virtual bool visitAggregate(TVisit, TIntermAggregate*) { return true; }
-    virtual bool visitLoop(TVisit, TIntermLoop*)           { return true; }
-    virtual bool visitBranch(TVisit, TIntermBranch*)       { return true; }
-    virtual bool visitSwitch(TVisit, TIntermSwitch*)       { return true; }
+    virtual void visitSymbol ( TIntermSymbol* )               { }
+    virtual void visitConstantUnion ( TIntermConstantUnion* ) { }
+    virtual bool visitBinary ( TVisit, TIntermBinary* )
+    {
+        return true;
+    }
+    virtual bool visitUnary ( TVisit, TIntermUnary* )
+    {
+        return true;
+    }
+    virtual bool visitSelection ( TVisit, TIntermSelection* )
+    {
+        return true;
+    }
+    virtual bool visitAggregate ( TVisit, TIntermAggregate* )
+    {
+        return true;
+    }
+    virtual bool visitLoop ( TVisit, TIntermLoop* )
+    {
+        return true;
+    }
+    virtual bool visitBranch ( TVisit, TIntermBranch* )
+    {
+        return true;
+    }
+    virtual bool visitSwitch ( TVisit, TIntermSwitch* )
+    {
+        return true;
+    }
 
-    int getMaxDepth() const { return maxDepth; }
+    int getMaxDepth() const
+    {
+        return maxDepth;
+    }
 
-    void incrementDepth(TIntermNode *current)
+    void incrementDepth ( TIntermNode *current )
     {
         depth++;
-        maxDepth = (std::max)(maxDepth, depth);
-        path.push_back(current);
+        maxDepth = ( std::max ) ( maxDepth, depth );
+        path.push_back ( current );
     }
 
     void decrementDepth()
@@ -1751,7 +2281,7 @@ public:
     const bool rightToLeft;
 
 protected:
-    TIntermTraverser& operator=(TIntermTraverser&);
+    TIntermTraverser& operator= ( TIntermTraverser& );
 
     int depth;
     int maxDepth;
@@ -1762,7 +2292,7 @@ protected:
 
 // KHR_vulkan_glsl says "Two arrays sized with specialization constants are the same type only if
 // sized with the same symbol, involving no operations"
-inline bool SameSpecializationConstants(TIntermTyped* node1, TIntermTyped* node2)
+inline bool SameSpecializationConstants ( TIntermTyped* node1, TIntermTyped* node2 )
 {
     return node1->getAsSymbolNode() && node2->getAsSymbolNode() &&
            node1->getAsSymbolNode()->getId() == node2->getAsSymbolNode()->getId();

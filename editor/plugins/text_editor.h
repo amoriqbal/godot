@@ -33,119 +33,123 @@
 
 #include "script_editor_plugin.h"
 
-class TextEditor : public ScriptEditorBase {
-	GDCLASS(TextEditor, ScriptEditorBase);
+class TextEditor : public ScriptEditorBase
+{
+    GDCLASS ( TextEditor, ScriptEditorBase );
 
 private:
-	CodeTextEditor *code_editor = nullptr;
+    CodeTextEditor *code_editor = nullptr;
 
-	Ref<TextFile> text_file;
-	bool editor_enabled = false;
+    Ref<TextFile> text_file;
+    bool editor_enabled = false;
 
-	HBoxContainer *edit_hb = nullptr;
-	MenuButton *edit_menu = nullptr;
-	PopupMenu *highlighter_menu = nullptr;
-	MenuButton *search_menu = nullptr;
-	PopupMenu *bookmarks_menu = nullptr;
-	PopupMenu *context_menu = nullptr;
+    HBoxContainer *edit_hb = nullptr;
+    MenuButton *edit_menu = nullptr;
+    PopupMenu *highlighter_menu = nullptr;
+    MenuButton *search_menu = nullptr;
+    PopupMenu *bookmarks_menu = nullptr;
+    PopupMenu *context_menu = nullptr;
 
-	GotoLineDialog *goto_line_dialog = nullptr;
+    GotoLineDialog *goto_line_dialog = nullptr;
 
-	enum {
-		EDIT_UNDO,
-		EDIT_REDO,
-		EDIT_CUT,
-		EDIT_COPY,
-		EDIT_PASTE,
-		EDIT_SELECT_ALL,
-		EDIT_TRIM_TRAILING_WHITESAPCE,
-		EDIT_CONVERT_INDENT_TO_SPACES,
-		EDIT_CONVERT_INDENT_TO_TABS,
-		EDIT_MOVE_LINE_UP,
-		EDIT_MOVE_LINE_DOWN,
-		EDIT_INDENT_RIGHT,
-		EDIT_INDENT_LEFT,
-		EDIT_DELETE_LINE,
-		EDIT_CLONE_DOWN,
-		EDIT_TO_UPPERCASE,
-		EDIT_TO_LOWERCASE,
-		EDIT_CAPITALIZE,
-		EDIT_TOGGLE_FOLD_LINE,
-		EDIT_FOLD_ALL_LINES,
-		EDIT_UNFOLD_ALL_LINES,
-		SEARCH_FIND,
-		SEARCH_FIND_NEXT,
-		SEARCH_FIND_PREV,
-		SEARCH_REPLACE,
-		SEARCH_IN_FILES,
-		REPLACE_IN_FILES,
-		SEARCH_GOTO_LINE,
-		BOOKMARK_TOGGLE,
-		BOOKMARK_GOTO_NEXT,
-		BOOKMARK_GOTO_PREV,
-		BOOKMARK_REMOVE_ALL,
-	};
+    enum {
+        EDIT_UNDO,
+        EDIT_REDO,
+        EDIT_CUT,
+        EDIT_COPY,
+        EDIT_PASTE,
+        EDIT_SELECT_ALL,
+        EDIT_TRIM_TRAILING_WHITESAPCE,
+        EDIT_CONVERT_INDENT_TO_SPACES,
+        EDIT_CONVERT_INDENT_TO_TABS,
+        EDIT_MOVE_LINE_UP,
+        EDIT_MOVE_LINE_DOWN,
+        EDIT_INDENT_RIGHT,
+        EDIT_INDENT_LEFT,
+        EDIT_DELETE_LINE,
+        EDIT_CLONE_DOWN,
+        EDIT_TO_UPPERCASE,
+        EDIT_TO_LOWERCASE,
+        EDIT_CAPITALIZE,
+        EDIT_TOGGLE_FOLD_LINE,
+        EDIT_FOLD_ALL_LINES,
+        EDIT_UNFOLD_ALL_LINES,
+        SEARCH_FIND,
+        SEARCH_FIND_NEXT,
+        SEARCH_FIND_PREV,
+        SEARCH_REPLACE,
+        SEARCH_IN_FILES,
+        REPLACE_IN_FILES,
+        SEARCH_GOTO_LINE,
+        BOOKMARK_TOGGLE,
+        BOOKMARK_GOTO_NEXT,
+        BOOKMARK_GOTO_PREV,
+        BOOKMARK_REMOVE_ALL,
+    };
 
 protected:
-	static void _bind_methods();
+    static void _bind_methods();
 
-	void _edit_option(int p_op);
-	void _make_context_menu(bool p_selection, bool p_can_fold, bool p_is_folded, Vector2 p_position);
-	void _text_edit_gui_input(const Ref<InputEvent> &ev);
+    void _edit_option ( int p_op );
+    void _make_context_menu ( bool p_selection, bool p_can_fold, bool p_is_folded, Vector2 p_position );
+    void _text_edit_gui_input ( const Ref<InputEvent> &ev );
 
-	Map<String, Ref<EditorSyntaxHighlighter>> highlighters;
-	void _change_syntax_highlighter(int p_idx);
-	void _load_theme_settings();
+    Map<String, Ref<EditorSyntaxHighlighter>> highlighters;
+    void _change_syntax_highlighter ( int p_idx );
+    void _load_theme_settings();
 
-	void _convert_case(CodeTextEditor::CaseStyle p_case);
+    void _convert_case ( CodeTextEditor::CaseStyle p_case );
 
-	void _validate_script();
+    void _validate_script();
 
-	void _update_bookmark_list();
-	void _bookmark_item_pressed(int p_idx);
+    void _update_bookmark_list();
+    void _bookmark_item_pressed ( int p_idx );
 
 public:
-	virtual void add_syntax_highlighter(Ref<EditorSyntaxHighlighter> p_highlighter) override;
-	virtual void set_syntax_highlighter(Ref<EditorSyntaxHighlighter> p_highlighter) override;
+    virtual void add_syntax_highlighter ( Ref<EditorSyntaxHighlighter> p_highlighter ) override;
+    virtual void set_syntax_highlighter ( Ref<EditorSyntaxHighlighter> p_highlighter ) override;
 
-	virtual String get_name() override;
-	virtual Ref<Texture2D> get_theme_icon() override;
-	virtual RES get_edited_resource() const override;
-	virtual void set_edited_resource(const RES &p_res) override;
-	virtual void enable_editor() override;
-	virtual void reload_text() override;
-	virtual void apply_code() override;
-	virtual bool is_unsaved() override;
-	virtual Variant get_edit_state() override;
-	virtual void set_edit_state(const Variant &p_state) override;
-	virtual Vector<String> get_functions() override;
-	virtual void get_breakpoints(List<int> *p_breakpoints) override;
-	virtual void goto_line(int p_line, bool p_with_error = false) override;
-	void goto_line_selection(int p_line, int p_begin, int p_end);
-	virtual void set_executing_line(int p_line) override;
-	virtual void clear_executing_line() override;
-	virtual void trim_trailing_whitespace() override;
-	virtual void insert_final_newline() override;
-	virtual void convert_indent_to_spaces() override;
-	virtual void convert_indent_to_tabs() override;
-	virtual void ensure_focus() override;
-	virtual void tag_saved_version() override;
-	virtual void update_settings() override;
-	virtual bool show_members_overview() override;
-	virtual bool can_lose_focus_on_node_selection() override { return true; }
-	virtual void set_debugger_active(bool p_active) override;
-	virtual void set_tooltip_request_func(String p_method, Object *p_obj) override;
-	virtual void add_callback(const String &p_function, PackedStringArray p_args) override;
+    virtual String get_name() override;
+    virtual Ref<Texture2D> get_theme_icon() override;
+    virtual RES get_edited_resource() const override;
+    virtual void set_edited_resource ( const RES &p_res ) override;
+    virtual void enable_editor() override;
+    virtual void reload_text() override;
+    virtual void apply_code() override;
+    virtual bool is_unsaved() override;
+    virtual Variant get_edit_state() override;
+    virtual void set_edit_state ( const Variant &p_state ) override;
+    virtual Vector<String> get_functions() override;
+    virtual void get_breakpoints ( List<int> *p_breakpoints ) override;
+    virtual void goto_line ( int p_line, bool p_with_error = false ) override;
+    void goto_line_selection ( int p_line, int p_begin, int p_end );
+    virtual void set_executing_line ( int p_line ) override;
+    virtual void clear_executing_line() override;
+    virtual void trim_trailing_whitespace() override;
+    virtual void insert_final_newline() override;
+    virtual void convert_indent_to_spaces() override;
+    virtual void convert_indent_to_tabs() override;
+    virtual void ensure_focus() override;
+    virtual void tag_saved_version() override;
+    virtual void update_settings() override;
+    virtual bool show_members_overview() override;
+    virtual bool can_lose_focus_on_node_selection() override
+    {
+        return true;
+    }
+    virtual void set_debugger_active ( bool p_active ) override;
+    virtual void set_tooltip_request_func ( String p_method, Object *p_obj ) override;
+    virtual void add_callback ( const String &p_function, PackedStringArray p_args ) override;
 
-	virtual Control *get_edit_menu() override;
-	virtual void clear_edit_menu() override;
+    virtual Control *get_edit_menu() override;
+    virtual void clear_edit_menu() override;
 
-	virtual void validate() override;
+    virtual void validate() override;
 
-	static void register_editor();
+    static void register_editor();
 
-	TextEditor();
-	~TextEditor();
+    TextEditor();
+    ~TextEditor();
 };
 
 #endif // TEXT_EDITOR_H

@@ -92,14 +92,14 @@ struct aiTexel {
 
 #ifdef __cplusplus
     //! Comparison operator
-    bool operator== (const aiTexel& other) const
+    bool operator== ( const aiTexel& other ) const
     {
         return b == other.b && r == other.r &&
                g == other.g && a == other.a;
     }
 
     //! Inverse comparison operator
-    bool operator!= (const aiTexel& other) const
+    bool operator!= ( const aiTexel& other ) const
     {
         return b != other.b || r != other.r ||
                g != other.g || a != other.a;
@@ -108,7 +108,7 @@ struct aiTexel {
     //! Conversion to a floating-point 4d color
     operator aiColor4D() const
     {
-        return aiColor4D(r/255.f,g/255.f,b/255.f,a/255.f);
+        return aiColor4D ( r/255.f,g/255.f,b/255.f,a/255.f );
     }
 #endif // __cplusplus
 
@@ -193,26 +193,30 @@ struct aiTexture {
     //! @param s Input string. 3 characters are maximally processed.
     //!        Example values: "jpg", "png"
     //! @return true if the given string matches the format hint
-    bool CheckFormat(const char* s) const {
-        if (nullptr == s) {
+    bool CheckFormat ( const char* s ) const
+    {
+        if ( nullptr == s ) {
             return false;
         }
 
-		return (0 == ::strncmp(achFormatHint, s, sizeof(achFormatHint)));
+        return ( 0 == ::strncmp ( achFormatHint, s, sizeof ( achFormatHint ) ) );
     }
 
     // Construction
     aiTexture() AI_NO_EXCEPT
-    : mWidth(0)
-    , mHeight(0)
-    , pcData(nullptr)
-    , mFilename() {
+:
+    mWidth ( 0 )
+    , mHeight ( 0 )
+    , pcData ( nullptr )
+    , mFilename()
+    {
         achFormatHint[0] = achFormatHint[1] = 0;
         achFormatHint[2] = achFormatHint[3] = 0;
     }
 
     // Destruction
-    ~aiTexture () {
+    ~aiTexture ()
+    {
         delete[] pcData;
     }
 #endif

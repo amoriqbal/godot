@@ -42,130 +42,196 @@
 
 class btGhostObject;
 
-class AreaBullet : public RigidCollisionObjectBullet {
-	friend void SpaceBullet::check_ghost_overlaps();
+class AreaBullet : public RigidCollisionObjectBullet
+{
+    friend void SpaceBullet::check_ghost_overlaps();
 
 public:
-	struct InOutEventCallback {
-		ObjectID event_callback_id;
-		StringName event_callback_method;
+    struct InOutEventCallback {
+        ObjectID event_callback_id;
+        StringName event_callback_method;
 
-		InOutEventCallback() {}
-	};
+        InOutEventCallback() {}
+    };
 
-	enum OverlapState {
-		OVERLAP_STATE_DIRTY = 0, // Mark processed overlaps
-		OVERLAP_STATE_INSIDE, // Mark old overlap
-		OVERLAP_STATE_ENTER, // Mark just enter overlap
-		OVERLAP_STATE_EXIT // Mark ended overlaps
-	};
+    enum OverlapState {
+        OVERLAP_STATE_DIRTY = 0, // Mark processed overlaps
+        OVERLAP_STATE_INSIDE, // Mark old overlap
+        OVERLAP_STATE_ENTER, // Mark just enter overlap
+        OVERLAP_STATE_EXIT // Mark ended overlaps
+    };
 
-	struct OverlappingObjectData {
-		CollisionObjectBullet *object = nullptr;
-		OverlapState state = OVERLAP_STATE_ENTER;
+    struct OverlappingObjectData {
+        CollisionObjectBullet *object = nullptr;
+        OverlapState state = OVERLAP_STATE_ENTER;
 
-		OverlappingObjectData() {}
-		OverlappingObjectData(CollisionObjectBullet *p_object, OverlapState p_state) :
-				object(p_object),
-				state(p_state) {}
-		OverlappingObjectData(const OverlappingObjectData &other) {
-			operator=(other);
-		}
-		void operator=(const OverlappingObjectData &other) {
-			object = other.object;
-			state = other.state;
-		}
-	};
+        OverlappingObjectData() {}
+        OverlappingObjectData ( CollisionObjectBullet *p_object, OverlapState p_state ) :
+            object ( p_object ),
+            state ( p_state ) {}
+        OverlappingObjectData ( const OverlappingObjectData &other )
+        {
+            operator= ( other );
+        }
+        void operator= ( const OverlappingObjectData &other )
+        {
+            object = other.object;
+            state = other.state;
+        }
+    };
 
 private:
-	// These are used by function callEvent. Instead to create this each call I create if one time.
-	Variant call_event_res[5];
-	Variant *call_event_res_ptr[5];
+    // These are used by function callEvent. Instead to create this each call I create if one time.
+    Variant call_event_res[5];
+    Variant *call_event_res_ptr[5];
 
-	btGhostObject *btGhost;
-	LocalVector<OverlappingObjectData> overlappingObjects;
-	bool monitorable = true;
+    btGhostObject *btGhost;
+    LocalVector<OverlappingObjectData> overlappingObjects;
+    bool monitorable = true;
 
-	PhysicsServer3D::AreaSpaceOverrideMode spOv_mode = PhysicsServer3D::AREA_SPACE_OVERRIDE_DISABLED;
-	bool spOv_gravityPoint = false;
-	real_t spOv_gravityPointDistanceScale = 0;
-	real_t spOv_gravityPointAttenuation = 1;
-	Vector3 spOv_gravityVec = Vector3(0, -1, 0);
-	real_t spOv_gravityMag = 10;
-	real_t spOv_linearDump = 0.1;
-	real_t spOv_angularDump = 0.1;
-	int spOv_priority = 0;
+    PhysicsServer3D::AreaSpaceOverrideMode spOv_mode = PhysicsServer3D::AREA_SPACE_OVERRIDE_DISABLED;
+    bool spOv_gravityPoint = false;
+    real_t spOv_gravityPointDistanceScale = 0;
+    real_t spOv_gravityPointAttenuation = 1;
+    Vector3 spOv_gravityVec = Vector3 ( 0, -1, 0 );
+    real_t spOv_gravityMag = 10;
+    real_t spOv_linearDump = 0.1;
+    real_t spOv_angularDump = 0.1;
+    int spOv_priority = 0;
 
-	InOutEventCallback eventsCallbacks[2];
+    InOutEventCallback eventsCallbacks[2];
 
 public:
-	AreaBullet();
-	~AreaBullet();
+    AreaBullet();
+    ~AreaBullet();
 
-	_FORCE_INLINE_ btGhostObject *get_bt_ghost() const { return btGhost; }
-	int find_overlapping_object(CollisionObjectBullet *p_colObj);
+    _FORCE_INLINE_ btGhostObject *get_bt_ghost() const
+    {
+        return btGhost;
+    }
+    int find_overlapping_object ( CollisionObjectBullet *p_colObj );
 
-	void set_monitorable(bool p_monitorable);
-	_FORCE_INLINE_ bool is_monitorable() const { return monitorable; }
+    void set_monitorable ( bool p_monitorable );
+    _FORCE_INLINE_ bool is_monitorable() const
+    {
+        return monitorable;
+    }
 
-	bool is_monitoring() const;
+    bool is_monitoring() const;
 
-	_FORCE_INLINE_ void set_spOv_mode(PhysicsServer3D::AreaSpaceOverrideMode p_mode) { spOv_mode = p_mode; }
-	_FORCE_INLINE_ PhysicsServer3D::AreaSpaceOverrideMode get_spOv_mode() { return spOv_mode; }
+    _FORCE_INLINE_ void set_spOv_mode ( PhysicsServer3D::AreaSpaceOverrideMode p_mode )
+    {
+        spOv_mode = p_mode;
+    }
+    _FORCE_INLINE_ PhysicsServer3D::AreaSpaceOverrideMode get_spOv_mode()
+    {
+        return spOv_mode;
+    }
 
-	_FORCE_INLINE_ void set_spOv_gravityPoint(bool p_isGP) { spOv_gravityPoint = p_isGP; }
-	_FORCE_INLINE_ bool is_spOv_gravityPoint() { return spOv_gravityPoint; }
+    _FORCE_INLINE_ void set_spOv_gravityPoint ( bool p_isGP )
+    {
+        spOv_gravityPoint = p_isGP;
+    }
+    _FORCE_INLINE_ bool is_spOv_gravityPoint()
+    {
+        return spOv_gravityPoint;
+    }
 
-	_FORCE_INLINE_ void set_spOv_gravityPointDistanceScale(real_t p_GPDS) { spOv_gravityPointDistanceScale = p_GPDS; }
-	_FORCE_INLINE_ real_t get_spOv_gravityPointDistanceScale() { return spOv_gravityPointDistanceScale; }
+    _FORCE_INLINE_ void set_spOv_gravityPointDistanceScale ( real_t p_GPDS )
+    {
+        spOv_gravityPointDistanceScale = p_GPDS;
+    }
+    _FORCE_INLINE_ real_t get_spOv_gravityPointDistanceScale()
+    {
+        return spOv_gravityPointDistanceScale;
+    }
 
-	_FORCE_INLINE_ void set_spOv_gravityPointAttenuation(real_t p_GPA) { spOv_gravityPointAttenuation = p_GPA; }
-	_FORCE_INLINE_ real_t get_spOv_gravityPointAttenuation() { return spOv_gravityPointAttenuation; }
+    _FORCE_INLINE_ void set_spOv_gravityPointAttenuation ( real_t p_GPA )
+    {
+        spOv_gravityPointAttenuation = p_GPA;
+    }
+    _FORCE_INLINE_ real_t get_spOv_gravityPointAttenuation()
+    {
+        return spOv_gravityPointAttenuation;
+    }
 
-	_FORCE_INLINE_ void set_spOv_gravityVec(Vector3 p_vec) { spOv_gravityVec = p_vec; }
-	_FORCE_INLINE_ const Vector3 &get_spOv_gravityVec() const { return spOv_gravityVec; }
+    _FORCE_INLINE_ void set_spOv_gravityVec ( Vector3 p_vec )
+    {
+        spOv_gravityVec = p_vec;
+    }
+    _FORCE_INLINE_ const Vector3 &get_spOv_gravityVec() const
+    {
+        return spOv_gravityVec;
+    }
 
-	_FORCE_INLINE_ void set_spOv_gravityMag(real_t p_gravityMag) { spOv_gravityMag = p_gravityMag; }
-	_FORCE_INLINE_ real_t get_spOv_gravityMag() { return spOv_gravityMag; }
+    _FORCE_INLINE_ void set_spOv_gravityMag ( real_t p_gravityMag )
+    {
+        spOv_gravityMag = p_gravityMag;
+    }
+    _FORCE_INLINE_ real_t get_spOv_gravityMag()
+    {
+        return spOv_gravityMag;
+    }
 
-	_FORCE_INLINE_ void set_spOv_linearDump(real_t p_linearDump) { spOv_linearDump = p_linearDump; }
-	_FORCE_INLINE_ real_t get_spOv_linearDamp() { return spOv_linearDump; }
+    _FORCE_INLINE_ void set_spOv_linearDump ( real_t p_linearDump )
+    {
+        spOv_linearDump = p_linearDump;
+    }
+    _FORCE_INLINE_ real_t get_spOv_linearDamp()
+    {
+        return spOv_linearDump;
+    }
 
-	_FORCE_INLINE_ void set_spOv_angularDump(real_t p_angularDump) { spOv_angularDump = p_angularDump; }
-	_FORCE_INLINE_ real_t get_spOv_angularDamp() { return spOv_angularDump; }
+    _FORCE_INLINE_ void set_spOv_angularDump ( real_t p_angularDump )
+    {
+        spOv_angularDump = p_angularDump;
+    }
+    _FORCE_INLINE_ real_t get_spOv_angularDamp()
+    {
+        return spOv_angularDump;
+    }
 
-	_FORCE_INLINE_ void set_spOv_priority(int p_priority) { spOv_priority = p_priority; }
-	_FORCE_INLINE_ int get_spOv_priority() { return spOv_priority; }
+    _FORCE_INLINE_ void set_spOv_priority ( int p_priority )
+    {
+        spOv_priority = p_priority;
+    }
+    _FORCE_INLINE_ int get_spOv_priority()
+    {
+        return spOv_priority;
+    }
 
-	virtual void main_shape_changed() override;
-	virtual void do_reload_body() override;
-	virtual void set_space(SpaceBullet *p_space) override;
+    virtual void main_shape_changed() override;
+    virtual void do_reload_body() override;
+    virtual void set_space ( SpaceBullet *p_space ) override;
 
-	virtual void dispatch_callbacks() override;
-	void call_event(CollisionObjectBullet *p_otherObject, PhysicsServer3D::AreaBodyStatus p_status);
-	void set_on_state_change(ObjectID p_id, const StringName &p_method, const Variant &p_udata = Variant());
-	void scratch();
+    virtual void dispatch_callbacks() override;
+    void call_event ( CollisionObjectBullet *p_otherObject, PhysicsServer3D::AreaBodyStatus p_status );
+    void set_on_state_change ( ObjectID p_id, const StringName &p_method, const Variant &p_udata = Variant() );
+    void scratch();
 
-	void clear_overlaps(bool p_notify);
-	// Dispatch the callbacks and removes from overlapping list
-	void remove_overlap(CollisionObjectBullet *p_object, bool p_notify);
+    void clear_overlaps ( bool p_notify );
+    // Dispatch the callbacks and removes from overlapping list
+    void remove_overlap ( CollisionObjectBullet *p_object, bool p_notify );
 
-	virtual void do_reload_collision_filters() override;
-	virtual void on_collision_checker_start() override {}
-	virtual void on_collision_checker_end() override { isTransformChanged = false; }
+    virtual void do_reload_collision_filters() override;
+    virtual void on_collision_checker_start() override {}
+    virtual void on_collision_checker_end() override
+    {
+        isTransformChanged = false;
+    }
 
-	void add_overlap(CollisionObjectBullet *p_otherObject);
-	void put_overlap_as_exit(int p_index);
-	void put_overlap_as_inside(int p_index);
+    void add_overlap ( CollisionObjectBullet *p_otherObject );
+    void put_overlap_as_exit ( int p_index );
+    void put_overlap_as_inside ( int p_index );
 
-	void set_param(PhysicsServer3D::AreaParameter p_param, const Variant &p_value);
-	Variant get_param(PhysicsServer3D::AreaParameter p_param) const;
+    void set_param ( PhysicsServer3D::AreaParameter p_param, const Variant &p_value );
+    Variant get_param ( PhysicsServer3D::AreaParameter p_param ) const;
 
-	void set_event_callback(Type p_callbackObjectType, ObjectID p_id, const StringName &p_method);
-	bool has_event_callback(Type p_callbackObjectType);
+    void set_event_callback ( Type p_callbackObjectType, ObjectID p_id, const StringName &p_method );
+    bool has_event_callback ( Type p_callbackObjectType );
 
-	virtual void on_enter_area(AreaBullet *p_area) override;
-	virtual void on_exit_area(AreaBullet *p_area) override;
+    virtual void on_enter_area ( AreaBullet *p_area ) override;
+    virtual void on_exit_area ( AreaBullet *p_area ) override;
 };
 
 #endif

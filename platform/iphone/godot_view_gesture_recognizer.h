@@ -39,6 +39,6 @@
 
 @interface GodotViewGestureRecognizer : UIGestureRecognizer
 
-- (instancetype)init;
+- ( instancetype ) init;
 
 @end

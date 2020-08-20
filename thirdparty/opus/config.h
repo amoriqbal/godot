@@ -96,11 +96,11 @@
 #define OPUS_BUILD /**/
 
 #ifndef WIN32
-	/* Use C99 variable-size arrays */
-	#define VAR_ARRAYS 1
+/* Use C99 variable-size arrays */
+#define VAR_ARRAYS 1
 #else
-	/* Fixes VS 2013 compile error */
-	#define USE_ALLOCA 1
+/* Fixes VS 2013 compile error */
+#define USE_ALLOCA 1
 #endif
 
 #ifndef OPUS_FIXED_POINT

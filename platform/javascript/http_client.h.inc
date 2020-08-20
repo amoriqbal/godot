@@ -30,7 +30,7 @@
 
 // HTTPClient's additional private members in the javascript platform
 
-Error prepare_request(Method p_method, const String &p_url, const Vector<String> &p_headers);
+Error prepare_request ( Method p_method, const String &p_url, const Vector<String> &p_headers );
 
 int xhr_id;
 int read_limit = 4096;

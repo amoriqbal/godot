@@ -53,12 +53,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Forward declarations
 class GenNormalsTest;
 
-namespace Assimp {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /** The GenFaceNormalsProcess computes vertex normals for all vertices
 */
-class ASSIMP_API GenVertexNormalsProcess : public BaseProcess {
+class ASSIMP_API GenVertexNormalsProcess : public BaseProcess
+{
 public:
     GenVertexNormalsProcess();
     ~GenVertexNormalsProcess();
@@ -70,25 +72,26 @@ public:
     * @return true if the process is present in this flag fields,
     *   false if not.
     */
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
     /** Called prior to ExecuteOnScene().
     * The function is a request to the process to update its configuration
     * basing on the Importer's configuration property list.
     */
-    void SetupProperties(const Importer* pImp);
+    void SetupProperties ( const Importer* pImp );
 
     // -------------------------------------------------------------------
     /** Executes the post processing step on the given imported data.
     * At the moment a process is not supposed to fail.
     * @param pScene The imported data to work at.
     */
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
 
     // setter for configMaxAngle
-    inline void SetMaxSmoothAngle(ai_real f) {
+    inline void SetMaxSmoothAngle ( ai_real f )
+    {
         configMaxAngle =f;
     }
 
@@ -98,7 +101,7 @@ public:
     *  @param meshIndex Index of the mesh
     *  @return true if vertex normals have been computed
     */
-    bool GenMeshVertexNormals (aiMesh* pcMesh, unsigned int meshIndex);
+    bool GenMeshVertexNormals ( aiMesh* pcMesh, unsigned int meshIndex );
 
 private:
     /** Configuration option: maximum smoothing angle, in radians*/

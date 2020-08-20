@@ -28,7 +28,7 @@ typedef struct LoaderEnumAdapters2 {
     } * adapters;
 } LoaderEnumAdapters2;
 
-typedef _Check_return_ NTSTATUS(APIENTRY *PFN_LoaderEnumAdapters2)(const LoaderEnumAdapters2 *);
+typedef _Check_return_ NTSTATUS ( APIENTRY *PFN_LoaderEnumAdapters2 ) ( const LoaderEnumAdapters2 * );
 
 typedef enum AdapterInfoType {
     LOADER_QUERY_TYPE_REGISTRY = 48,
@@ -41,7 +41,7 @@ typedef struct LoaderQueryAdapterInfo {
     UINT private_data_size;
 } LoaderQueryAdapterInfo;
 
-typedef _Check_return_ NTSTATUS(APIENTRY *PFN_LoaderQueryAdapterInfo)(const LoaderQueryAdapterInfo *);
+typedef _Check_return_ NTSTATUS ( APIENTRY *PFN_LoaderQueryAdapterInfo ) ( const LoaderQueryAdapterInfo * );
 
 typedef enum LoaderQueryRegistryType {
     LOADER_QUERY_REGISTRY_ADAPTER_KEY = 1,

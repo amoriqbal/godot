@@ -30,18 +30,19 @@
 #include "colourfit.h"
 #include "maths.h"
 
-namespace squish {
+namespace squish
+{
 
 class ColourSet;
 
 class RangeFit : public ColourFit
 {
 public:
-    RangeFit( ColourSet const* colours, int flags, float* metric );
+    RangeFit ( ColourSet const* colours, int flags, float* metric );
 
 private:
-    virtual void Compress3( void* block );
-    virtual void Compress4( void* block );
+    virtual void Compress3 ( void* block );
+    virtual void Compress4 ( void* block );
 
     Vec3 m_metric;
     Vec3 m_start;

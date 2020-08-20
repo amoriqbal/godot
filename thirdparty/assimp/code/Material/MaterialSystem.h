@@ -51,7 +51,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 struct aiMaterial;
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // ------------------------------------------------------------------------------
 /** Computes a hash (hopefully unique) from all material properties
@@ -64,7 +65,7 @@ namespace Assimp    {
  *    Currently #AI_MATKEY_NAME is the only example.
  *  @return 32 Bit jash value for the material
  */
-uint32_t ComputeMaterialHash(const aiMaterial* mat, bool includeMatName = false);
+uint32_t ComputeMaterialHash ( const aiMaterial* mat, bool includeMatName = false );
 
 
 } // ! namespace Assimp

@@ -35,26 +35,30 @@
 #include "servers/rendering_server.h"
 #include "shader_language.h"
 
-class ShaderTypes {
-	struct Type {
-		Map<StringName, ShaderLanguage::FunctionInfo> functions;
-		Vector<StringName> modes;
-	};
+class ShaderTypes
+{
+    struct Type {
+        Map<StringName, ShaderLanguage::FunctionInfo> functions;
+        Vector<StringName> modes;
+    };
 
-	Map<RS::ShaderMode, Type> shader_modes;
+    Map<RS::ShaderMode, Type> shader_modes;
 
-	static ShaderTypes *singleton;
+    static ShaderTypes *singleton;
 
-	Set<String> shader_types;
+    Set<String> shader_types;
 
 public:
-	static ShaderTypes *get_singleton() { return singleton; }
+    static ShaderTypes *get_singleton()
+    {
+        return singleton;
+    }
 
-	const Map<StringName, ShaderLanguage::FunctionInfo> &get_functions(RS::ShaderMode p_mode);
-	const Vector<StringName> &get_modes(RS::ShaderMode p_mode);
-	const Set<String> &get_types();
+    const Map<StringName, ShaderLanguage::FunctionInfo> &get_functions ( RS::ShaderMode p_mode );
+    const Vector<StringName> &get_modes ( RS::ShaderMode p_mode );
+    const Set<String> &get_types();
 
-	ShaderTypes();
+    ShaderTypes();
 };
 
 #endif // SHADERTYPES_H

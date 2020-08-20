@@ -51,7 +51,8 @@ struct aiMesh;
 
 class LimitBoneWeightsTest;
 
-namespace Assimp {
+namespace Assimp
+{
 
 // NOTE: If you change these limits, don't forget to change the
 // corresponding values in all Assimp ports
@@ -72,7 +73,8 @@ namespace Assimp {
 * The other weights on this bone are then renormalized to assure the sum weight
 * to be 1.
 */
-class ASSIMP_API LimitBoneWeightsProcess : public BaseProcess {
+class ASSIMP_API LimitBoneWeightsProcess : public BaseProcess
+{
 public:
     LimitBoneWeightsProcess();
     ~LimitBoneWeightsProcess();
@@ -84,27 +86,27 @@ public:
     * @return true if the process is present in this flag fields,
     *   false if not.
     */
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
     /** Called prior to ExecuteOnScene().
     * The function is a request to the process to update its configuration
     * basing on the Importer's configuration property list.
     */
-    void SetupProperties(const Importer* pImp);
+    void SetupProperties ( const Importer* pImp );
 
     // -------------------------------------------------------------------
     /** Limits the bone weight count for all vertices in the given mesh.
     * @param pMesh The mesh to process.
     */
-    void ProcessMesh( aiMesh* pMesh);
+    void ProcessMesh ( aiMesh* pMesh );
 
     // -------------------------------------------------------------------
     /** Executes the post processing step on the given imported data.
     * At the moment a process is not supposed to fail.
     * @param pScene The imported data to work at.
     */
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
     // -------------------------------------------------------------------
     /** Describes a bone weight on a vertex */
@@ -112,19 +114,23 @@ public:
         unsigned int mBone; ///< Index of the bone
         float mWeight;      ///< Weight of that bone on this vertex
         Weight() AI_NO_EXCEPT
-        : mBone(0)
-        , mWeight(0.0f) {
+    :
+        mBone ( 0 )
+        , mWeight ( 0.0f )
+        {
             // empty
         }
 
-        Weight( unsigned int pBone, float pWeight)
-        : mBone(pBone)
-        , mWeight(pWeight) {
+        Weight ( unsigned int pBone, float pWeight )
+            : mBone ( pBone )
+            , mWeight ( pWeight )
+        {
             // empty
         }
 
         /** Comparison operator to sort bone weights by descending weight */
-        bool operator < (const Weight& pWeight) const {
+        bool operator < ( const Weight& pWeight ) const
+        {
             return mWeight > pWeight.mWeight;
         }
     };

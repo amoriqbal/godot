@@ -259,9 +259,9 @@ static const char *locale_list[] = {
 	"mg_MG", //  Malagasy (Madagascar)
 	"mh_MH", //  Marshallese (Marshall Islands)
 	"mhr_RU", //  Eastern Mari (Russia)
-	"mi", //  Māori
-	"mi_NZ", //  Māori (New Zealand)
-	"miq_NI", //  Mískito (Nicaragua)
+	"mi", //  M??ori
+	"mi_NZ", //  M??ori (New Zealand)
+	"miq_NI", //  M??skito (Nicaragua)
 	"mk", //  Macedonian
 	"mk_MK", //  Macedonian (Macedonia)
 	"ml", //  Malayalam
@@ -277,8 +277,8 @@ static const char *locale_list[] = {
 	"myv_RU", //  Erzya (Russia)
 	"nah_MX", //  Nahuatl languages (Mexico)
 	"nan_TW", //  Min Nan Chinese (Taiwan)
-	"nb", //  Norwegian Bokmål
-	"nb_NO", //  Norwegian Bokmål (Norway)
+	"nb", //  Norwegian Bokm??l
+	"nb_NO", //  Norwegian Bokm??l (Norway)
 	"nds_DE", //  Low German (Germany)
 	"nds_NL", //  Low German (Netherlands)
 	"ne_NP", //  Nepali (Nepal)
@@ -303,7 +303,7 @@ static const char *locale_list[] = {
 	"pap", //  Papiamento
 	"pap_AN", //  Papiamento (Netherlands Antilles)
 	"pap_AW", //  Papiamento (Aruba)
-	"pap_CW", //  Papiamento (Curaçao)
+	"pap_CW", //  Papiamento (Cura??ao)
 	"pa_PK", //  Panjabi (Pakistan)
 	"pl", //  Polish
 	"pl_PL", //  Polish (Poland)
@@ -627,9 +627,9 @@ static const char *locale_names[] = {
 	"Malagasy (Madagascar)",
 	"Marshallese (Marshall Islands)",
 	"Eastern Mari (Russia)",
-	"Māori",
-	"Māori (New Zealand)",
-	"Mískito (Nicaragua)",
+	"M??ori",
+	"M??ori (New Zealand)",
+	"M??skito (Nicaragua)",
 	"Macedonian",
 	"Macedonian (Macedonia)",
 	"Malayalam",
@@ -645,8 +645,8 @@ static const char *locale_names[] = {
 	"Erzya (Russia)",
 	"Nahuatl languages (Mexico)",
 	"Min Nan Chinese (Taiwan)",
-	"Norwegian Bokmål",
-	"Norwegian Bokmål (Norway)",
+	"Norwegian Bokm??l",
+	"Norwegian Bokm??l (Norway)",
 	"Low German (Germany)",
 	"Low German (Netherlands)",
 	"Nepali (Nepal)",
@@ -671,7 +671,7 @@ static const char *locale_names[] = {
 	"Papiamento",
 	"Papiamento (Netherlands Antilles)",
 	"Papiamento (Aruba)",
-	"Papiamento (Curaçao)",
+	"Papiamento (Cura??ao)",
 	"Panjabi (Pakistan)",
 	"Polish",
 	"Polish (Poland)",
@@ -788,7 +788,7 @@ static const char *locale_names[] = {
 static const char *locale_renames[][2] = {
 	{ "in", "id" }, //  Indonesian
 	{ "iw", "he" }, //  Hebrew
-	{ "no", "nb" }, //  Norwegian Bokmål
+	{ "no", "nb" }, //  Norwegian Bokm??l
 	{ nullptr, nullptr }
 };
 

@@ -19,27 +19,28 @@
 #include <exception>
 #include "platform.h"
 
-namespace oidn {
+namespace oidn
+{
 
-  class Exception : public std::exception
-  {
-  private:
+class Exception : public std::exception
+{
+private:
     Error error;
     const char* message;
 
-  public:
-    Exception(Error error, const char* message)
-      : error(error), message(message) {}
+public:
+    Exception ( Error error, const char* message )
+        : error ( error ), message ( message ) {}
 
     Error code() const noexcept
     {
-      return error;
+        return error;
     }
 
     const char* what() const noexcept override
     {
-      return message;
+        return message;
     }
-  };
+};
 
 } // namespace oidn

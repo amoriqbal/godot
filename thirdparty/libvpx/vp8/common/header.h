@@ -17,8 +17,7 @@ extern "C" {
 #endif
 
 /* 24 bits total */
-typedef struct
-{
+typedef struct {
     unsigned int type: 1;
     unsigned int version: 3;
     unsigned int show_frame: 1;

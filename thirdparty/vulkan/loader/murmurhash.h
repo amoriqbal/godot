@@ -43,7 +43,7 @@ extern "C" {
  * using the MurmurHash3 algorithm
  */
 
-uint32_t murmurhash(const char *key, size_t len, uint32_t seed);
+uint32_t murmurhash ( const char *key, size_t len, uint32_t seed );
 
 #ifdef __cplusplus
 }

@@ -36,21 +36,22 @@
 
 struct OIDNDeviceImpl;
 
-class LightmapDenoiserOIDN : public LightmapDenoiser {
-	GDCLASS(LightmapDenoiserOIDN, LightmapDenoiser);
+class LightmapDenoiserOIDN : public LightmapDenoiser
+{
+    GDCLASS ( LightmapDenoiserOIDN, LightmapDenoiser );
 
 protected:
-	void *device = nullptr;
+    void *device = nullptr;
 
 public:
-	static LightmapDenoiser *create_oidn_denoiser();
+    static LightmapDenoiser *create_oidn_denoiser();
 
-	Ref<Image> denoise_image(const Ref<Image> &p_image) override;
+    Ref<Image> denoise_image ( const Ref<Image> &p_image ) override;
 
-	static void make_default_denoiser();
+    static void make_default_denoiser();
 
-	LightmapDenoiserOIDN();
-	~LightmapDenoiserOIDN();
+    LightmapDenoiserOIDN();
+    ~LightmapDenoiserOIDN();
 };
 
 #endif // LIGHTMAP_DENOISER_H

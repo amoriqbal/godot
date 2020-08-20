@@ -44,7 +44,8 @@
 #include <list>
 #include <unordered_set>
 
-namespace glslang {
+namespace glslang
+{
 
 //
 // The traverser: mostly pass through, except
@@ -56,25 +57,26 @@ namespace glslang {
 // binding mappers: anything that wants to traverse the live subset of the tree.
 //
 
-class TLiveTraverser : public TIntermTraverser {
+class TLiveTraverser : public TIntermTraverser
+{
 public:
-    TLiveTraverser(const TIntermediate& i, bool traverseAll = false,
-                   bool preVisit = true, bool inVisit = false, bool postVisit = false) :
-        TIntermTraverser(preVisit, inVisit, postVisit),
-        intermediate(i), traverseAll(traverseAll)
+    TLiveTraverser ( const TIntermediate& i, bool traverseAll = false,
+                     bool preVisit = true, bool inVisit = false, bool postVisit = false ) :
+        TIntermTraverser ( preVisit, inVisit, postVisit ),
+        intermediate ( i ), traverseAll ( traverseAll )
     { }
 
     //
     // Given a function name, find its subroot in the tree, and push it onto the stack of
     // functions left to process.
     //
-    void pushFunction(const TString& name)
+    void pushFunction ( const TString& name )
     {
         TIntermSequence& globals = intermediate.getTreeRoot()->getAsAggregate()->getSequence();
-        for (unsigned int f = 0; f < globals.size(); ++f) {
+        for ( unsigned int f = 0; f < globals.size(); ++f ) {
             TIntermAggregate* candidate = globals[f]->getAsAggregate();
-            if (candidate && candidate->getOp() == EOpFunction && candidate->getName() == name) {
-                functions.push_back(candidate);
+            if ( candidate && candidate->getOp() == EOpFunction && candidate->getName() == name ) {
+                functions.push_back ( candidate );
                 break;
             }
         }
@@ -85,42 +87,47 @@ public:
 
 protected:
     // To catch which function calls are not dead, and hence which functions must be visited.
-    virtual bool visitAggregate(TVisit, TIntermAggregate* node)
+    virtual bool visitAggregate ( TVisit, TIntermAggregate* node )
     {
-        if (!traverseAll)
-            if (node->getOp() == EOpFunctionCall)
-                addFunctionCall(node);
+        if ( !traverseAll )
+            if ( node->getOp() == EOpFunctionCall ) {
+                addFunctionCall ( node );
+            }
 
         return true; // traverse this subtree
     }
 
     // To prune semantically dead paths.
-    virtual bool visitSelection(TVisit /* visit */,  TIntermSelection* node)
+    virtual bool visitSelection ( TVisit /* visit */,  TIntermSelection* node )
     {
-        if (traverseAll)
-            return true; // traverse all code
+        if ( traverseAll ) {
+            return true;    // traverse all code
+        }
 
         TIntermConstantUnion* constant = node->getCondition()->getAsConstantUnion();
-        if (constant) {
+        if ( constant ) {
             // cull the path that is dead
-            if (constant->getConstArray()[0].getBConst() == true && node->getTrueBlock())
-                node->getTrueBlock()->traverse(this);
-            if (constant->getConstArray()[0].getBConst() == false && node->getFalseBlock())
-                node->getFalseBlock()->traverse(this);
+            if ( constant->getConstArray() [0].getBConst() == true && node->getTrueBlock() ) {
+                node->getTrueBlock()->traverse ( this );
+            }
+            if ( constant->getConstArray() [0].getBConst() == false && node->getFalseBlock() ) {
+                node->getFalseBlock()->traverse ( this );
+            }
 
             return false; // don't traverse any more, we did it all above
-        } else
-            return true; // traverse the whole subtree
+        } else {
+            return true;    // traverse the whole subtree
+        }
     }
 
     // Track live functions as well as uniforms, so that we don't visit dead functions
     // and only visit each function once.
-    void addFunctionCall(TIntermAggregate* call)
+    void addFunctionCall ( TIntermAggregate* call )
     {
         // // just use the map to ensure we process each function at most once
-        if (liveFunctions.find(call->getName()) == liveFunctions.end()) {
-            liveFunctions.insert(call->getName());
-            pushFunction(call->getName());
+        if ( liveFunctions.find ( call->getName() ) == liveFunctions.end() ) {
+            liveFunctions.insert ( call->getName() );
+            pushFunction ( call->getName() );
         }
     }
 
@@ -131,8 +138,8 @@ protected:
 
 private:
     // prevent copy & copy construct
-    TLiveTraverser(TLiveTraverser&);
-    TLiveTraverser& operator=(TLiveTraverser&);
+    TLiveTraverser ( TLiveTraverser& );
+    TLiveTraverser& operator= ( TLiveTraverser& );
 };
 
 } // namespace glslang

@@ -3,8 +3,8 @@ Copyright (c) 2003-2013 Gino van den Bergen / Erwin Coumans  http://bulletphysic
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
@@ -29,7 +29,7 @@ subject to the following restrictions:
 
 inline int b3GetVersion()
 {
-	return B3_BULLET_VERSION;
+    return B3_BULLET_VERSION;
 }
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -298,19 +298,19 @@ static int b3InfinityMask = 0x7F800000;
 #define B3_INFINITY_MASK (*(float *)&b3InfinityMask)
 #endif
 #ifndef B3_NO_SIMD_OPERATOR_OVERLOADS
-inline __m128 operator+(const __m128 A, const __m128 B)
+inline __m128 operator+ ( const __m128 A, const __m128 B )
 {
-	return _mm_add_ps(A, B);
+    return _mm_add_ps ( A, B );
 }
 
-inline __m128 operator-(const __m128 A, const __m128 B)
+inline __m128 operator- ( const __m128 A, const __m128 B )
 {
-	return _mm_sub_ps(A, B);
+    return _mm_sub_ps ( A, B );
 }
 
-inline __m128 operator*(const __m128 A, const __m128 B)
+inline __m128 operator* ( const __m128 A, const __m128 B )
 {
-	return _mm_mul_ps(A, B);
+    return _mm_mul_ps ( A, B );
 }
 #endif //B3_NO_SIMD_OPERATOR_OVERLOADS
 #define b3CastfTo128i(a) (_mm_castps_si128(a))
@@ -354,81 +354,153 @@ typedef float32x4_t b3SimdFloat4;
 
 #if defined(B3_USE_DOUBLE_PRECISION) || defined(B3_FORCE_DOUBLE_FUNCTIONS)
 
-B3_FORCE_INLINE b3Scalar b3Sqrt(b3Scalar x)
+B3_FORCE_INLINE b3Scalar b3Sqrt ( b3Scalar x )
 {
-	return sqrt(x);
+    return sqrt ( x );
 }
-B3_FORCE_INLINE b3Scalar b3Fabs(b3Scalar x) { return fabs(x); }
-B3_FORCE_INLINE b3Scalar b3Cos(b3Scalar x) { return cos(x); }
-B3_FORCE_INLINE b3Scalar b3Sin(b3Scalar x) { return sin(x); }
-B3_FORCE_INLINE b3Scalar b3Tan(b3Scalar x) { return tan(x); }
-B3_FORCE_INLINE b3Scalar b3Acos(b3Scalar x)
+B3_FORCE_INLINE b3Scalar b3Fabs ( b3Scalar x )
 {
-	if (x < b3Scalar(-1)) x = b3Scalar(-1);
-	if (x > b3Scalar(1)) x = b3Scalar(1);
-	return acos(x);
+    return fabs ( x );
 }
-B3_FORCE_INLINE b3Scalar b3Asin(b3Scalar x)
+B3_FORCE_INLINE b3Scalar b3Cos ( b3Scalar x )
 {
-	if (x < b3Scalar(-1)) x = b3Scalar(-1);
-	if (x > b3Scalar(1)) x = b3Scalar(1);
-	return asin(x);
+    return cos ( x );
 }
-B3_FORCE_INLINE b3Scalar b3Atan(b3Scalar x) { return atan(x); }
-B3_FORCE_INLINE b3Scalar b3Atan2(b3Scalar x, b3Scalar y) { return atan2(x, y); }
-B3_FORCE_INLINE b3Scalar b3Exp(b3Scalar x) { return exp(x); }
-B3_FORCE_INLINE b3Scalar b3Log(b3Scalar x) { return log(x); }
-B3_FORCE_INLINE b3Scalar b3Pow(b3Scalar x, b3Scalar y) { return pow(x, y); }
-B3_FORCE_INLINE b3Scalar b3Fmod(b3Scalar x, b3Scalar y) { return fmod(x, y); }
+B3_FORCE_INLINE b3Scalar b3Sin ( b3Scalar x )
+{
+    return sin ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Tan ( b3Scalar x )
+{
+    return tan ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Acos ( b3Scalar x )
+{
+    if ( x < b3Scalar ( -1 ) ) {
+        x = b3Scalar ( -1 );
+    }
+    if ( x > b3Scalar ( 1 ) ) {
+        x = b3Scalar ( 1 );
+    }
+    return acos ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Asin ( b3Scalar x )
+{
+    if ( x < b3Scalar ( -1 ) ) {
+        x = b3Scalar ( -1 );
+    }
+    if ( x > b3Scalar ( 1 ) ) {
+        x = b3Scalar ( 1 );
+    }
+    return asin ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Atan ( b3Scalar x )
+{
+    return atan ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Atan2 ( b3Scalar x, b3Scalar y )
+{
+    return atan2 ( x, y );
+}
+B3_FORCE_INLINE b3Scalar b3Exp ( b3Scalar x )
+{
+    return exp ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Log ( b3Scalar x )
+{
+    return log ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Pow ( b3Scalar x, b3Scalar y )
+{
+    return pow ( x, y );
+}
+B3_FORCE_INLINE b3Scalar b3Fmod ( b3Scalar x, b3Scalar y )
+{
+    return fmod ( x, y );
+}
 
 #else
 
-B3_FORCE_INLINE b3Scalar b3Sqrt(b3Scalar y)
+B3_FORCE_INLINE b3Scalar b3Sqrt ( b3Scalar y )
 {
 #ifdef USE_APPROXIMATION
-	double x, z, tempf;
-	unsigned long *tfptr = ((unsigned long *)&tempf) + 1;
+    double x, z, tempf;
+    unsigned long *tfptr = ( ( unsigned long * ) &tempf ) + 1;
 
-	tempf = y;
-	*tfptr = (0xbfcdd90a - *tfptr) >> 1; /* estimate of 1/sqrt(y) */
-	x = tempf;
-	z = y * b3Scalar(0.5);
-	x = (b3Scalar(1.5) * x) - (x * x) * (x * z); /* iteration formula     */
-	x = (b3Scalar(1.5) * x) - (x * x) * (x * z);
-	x = (b3Scalar(1.5) * x) - (x * x) * (x * z);
-	x = (b3Scalar(1.5) * x) - (x * x) * (x * z);
-	x = (b3Scalar(1.5) * x) - (x * x) * (x * z);
-	return x * y;
+    tempf = y;
+    *tfptr = ( 0xbfcdd90a - *tfptr ) >> 1; /* estimate of 1/sqrt(y) */
+    x = tempf;
+    z = y * b3Scalar ( 0.5 );
+    x = ( b3Scalar ( 1.5 ) * x ) - ( x * x ) * ( x * z ); /* iteration formula     */
+    x = ( b3Scalar ( 1.5 ) * x ) - ( x * x ) * ( x * z );
+    x = ( b3Scalar ( 1.5 ) * x ) - ( x * x ) * ( x * z );
+    x = ( b3Scalar ( 1.5 ) * x ) - ( x * x ) * ( x * z );
+    x = ( b3Scalar ( 1.5 ) * x ) - ( x * x ) * ( x * z );
+    return x * y;
 #else
-	return sqrtf(y);
+    return sqrtf ( y );
 #endif
 }
-B3_FORCE_INLINE b3Scalar b3Fabs(b3Scalar x) { return fabsf(x); }
-B3_FORCE_INLINE b3Scalar b3Cos(b3Scalar x) { return cosf(x); }
-B3_FORCE_INLINE b3Scalar b3Sin(b3Scalar x) { return sinf(x); }
-B3_FORCE_INLINE b3Scalar b3Tan(b3Scalar x) { return tanf(x); }
-B3_FORCE_INLINE b3Scalar b3Acos(b3Scalar x)
+B3_FORCE_INLINE b3Scalar b3Fabs ( b3Scalar x )
 {
-	if (x < b3Scalar(-1))
-		x = b3Scalar(-1);
-	if (x > b3Scalar(1))
-		x = b3Scalar(1);
-	return acosf(x);
+    return fabsf ( x );
 }
-B3_FORCE_INLINE b3Scalar b3Asin(b3Scalar x)
+B3_FORCE_INLINE b3Scalar b3Cos ( b3Scalar x )
 {
-	if (x < b3Scalar(-1))
-		x = b3Scalar(-1);
-	if (x > b3Scalar(1))
-		x = b3Scalar(1);
-	return asinf(x);
+    return cosf ( x );
 }
-B3_FORCE_INLINE b3Scalar b3Atan(b3Scalar x) { return atanf(x); }
-B3_FORCE_INLINE b3Scalar b3Atan2(b3Scalar x, b3Scalar y) { return atan2f(x, y); }
-B3_FORCE_INLINE b3Scalar b3Exp(b3Scalar x) { return expf(x); }
-B3_FORCE_INLINE b3Scalar b3Log(b3Scalar x) { return logf(x); }
-B3_FORCE_INLINE b3Scalar b3Pow(b3Scalar x, b3Scalar y) { return powf(x, y); }
-B3_FORCE_INLINE b3Scalar b3Fmod(b3Scalar x, b3Scalar y) { return fmodf(x, y); }
+B3_FORCE_INLINE b3Scalar b3Sin ( b3Scalar x )
+{
+    return sinf ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Tan ( b3Scalar x )
+{
+    return tanf ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Acos ( b3Scalar x )
+{
+    if ( x < b3Scalar ( -1 ) ) {
+        x = b3Scalar ( -1 );
+    }
+    if ( x > b3Scalar ( 1 ) ) {
+        x = b3Scalar ( 1 );
+    }
+    return acosf ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Asin ( b3Scalar x )
+{
+    if ( x < b3Scalar ( -1 ) ) {
+        x = b3Scalar ( -1 );
+    }
+    if ( x > b3Scalar ( 1 ) ) {
+        x = b3Scalar ( 1 );
+    }
+    return asinf ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Atan ( b3Scalar x )
+{
+    return atanf ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Atan2 ( b3Scalar x, b3Scalar y )
+{
+    return atan2f ( x, y );
+}
+B3_FORCE_INLINE b3Scalar b3Exp ( b3Scalar x )
+{
+    return expf ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Log ( b3Scalar x )
+{
+    return logf ( x );
+}
+B3_FORCE_INLINE b3Scalar b3Pow ( b3Scalar x, b3Scalar y )
+{
+    return powf ( x, y );
+}
+B3_FORCE_INLINE b3Scalar b3Fmod ( b3Scalar x, b3Scalar y )
+{
+    return fmodf ( x, y );
+}
 
 #endif
 
@@ -449,43 +521,49 @@ B3_FORCE_INLINE b3Scalar b3Fmod(b3Scalar x, b3Scalar y) { return fmodf(x, y); }
 #define B3_INFINITY FLT_MAX
 #endif
 
-B3_FORCE_INLINE b3Scalar b3Atan2Fast(b3Scalar y, b3Scalar x)
+B3_FORCE_INLINE b3Scalar b3Atan2Fast ( b3Scalar y, b3Scalar x )
 {
-	b3Scalar coeff_1 = B3_PI / 4.0f;
-	b3Scalar coeff_2 = 3.0f * coeff_1;
-	b3Scalar abs_y = b3Fabs(y);
-	b3Scalar angle;
-	if (x >= 0.0f)
-	{
-		b3Scalar r = (x - abs_y) / (x + abs_y);
-		angle = coeff_1 - coeff_1 * r;
-	}
-	else
-	{
-		b3Scalar r = (x + abs_y) / (abs_y - x);
-		angle = coeff_2 - coeff_1 * r;
-	}
-	return (y < 0.0f) ? -angle : angle;
+    b3Scalar coeff_1 = B3_PI / 4.0f;
+    b3Scalar coeff_2 = 3.0f * coeff_1;
+    b3Scalar abs_y = b3Fabs ( y );
+    b3Scalar angle;
+    if ( x >= 0.0f ) {
+        b3Scalar r = ( x - abs_y ) / ( x + abs_y );
+        angle = coeff_1 - coeff_1 * r;
+    } else {
+        b3Scalar r = ( x + abs_y ) / ( abs_y - x );
+        angle = coeff_2 - coeff_1 * r;
+    }
+    return ( y < 0.0f ) ? -angle : angle;
 }
 
-B3_FORCE_INLINE bool b3FuzzyZero(b3Scalar x) { return b3Fabs(x) < B3_EPSILON; }
-
-B3_FORCE_INLINE bool b3Equal(b3Scalar a, b3Scalar eps)
+B3_FORCE_INLINE bool b3FuzzyZero ( b3Scalar x )
 {
-	return (((a) <= eps) && !((a) < -eps));
-}
-B3_FORCE_INLINE bool b3GreaterEqual(b3Scalar a, b3Scalar eps)
-{
-	return (!((a) <= eps));
+    return b3Fabs ( x ) < B3_EPSILON;
 }
 
-B3_FORCE_INLINE int b3IsNegative(b3Scalar x)
+B3_FORCE_INLINE bool b3Equal ( b3Scalar a, b3Scalar eps )
 {
-	return x < b3Scalar(0.0) ? 1 : 0;
+    return ( ( ( a ) <= eps ) && ! ( ( a ) < -eps ) );
+}
+B3_FORCE_INLINE bool b3GreaterEqual ( b3Scalar a, b3Scalar eps )
+{
+    return ( ! ( ( a ) <= eps ) );
 }
 
-B3_FORCE_INLINE b3Scalar b3Radians(b3Scalar x) { return x * B3_RADS_PER_DEG; }
-B3_FORCE_INLINE b3Scalar b3Degrees(b3Scalar x) { return x * B3_DEGS_PER_RAD; }
+B3_FORCE_INLINE int b3IsNegative ( b3Scalar x )
+{
+    return x < b3Scalar ( 0.0 ) ? 1 : 0;
+}
+
+B3_FORCE_INLINE b3Scalar b3Radians ( b3Scalar x )
+{
+    return x * B3_RADS_PER_DEG;
+}
+B3_FORCE_INLINE b3Scalar b3Degrees ( b3Scalar x )
+{
+    return x * B3_DEGS_PER_RAD;
+}
 
 #define B3_DECLARE_HANDLE(name) \
 	typedef struct name##__     \
@@ -494,77 +572,78 @@ B3_FORCE_INLINE b3Scalar b3Degrees(b3Scalar x) { return x * B3_DEGS_PER_RAD; }
 	} * name
 
 #ifndef b3Fsel
-B3_FORCE_INLINE b3Scalar b3Fsel(b3Scalar a, b3Scalar b, b3Scalar c)
+B3_FORCE_INLINE b3Scalar b3Fsel ( b3Scalar a, b3Scalar b, b3Scalar c )
 {
-	return a >= 0 ? b : c;
+    return a >= 0 ? b : c;
 }
 #endif
 #define b3Fsels(a, b, c) (b3Scalar) b3Fsel(a, b, c)
 
 B3_FORCE_INLINE bool b3MachineIsLittleEndian()
 {
-	long int i = 1;
-	const char *p = (const char *)&i;
-	if (p[0] == 1)  // Lowest address contains the least significant byte
-		return true;
-	else
-		return false;
+    long int i = 1;
+    const char *p = ( const char * ) &i;
+    if ( p[0] == 1 ) { // Lowest address contains the least significant byte
+        return true;
+    } else {
+        return false;
+    }
 }
 
 ///b3Select avoids branches, which makes performance much better for consoles like Playstation 3 and XBox 360
 ///Thanks Phil Knight. See also http://www.cellperformance.com/articles/2006/04/more_techniques_for_eliminatin_1.html
-B3_FORCE_INLINE unsigned b3Select(unsigned condition, unsigned valueIfConditionNonZero, unsigned valueIfConditionZero)
+B3_FORCE_INLINE unsigned b3Select ( unsigned condition, unsigned valueIfConditionNonZero, unsigned valueIfConditionZero )
 {
-	// Set testNz to 0xFFFFFFFF if condition is nonzero, 0x00000000 if condition is zero
-	// Rely on positive value or'ed with its negative having sign bit on
-	// and zero value or'ed with its negative (which is still zero) having sign bit off
-	// Use arithmetic shift right, shifting the sign bit through all 32 bits
-	unsigned testNz = (unsigned)(((int)condition | -(int)condition) >> 31);
-	unsigned testEqz = ~testNz;
-	return ((valueIfConditionNonZero & testNz) | (valueIfConditionZero & testEqz));
+    // Set testNz to 0xFFFFFFFF if condition is nonzero, 0x00000000 if condition is zero
+    // Rely on positive value or'ed with its negative having sign bit on
+    // and zero value or'ed with its negative (which is still zero) having sign bit off
+    // Use arithmetic shift right, shifting the sign bit through all 32 bits
+    unsigned testNz = ( unsigned ) ( ( ( int ) condition | - ( int ) condition ) >> 31 );
+    unsigned testEqz = ~testNz;
+    return ( ( valueIfConditionNonZero & testNz ) | ( valueIfConditionZero & testEqz ) );
 }
-B3_FORCE_INLINE int b3Select(unsigned condition, int valueIfConditionNonZero, int valueIfConditionZero)
+B3_FORCE_INLINE int b3Select ( unsigned condition, int valueIfConditionNonZero, int valueIfConditionZero )
 {
-	unsigned testNz = (unsigned)(((int)condition | -(int)condition) >> 31);
-	unsigned testEqz = ~testNz;
-	return static_cast<int>((valueIfConditionNonZero & testNz) | (valueIfConditionZero & testEqz));
+    unsigned testNz = ( unsigned ) ( ( ( int ) condition | - ( int ) condition ) >> 31 );
+    unsigned testEqz = ~testNz;
+    return static_cast<int> ( ( valueIfConditionNonZero & testNz ) | ( valueIfConditionZero & testEqz ) );
 }
-B3_FORCE_INLINE float b3Select(unsigned condition, float valueIfConditionNonZero, float valueIfConditionZero)
+B3_FORCE_INLINE float b3Select ( unsigned condition, float valueIfConditionNonZero, float valueIfConditionZero )
 {
 #ifdef B3_HAVE_NATIVE_FSEL
-	return (float)b3Fsel((b3Scalar)condition - b3Scalar(1.0f), valueIfConditionNonZero, valueIfConditionZero);
+    return ( float ) b3Fsel ( ( b3Scalar ) condition - b3Scalar ( 1.0f ), valueIfConditionNonZero, valueIfConditionZero );
 #else
-	return (condition != 0) ? valueIfConditionNonZero : valueIfConditionZero;
+    return ( condition != 0 ) ? valueIfConditionNonZero : valueIfConditionZero;
 #endif
 }
 
 template <typename T>
-B3_FORCE_INLINE void b3Swap(T &a, T &b)
+B3_FORCE_INLINE void b3Swap ( T &a, T &b )
 {
-	T tmp = a;
-	a = b;
-	b = tmp;
+    T tmp = a;
+    a = b;
+    b = tmp;
 }
 
 //PCK: endian swapping functions
-B3_FORCE_INLINE unsigned b3SwapEndian(unsigned val)
+B3_FORCE_INLINE unsigned b3SwapEndian ( unsigned val )
 {
-	return (((val & 0xff000000) >> 24) | ((val & 0x00ff0000) >> 8) | ((val & 0x0000ff00) << 8) | ((val & 0x000000ff) << 24));
+    return ( ( ( val & 0xff000000 ) >> 24 ) | ( ( val & 0x00ff0000 ) >> 8 ) | ( ( val & 0x0000ff00 ) << 8 ) | ( ( val & 0x000000ff ) << 24 ) );
 }
 
-B3_FORCE_INLINE unsigned short b3SwapEndian(unsigned short val)
+B3_FORCE_INLINE unsigned short b3SwapEndian ( unsigned short val )
 {
-	return static_cast<unsigned short>(((val & 0xff00) >> 8) | ((val & 0x00ff) << 8));
+    return static_cast<unsigned short> ( ( ( val & 0xff00 ) >> 8 ) | ( ( val & 0x00ff ) << 8 ) );
 }
 
-B3_FORCE_INLINE unsigned b3SwapEndian(int val)
+B3_FORCE_INLINE unsigned b3SwapEndian ( int val )
 {
-	return b3SwapEndian((unsigned)val);
+    return b3SwapEndian ( ( unsigned ) val );
 }
 
-B3_FORCE_INLINE unsigned short b3SwapEndian(short val)
+B3_FORCE_INLINE unsigned short b3SwapEndian ( short val )
 {
-	return b3SwapEndian((unsigned short)val);
+    return b3SwapEndian ( ( unsigned short ) val );
 }
 
 ///b3SwapFloat uses using char pointers to swap the endianness
@@ -573,117 +652,110 @@ B3_FORCE_INLINE unsigned short b3SwapEndian(short val)
 ///When a floating point unit is faced with an invalid value, it may actually change the value, or worse, throw an exception.
 ///In most systems, running user mode code, you wouldn't get an exception, but instead the hardware/os/runtime will 'fix' the number for you.
 ///so instead of returning a float/double, we return integer/long long integer
-B3_FORCE_INLINE unsigned int b3SwapEndianFloat(float d)
+B3_FORCE_INLINE unsigned int b3SwapEndianFloat ( float d )
 {
-	unsigned int a = 0;
-	unsigned char *dst = (unsigned char *)&a;
-	unsigned char *src = (unsigned char *)&d;
+    unsigned int a = 0;
+    unsigned char *dst = ( unsigned char * ) &a;
+    unsigned char *src = ( unsigned char * ) &d;
 
-	dst[0] = src[3];
-	dst[1] = src[2];
-	dst[2] = src[1];
-	dst[3] = src[0];
-	return a;
+    dst[0] = src[3];
+    dst[1] = src[2];
+    dst[2] = src[1];
+    dst[3] = src[0];
+    return a;
 }
 
 // unswap using char pointers
-B3_FORCE_INLINE float b3UnswapEndianFloat(unsigned int a)
+B3_FORCE_INLINE float b3UnswapEndianFloat ( unsigned int a )
 {
-	float d = 0.0f;
-	unsigned char *src = (unsigned char *)&a;
-	unsigned char *dst = (unsigned char *)&d;
+    float d = 0.0f;
+    unsigned char *src = ( unsigned char * ) &a;
+    unsigned char *dst = ( unsigned char * ) &d;
 
-	dst[0] = src[3];
-	dst[1] = src[2];
-	dst[2] = src[1];
-	dst[3] = src[0];
+    dst[0] = src[3];
+    dst[1] = src[2];
+    dst[2] = src[1];
+    dst[3] = src[0];
 
-	return d;
+    return d;
 }
 
 // swap using char pointers
-B3_FORCE_INLINE void b3SwapEndianDouble(double d, unsigned char *dst)
+B3_FORCE_INLINE void b3SwapEndianDouble ( double d, unsigned char *dst )
 {
-	unsigned char *src = (unsigned char *)&d;
+    unsigned char *src = ( unsigned char * ) &d;
 
-	dst[0] = src[7];
-	dst[1] = src[6];
-	dst[2] = src[5];
-	dst[3] = src[4];
-	dst[4] = src[3];
-	dst[5] = src[2];
-	dst[6] = src[1];
-	dst[7] = src[0];
+    dst[0] = src[7];
+    dst[1] = src[6];
+    dst[2] = src[5];
+    dst[3] = src[4];
+    dst[4] = src[3];
+    dst[5] = src[2];
+    dst[6] = src[1];
+    dst[7] = src[0];
 }
 
 // unswap using char pointers
-B3_FORCE_INLINE double b3UnswapEndianDouble(const unsigned char *src)
+B3_FORCE_INLINE double b3UnswapEndianDouble ( const unsigned char *src )
 {
-	double d = 0.0;
-	unsigned char *dst = (unsigned char *)&d;
+    double d = 0.0;
+    unsigned char *dst = ( unsigned char * ) &d;
 
-	dst[0] = src[7];
-	dst[1] = src[6];
-	dst[2] = src[5];
-	dst[3] = src[4];
-	dst[4] = src[3];
-	dst[5] = src[2];
-	dst[6] = src[1];
-	dst[7] = src[0];
+    dst[0] = src[7];
+    dst[1] = src[6];
+    dst[2] = src[5];
+    dst[3] = src[4];
+    dst[4] = src[3];
+    dst[5] = src[2];
+    dst[6] = src[1];
+    dst[7] = src[0];
 
-	return d;
+    return d;
 }
 
 // returns normalized value in range [-B3_PI, B3_PI]
-B3_FORCE_INLINE b3Scalar b3NormalizeAngle(b3Scalar angleInRadians)
+B3_FORCE_INLINE b3Scalar b3NormalizeAngle ( b3Scalar angleInRadians )
 {
-	angleInRadians = b3Fmod(angleInRadians, B3_2_PI);
-	if (angleInRadians < -B3_PI)
-	{
-		return angleInRadians + B3_2_PI;
-	}
-	else if (angleInRadians > B3_PI)
-	{
-		return angleInRadians - B3_2_PI;
-	}
-	else
-	{
-		return angleInRadians;
-	}
+    angleInRadians = b3Fmod ( angleInRadians, B3_2_PI );
+    if ( angleInRadians < -B3_PI ) {
+        return angleInRadians + B3_2_PI;
+    } else if ( angleInRadians > B3_PI ) {
+        return angleInRadians - B3_2_PI;
+    } else {
+        return angleInRadians;
+    }
 }
 
 ///rudimentary class to provide type info
-struct b3TypedObject
-{
-	b3TypedObject(int objectType)
-		: m_objectType(objectType)
-	{
-	}
-	int m_objectType;
-	inline int getObjectType() const
-	{
-		return m_objectType;
-	}
+struct b3TypedObject {
+    b3TypedObject ( int objectType )
+        : m_objectType ( objectType )
+    {
+    }
+    int m_objectType;
+    inline int getObjectType() const
+    {
+        return m_objectType;
+    }
 };
 
 ///align a pointer to the provided alignment, upwards
 template <typename T>
-T *b3AlignPointer(T *unalignedPtr, size_t alignment)
+T *b3AlignPointer ( T *unalignedPtr, size_t alignment )
 {
-	struct b3ConvertPointerSizeT
-	{
-		union {
-			T *ptr;
-			size_t integer;
-		};
-	};
-	b3ConvertPointerSizeT converter;
+    struct b3ConvertPointerSizeT {
+        union {
+            T *ptr;
+            size_t integer;
+        };
+    };
+    b3ConvertPointerSizeT converter;
 
-	const size_t bit_mask = ~(alignment - 1);
-	converter.ptr = unalignedPtr;
-	converter.integer += alignment - 1;
-	converter.integer &= bit_mask;
-	return converter.ptr;
+    const size_t bit_mask = ~ ( alignment - 1 );
+    converter.ptr = unalignedPtr;
+    converter.integer += alignment - 1;
+    converter.integer &= bit_mask;
+    return converter.ptr;
 }
 
 #endif  //B3_SCALAR_H

@@ -35,75 +35,105 @@
 
 #include "core/reference.h"
 
-namespace gdmono {
+namespace gdmono
+{
 
 enum class GCHandleType : char {
-	NIL,
-	STRONG_HANDLE,
-	WEAK_HANDLE
+    NIL,
+    STRONG_HANDLE,
+    WEAK_HANDLE
 };
 
 }
 
 // Manual release of the GC handle must be done when using this struct
 struct MonoGCHandleData {
-	uint32_t handle = 0;
-	gdmono::GCHandleType type = gdmono::GCHandleType::NIL;
+    uint32_t handle = 0;
+    gdmono::GCHandleType type = gdmono::GCHandleType::NIL;
 
-	_FORCE_INLINE_ bool is_released() const { return !handle; }
-	_FORCE_INLINE_ bool is_weak() const { return type == gdmono::GCHandleType::WEAK_HANDLE; }
+    _FORCE_INLINE_ bool is_released() const
+    {
+        return !handle;
+    }
+    _FORCE_INLINE_ bool is_weak() const
+    {
+        return type == gdmono::GCHandleType::WEAK_HANDLE;
+    }
 
-	_FORCE_INLINE_ MonoObject *get_target() const { return handle ? mono_gchandle_get_target(handle) : nullptr; }
+    _FORCE_INLINE_ MonoObject *get_target() const
+    {
+        return handle ? mono_gchandle_get_target ( handle ) : nullptr;
+    }
 
-	void release();
+    void release();
 
-	MonoGCHandleData &operator=(const MonoGCHandleData &p_other) {
+    MonoGCHandleData &operator= ( const MonoGCHandleData &p_other )
+    {
 #ifdef DEBUG_ENABLED
-		CRASH_COND(!is_released());
+        CRASH_COND ( !is_released() );
 #endif
-		handle = p_other.handle;
-		type = p_other.type;
-		return *this;
-	}
+        handle = p_other.handle;
+        type = p_other.type;
+        return *this;
+    }
 
-	MonoGCHandleData(const MonoGCHandleData &) = default;
+    MonoGCHandleData ( const MonoGCHandleData & ) = default;
 
-	MonoGCHandleData() {}
+    MonoGCHandleData() {}
 
-	MonoGCHandleData(uint32_t p_handle, gdmono::GCHandleType p_type) :
-			handle(p_handle),
-			type(p_type) {
-	}
+    MonoGCHandleData ( uint32_t p_handle, gdmono::GCHandleType p_type ) :
+        handle ( p_handle ),
+        type ( p_type )
+    {
+    }
 
-	static MonoGCHandleData new_strong_handle(MonoObject *p_object);
-	static MonoGCHandleData new_strong_handle_pinned(MonoObject *p_object);
-	static MonoGCHandleData new_weak_handle(MonoObject *p_object);
+    static MonoGCHandleData new_strong_handle ( MonoObject *p_object );
+    static MonoGCHandleData new_strong_handle_pinned ( MonoObject *p_object );
+    static MonoGCHandleData new_weak_handle ( MonoObject *p_object );
 };
 
-class MonoGCHandleRef : public Reference {
-	GDCLASS(MonoGCHandleRef, Reference);
+class MonoGCHandleRef : public Reference
+{
+    GDCLASS ( MonoGCHandleRef, Reference );
 
-	MonoGCHandleData data;
+    MonoGCHandleData data;
 
 public:
-	static Ref<MonoGCHandleRef> create_strong(MonoObject *p_object);
-	static Ref<MonoGCHandleRef> create_weak(MonoObject *p_object);
+    static Ref<MonoGCHandleRef> create_strong ( MonoObject *p_object );
+    static Ref<MonoGCHandleRef> create_weak ( MonoObject *p_object );
 
-	_FORCE_INLINE_ bool is_released() const { return data.is_released(); }
-	_FORCE_INLINE_ bool is_weak() const { return data.is_weak(); }
+    _FORCE_INLINE_ bool is_released() const
+    {
+        return data.is_released();
+    }
+    _FORCE_INLINE_ bool is_weak() const
+    {
+        return data.is_weak();
+    }
 
-	_FORCE_INLINE_ MonoObject *get_target() const { return data.get_target(); }
+    _FORCE_INLINE_ MonoObject *get_target() const
+    {
+        return data.get_target();
+    }
 
-	void release() { data.release(); }
+    void release()
+    {
+        data.release();
+    }
 
-	_FORCE_INLINE_ void set_handle(uint32_t p_handle, gdmono::GCHandleType p_handle_type) {
-		data = MonoGCHandleData(p_handle, p_handle_type);
-	}
+    _FORCE_INLINE_ void set_handle ( uint32_t p_handle, gdmono::GCHandleType p_handle_type )
+    {
+        data = MonoGCHandleData ( p_handle, p_handle_type );
+    }
 
-	MonoGCHandleRef(const MonoGCHandleData &p_gc_handle_data) :
-			data(p_gc_handle_data) {
-	}
-	~MonoGCHandleRef() { release(); }
+    MonoGCHandleRef ( const MonoGCHandleData &p_gc_handle_data ) :
+        data ( p_gc_handle_data )
+    {
+    }
+    ~MonoGCHandleRef()
+    {
+        release();
+    }
 };
 
 #endif // CSHARP_GC_HANDLE_H

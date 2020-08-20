@@ -57,7 +57,8 @@ namespace Assimp
  * vectors of an object are facing inwards. In this case they will be
  * flipped.
  */
-class FixInfacingNormalsProcess : public BaseProcess {
+class FixInfacingNormalsProcess : public BaseProcess
+{
 public:
     FixInfacingNormalsProcess();
     ~FixInfacingNormalsProcess();
@@ -68,14 +69,14 @@ public:
      *   combination of #aiPostProcessSteps.
      * @return true if the process is present in this flag fields, false if not.
     */
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
     /** Executes the post processing step on the given imported data.
     * At the moment a process is not supposed to fail.
     * @param pScene The imported data to work at.
     */
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
 protected:
 
@@ -83,7 +84,7 @@ protected:
     /** Executes the step on the given mesh
      * @param pMesh The mesh to process.
      */
-    bool ProcessMesh( aiMesh* pMesh, unsigned int index);
+    bool ProcessMesh ( aiMesh* pMesh, unsigned int index );
 };
 
 } // end of namespace Assimp

@@ -31,7 +31,8 @@ import android.util.Log;
  * in should stop. Since the goal of this service is to handle a single kind of
  * intent, it does not queue up batches of intents of the same type.
  */
-public abstract class CustomIntentService extends Service {
+public abstract class CustomIntentService extends Service
+{
     private String mName;
     private boolean mRedelivery;
     private volatile ServiceHandler mServiceHandler;
@@ -39,73 +40,83 @@ public abstract class CustomIntentService extends Service {
     private static final String LOG_TAG = "CustomIntentService";
     private static final int WHAT_MESSAGE = -10;
 
-    public CustomIntentService(String paramString) {
+    public CustomIntentService ( String paramString )
+    {
         this.mName = paramString;
     }
 
     @Override
-    public IBinder onBind(Intent paramIntent) {
+    public IBinder onBind ( Intent paramIntent )
+    {
         return null;
     }
 
     @Override
-    public void onCreate() {
+    public void onCreate()
+    {
         super.onCreate();
-        HandlerThread localHandlerThread = new HandlerThread("IntentService["
-                + this.mName + "]");
+        HandlerThread localHandlerThread = new HandlerThread ( "IntentService["
+                + this.mName + "]" );
         localHandlerThread.start();
         this.mServiceLooper = localHandlerThread.getLooper();
-        this.mServiceHandler = new ServiceHandler(this.mServiceLooper);
+        this.mServiceHandler = new ServiceHandler ( this.mServiceLooper );
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy()
+    {
         Thread localThread = this.mServiceLooper.getThread();
-        if ((localThread != null) && (localThread.isAlive())) {
+        if ( ( localThread != null ) && ( localThread.isAlive() ) ) {
             localThread.interrupt();
         }
         this.mServiceLooper.quit();
-        Log.d(LOG_TAG, "onDestroy");
+        Log.d ( LOG_TAG, "onDestroy" );
     }
 
-    protected abstract void onHandleIntent(Intent paramIntent);
+    protected abstract void onHandleIntent ( Intent paramIntent );
 
     protected abstract boolean shouldStop();
 
     @Override
-    public void onStart(Intent paramIntent, int startId) {
-        if (!this.mServiceHandler.hasMessages(WHAT_MESSAGE)) {
+    public void onStart ( Intent paramIntent, int startId )
+    {
+        if ( !this.mServiceHandler.hasMessages ( WHAT_MESSAGE ) ) {
             Message localMessage = this.mServiceHandler.obtainMessage();
             localMessage.arg1 = startId;
             localMessage.obj = paramIntent;
             localMessage.what = WHAT_MESSAGE;
-            this.mServiceHandler.sendMessage(localMessage);
+            this.mServiceHandler.sendMessage ( localMessage );
         }
     }
 
     @Override
-    public int onStartCommand(Intent paramIntent, int flags, int startId) {
-        onStart(paramIntent, startId);
+    public int onStartCommand ( Intent paramIntent, int flags, int startId )
+    {
+        onStart ( paramIntent, startId );
         return mRedelivery ? START_REDELIVER_INTENT : START_NOT_STICKY;
     }
 
-    public void setIntentRedelivery(boolean enabled) {
+    public void setIntentRedelivery ( boolean enabled )
+    {
         this.mRedelivery = enabled;
     }
 
-    private final class ServiceHandler extends Handler {
-        public ServiceHandler(Looper looper) {
-            super(looper);
+    private final class ServiceHandler extends Handler
+    {
+        public ServiceHandler ( Looper looper )
+        {
+            super ( looper );
         }
 
         @Override
-        public void handleMessage(Message paramMessage) {
+        public void handleMessage ( Message paramMessage )
+        {
             CustomIntentService.this
-                    .onHandleIntent((Intent) paramMessage.obj);
-            if (shouldStop()) {
-                Log.d(LOG_TAG, "stopSelf");
-                CustomIntentService.this.stopSelf(paramMessage.arg1);
-                Log.d(LOG_TAG, "afterStopSelf");
+            .onHandleIntent ( ( Intent ) paramMessage.obj );
+            if ( shouldStop() ) {
+                Log.d ( LOG_TAG, "stopSelf" );
+                CustomIntentService.this.stopSelf ( paramMessage.arg1 );
+                Log.d ( LOG_TAG, "afterStopSelf" );
             }
         }
     }

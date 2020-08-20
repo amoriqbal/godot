@@ -55,7 +55,8 @@ struct aiMesh;
 
 class FindInvalidDataProcessTest;
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /** The FindInvalidData post-processing step. It searches the mesh data
@@ -63,38 +64,39 @@ namespace Assimp    {
  *
  *  Originally this was a workaround for some models written by Blender
  *  which have zero normal vectors. */
-class ASSIMP_API FindInvalidDataProcess : public BaseProcess {
+class ASSIMP_API FindInvalidDataProcess : public BaseProcess
+{
 public:
     FindInvalidDataProcess();
     ~FindInvalidDataProcess();
 
     // -------------------------------------------------------------------
     //
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
     // Setup import settings
-    void SetupProperties(const Importer* pImp);
+    void SetupProperties ( const Importer* pImp );
 
     // -------------------------------------------------------------------
     // Run the step
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
     // -------------------------------------------------------------------
     /** Executes the post-processing step on the given mesh
      * @param pMesh The mesh to process.
      * @return 0 - nothing, 1 - removed sth, 2 - please delete me  */
-    int ProcessMesh( aiMesh* pMesh);
+    int ProcessMesh ( aiMesh* pMesh );
 
     // -------------------------------------------------------------------
     /** Executes the post-processing step on the given animation
      * @param anim The animation to process.  */
-    void ProcessAnimation (aiAnimation* anim);
+    void ProcessAnimation ( aiAnimation* anim );
 
     // -------------------------------------------------------------------
     /** Executes the post-processing step on the given anim channel
      * @param anim The animation channel to process.*/
-    void ProcessAnimationChannel (aiNodeAnim* anim);
+    void ProcessAnimationChannel ( aiNodeAnim* anim );
 
 private:
     ai_real configEpsilon;

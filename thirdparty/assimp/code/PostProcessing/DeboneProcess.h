@@ -55,7 +55,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #// Forward declarations
 class DeboneTest;
 
-namespace Assimp {
+namespace Assimp
+{
 
 #if (!defined AI_DEBONE_THRESHOLD)
 #   define AI_DEBONE_THRESHOLD  1.0f
@@ -67,7 +68,8 @@ namespace Assimp {
 * the bone are split from the mesh. The split off (new) mesh is boneless. At any
 * point in time, bones without affect upon a given mesh are to be removed.
 */
-class DeboneProcess : public BaseProcess {
+class DeboneProcess : public BaseProcess
+{
 public:
     DeboneProcess();
     ~DeboneProcess();
@@ -79,14 +81,14 @@ public:
     * @return true if the process is present in this flag fields,
     *   false if not.
     */
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
     /** Called prior to ExecuteOnScene().
     * The function is a request to the process to update its configuration
     * basing on the Importer's configuration property list.
     */
-    void SetupProperties(const Importer* pImp);
+    void SetupProperties ( const Importer* pImp );
 
 protected:
     // -------------------------------------------------------------------
@@ -94,25 +96,25 @@ protected:
     * At the moment a process is not supposed to fail.
     * @param pScene The imported data to work at.
     */
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
     // -------------------------------------------------------------------
     /** Counts bones total/removable in a given mesh.
     * @param pMesh The mesh to process.
     */
-    bool ConsiderMesh( const aiMesh* pMesh);
+    bool ConsiderMesh ( const aiMesh* pMesh );
 
     /// Splits the given mesh by bone count.
     /// @param pMesh the Mesh to split. Is not changed at all, but might be superfluous in case it was split.
     /// @param poNewMeshes Array of submeshes created in the process. Empty if splitting was not necessary.
-    void SplitMesh(const aiMesh* pMesh, std::vector< std::pair< aiMesh*,const aiBone* > >& poNewMeshes) const;
+    void SplitMesh ( const aiMesh* pMesh, std::vector< std::pair< aiMesh*,const aiBone* > >& poNewMeshes ) const;
 
     /// Recursively updates the node's mesh list to account for the changed mesh list
-    void UpdateNode(aiNode* pNode) const;
+    void UpdateNode ( aiNode* pNode ) const;
 
     // -------------------------------------------------------------------
     // Apply transformation to a mesh
-    void ApplyTransform(aiMesh* mesh, const aiMatrix4x4& mat)const;
+    void ApplyTransform ( aiMesh* mesh, const aiMatrix4x4& mat ) const;
 
 public:
     /** Number of bones present in the scene. */

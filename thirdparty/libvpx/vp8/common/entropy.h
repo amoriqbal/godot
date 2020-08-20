@@ -41,8 +41,7 @@ extern const vp8_tree_index vp8_coef_tree[];
 
 extern const struct vp8_token_struct vp8_coef_encodings[MAX_ENTROPY_TOKENS];
 
-typedef struct
-{
+typedef struct {
     vp8_tree_p tree;
     const vp8_prob *prob;
     int Len;
@@ -67,7 +66,7 @@ extern const vp8_extra_bit_struct vp8_extra_bits[12];    /* indexed by token val
    position within the 4x4 DCT. */
 
 #define COEF_BANDS 8
-extern DECLARE_ALIGNED(16, const unsigned char, vp8_coef_bands[16]);
+extern DECLARE_ALIGNED ( 16, const unsigned char, vp8_coef_bands[16] );
 
 /* Inside dimension is 3-valued measure of nearby complexity, that is,
    the extent to which nearby coefficients are nonzero.  For the first
@@ -88,20 +87,20 @@ extern DECLARE_ALIGNED(16, const unsigned char, vp8_coef_bands[16]);
 /*# define DC_TOKEN_CONTEXTS        3*/ /* 00, 0!0, !0!0 */
 #   define PREV_COEF_CONTEXTS       3
 
-extern DECLARE_ALIGNED(16, const unsigned char, vp8_prev_token_class[MAX_ENTROPY_TOKENS]);
+extern DECLARE_ALIGNED ( 16, const unsigned char, vp8_prev_token_class[MAX_ENTROPY_TOKENS] );
 
 extern const vp8_prob vp8_coef_update_probs [BLOCK_TYPES] [COEF_BANDS] [PREV_COEF_CONTEXTS] [ENTROPY_NODES];
 
 
 struct VP8Common;
-void vp8_default_coef_probs(struct VP8Common *);
+void vp8_default_coef_probs ( struct VP8Common * );
 
-extern DECLARE_ALIGNED(16, const int, vp8_default_zig_zag1d[16]);
-extern DECLARE_ALIGNED(16, const short, vp8_default_inv_zig_zag[16]);
-extern DECLARE_ALIGNED(16, const short, vp8_default_zig_zag_mask[16]);
+extern DECLARE_ALIGNED ( 16, const int, vp8_default_zig_zag1d[16] );
+extern DECLARE_ALIGNED ( 16, const short, vp8_default_inv_zig_zag[16] );
+extern DECLARE_ALIGNED ( 16, const short, vp8_default_zig_zag_mask[16] );
 extern const int vp8_mb_feature_data_bits[MB_LVL_MAX];
 
-void vp8_coef_tree_initialize(void);
+void vp8_coef_tree_initialize ( void );
 #ifdef __cplusplus
 }  // extern "C"
 #endif

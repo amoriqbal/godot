@@ -73,43 +73,43 @@ extern "C" {
  * propagation (required for backward propagation). Pass @c NULL for forward
  * propagation.
  */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_iterator_create(
-        mkldnn_primitive_desc_iterator_t *iterator,
-        const_mkldnn_op_desc_t op_desc, const_mkldnn_primitive_attr_t attr,
-        mkldnn_engine_t engine,
-        const_mkldnn_primitive_desc_t hint_forward_primitive_desc);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_iterator_create (
+    mkldnn_primitive_desc_iterator_t *iterator,
+    const_mkldnn_op_desc_t op_desc, const_mkldnn_primitive_attr_t attr,
+    mkldnn_engine_t engine,
+    const_mkldnn_primitive_desc_t hint_forward_primitive_desc );
 
 /** Iterates over primitive descriptors. Returns #mkldnn_iterator_ends if no
  * more primitive descriptors are available. */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_iterator_next(
-        mkldnn_primitive_desc_iterator_t iterator);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_iterator_next (
+    mkldnn_primitive_desc_iterator_t iterator );
 
 /** Fetches the current primitive descriptor.
  *
  * @note
  *     The user should delete the fetched primitive descriptor using
  *     mkldnn_primitive_desc_destroy() once it is no longer needed. */
-mkldnn_primitive_desc_t MKLDNN_API mkldnn_primitive_desc_iterator_fetch(
-        const_mkldnn_primitive_desc_iterator_t iterator);
+mkldnn_primitive_desc_t MKLDNN_API mkldnn_primitive_desc_iterator_fetch (
+    const_mkldnn_primitive_desc_iterator_t iterator );
 
 /** Deletes a primitive descriptor @p iterator */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_iterator_destroy(
-        mkldnn_primitive_desc_iterator_t iterator);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_iterator_destroy (
+    mkldnn_primitive_desc_iterator_t iterator );
 
 /** Creates a @p primitive_desc using @p op_desc, @p attr, @p engine, and
  * optionally a hint primitive descriptor from forward propagation. The call is
  * equivalent to creating a primitive descriptor iterator, immediately fetching
  * a primitive descriptor, and then destroying the iterator. */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_create(
-        mkldnn_primitive_desc_t *primitive_desc,
-        const_mkldnn_op_desc_t op_desc, const_mkldnn_primitive_attr_t attr,
-        mkldnn_engine_t engine,
-        const_mkldnn_primitive_desc_t hint_forward_primitive_desc);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_create (
+    mkldnn_primitive_desc_t *primitive_desc,
+    const_mkldnn_op_desc_t op_desc, const_mkldnn_primitive_attr_t attr,
+    mkldnn_engine_t engine,
+    const_mkldnn_primitive_desc_t hint_forward_primitive_desc );
 
 /** Makes a copy of a @p primitive_desc. */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_clone(
-        mkldnn_primitive_desc_t *primitive_desc,
-        const_mkldnn_primitive_desc_t existing_primitive_desc);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_clone (
+    mkldnn_primitive_desc_t *primitive_desc,
+    const_mkldnn_primitive_desc_t existing_primitive_desc );
 
 /** Returns a constant reference to the attribute of a @p primitive_desc.
  *
@@ -120,13 +120,13 @@ mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_clone(
  *      The lifetime of an @p attr is the same as that of a @p primitive_desc,
  *      so it is illegal to use the @p attr once @p primitive_desc has been
  *      destroyed. */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_get_attr(
-        const_mkldnn_primitive_desc_t primitive_desc,
-        const_mkldnn_primitive_attr_t *attr);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_get_attr (
+    const_mkldnn_primitive_desc_t primitive_desc,
+    const_mkldnn_primitive_attr_t *attr );
 
 /** Deletes a @p primitive_desc. */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_destroy(
-        mkldnn_primitive_desc_t primitive_desc);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_destroy (
+    mkldnn_primitive_desc_t primitive_desc );
 
 /** Queries primitive descriptor
  *
@@ -154,9 +154,9 @@ mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_destroy(
  *
  * @sa mkldnn_query_t for more options
  */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_query(
-        const_mkldnn_primitive_desc_t primitive_desc, mkldnn_query_t what,
-        int index, void *result);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_query (
+    const_mkldnn_primitive_desc_t primitive_desc, mkldnn_query_t what,
+    int index, void *result );
 
 /** Queries primitive descriptor for memory descriptor
  *
@@ -165,9 +165,9 @@ mkldnn_status_t MKLDNN_API mkldnn_primitive_desc_query(
  * This is just a specialized version of mkldnn_primitive_desc_query
  * used for convenience.
  */
-const mkldnn_memory_desc_t MKLDNN_API *mkldnn_primitive_desc_query_md(
-        const_mkldnn_primitive_desc_t primitive_desc, mkldnn_query_t what,
-        int index);
+const mkldnn_memory_desc_t MKLDNN_API *mkldnn_primitive_desc_query_md (
+    const_mkldnn_primitive_desc_t primitive_desc, mkldnn_query_t what,
+    int index );
 
 /** Queries primitive descriptor for signed 32bit int
  *
@@ -178,20 +178,20 @@ const mkldnn_memory_desc_t MKLDNN_API *mkldnn_primitive_desc_query_md(
  * This is just a specialized version of mkldnn_primitive_desc_query
  * used for convenience.
  */
-int MKLDNN_API mkldnn_primitive_desc_query_s32(
-        const_mkldnn_primitive_desc_t primitive_desc, mkldnn_query_t what,
-        int index);
+int MKLDNN_API mkldnn_primitive_desc_query_s32 (
+    const_mkldnn_primitive_desc_t primitive_desc, mkldnn_query_t what,
+    int index );
 
 /** Creates a @p primitive using a @p primitive_desc descriptor. */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_create(
-        mkldnn_primitive_t *primitive,
-        const_mkldnn_primitive_desc_t primitive_desc);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_create (
+    mkldnn_primitive_t *primitive,
+    const_mkldnn_primitive_desc_t primitive_desc );
 
 /** Executes a @p primitive using a @p stream, and @p nargs arguments
  * @p args. */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_execute(
-        const_mkldnn_primitive_t primitive, mkldnn_stream_t stream,
-        int nargs, const mkldnn_exec_arg_t *args);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_execute (
+    const_mkldnn_primitive_t primitive, mkldnn_stream_t stream,
+    int nargs, const mkldnn_exec_arg_t *args );
 
 /** Retrieves a reference to the @p primitive_desc descriptor of given @p
  * primitive.
@@ -199,13 +199,13 @@ mkldnn_status_t MKLDNN_API mkldnn_primitive_execute(
  * @warning
  *     The returned object must not be destroyed by the user. The @c const
  *     qualifier of the returned object prevents such attempts. */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_get_primitive_desc(
-        const_mkldnn_primitive_t primitive,
-        const_mkldnn_primitive_desc_t *primitive_desc);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_get_primitive_desc (
+    const_mkldnn_primitive_t primitive,
+    const_mkldnn_primitive_desc_t *primitive_desc );
 
 /** Deletes a @p primitive. */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_destroy(
-        mkldnn_primitive_t primitive);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_destroy (
+    mkldnn_primitive_t primitive );
 
 /** @} */
 
@@ -219,28 +219,28 @@ mkldnn_status_t MKLDNN_API mkldnn_primitive_destroy(
  * An empty attribute is used in primitive descriptor creation whenever it
  * is not passed explicitly, e.g. in mkldnn_primitive_desc_create.
  */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_create(
-        mkldnn_primitive_attr_t *attr);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_create (
+    mkldnn_primitive_attr_t *attr );
 
 /** Makes a copy of an @p existing_attr. */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_clone(
-        mkldnn_primitive_attr_t *attr,
-        const_mkldnn_primitive_attr_t existing_attr);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_clone (
+    mkldnn_primitive_attr_t *attr,
+    const_mkldnn_primitive_attr_t existing_attr );
 
 /** Deletes an @p attr. */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_destroy(
-        mkldnn_primitive_attr_t attr);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_destroy (
+    mkldnn_primitive_attr_t attr );
 
 /** Returns the scratchpad @p mode set in the attribute @p attr */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_get_scratchpad_mode(
-        const_mkldnn_primitive_attr_t attr, mkldnn_scratchpad_mode_t *mode);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_get_scratchpad_mode (
+    const_mkldnn_primitive_attr_t attr, mkldnn_scratchpad_mode_t *mode );
 
 /** Sets scratchpad @p mode.
  *
  * The possible values are: #mkldnn_scratchpad_mode_library (default) and
  * #mkldnn_scratchpad_mode_user. */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_set_scratchpad_mode(
-        mkldnn_primitive_attr_t attr, mkldnn_scratchpad_mode_t mode);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_set_scratchpad_mode (
+    mkldnn_primitive_attr_t attr, mkldnn_scratchpad_mode_t mode );
 
 /** Returns @p count, correspondence scale @p mask, and a pointer to a constant
  * floating point array of output @p scales for given @p attr, previously set
@@ -254,9 +254,9 @@ mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_set_scratchpad_mode(
  *      The lifetime of @p scales is the same as that of the @p attr to which it
  *      belongs, so it is illegal to use @p scales after @p attr is destroyed.
  */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_get_output_scales(
-        const_mkldnn_primitive_attr_t attr, mkldnn_dim_t *count, int *mask,
-        const float **scales);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_get_output_scales (
+    const_mkldnn_primitive_attr_t attr, mkldnn_dim_t *count, int *mask,
+    const float **scales );
 
 /** Sets output @p scales for primitive operations. The number of elements @p
  * count and correspondence scale @p mask are stored for future use.
@@ -297,9 +297,9 @@ mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_get_output_scales(
  *
  *      \f[count = \prod\limits_{d \in mask} output.dims[d]\f]
  */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_set_output_scales(
-        mkldnn_primitive_attr_t attr, mkldnn_dim_t count, int mask,
-        const float *scales);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_set_output_scales (
+    mkldnn_primitive_attr_t attr, mkldnn_dim_t count, int mask,
+    const float *scales );
 
 /** Returns @p post_ops for given @p attr.
  *
@@ -309,8 +309,8 @@ mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_set_output_scales(
  *      same as that of the @p attr it belongs to, so it is illegal to use @p
  *      post_ops after @p attr has been destroyed.
  */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_get_post_ops(
-        const_mkldnn_primitive_attr_t attr, const_mkldnn_post_ops_t *post_ops);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_get_post_ops (
+    const_mkldnn_primitive_attr_t attr, const_mkldnn_post_ops_t *post_ops );
 
 /** Sets configured @p post_ops to an attribute @p attr for future use (when
  * primitive descriptor is being created).
@@ -321,26 +321,26 @@ mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_get_post_ops(
  *      Therefore the user should handle an error that might occur at the
  *      mkldnn_primitive_desc_create call.
  */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_set_post_ops(
-        mkldnn_primitive_attr_t attr, const_mkldnn_post_ops_t post_ops);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_set_post_ops (
+    mkldnn_primitive_attr_t attr, const_mkldnn_post_ops_t post_ops );
 
 /** @addtogroup c_api_attributes_post_ops Sequence of post operations
  * An extension for performing extra operations after a base operation.
  * @{ */
 
 /** Creates an empty sequence of post operations @p post_ops. */
-mkldnn_status_t MKLDNN_API mkldnn_post_ops_create(mkldnn_post_ops_t *post_ops);
+mkldnn_status_t MKLDNN_API mkldnn_post_ops_create ( mkldnn_post_ops_t *post_ops );
 
 /** Deletes a @p post_ops sequence. */
-mkldnn_status_t MKLDNN_API mkldnn_post_ops_destroy(mkldnn_post_ops_t post_ops);
+mkldnn_status_t MKLDNN_API mkldnn_post_ops_destroy ( mkldnn_post_ops_t post_ops );
 
 /** Returns the @p length of post operations for given @p post_ops. */
-int MKLDNN_API mkldnn_post_ops_len(const_mkldnn_post_ops_t post_ops);
+int MKLDNN_API mkldnn_post_ops_len ( const_mkldnn_post_ops_t post_ops );
 
 /** Returns the type of post operation with index @p index in given
  * @p post_ops. In case of error, returns #mkldnn_undefined_primitive. */
-mkldnn_primitive_kind_t MKLDNN_API mkldnn_post_ops_get_kind(
-        const_mkldnn_post_ops_t post_ops, int index);
+mkldnn_primitive_kind_t MKLDNN_API mkldnn_post_ops_get_kind (
+    const_mkldnn_post_ops_t post_ops, int index );
 
 /** Appends accumulation (sum) post operation to the @p post_ops. Prior to
  * accumulating the result, the previous value would be multiplied by @p scale.
@@ -363,8 +363,8 @@ mkldnn_primitive_kind_t MKLDNN_API mkldnn_post_ops_get_kind(
  *      destination is expected to be the same as the layout of the stored
  *      destination.
  */
-mkldnn_status_t MKLDNN_API mkldnn_post_ops_append_sum(
-        mkldnn_post_ops_t post_ops, float scale);
+mkldnn_status_t MKLDNN_API mkldnn_post_ops_append_sum (
+    mkldnn_post_ops_t post_ops, float scale );
 
 /** Gets the parameters of the accumulation (sum) post operation with index
  * @p index in the sequence of @p post_ops.
@@ -373,8 +373,8 @@ mkldnn_status_t MKLDNN_API mkldnn_post_ops_append_sum(
  *      If index @p index would not correspond to the accumulation post
  *      operation, the function returns #mkldnn_invalid_arguments.
  */
-mkldnn_status_t MKLDNN_API mkldnn_post_ops_get_params_sum(
-        const_mkldnn_post_ops_t post_ops, int index, float *scale);
+mkldnn_status_t MKLDNN_API mkldnn_post_ops_get_params_sum (
+    const_mkldnn_post_ops_t post_ops, int index, float *scale );
 
 /** Appends eltwise post operation to the @p post_ops with given parameters
  * @p kind, @p alpha, and @p beta (@sa mkldnn_eltwise_forward_desc_init and
@@ -387,16 +387,16 @@ mkldnn_status_t MKLDNN_API mkldnn_post_ops_get_params_sum(
  * dst[] <- scale * eltwise_op ( op(...) ) // instead of dst[] <- op(...)
  * where eltwise_op is configured with the given parameters.
  */
-mkldnn_status_t MKLDNN_API mkldnn_post_ops_append_eltwise(
-        mkldnn_post_ops_t post_ops, float scale, mkldnn_alg_kind_t alg,
-        float alpha, float beta);
+mkldnn_status_t MKLDNN_API mkldnn_post_ops_append_eltwise (
+    mkldnn_post_ops_t post_ops, float scale, mkldnn_alg_kind_t alg,
+    float alpha, float beta );
 
 /** Gets the eltwise parameters of the post operation with index @p index in
  * the sequence of @p post_ops.
  */
-mkldnn_status_t MKLDNN_API mkldnn_post_ops_get_params_eltwise(
-        const_mkldnn_post_ops_t post_ops, int index, float *scale,
-        mkldnn_alg_kind_t *alg, float *alpha, float *beta);
+mkldnn_status_t MKLDNN_API mkldnn_post_ops_get_params_eltwise (
+    const_mkldnn_post_ops_t post_ops, int index, float *scale,
+    mkldnn_alg_kind_t *alg, float *alpha, float *beta );
 
 /** @} */
 
@@ -485,9 +485,9 @@ mkldnn_status_t MKLDNN_API mkldnn_post_ops_get_params_eltwise(
  * @note The logical order of dimensions is defined by a primitive that
  *       consumes the memory.
  */
-mkldnn_status_t MKLDNN_API mkldnn_memory_desc_init_by_strides(
-        mkldnn_memory_desc_t *memory_desc, int ndims, const mkldnn_dims_t dims,
-        mkldnn_data_type_t data_type, const mkldnn_dims_t strides);
+mkldnn_status_t MKLDNN_API mkldnn_memory_desc_init_by_strides (
+    mkldnn_memory_desc_t *memory_desc, int ndims, const mkldnn_dims_t dims,
+    mkldnn_data_type_t data_type, const mkldnn_dims_t strides );
 
 /** Initializes a @p memory_desc memory descriptor using @p ndims, @p dims, @p
  * data_type, and format @p tag.
@@ -495,18 +495,18 @@ mkldnn_status_t MKLDNN_API mkldnn_memory_desc_init_by_strides(
  * @p tag can be #mkldnn_format_tag_any, which allows a primitive to define
  * the appropriate memory format. In this case, the @p format_kind would be set
  * to #mkldnn_format_kind_any */
-mkldnn_status_t MKLDNN_API mkldnn_memory_desc_init_by_tag(
-        mkldnn_memory_desc_t *memory_desc, int ndims, const mkldnn_dims_t dims,
-        mkldnn_data_type_t data_type, mkldnn_format_tag_t tag);
+mkldnn_status_t MKLDNN_API mkldnn_memory_desc_init_by_tag (
+    mkldnn_memory_desc_t *memory_desc, int ndims, const mkldnn_dims_t dims,
+    mkldnn_data_type_t data_type, mkldnn_format_tag_t tag );
 
 /** Initializes a @p memory_desc for a given @p parent_memory_desc, with
  * @p dims sizes and @p offsets. May fail if layout used does not allow
  * obtain desired submemory. In this case consider using `extract` or `insert`
  * primitive */
-mkldnn_status_t MKLDNN_API mkldnn_memory_desc_init_submemory(
-        mkldnn_memory_desc_t *memory_desc,
-        const mkldnn_memory_desc_t *parent_memory_desc,
-        const mkldnn_dims_t dims, const mkldnn_dims_t offsets);
+mkldnn_status_t MKLDNN_API mkldnn_memory_desc_init_submemory (
+    mkldnn_memory_desc_t *memory_desc,
+    const mkldnn_memory_desc_t *parent_memory_desc,
+    const mkldnn_dims_t dims, const mkldnn_dims_t offsets );
 
 /** Compares two memory descriptors.
  * @return 1 if the descriptors are the same.
@@ -514,13 +514,13 @@ mkldnn_status_t MKLDNN_API mkldnn_memory_desc_init_submemory(
  *
  * Use this function to identify whether a reorder is required between the
  * two memories */
-int MKLDNN_API mkldnn_memory_desc_equal(
-        const mkldnn_memory_desc_t *lhs,
-        const mkldnn_memory_desc_t *rhs);
+int MKLDNN_API mkldnn_memory_desc_equal (
+    const mkldnn_memory_desc_t *lhs,
+    const mkldnn_memory_desc_t *rhs );
 
 /** Returns the size (in bytes) that is required for given @p memory_desc */
-size_t MKLDNN_API mkldnn_memory_desc_get_size(
-        const mkldnn_memory_desc_t *memory_desc);
+size_t MKLDNN_API mkldnn_memory_desc_get_size (
+    const mkldnn_memory_desc_t *memory_desc );
 
 /** Creates a memory for given @p memory_desc and @p engine. Also sets handle
  * to @p native_handle.
@@ -531,31 +531,31 @@ size_t MKLDNN_API mkldnn_memory_desc_get_size(
  *   attach memory. In this case the library owns allocated memory.
  * - be MKLDNN_NATIVE_HANDLE_NONE to create mkldnn_memory w/o attached memory.
  */
-mkldnn_status_t MKLDNN_API mkldnn_memory_create(mkldnn_memory_t *memory,
+mkldnn_status_t MKLDNN_API mkldnn_memory_create ( mkldnn_memory_t *memory,
         const mkldnn_memory_desc_t *memory_desc, mkldnn_engine_t engine,
-        void *native_handle);
+        void *native_handle );
 
 /** Returns a @p memory_desc associated with @p memory. */
-mkldnn_status_t MKLDNN_API mkldnn_memory_get_memory_desc(
-        const_mkldnn_memory_t memory,
-        const mkldnn_memory_desc_t **memory_desc);
+mkldnn_status_t MKLDNN_API mkldnn_memory_get_memory_desc (
+    const_mkldnn_memory_t memory,
+    const mkldnn_memory_desc_t **memory_desc );
 
 /** Returns an @p engine associated with @p memory. */
-mkldnn_status_t MKLDNN_API mkldnn_memory_get_engine(
-        const_mkldnn_memory_t memory, mkldnn_engine_t *engine);
+mkldnn_status_t MKLDNN_API mkldnn_memory_get_engine (
+    const_mkldnn_memory_t memory, mkldnn_engine_t *engine );
 
 /** For a @p memory, returns the data @p handle.
  *
  * For the CPU engine, the data handle is a pointer to the actual data. */
-mkldnn_status_t MKLDNN_API mkldnn_memory_get_data_handle(
-        const_mkldnn_memory_t memory, void **handle);
+mkldnn_status_t MKLDNN_API mkldnn_memory_get_data_handle (
+    const_mkldnn_memory_t memory, void **handle );
 
 /** For a @p memory, sets the data @p handle. */
-mkldnn_status_t MKLDNN_API mkldnn_memory_set_data_handle(
-        mkldnn_memory_t memory, void *handle);
+mkldnn_status_t MKLDNN_API mkldnn_memory_set_data_handle (
+    mkldnn_memory_t memory, void *handle );
 
 /** Deletes a @p memory. */
-mkldnn_status_t MKLDNN_API mkldnn_memory_destroy(mkldnn_memory_t memory);
+mkldnn_status_t MKLDNN_API mkldnn_memory_destroy ( mkldnn_memory_t memory );
 
 /** @} */
 
@@ -573,11 +573,11 @@ mkldnn_status_t MKLDNN_API mkldnn_memory_destroy(mkldnn_memory_t memory);
  * Outputs:
  *  - output (#mkldnn_query_dst_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_reorder_primitive_desc_create(
-        mkldnn_primitive_desc_t *reorder_primitive_desc,
-        mkldnn_engine_t src_engine, const mkldnn_memory_desc_t *src_md,
-        mkldnn_engine_t dst_engine, const mkldnn_memory_desc_t *dst_md,
-        const_mkldnn_primitive_attr_t attr);
+mkldnn_status_t MKLDNN_API mkldnn_reorder_primitive_desc_create (
+    mkldnn_primitive_desc_t *reorder_primitive_desc,
+    mkldnn_engine_t src_engine, const mkldnn_memory_desc_t *src_md,
+    mkldnn_engine_t dst_engine, const mkldnn_memory_desc_t *dst_md,
+    const_mkldnn_primitive_attr_t attr );
 
 /** @} */
 
@@ -600,13 +600,13 @@ mkldnn_status_t MKLDNN_API mkldnn_reorder_primitive_desc_create(
  * Outputs:
  *  - output (#mkldnn_query_dst_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_concat_primitive_desc_create(
-        mkldnn_primitive_desc_t *concat_primitive_desc,
-        const mkldnn_memory_desc_t *dst_md,
-        int n, int concat_dimension,
-        const mkldnn_memory_desc_t *src_mds,
-        const_mkldnn_primitive_attr_t attr,
-        mkldnn_engine_t engine);
+mkldnn_status_t MKLDNN_API mkldnn_concat_primitive_desc_create (
+    mkldnn_primitive_desc_t *concat_primitive_desc,
+    const mkldnn_memory_desc_t *dst_md,
+    int n, int concat_dimension,
+    const mkldnn_memory_desc_t *src_mds,
+    const_mkldnn_primitive_attr_t attr,
+    mkldnn_engine_t engine );
 
 /** @} */
 
@@ -629,13 +629,13 @@ mkldnn_status_t MKLDNN_API mkldnn_concat_primitive_desc_create(
  * Outputs:
  *  - output (#mkldnn_query_dst_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_sum_primitive_desc_create(
-        mkldnn_primitive_desc_t *sum_primitive_desc,
-        const mkldnn_memory_desc_t *dst_mds,
-        int n, const float *scales,
-        const mkldnn_memory_desc_t *src_mds,
-        const_mkldnn_primitive_attr_t attr,
-        mkldnn_engine_t engine);
+mkldnn_status_t MKLDNN_API mkldnn_sum_primitive_desc_create (
+    mkldnn_primitive_desc_t *sum_primitive_desc,
+    const mkldnn_memory_desc_t *dst_mds,
+    int n, const float *scales,
+    const mkldnn_memory_desc_t *src_mds,
+    const_mkldnn_primitive_attr_t attr,
+    mkldnn_engine_t engine );
 
 /** @} */
 
@@ -679,14 +679,14 @@ mkldnn_status_t MKLDNN_API mkldnn_sum_primitive_desc_create(
  * Outputs:
  *  - dst (#mkldnn_query_dst_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_convolution_forward_desc_init(
-        mkldnn_convolution_desc_t *conv_desc, mkldnn_prop_kind_t prop_kind,
-        mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *src_desc,
-        const mkldnn_memory_desc_t *weights_desc,
-        const mkldnn_memory_desc_t *bias_desc,
-        const mkldnn_memory_desc_t *dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t padding_l, const mkldnn_dims_t padding_r,
-        mkldnn_padding_kind_t padding_kind);
+mkldnn_status_t MKLDNN_API mkldnn_convolution_forward_desc_init (
+    mkldnn_convolution_desc_t *conv_desc, mkldnn_prop_kind_t prop_kind,
+    mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *src_desc,
+    const mkldnn_memory_desc_t *weights_desc,
+    const mkldnn_memory_desc_t *bias_desc,
+    const mkldnn_memory_desc_t *dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t padding_l, const mkldnn_dims_t padding_r,
+    mkldnn_padding_kind_t padding_kind );
 
 /** Initializes a dilated convolution descriptor @p conv_desc for forward
  * propagation using @p prop_kind (possible values are #mkldnn_forward_training
@@ -709,14 +709,14 @@ mkldnn_status_t MKLDNN_API mkldnn_convolution_forward_desc_init(
  * Outputs:
  *  - dst (#mkldnn_query_dst_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_dilated_convolution_forward_desc_init(
-        mkldnn_convolution_desc_t *conv_desc, mkldnn_prop_kind_t prop_kind,
-        mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *src_desc,
-        const mkldnn_memory_desc_t *weights_desc,
-        const mkldnn_memory_desc_t *bias_desc,
-        const mkldnn_memory_desc_t *dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t dilates, const mkldnn_dims_t padding_l,
-        const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind);
+mkldnn_status_t MKLDNN_API mkldnn_dilated_convolution_forward_desc_init (
+    mkldnn_convolution_desc_t *conv_desc, mkldnn_prop_kind_t prop_kind,
+    mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *src_desc,
+    const mkldnn_memory_desc_t *weights_desc,
+    const mkldnn_memory_desc_t *bias_desc,
+    const mkldnn_memory_desc_t *dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t dilates, const mkldnn_dims_t padding_l,
+    const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind );
 
 /** Initializes a convolution descriptor @p conv_desc for backward propagation
  * with respect to data using @p alg_kind, memory descriptors, @p strides, @p
@@ -732,13 +732,13 @@ mkldnn_status_t MKLDNN_API mkldnn_dilated_convolution_forward_desc_init(
  * Outputs:
  *  - diff_src (#mkldnn_query_diff_src_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_convolution_backward_data_desc_init(
-        mkldnn_convolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
-        const mkldnn_memory_desc_t *diff_src_desc,
-        const mkldnn_memory_desc_t *weights_desc,
-        const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t padding_l, const mkldnn_dims_t padding_r,
-        mkldnn_padding_kind_t padding_kind);
+mkldnn_status_t MKLDNN_API mkldnn_convolution_backward_data_desc_init (
+    mkldnn_convolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
+    const mkldnn_memory_desc_t *diff_src_desc,
+    const mkldnn_memory_desc_t *weights_desc,
+    const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t padding_l, const mkldnn_dims_t padding_r,
+    mkldnn_padding_kind_t padding_kind );
 
 /** Initializes a dilated convolution descriptor @p conv_desc for backward
  * propagation with respect to data using @p alg_kind, memory descriptors, @p
@@ -754,13 +754,13 @@ mkldnn_status_t MKLDNN_API mkldnn_convolution_backward_data_desc_init(
  * Outputs:
  *  - diff_src (#mkldnn_query_diff_src_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_dilated_convolution_backward_data_desc_init(
-        mkldnn_convolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
-        const mkldnn_memory_desc_t *diff_src_desc,
-        const mkldnn_memory_desc_t *weights_desc,
-        const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t dilates, const mkldnn_dims_t padding_l,
-        const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind);
+mkldnn_status_t MKLDNN_API mkldnn_dilated_convolution_backward_data_desc_init (
+    mkldnn_convolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
+    const mkldnn_memory_desc_t *diff_src_desc,
+    const mkldnn_memory_desc_t *weights_desc,
+    const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t dilates, const mkldnn_dims_t padding_l,
+    const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind );
 
 /** Initializes a convolution descriptor @p conv_desc for backward propagation
  * with respect to weights using @p alg_kind, memory descriptors, @p strides,
@@ -777,14 +777,14 @@ mkldnn_status_t MKLDNN_API mkldnn_dilated_convolution_backward_data_desc_init(
  *  - diff_weights (#mkldnn_query_diff_weights_md, 0)
  *  - diff_bias (#mkldnn_query_diff_weights_md, 1), if created with bias
  */
-mkldnn_status_t MKLDNN_API mkldnn_convolution_backward_weights_desc_init(
-        mkldnn_convolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
-        const mkldnn_memory_desc_t *src_desc,
-        const mkldnn_memory_desc_t *diff_weights_desc,
-        const mkldnn_memory_desc_t *diff_bias_desc,
-        const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t padding_l, const mkldnn_dims_t padding_r,
-        mkldnn_padding_kind_t padding_kind);
+mkldnn_status_t MKLDNN_API mkldnn_convolution_backward_weights_desc_init (
+    mkldnn_convolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
+    const mkldnn_memory_desc_t *src_desc,
+    const mkldnn_memory_desc_t *diff_weights_desc,
+    const mkldnn_memory_desc_t *diff_bias_desc,
+    const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t padding_l, const mkldnn_dims_t padding_r,
+    mkldnn_padding_kind_t padding_kind );
 
 /** Initializes a convolution descriptor @p conv_desc for backward propagation
  * with respect to weights using @p alg_kind, memory descriptors, @p strides,
@@ -802,14 +802,14 @@ mkldnn_status_t MKLDNN_API mkldnn_convolution_backward_weights_desc_init(
  *  - diff_bias (#mkldnn_query_diff_weights_md, 1), if created with bias
  */
 mkldnn_status_t MKLDNN_API
-mkldnn_dilated_convolution_backward_weights_desc_init(
-        mkldnn_convolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
-        const mkldnn_memory_desc_t *src_desc,
-        const mkldnn_memory_desc_t *diff_weights_desc,
-        const mkldnn_memory_desc_t *diff_bias_desc,
-        const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t dilates, const mkldnn_dims_t padding_l,
-        const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind);
+mkldnn_dilated_convolution_backward_weights_desc_init (
+    mkldnn_convolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
+    const mkldnn_memory_desc_t *src_desc,
+    const mkldnn_memory_desc_t *diff_weights_desc,
+    const mkldnn_memory_desc_t *diff_bias_desc,
+    const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t dilates, const mkldnn_dims_t padding_l,
+    const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind );
 
 /** @} */
 
@@ -839,14 +839,14 @@ mkldnn_dilated_convolution_backward_weights_desc_init(
  * Outputs:
  *  - dst (#mkldnn_query_dst_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_deconvolution_forward_desc_init(
-        mkldnn_deconvolution_desc_t *conv_desc, mkldnn_prop_kind_t prop_kind,
-        mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *src_desc,
-        const mkldnn_memory_desc_t *weights_desc,
-        const mkldnn_memory_desc_t *bias_desc,
-        const mkldnn_memory_desc_t *dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t padding_l, const mkldnn_dims_t padding_r,
-        mkldnn_padding_kind_t padding_kind);
+mkldnn_status_t MKLDNN_API mkldnn_deconvolution_forward_desc_init (
+    mkldnn_deconvolution_desc_t *conv_desc, mkldnn_prop_kind_t prop_kind,
+    mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *src_desc,
+    const mkldnn_memory_desc_t *weights_desc,
+    const mkldnn_memory_desc_t *bias_desc,
+    const mkldnn_memory_desc_t *dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t padding_l, const mkldnn_dims_t padding_r,
+    mkldnn_padding_kind_t padding_kind );
 
 /** Initializes a dilated deconvolution descriptor @p deconv_desc for forward
  * propagation using @p prop_kind (possible values are #mkldnn_forward_training
@@ -869,14 +869,14 @@ mkldnn_status_t MKLDNN_API mkldnn_deconvolution_forward_desc_init(
  * Outputs:
  *  - dst (#mkldnn_query_dst_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_dilated_deconvolution_forward_desc_init(
-        mkldnn_deconvolution_desc_t *conv_desc, mkldnn_prop_kind_t prop_kind,
-        mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *src_desc,
-        const mkldnn_memory_desc_t *weights_desc,
-        const mkldnn_memory_desc_t *bias_desc,
-        const mkldnn_memory_desc_t *dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t dilates, const mkldnn_dims_t padding_l,
-        const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind);
+mkldnn_status_t MKLDNN_API mkldnn_dilated_deconvolution_forward_desc_init (
+    mkldnn_deconvolution_desc_t *conv_desc, mkldnn_prop_kind_t prop_kind,
+    mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *src_desc,
+    const mkldnn_memory_desc_t *weights_desc,
+    const mkldnn_memory_desc_t *bias_desc,
+    const mkldnn_memory_desc_t *dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t dilates, const mkldnn_dims_t padding_l,
+    const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind );
 
 /** Initializes a deconvolution descriptor @p conv_desc for backward propagation
  * with respect to data using @p alg_kind, memory descriptors, @p strides, @p
@@ -892,13 +892,13 @@ mkldnn_status_t MKLDNN_API mkldnn_dilated_deconvolution_forward_desc_init(
  * Outputs:
  *  - diff_src (#mkldnn_query_diff_src_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_deconvolution_backward_data_desc_init(
-        mkldnn_deconvolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
-        const mkldnn_memory_desc_t *diff_src_desc,
-        const mkldnn_memory_desc_t *weights_desc,
-        const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t padding_l, const mkldnn_dims_t padding_r,
-        mkldnn_padding_kind_t padding_kind);
+mkldnn_status_t MKLDNN_API mkldnn_deconvolution_backward_data_desc_init (
+    mkldnn_deconvolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
+    const mkldnn_memory_desc_t *diff_src_desc,
+    const mkldnn_memory_desc_t *weights_desc,
+    const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t padding_l, const mkldnn_dims_t padding_r,
+    mkldnn_padding_kind_t padding_kind );
 
 /** Initializes a dilated deconvolution descriptor @p conv_desc for backward
  * propagation with respect to data using @p alg_kind, memory descriptors, @p
@@ -914,13 +914,13 @@ mkldnn_status_t MKLDNN_API mkldnn_deconvolution_backward_data_desc_init(
  * Outputs:
  *  - diff_src (#mkldnn_query_diff_src_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_dilated_deconvolution_backward_data_desc_init(
-        mkldnn_deconvolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
-        const mkldnn_memory_desc_t *diff_src_desc,
-        const mkldnn_memory_desc_t *weights_desc,
-        const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t dilates, const mkldnn_dims_t padding_l,
-        const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind);
+mkldnn_status_t MKLDNN_API mkldnn_dilated_deconvolution_backward_data_desc_init (
+    mkldnn_deconvolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
+    const mkldnn_memory_desc_t *diff_src_desc,
+    const mkldnn_memory_desc_t *weights_desc,
+    const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t dilates, const mkldnn_dims_t padding_l,
+    const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind );
 
 /** Initializes a deconvolution descriptor @p conv_desc for backward propagation
  * with respect to weights using @p alg_kind, memory descriptors, @p strides,
@@ -937,14 +937,14 @@ mkldnn_status_t MKLDNN_API mkldnn_dilated_deconvolution_backward_data_desc_init(
  *  - diff_weights (#mkldnn_query_diff_weights_md, 0)
  *  - diff_bias (#mkldnn_query_diff_weights_md, 1), if created with bias
  */
-mkldnn_status_t MKLDNN_API mkldnn_deconvolution_backward_weights_desc_init(
-        mkldnn_deconvolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
-        const mkldnn_memory_desc_t *src_desc,
-        const mkldnn_memory_desc_t *diff_weights_desc,
-        const mkldnn_memory_desc_t *diff_bias_desc,
-        const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t padding_l, const mkldnn_dims_t padding_r,
-        mkldnn_padding_kind_t padding_kind);
+mkldnn_status_t MKLDNN_API mkldnn_deconvolution_backward_weights_desc_init (
+    mkldnn_deconvolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
+    const mkldnn_memory_desc_t *src_desc,
+    const mkldnn_memory_desc_t *diff_weights_desc,
+    const mkldnn_memory_desc_t *diff_bias_desc,
+    const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t padding_l, const mkldnn_dims_t padding_r,
+    mkldnn_padding_kind_t padding_kind );
 
 /** Initializes a dilated deconvolution descriptor @p conv_desc for backward
  * propagation with respect to weights using @p alg_kind, memory descriptors,
@@ -961,14 +961,14 @@ mkldnn_status_t MKLDNN_API mkldnn_deconvolution_backward_weights_desc_init(
  *  - diff_weights (#mkldnn_query_diff_weights_md, 0)
  *  - diff_bias (#mkldnn_query_diff_weights_md, 1), if created with bias
  */
-mkldnn_status_t MKLDNN_API mkldnn_dilated_deconvolution_backward_weights_desc_init(
-        mkldnn_deconvolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
-        const mkldnn_memory_desc_t *src_desc,
-        const mkldnn_memory_desc_t *diff_weights_desc,
-        const mkldnn_memory_desc_t *diff_bias_desc,
-        const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t dilates, const mkldnn_dims_t padding_l,
-        const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind);
+mkldnn_status_t MKLDNN_API mkldnn_dilated_deconvolution_backward_weights_desc_init (
+    mkldnn_deconvolution_desc_t *conv_desc, mkldnn_alg_kind_t alg_kind,
+    const mkldnn_memory_desc_t *src_desc,
+    const mkldnn_memory_desc_t *diff_weights_desc,
+    const mkldnn_memory_desc_t *diff_bias_desc,
+    const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t dilates, const mkldnn_dims_t padding_l,
+    const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind );
 
 /** @} */
 
@@ -986,10 +986,10 @@ mkldnn_status_t MKLDNN_API mkldnn_dilated_deconvolution_backward_weights_desc_in
  *  - dst (#mkldnn_query_dst_md, 0)
  *
  */
-mkldnn_status_t MKLDNN_API mkldnn_shuffle_forward_desc_init(
-        mkldnn_shuffle_desc_t *shuffle_desc, mkldnn_prop_kind_t prop_kind,
-        const mkldnn_memory_desc_t *data_desc, int axis,
-        mkldnn_dim_t group_size);
+mkldnn_status_t MKLDNN_API mkldnn_shuffle_forward_desc_init (
+    mkldnn_shuffle_desc_t *shuffle_desc, mkldnn_prop_kind_t prop_kind,
+    const mkldnn_memory_desc_t *data_desc, int axis,
+    mkldnn_dim_t group_size );
 
 /** Initializes a @p shuffle_desc for backward propagation using memory
  * descriptor @p diff_data_desc, @p axis, and @p group_size.
@@ -1002,10 +1002,10 @@ mkldnn_status_t MKLDNN_API mkldnn_shuffle_forward_desc_init(
  *  - diff_src (#mkldnn_query_diff_src_md, 0)
  *
  */
-mkldnn_status_t MKLDNN_API mkldnn_shuffle_backward_desc_init(
-        mkldnn_shuffle_desc_t *shuffle_desc,
-        const mkldnn_memory_desc_t *diff_data_desc, int axis,
-        mkldnn_dim_t group_size);
+mkldnn_status_t MKLDNN_API mkldnn_shuffle_backward_desc_init (
+    mkldnn_shuffle_desc_t *shuffle_desc,
+    const mkldnn_memory_desc_t *diff_data_desc, int axis,
+    mkldnn_dim_t group_size );
 
 /** @} */
 
@@ -1038,10 +1038,10 @@ mkldnn_status_t MKLDNN_API mkldnn_shuffle_backward_desc_init(
  * Outputs:
  *  - dst (#mkldnn_query_dst_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_eltwise_forward_desc_init(
-        mkldnn_eltwise_desc_t *eltwise_desc, mkldnn_prop_kind_t prop_kind,
-        mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *data_desc,
-        float alpha, float beta);
+mkldnn_status_t MKLDNN_API mkldnn_eltwise_forward_desc_init (
+    mkldnn_eltwise_desc_t *eltwise_desc, mkldnn_prop_kind_t prop_kind,
+    mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *data_desc,
+    float alpha, float beta );
 
 /** Initializes an @p eltwise_desc for backward propagation using @p alg_kind
  * algorithm memory descriptors @p diff_data_desc and @p data_desc, and the
@@ -1056,10 +1056,10 @@ mkldnn_status_t MKLDNN_API mkldnn_eltwise_forward_desc_init(
  * Outputs:
  *  - diff_src (#mkldnn_query_diff_src_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_eltwise_backward_desc_init(
-        mkldnn_eltwise_desc_t *eltwise_desc, mkldnn_alg_kind_t alg_kind,
-        const mkldnn_memory_desc_t *diff_data_desc,
-        const mkldnn_memory_desc_t *data_desc, float alpha, float beta);
+mkldnn_status_t MKLDNN_API mkldnn_eltwise_backward_desc_init (
+    mkldnn_eltwise_desc_t *eltwise_desc, mkldnn_alg_kind_t alg_kind,
+    const mkldnn_memory_desc_t *diff_data_desc,
+    const mkldnn_memory_desc_t *data_desc, float alpha, float beta );
 
 /** @} */
 
@@ -1085,9 +1085,9 @@ mkldnn_status_t MKLDNN_API mkldnn_eltwise_backward_desc_init(
  * Outputs:
  *  - dst (#mkldnn_query_dst_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_softmax_forward_desc_init(
-        mkldnn_softmax_desc_t *softmax_desc, mkldnn_prop_kind_t prop_kind,
-        const mkldnn_memory_desc_t *data_desc, int softmax_axis);
+mkldnn_status_t MKLDNN_API mkldnn_softmax_forward_desc_init (
+    mkldnn_softmax_desc_t *softmax_desc, mkldnn_prop_kind_t prop_kind,
+    const mkldnn_memory_desc_t *data_desc, int softmax_axis );
 
 /** Initializes a @p softmax_desc for backward propagation using memory
  * descriptors @p diff_desc and @p data_desc.
@@ -1099,10 +1099,10 @@ mkldnn_status_t MKLDNN_API mkldnn_softmax_forward_desc_init(
  * Outputs:
  *  - diff_src (#mkldnn_query_diff_src_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_softmax_backward_desc_init(
-        mkldnn_softmax_desc_t *softmax_desc,
-        const mkldnn_memory_desc_t *diff_desc,
-        const mkldnn_memory_desc_t *data_desc, int softmax_axis);
+mkldnn_status_t MKLDNN_API mkldnn_softmax_backward_desc_init (
+    mkldnn_softmax_desc_t *softmax_desc,
+    const mkldnn_memory_desc_t *diff_desc,
+    const mkldnn_memory_desc_t *data_desc, int softmax_axis );
 
 /** @} */
 
@@ -1148,12 +1148,12 @@ mkldnn_status_t MKLDNN_API mkldnn_softmax_backward_desc_init(
  *      if @p alg_kind = #mkldnn_pooling_max and
  *      @p prop_kind = #mkldnn_forward_training
  */
-mkldnn_status_t MKLDNN_API mkldnn_pooling_forward_desc_init(
-        mkldnn_pooling_desc_t *pool_desc, mkldnn_prop_kind_t prop_kind,
-        mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *src_desc,
-        const mkldnn_memory_desc_t *dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t kernel, const mkldnn_dims_t padding_l,
-        const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind);
+mkldnn_status_t MKLDNN_API mkldnn_pooling_forward_desc_init (
+    mkldnn_pooling_desc_t *pool_desc, mkldnn_prop_kind_t prop_kind,
+    mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *src_desc,
+    const mkldnn_memory_desc_t *dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t kernel, const mkldnn_dims_t padding_l,
+    const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind );
 
 /** Initializes a pooling descriptor @p pool_desc for backward propagation
  * using @p alg_kind, memory descriptors, and pooling parameters in the spatial
@@ -1170,12 +1170,12 @@ mkldnn_status_t MKLDNN_API mkldnn_pooling_forward_desc_init(
  * Outputs:
  *  - diff_src (#mkldnn_query_diff_src_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_pooling_backward_desc_init(
-        mkldnn_pooling_desc_t *pool_desc, mkldnn_alg_kind_t alg_kind,
-        const mkldnn_memory_desc_t *diff_src_desc,
-        const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
-        const mkldnn_dims_t kernel, const mkldnn_dims_t padding_l,
-        const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind);
+mkldnn_status_t MKLDNN_API mkldnn_pooling_backward_desc_init (
+    mkldnn_pooling_desc_t *pool_desc, mkldnn_alg_kind_t alg_kind,
+    const mkldnn_memory_desc_t *diff_src_desc,
+    const mkldnn_memory_desc_t *diff_dst_desc, const mkldnn_dims_t strides,
+    const mkldnn_dims_t kernel, const mkldnn_dims_t padding_l,
+    const mkldnn_dims_t padding_r, mkldnn_padding_kind_t padding_kind );
 
 /** @} */
 
@@ -1223,10 +1223,10 @@ mkldnn_status_t MKLDNN_API mkldnn_pooling_backward_desc_init(
  *  - workspace (#mkldnn_query_workspace_md, 0),
  *      if the underlying implementation requires
  */
-mkldnn_status_t MKLDNN_API mkldnn_lrn_forward_desc_init(
-        mkldnn_lrn_desc_t *lrn_desc, mkldnn_prop_kind_t prop_kind,
-        mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *data_desc,
-        mkldnn_dim_t local_size, float alpha, float beta, float k);
+mkldnn_status_t MKLDNN_API mkldnn_lrn_forward_desc_init (
+    mkldnn_lrn_desc_t *lrn_desc, mkldnn_prop_kind_t prop_kind,
+    mkldnn_alg_kind_t alg_kind, const mkldnn_memory_desc_t *data_desc,
+    mkldnn_dim_t local_size, float alpha, float beta, float k );
 
 /** Initializes an @p lrn_desc for backward propagation using @p alg_kind,
  * memory descriptors @p data_desc and @p diff_data_desc, and regularization
@@ -1241,11 +1241,11 @@ mkldnn_status_t MKLDNN_API mkldnn_lrn_forward_desc_init(
  * Outputs:
  *  - diff_src (#mkldnn_query_diff_src_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_lrn_backward_desc_init(
-        mkldnn_lrn_desc_t *lrn_desc, mkldnn_alg_kind_t alg_kind,
-        const mkldnn_memory_desc_t *diff_data_desc,
-        const mkldnn_memory_desc_t *data_desc, mkldnn_dim_t local_size,
-        float alpha, float beta, float k);
+mkldnn_status_t MKLDNN_API mkldnn_lrn_backward_desc_init (
+    mkldnn_lrn_desc_t *lrn_desc, mkldnn_alg_kind_t alg_kind,
+    const mkldnn_memory_desc_t *diff_data_desc,
+    const mkldnn_memory_desc_t *data_desc, mkldnn_dim_t local_size,
+    float alpha, float beta, float k );
 
 /** @} */
 
@@ -1309,10 +1309,10 @@ mkldnn_status_t MKLDNN_API mkldnn_lrn_backward_desc_init(
  *
  * @sa mkldnn_batch_normalization_desc_t
  */
-mkldnn_status_t MKLDNN_API mkldnn_batch_normalization_forward_desc_init(
-        mkldnn_batch_normalization_desc_t *bnrm_desc,
-        mkldnn_prop_kind_t prop_kind, const mkldnn_memory_desc_t *data_desc,
-        float epsilon, unsigned flags);
+mkldnn_status_t MKLDNN_API mkldnn_batch_normalization_forward_desc_init (
+    mkldnn_batch_normalization_desc_t *bnrm_desc,
+    mkldnn_prop_kind_t prop_kind, const mkldnn_memory_desc_t *data_desc,
+    float epsilon, unsigned flags );
 
 /** Initializes a batch normalization descriptor @p bnrm_desc for backward
  * propagation with respect to data and scale-shift parameters using memory
@@ -1341,12 +1341,12 @@ mkldnn_status_t MKLDNN_API mkldnn_batch_normalization_forward_desc_init(
  *
  * @sa mkldnn_batch_normalization_desc_t
  */
-mkldnn_status_t MKLDNN_API mkldnn_batch_normalization_backward_desc_init(
-        mkldnn_batch_normalization_desc_t *bnrm_desc,
-        mkldnn_prop_kind_t prop_kind,
-        const mkldnn_memory_desc_t *diff_data_desc,
-        const mkldnn_memory_desc_t *data_desc,
-        float epsilon, unsigned flags);
+mkldnn_status_t MKLDNN_API mkldnn_batch_normalization_backward_desc_init (
+    mkldnn_batch_normalization_desc_t *bnrm_desc,
+    mkldnn_prop_kind_t prop_kind,
+    const mkldnn_memory_desc_t *diff_data_desc,
+    const mkldnn_memory_desc_t *data_desc,
+    float epsilon, unsigned flags );
 
 /** @} */
 
@@ -1379,12 +1379,12 @@ mkldnn_status_t MKLDNN_API mkldnn_batch_normalization_backward_desc_init(
  * Outputs:
  *  - dst (#mkldnn_query_dst_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_inner_product_forward_desc_init(
-        mkldnn_inner_product_desc_t *ip_desc, mkldnn_prop_kind_t prop_kind,
-        const mkldnn_memory_desc_t *src_desc,
-        const mkldnn_memory_desc_t *weights_desc,
-        const mkldnn_memory_desc_t *bias_desc,
-        const mkldnn_memory_desc_t *dst_desc);
+mkldnn_status_t MKLDNN_API mkldnn_inner_product_forward_desc_init (
+    mkldnn_inner_product_desc_t *ip_desc, mkldnn_prop_kind_t prop_kind,
+    const mkldnn_memory_desc_t *src_desc,
+    const mkldnn_memory_desc_t *weights_desc,
+    const mkldnn_memory_desc_t *bias_desc,
+    const mkldnn_memory_desc_t *dst_desc );
 
 /** Initializes an inner product descriptor @p ip_desc for backward propagation
  * with respect to data using memory descriptors.
@@ -1399,11 +1399,11 @@ mkldnn_status_t MKLDNN_API mkldnn_inner_product_forward_desc_init(
  * Outputs:
  *  - diff_src (#mkldnn_query_diff_src_md, 0)
  */
-mkldnn_status_t MKLDNN_API mkldnn_inner_product_backward_data_desc_init(
-        mkldnn_inner_product_desc_t *ip_desc,
-        const mkldnn_memory_desc_t *diff_src_desc,
-        const mkldnn_memory_desc_t *weights_desc,
-        const mkldnn_memory_desc_t *diff_dst_desc);
+mkldnn_status_t MKLDNN_API mkldnn_inner_product_backward_data_desc_init (
+    mkldnn_inner_product_desc_t *ip_desc,
+    const mkldnn_memory_desc_t *diff_src_desc,
+    const mkldnn_memory_desc_t *weights_desc,
+    const mkldnn_memory_desc_t *diff_dst_desc );
 
 /** Initializes an inner product descriptor @p ip_desc for backward propagation
  * with respect to weights using memory descriptors.
@@ -1419,12 +1419,12 @@ mkldnn_status_t MKLDNN_API mkldnn_inner_product_backward_data_desc_init(
  *  - diff_weights (#mkldnn_query_diff_weights_md, 0)
  *  - diff_bias (#mkldnn_query_diff_weights_md, 1), if created with bias
  */
-mkldnn_status_t MKLDNN_API mkldnn_inner_product_backward_weights_desc_init(
-        mkldnn_inner_product_desc_t *ip_desc,
-        const mkldnn_memory_desc_t *src_desc,
-        const mkldnn_memory_desc_t *diff_weights_desc,
-        const mkldnn_memory_desc_t *diff_bias_desc,
-        const mkldnn_memory_desc_t *diff_dst_desc);
+mkldnn_status_t MKLDNN_API mkldnn_inner_product_backward_weights_desc_init (
+    mkldnn_inner_product_desc_t *ip_desc,
+    const mkldnn_memory_desc_t *src_desc,
+    const mkldnn_memory_desc_t *diff_weights_desc,
+    const mkldnn_memory_desc_t *diff_bias_desc,
+    const mkldnn_memory_desc_t *diff_dst_desc );
 
 /** @} */
 
@@ -1441,18 +1441,18 @@ mkldnn_status_t MKLDNN_API mkldnn_inner_product_backward_weights_desc_init(
  *  @p f (possible values are #mkldnn_eltwise_relu and
  *   #mkldnn_eltwise_tanh), @p flags, @p alpha, and @p clipping.
  */
-mkldnn_status_t MKLDNN_API mkldnn_rnn_cell_desc_init(
-        mkldnn_rnn_cell_desc_t *rnn_cell_desc,
-        mkldnn_alg_kind_t kind, mkldnn_alg_kind_t f,
-        unsigned int flags, float alpha, float clipping);
+mkldnn_status_t MKLDNN_API mkldnn_rnn_cell_desc_init (
+    mkldnn_rnn_cell_desc_t *rnn_cell_desc,
+    mkldnn_alg_kind_t kind, mkldnn_alg_kind_t f,
+    unsigned int flags, float alpha, float clipping );
 
 /** Returns the number of gates of a particular @p rnn_cell_desc. */
-int MKLDNN_API mkldnn_rnn_cell_get_gates_count(
-        const mkldnn_rnn_cell_desc_t *rnn_cell_desc);
+int MKLDNN_API mkldnn_rnn_cell_get_gates_count (
+    const mkldnn_rnn_cell_desc_t *rnn_cell_desc );
 
 /** Returns the number of states of a particular @p rnn_cell_desc. */
-int MKLDNN_API mkldnn_rnn_cell_get_states_count(
-        const mkldnn_rnn_cell_desc_t *rnn_cell_desc);
+int MKLDNN_API mkldnn_rnn_cell_get_states_count (
+    const mkldnn_rnn_cell_desc_t *rnn_cell_desc );
 
 /** Sets quantization @p scale and @p shift for RNN data tensors.
  *  For performance reasons, low precision configuration of RNN primitive
@@ -1482,8 +1482,8 @@ int MKLDNN_API mkldnn_rnn_cell_get_states_count(
  *      Quantization scale and shift are common for src_layer, src_iter,
  *      dst_iter and dst_layer.
  */
-mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_set_rnn_data_qparams(
-        mkldnn_primitive_attr_t attr, const float scale, const float shift);
+mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_set_rnn_data_qparams (
+    mkldnn_primitive_attr_t attr, const float scale, const float shift );
 
 /** Sets quantization scales @p weights_scales for RNN weights tensors.
  * Low precision configuration of RNN primitive expects input weights to have
@@ -1529,8 +1529,8 @@ mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_set_rnn_data_qparams(
  *      \f[count = \prod\limits_{d \in mask} output.dims[d]\f]
  */
 mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_set_rnn_weights_qparams (
-        mkldnn_primitive_attr_t attr, mkldnn_dim_t count, int mask,
-                const float *weights_scales);
+    mkldnn_primitive_attr_t attr, mkldnn_dim_t count, int mask,
+    const float *weights_scales );
 
 /** Initializes a rnn descriptor @p rnn_desc for forward propagation
  * using @p prop_kind, @p rnn_cell_desc, @p direction, and memory descriptors.
@@ -1557,17 +1557,17 @@ mkldnn_status_t MKLDNN_API mkldnn_primitive_attr_set_rnn_weights_qparams (
  *  - workspace (#mkldnn_query_workspace_md, 0),
  *      if @p prop_kind equals #mkldnn_forward_training
  */
-mkldnn_status_t MKLDNN_API mkldnn_rnn_forward_desc_init(
-        mkldnn_rnn_desc_t *rnn_desc, mkldnn_prop_kind_t prop_kind,
-        const mkldnn_rnn_cell_desc_t *rnn_cell_desc,
-        const mkldnn_rnn_direction_t direction,
-        const mkldnn_memory_desc_t *src_layer_desc,
-        const mkldnn_memory_desc_t *src_iter_desc,
-        const mkldnn_memory_desc_t *weights_layer_desc,
-        const mkldnn_memory_desc_t *weights_iter_desc,
-        const mkldnn_memory_desc_t *bias_desc,
-        const mkldnn_memory_desc_t *dst_layer_desc,
-        const mkldnn_memory_desc_t *dst_iter_desc);
+mkldnn_status_t MKLDNN_API mkldnn_rnn_forward_desc_init (
+    mkldnn_rnn_desc_t *rnn_desc, mkldnn_prop_kind_t prop_kind,
+    const mkldnn_rnn_cell_desc_t *rnn_cell_desc,
+    const mkldnn_rnn_direction_t direction,
+    const mkldnn_memory_desc_t *src_layer_desc,
+    const mkldnn_memory_desc_t *src_iter_desc,
+    const mkldnn_memory_desc_t *weights_layer_desc,
+    const mkldnn_memory_desc_t *weights_iter_desc,
+    const mkldnn_memory_desc_t *bias_desc,
+    const mkldnn_memory_desc_t *dst_layer_desc,
+    const mkldnn_memory_desc_t *dst_iter_desc );
 
 /** Initializes a rnn descriptor @p rnn_desc for backward propagation
  * using @p prop_kind, @p rnn_cell_desc, @p direction, and memory descriptors.
@@ -1600,24 +1600,24 @@ mkldnn_status_t MKLDNN_API mkldnn_rnn_forward_desc_init(
  *  - diff_weights_iter (#mkldnn_query_diff_weights_md, 1)
  *  - diff_bias (#mkldnn_query_diff_weights_md, 2), if used
  */
-mkldnn_status_t MKLDNN_API mkldnn_rnn_backward_desc_init(
-        mkldnn_rnn_desc_t *rnn_desc, mkldnn_prop_kind_t prop_kind,
-        const mkldnn_rnn_cell_desc_t *rnn_cell_desc,
-        const mkldnn_rnn_direction_t direction,
-        const mkldnn_memory_desc_t *src_layer_desc,
-        const mkldnn_memory_desc_t *src_iter_desc,
-        const mkldnn_memory_desc_t *weights_layer_desc,
-        const mkldnn_memory_desc_t *weights_iter_desc,
-        const mkldnn_memory_desc_t *bias_desc,
-        const mkldnn_memory_desc_t *dst_layer_desc,
-        const mkldnn_memory_desc_t *dst_iter_desc,
-        const mkldnn_memory_desc_t *diff_src_layer_desc,
-        const mkldnn_memory_desc_t *diff_src_iter_desc,
-        const mkldnn_memory_desc_t *diff_weights_layer_desc,
-        const mkldnn_memory_desc_t *diff_weights_iter_desc,
-        const mkldnn_memory_desc_t *diff_bias_desc,
-        const mkldnn_memory_desc_t *diff_dst_layer,
-        const mkldnn_memory_desc_t *diff_dst_iter_desc);
+mkldnn_status_t MKLDNN_API mkldnn_rnn_backward_desc_init (
+    mkldnn_rnn_desc_t *rnn_desc, mkldnn_prop_kind_t prop_kind,
+    const mkldnn_rnn_cell_desc_t *rnn_cell_desc,
+    const mkldnn_rnn_direction_t direction,
+    const mkldnn_memory_desc_t *src_layer_desc,
+    const mkldnn_memory_desc_t *src_iter_desc,
+    const mkldnn_memory_desc_t *weights_layer_desc,
+    const mkldnn_memory_desc_t *weights_iter_desc,
+    const mkldnn_memory_desc_t *bias_desc,
+    const mkldnn_memory_desc_t *dst_layer_desc,
+    const mkldnn_memory_desc_t *dst_iter_desc,
+    const mkldnn_memory_desc_t *diff_src_layer_desc,
+    const mkldnn_memory_desc_t *diff_src_iter_desc,
+    const mkldnn_memory_desc_t *diff_weights_layer_desc,
+    const mkldnn_memory_desc_t *diff_weights_iter_desc,
+    const mkldnn_memory_desc_t *diff_bias_desc,
+    const mkldnn_memory_desc_t *diff_dst_layer,
+    const mkldnn_memory_desc_t *diff_dst_iter_desc );
 
 /** @} */
 
@@ -1627,18 +1627,18 @@ mkldnn_status_t MKLDNN_API mkldnn_rnn_backward_desc_init(
  * @{ */
 
 /** Returns the number of engines of a particular @p kind. */
-size_t MKLDNN_API mkldnn_engine_get_count(mkldnn_engine_kind_t kind);
+size_t MKLDNN_API mkldnn_engine_get_count ( mkldnn_engine_kind_t kind );
 
 /** Creates an @p engine of particular @p kind and @p index. */
-mkldnn_status_t MKLDNN_API mkldnn_engine_create(mkldnn_engine_t *engine,
-        mkldnn_engine_kind_t kind, size_t index);
+mkldnn_status_t MKLDNN_API mkldnn_engine_create ( mkldnn_engine_t *engine,
+        mkldnn_engine_kind_t kind, size_t index );
 
 /** Returns the kind of an @p engine. */
-mkldnn_status_t MKLDNN_API mkldnn_engine_get_kind(mkldnn_engine_t engine,
-        mkldnn_engine_kind_t *kind);
+mkldnn_status_t MKLDNN_API mkldnn_engine_get_kind ( mkldnn_engine_t engine,
+        mkldnn_engine_kind_t *kind );
 
 /** Destroys an @p engine. */
-mkldnn_status_t MKLDNN_API mkldnn_engine_destroy(mkldnn_engine_t engine);
+mkldnn_status_t MKLDNN_API mkldnn_engine_destroy ( mkldnn_engine_t engine );
 
 /** @} */
 
@@ -1646,11 +1646,11 @@ mkldnn_status_t MKLDNN_API mkldnn_engine_destroy(mkldnn_engine_t engine);
  * @{ */
 
 /** Creates an execution @p stream for @p engine and with @p flags. */
-mkldnn_status_t MKLDNN_API mkldnn_stream_create(mkldnn_stream_t *stream,
-        mkldnn_engine_t engine, unsigned flags);
+mkldnn_status_t MKLDNN_API mkldnn_stream_create ( mkldnn_stream_t *stream,
+        mkldnn_engine_t engine, unsigned flags );
 
 /** Destroys an execution @p stream. */
-mkldnn_status_t MKLDNN_API mkldnn_stream_destroy(mkldnn_stream_t stream);
+mkldnn_status_t MKLDNN_API mkldnn_stream_destroy ( mkldnn_stream_t stream );
 
 /** @} */
 
@@ -1666,7 +1666,7 @@ mkldnn_status_t MKLDNN_API mkldnn_stream_destroy(mkldnn_stream_t stream);
  * @note
  *     Dumping information might affect performance.
  *     This setting overrides the MKLDNN_VERBOSE environment variable. */
-mkldnn_status_t MKLDNN_API mkldnn_set_verbose(int level);
+mkldnn_status_t MKLDNN_API mkldnn_set_verbose ( int level );
 
 /** Enables or disables dumping of JIT-generated code.
  * The enable parameter can be:
@@ -1675,7 +1675,7 @@ mkldnn_status_t MKLDNN_API mkldnn_set_verbose(int level);
  *
  * @note
  *     This setting overrides the MKLDNN_JIT_DUMP environment variable. */
-mkldnn_status_t MKLDNN_API mkldnn_set_jit_dump(int enable);
+mkldnn_status_t MKLDNN_API mkldnn_set_jit_dump ( int enable );
 
 /** Gets library version information.
  * Version information includes:
@@ -1710,12 +1710,12 @@ const mkldnn_version_t MKLDNN_API *mkldnn_version();
  *      because it returns mkldnn_status_t for error handling.
  *      XERBLA is not supported: no error message will be printed
  *      in case of incorrect parameters. */
-mkldnn_status_t MKLDNN_API mkldnn_sgemm(
-        const char *transa, const char *transb,
-        const mkldnn_dim_t *M, const mkldnn_dim_t *N, const mkldnn_dim_t *K,
-        const float *alpha, const float *A, const mkldnn_dim_t *lda,
-        const float *B, const mkldnn_dim_t *ldb,
-        const float *beta, float *C, const mkldnn_dim_t *ldc);
+mkldnn_status_t MKLDNN_API mkldnn_sgemm (
+    const char *transa, const char *transb,
+    const mkldnn_dim_t *M, const mkldnn_dim_t *N, const mkldnn_dim_t *K,
+    const float *alpha, const float *A, const mkldnn_dim_t *lda,
+    const float *B, const mkldnn_dim_t *ldb,
+    const float *beta, float *C, const mkldnn_dim_t *ldc );
 
 /** gemm_s8u8s32 and gemm_s8s8s32 perform a matrix-matrix multiplication
  * operation and add the result to a scalar-matrix product. For the final
@@ -1743,23 +1743,23 @@ mkldnn_status_t MKLDNN_API mkldnn_sgemm(
  *      because it returns mkldnn_status_t for error handling.
  *      XERBLA is not supported: no error message will be printed
  *      in case of incorrect parameters. */
-mkldnn_status_t MKLDNN_API mkldnn_gemm_s8u8s32(
-        const char *transa, const char *transb, const char *offsetc,
-        const mkldnn_dim_t *M, const mkldnn_dim_t *N, const mkldnn_dim_t *K,
-        const float *alpha,
-        const int8_t *A, const mkldnn_dim_t *lda, const int8_t *ao,
-        const uint8_t *B, const mkldnn_dim_t *ldb, const int8_t *bo,
-        const float *beta,
-        int32_t *c, const mkldnn_dim_t *ldc, const int32_t *co);
+mkldnn_status_t MKLDNN_API mkldnn_gemm_s8u8s32 (
+    const char *transa, const char *transb, const char *offsetc,
+    const mkldnn_dim_t *M, const mkldnn_dim_t *N, const mkldnn_dim_t *K,
+    const float *alpha,
+    const int8_t *A, const mkldnn_dim_t *lda, const int8_t *ao,
+    const uint8_t *B, const mkldnn_dim_t *ldb, const int8_t *bo,
+    const float *beta,
+    int32_t *c, const mkldnn_dim_t *ldc, const int32_t *co );
 
-mkldnn_status_t MKLDNN_API mkldnn_gemm_s8s8s32(
-        const char *transa, const char *transb, const char *offsetc,
-        const mkldnn_dim_t *M, const mkldnn_dim_t *N, const mkldnn_dim_t *K,
-        const float *alpha,
-        const int8_t *A, const mkldnn_dim_t *lda, const int8_t *ao,
-        const int8_t *B, const mkldnn_dim_t *ldb, const int8_t *bo,
-        const float *beta,
-        int32_t *c, const mkldnn_dim_t *ldc, const int32_t *co);
+mkldnn_status_t MKLDNN_API mkldnn_gemm_s8s8s32 (
+    const char *transa, const char *transb, const char *offsetc,
+    const mkldnn_dim_t *M, const mkldnn_dim_t *N, const mkldnn_dim_t *K,
+    const float *alpha,
+    const int8_t *A, const mkldnn_dim_t *lda, const int8_t *ao,
+    const int8_t *B, const mkldnn_dim_t *ldb, const int8_t *bo,
+    const float *beta,
+    int32_t *c, const mkldnn_dim_t *ldc, const int32_t *co );
 /** @} */
 
 /** @} */

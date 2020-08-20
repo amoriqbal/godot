@@ -19,8 +19,7 @@
 extern "C" {
 #endif
 
-typedef enum
-{
+typedef enum {
     SUBMVREF_NORMAL,
     SUBMVREF_LEFT_ZED,
     SUBMVREF_ABOVE_ZED,
@@ -38,7 +37,7 @@ extern const int vp8_mbsplit_count [VP8_NUMMBSPLITS];    /* # of subsets */
 
 extern const vp8_prob vp8_mbsplit_probs [VP8_NUMMBSPLITS-1];
 
-extern int vp8_mv_cont(const int_mv *l, const int_mv *a);
+extern int vp8_mv_cont ( const int_mv *l, const int_mv *a );
 #define SUBMVREF_COUNT 5
 extern const vp8_prob vp8_sub_mv_ref_prob2 [SUBMVREF_COUNT][VP8_SUBMVREFS-1];
 
@@ -77,9 +76,9 @@ extern const vp8_prob vp8_kf_bmode_prob[VP8_BINTRAMODES][VP8_BINTRAMODES]
 extern const vp8_prob vp8_kf_uv_mode_prob[VP8_UV_MODES-1];
 extern const vp8_prob vp8_kf_ymode_prob[VP8_YMODES-1];
 
-void vp8_init_mbmode_probs(VP8_COMMON *x);
-void vp8_default_bmode_probs(vp8_prob dest [VP8_BINTRAMODES-1]);
-void vp8_kf_default_bmode_probs(vp8_prob dest [VP8_BINTRAMODES] [VP8_BINTRAMODES] [VP8_BINTRAMODES-1]);
+void vp8_init_mbmode_probs ( VP8_COMMON *x );
+void vp8_default_bmode_probs ( vp8_prob dest [VP8_BINTRAMODES-1] );
+void vp8_kf_default_bmode_probs ( vp8_prob dest [VP8_BINTRAMODES] [VP8_BINTRAMODES] [VP8_BINTRAMODES-1] );
 
 #ifdef __cplusplus
 }  // extern "C"

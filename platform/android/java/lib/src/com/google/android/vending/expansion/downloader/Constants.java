@@ -23,7 +23,8 @@ import java.io.File;
  * Contains the internal constants that are used in the download manager.
  * As a general rule, modifying these constants should be done with care.
  */
-public class Constants {
+public class Constants
+{
     /** Tag used for debugging/logging */
     public static final String TAG = "LVLDL";
 
@@ -31,7 +32,7 @@ public class Constants {
      * Expansion path where we store obb files
      */
     public static final String EXP_PATH = File.separator + "Android"
-            + File.separator + "obb" + File.separator;
+                                          + File.separator + "obb" + File.separator;
 
     /** The intent that gets sent when the service must wake up for a retry */
     public static final String ACTION_RETRY = "android.intent.action.DOWNLOAD_WAKEUP";

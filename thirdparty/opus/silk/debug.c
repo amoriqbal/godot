@@ -42,23 +42,23 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <sys/time.h>
 #endif
 
-unsigned long silk_GetHighResolutionTime(void) /* O  time in usec*/
+unsigned long silk_GetHighResolutionTime ( void ) /* O  time in usec*/
 {
     /* Returns a time counter in microsec   */
     /* the resolution is platform dependent */
     /* but is typically 1.62 us resolution  */
     LARGE_INTEGER lpPerformanceCount;
     LARGE_INTEGER lpFrequency;
-    QueryPerformanceCounter(&lpPerformanceCount);
-    QueryPerformanceFrequency(&lpFrequency);
-    return (unsigned long)((1000000*(lpPerformanceCount.QuadPart)) / lpFrequency.QuadPart);
+    QueryPerformanceCounter ( &lpPerformanceCount );
+    QueryPerformanceFrequency ( &lpFrequency );
+    return ( unsigned long ) ( ( 1000000* ( lpPerformanceCount.QuadPart ) ) / lpFrequency.QuadPart );
 }
 #else   /* Linux or Mac*/
-unsigned long GetHighResolutionTime(void) /* O  time in usec*/
+unsigned long GetHighResolutionTime ( void ) /* O  time in usec*/
 {
     struct timeval tv;
-    gettimeofday(&tv, 0);
-    return((tv.tv_sec*1000000)+(tv.tv_usec));
+    gettimeofday ( &tv, 0 );
+    return ( ( tv.tv_sec*1000000 )+ ( tv.tv_usec ) );
 }
 #endif
 
@@ -77,10 +77,9 @@ opus_int64     silk_Timer_max[silk_NUM_TIMERS_MAX];
 opus_int64     silk_Timer_depth[silk_NUM_TIMERS_MAX];
 
 #ifdef WIN32
-void silk_TimerSave(char *file_name)
+void silk_TimerSave ( char *file_name )
 {
-    if( silk_Timer_nTimers > 0 )
-    {
+    if ( silk_Timer_nTimers > 0 ) {
         int k;
         FILE *fp;
         LARGE_INTEGER lpFrequency;
@@ -88,75 +87,74 @@ void silk_TimerSave(char *file_name)
         int del = 0x7FFFFFFF;
         double avg, sum_avg;
         /* estimate overhead of calling performance counters */
-        for( k = 0; k < 1000; k++ ) {
-            QueryPerformanceCounter(&lpPerformanceCount1);
-            QueryPerformanceCounter(&lpPerformanceCount2);
+        for ( k = 0; k < 1000; k++ ) {
+            QueryPerformanceCounter ( &lpPerformanceCount1 );
+            QueryPerformanceCounter ( &lpPerformanceCount2 );
             lpPerformanceCount2.QuadPart -= lpPerformanceCount1.QuadPart;
-            if( (int)lpPerformanceCount2.LowPart < del )
+            if ( ( int ) lpPerformanceCount2.LowPart < del ) {
                 del = lpPerformanceCount2.LowPart;
+            }
         }
-        QueryPerformanceFrequency(&lpFrequency);
+        QueryPerformanceFrequency ( &lpFrequency );
         /* print results to file */
         sum_avg = 0.0f;
-        for( k = 0; k < silk_Timer_nTimers; k++ ) {
-            if (silk_Timer_depth[k] == 0) {
-                sum_avg += (1e6 * silk_Timer_sum[k] / silk_Timer_cnt[k] - del) / lpFrequency.QuadPart * silk_Timer_cnt[k];
+        for ( k = 0; k < silk_Timer_nTimers; k++ ) {
+            if ( silk_Timer_depth[k] == 0 ) {
+                sum_avg += ( 1e6 * silk_Timer_sum[k] / silk_Timer_cnt[k] - del ) / lpFrequency.QuadPart * silk_Timer_cnt[k];
             }
         }
-        fp = fopen(file_name, "w");
-        fprintf(fp, "                                min         avg     %%         max      count\n");
-        for( k = 0; k < silk_Timer_nTimers; k++ ) {
-            if (silk_Timer_depth[k] == 0) {
-                fprintf(fp, "%-28s", silk_Timer_tags[k]);
-            } else if (silk_Timer_depth[k] == 1) {
-                fprintf(fp, " %-27s", silk_Timer_tags[k]);
-            } else if (silk_Timer_depth[k] == 2) {
-                fprintf(fp, "  %-26s", silk_Timer_tags[k]);
-            } else if (silk_Timer_depth[k] == 3) {
-                fprintf(fp, "   %-25s", silk_Timer_tags[k]);
+        fp = fopen ( file_name, "w" );
+        fprintf ( fp, "                                min         avg     %%         max      count\n" );
+        for ( k = 0; k < silk_Timer_nTimers; k++ ) {
+            if ( silk_Timer_depth[k] == 0 ) {
+                fprintf ( fp, "%-28s", silk_Timer_tags[k] );
+            } else if ( silk_Timer_depth[k] == 1 ) {
+                fprintf ( fp, " %-27s", silk_Timer_tags[k] );
+            } else if ( silk_Timer_depth[k] == 2 ) {
+                fprintf ( fp, "  %-26s", silk_Timer_tags[k] );
+            } else if ( silk_Timer_depth[k] == 3 ) {
+                fprintf ( fp, "   %-25s", silk_Timer_tags[k] );
             } else {
-                fprintf(fp, "    %-24s", silk_Timer_tags[k]);
+                fprintf ( fp, "    %-24s", silk_Timer_tags[k] );
             }
-            avg = (1e6 * silk_Timer_sum[k] / silk_Timer_cnt[k] - del) / lpFrequency.QuadPart;
-            fprintf(fp, "%8.2f", (1e6 * (silk_max_64(silk_Timer_min[k] - del, 0))) / lpFrequency.QuadPart);
-            fprintf(fp, "%12.2f %6.2f", avg, 100.0 * avg / sum_avg * silk_Timer_cnt[k]);
-            fprintf(fp, "%12.2f", (1e6 * (silk_max_64(silk_Timer_max[k] - del, 0))) / lpFrequency.QuadPart);
-            fprintf(fp, "%10d\n", silk_Timer_cnt[k]);
+            avg = ( 1e6 * silk_Timer_sum[k] / silk_Timer_cnt[k] - del ) / lpFrequency.QuadPart;
+            fprintf ( fp, "%8.2f", ( 1e6 * ( silk_max_64 ( silk_Timer_min[k] - del, 0 ) ) ) / lpFrequency.QuadPart );
+            fprintf ( fp, "%12.2f %6.2f", avg, 100.0 * avg / sum_avg * silk_Timer_cnt[k] );
+            fprintf ( fp, "%12.2f", ( 1e6 * ( silk_max_64 ( silk_Timer_max[k] - del, 0 ) ) ) / lpFrequency.QuadPart );
+            fprintf ( fp, "%10d\n", silk_Timer_cnt[k] );
         }
-        fprintf(fp, "                                microseconds\n");
-        fclose(fp);
+        fprintf ( fp, "                                microseconds\n" );
+        fclose ( fp );
     }
 }
 #else
-void silk_TimerSave(char *file_name)
+void silk_TimerSave ( char *file_name )
 {
-    if( silk_Timer_nTimers > 0 )
-    {
+    if ( silk_Timer_nTimers > 0 ) {
         int k;
         FILE *fp;
         /* print results to file */
-        fp = fopen(file_name, "w");
-        fprintf(fp, "                                min         avg         max      count\n");
-        for( k = 0; k < silk_Timer_nTimers; k++ )
-        {
-            if (silk_Timer_depth[k] == 0) {
-                fprintf(fp, "%-28s", silk_Timer_tags[k]);
-            } else if (silk_Timer_depth[k] == 1) {
-                fprintf(fp, " %-27s", silk_Timer_tags[k]);
-            } else if (silk_Timer_depth[k] == 2) {
-                fprintf(fp, "  %-26s", silk_Timer_tags[k]);
-            } else if (silk_Timer_depth[k] == 3) {
-                fprintf(fp, "   %-25s", silk_Timer_tags[k]);
+        fp = fopen ( file_name, "w" );
+        fprintf ( fp, "                                min         avg         max      count\n" );
+        for ( k = 0; k < silk_Timer_nTimers; k++ ) {
+            if ( silk_Timer_depth[k] == 0 ) {
+                fprintf ( fp, "%-28s", silk_Timer_tags[k] );
+            } else if ( silk_Timer_depth[k] == 1 ) {
+                fprintf ( fp, " %-27s", silk_Timer_tags[k] );
+            } else if ( silk_Timer_depth[k] == 2 ) {
+                fprintf ( fp, "  %-26s", silk_Timer_tags[k] );
+            } else if ( silk_Timer_depth[k] == 3 ) {
+                fprintf ( fp, "   %-25s", silk_Timer_tags[k] );
             } else {
-                fprintf(fp, "    %-24s", silk_Timer_tags[k]);
+                fprintf ( fp, "    %-24s", silk_Timer_tags[k] );
             }
-            fprintf(fp, "%d ", silk_Timer_min[k]);
-            fprintf(fp, "%f ", (double)silk_Timer_sum[k] / (double)silk_Timer_cnt[k]);
-            fprintf(fp, "%d ", silk_Timer_max[k]);
-            fprintf(fp, "%10d\n", silk_Timer_cnt[k]);
+            fprintf ( fp, "%d ", silk_Timer_min[k] );
+            fprintf ( fp, "%f ", ( double ) silk_Timer_sum[k] / ( double ) silk_Timer_cnt[k] );
+            fprintf ( fp, "%d ", silk_Timer_max[k] );
+            fprintf ( fp, "%10d\n", silk_Timer_cnt[k] );
         }
-        fprintf(fp, "                                microseconds\n");
-        fclose(fp);
+        fprintf ( fp, "                                microseconds\n" );
+        fclose ( fp );
     }
 }
 #endif

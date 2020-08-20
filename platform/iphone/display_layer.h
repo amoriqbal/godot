@@ -33,16 +33,16 @@
 
 @protocol DisplayLayer <NSObject>
 
-- (void)renderDisplayLayer;
-- (void)initializeDisplayLayer;
-- (void)layoutDisplayLayer;
+- ( void ) renderDisplayLayer;
+- ( void ) initializeDisplayLayer;
+- ( void ) layoutDisplayLayer;
 
 @end
 
 // An ugly workaround for iOS simulator
 #if defined(TARGET_OS_SIMULATOR) && TARGET_OS_SIMULATOR
 #if defined(__IPHONE_13_0)
-API_AVAILABLE(ios(13.0))
+API_AVAILABLE ( ios ( 13.0 ) )
 @interface GodotMetalLayer : CAMetalLayer <DisplayLayer>
 #else
 @interface GodotMetalLayer : CALayer <DisplayLayer>
@@ -52,7 +52,7 @@ API_AVAILABLE(ios(13.0))
 #endif
 @end
 
-API_DEPRECATED("OpenGLES is deprecated", ios(2.0, 12.0))
+API_DEPRECATED ( "OpenGLES is deprecated", ios ( 2.0, 12.0 ) )
 @interface GodotOpenGLLayer : CAEAGLLayer <DisplayLayer>
 
 @end

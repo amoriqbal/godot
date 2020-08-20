@@ -27,7 +27,8 @@
 #define SQUISH_H
 
 //! All squish API functions live in this namespace.
-namespace squish {
+namespace squish
+{
 
 // -----------------------------------------------------------------------------
 
@@ -36,8 +37,7 @@ typedef unsigned char u8;
 
 // -----------------------------------------------------------------------------
 
-enum
-{
+enum {
     //! Use DXT1 compression.
     kDxt1 = ( 1 << 0 ),
 
@@ -113,7 +113,7 @@ enum
     { 0.2126f, 0.7152f, 0.0722f }. If non-NULL, the metric should point to a
     contiguous array of 3 floats.
 */
-void CompressMasked( u8 const* rgba, int mask, void* block, int flags, float* metric = 0 );
+void CompressMasked ( u8 const* rgba, int mask, void* block, int flags, float* metric = 0 );
 
 // -----------------------------------------------------------------------------
 
@@ -154,9 +154,9 @@ void CompressMasked( u8 const* rgba, int mask, void* block, int flags, float* me
     This method is an inline that calls CompressMasked with a mask of 0xffff,
     provided for compatibility with older versions of squish.
 */
-inline void Compress( u8 const* rgba, void* block, int flags, float* metric = 0 )
+inline void Compress ( u8 const* rgba, void* block, int flags, float* metric = 0 )
 {
-    CompressMasked( rgba, 0xffff, block, flags, metric );
+    CompressMasked ( rgba, 0xffff, block, flags, metric );
 }
 
 // -----------------------------------------------------------------------------
@@ -176,7 +176,7 @@ inline void Compress( u8 const* rgba, void* block, int flags, float* metric = 0 
     however, DXT1 will be used by default if none is specified. All other flags
     are ignored.
 */
-void Decompress( u8* rgba, void const* block, int flags );
+void Decompress ( u8* rgba, void const* block, int flags );
 
 // -----------------------------------------------------------------------------
 
@@ -194,7 +194,7 @@ void Decompress( u8* rgba, void const* block, int flags );
     function supports arbitrary size images by allowing the outer blocks to
     be only partially used.
 */
-int GetStorageRequirements( int width, int height, int flags );
+int GetStorageRequirements ( int width, int height, int flags );
 
 // -----------------------------------------------------------------------------
 
@@ -249,8 +249,8 @@ int GetStorageRequirements( int width, int height, int flags );
     Windows platform but for other platforms like MacOS X a different
     gamma value may be more suitable.
 */
-void CompressImage( u8 const* rgba, int width, int height, int pitch, void* blocks, int flags, float* metric = 0 );
-void CompressImage( u8 const* rgba, int width, int height, void* blocks, int flags, float* metric = 0 );
+void CompressImage ( u8 const* rgba, int width, int height, int pitch, void* blocks, int flags, float* metric = 0 );
+void CompressImage ( u8 const* rgba, int width, int height, void* blocks, int flags, float* metric = 0 );
 
 // -----------------------------------------------------------------------------
 
@@ -274,8 +274,8 @@ void CompressImage( u8 const* rgba, int width, int height, void* blocks, int fla
 
     Internally this function calls squish::Decompress for each block.
 */
-void DecompressImage( u8* rgba, int width, int height, int pitch, void const* blocks, int flags );
-void DecompressImage( u8* rgba, int width, int height, void const* blocks, int flags );
+void DecompressImage ( u8* rgba, int width, int height, int pitch, void const* blocks, int flags );
+void DecompressImage ( u8* rgba, int width, int height, void const* blocks, int flags );
 
 // -----------------------------------------------------------------------------
 
@@ -299,8 +299,8 @@ void DecompressImage( u8* rgba, int width, int height, void const* blocks, int f
 
     Internally this function calls squish::Decompress for each block.
 */
-void ComputeMSE(u8 const *rgba, int width, int height, int pitch, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE);
-void ComputeMSE(u8 const *rgba, int width, int height, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE);
+void ComputeMSE ( u8 const *rgba, int width, int height, int pitch, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE );
+void ComputeMSE ( u8 const *rgba, int width, int height, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE );
 
 // -----------------------------------------------------------------------------
 

@@ -3,6 +3,6 @@
 
 #include <dxgi1_2.h>
 
-HRESULT dyn_CreateDXGIFactory1(REFIID riid, void **ppFactory);
+HRESULT dyn_CreateDXGIFactory1 ( REFIID riid, void **ppFactory );
 
 #endif

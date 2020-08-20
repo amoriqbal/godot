@@ -40,11 +40,11 @@ POSSIBILITY OF SUCH DAMAGE.
 #define LOG2_INV_LPC_GAIN_LOW_THRES     8                   /* 2^8 = 24 dB LPC gain     */
 #define PITCH_DRIFT_FAC_Q16             655                 /* 0.01 in Q16              */
 
-void silk_PLC_Reset(
+void silk_PLC_Reset (
     silk_decoder_state                  *psDec              /* I/O Decoder state        */
 );
 
-void silk_PLC(
+void silk_PLC (
     silk_decoder_state                  *psDec,             /* I/O Decoder state        */
     silk_decoder_control                *psDecCtrl,         /* I/O Decoder control      */
     opus_int16                          frame[],            /* I/O  signal              */
@@ -52,7 +52,7 @@ void silk_PLC(
     int                                 arch                /* I Run-time architecture  */
 );
 
-void silk_PLC_glue_frames(
+void silk_PLC_glue_frames (
     silk_decoder_state                  *psDec,             /* I/O decoder state        */
     opus_int16                          frame[],            /* I/O signal               */
     opus_int                            length              /* I length of signal       */

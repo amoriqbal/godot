@@ -59,11 +59,13 @@ using std::runtime_error;
 /** FOR IMPORTER PLUGINS ONLY: Simple exception class to be thrown if an
  *  unrecoverable error occurs while importing. Loading APIs return
  *  NULL instead of a valid aiScene then.  */
-class DeadlyImportError : public runtime_error {
+class DeadlyImportError : public runtime_error
+{
 public:
     /** Constructor with arguments */
-    explicit DeadlyImportError( const std::string& errorText)
-    : runtime_error(errorText) {
+    explicit DeadlyImportError ( const std::string& errorText )
+        : runtime_error ( errorText )
+    {
         // empty
     }
 
@@ -78,7 +80,8 @@ typedef DeadlyImportError DeadlyExportError;
 // ---------------------------------------------------------------------------
 template <typename T>
 struct ExceptionSwallower   {
-    T operator ()() const {
+    T operator () () const
+    {
         return T();
     }
 };
@@ -86,7 +89,8 @@ struct ExceptionSwallower   {
 // ---------------------------------------------------------------------------
 template <typename T>
 struct ExceptionSwallower<T*>   {
-    T* operator ()() const {
+    T* operator () () const
+    {
         return nullptr;
     }
 };
@@ -94,14 +98,13 @@ struct ExceptionSwallower<T*>   {
 // ---------------------------------------------------------------------------
 template <>
 struct ExceptionSwallower<aiReturn> {
-    aiReturn operator ()() const {
+    aiReturn operator () () const
+    {
         try {
             throw;
-        }
-        catch (std::bad_alloc&) {
+        } catch ( std::bad_alloc& ) {
             return aiReturn_OUTOFMEMORY;
-        }
-        catch (...) {
+        } catch ( ... ) {
             return aiReturn_FAILURE;
         }
     }
@@ -110,7 +113,8 @@ struct ExceptionSwallower<aiReturn> {
 // ---------------------------------------------------------------------------
 template <>
 struct ExceptionSwallower<void> {
-    void operator ()() const {
+    void operator () () const
+    {
         return;
     }
 };

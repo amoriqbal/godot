@@ -8,12 +8,12 @@
  * You may select, at your option, one of the above-listed licenses.
  */
 
- #ifndef ZSTDMT_COMPRESS_H
- #define ZSTDMT_COMPRESS_H
+#ifndef ZSTDMT_COMPRESS_H
+#define ZSTDMT_COMPRESS_H
 
- #if defined (__cplusplus)
- extern "C" {
- #endif
+#if defined (__cplusplus)
+extern "C" {
+#endif
 
 
 /* Note : This is an internal API.
@@ -57,54 +57,54 @@
 /* ===   Memory management   === */
 typedef struct ZSTDMT_CCtx_s ZSTDMT_CCtx;
 /* Requires ZSTD_MULTITHREAD to be defined during compilation, otherwise it will return NULL. */
-ZSTDMT_API ZSTDMT_CCtx* ZSTDMT_createCCtx(unsigned nbWorkers);
+ZSTDMT_API ZSTDMT_CCtx* ZSTDMT_createCCtx ( unsigned nbWorkers );
 /* Requires ZSTD_MULTITHREAD to be defined during compilation, otherwise it will return NULL. */
-ZSTDMT_API ZSTDMT_CCtx* ZSTDMT_createCCtx_advanced(unsigned nbWorkers,
-                                                    ZSTD_customMem cMem);
-ZSTDMT_API size_t ZSTDMT_freeCCtx(ZSTDMT_CCtx* mtctx);
+ZSTDMT_API ZSTDMT_CCtx* ZSTDMT_createCCtx_advanced ( unsigned nbWorkers,
+        ZSTD_customMem cMem );
+ZSTDMT_API size_t ZSTDMT_freeCCtx ( ZSTDMT_CCtx* mtctx );
 
-ZSTDMT_API size_t ZSTDMT_sizeof_CCtx(ZSTDMT_CCtx* mtctx);
+ZSTDMT_API size_t ZSTDMT_sizeof_CCtx ( ZSTDMT_CCtx* mtctx );
 
 
 /* ===   Simple one-pass compression function   === */
 
-ZSTDMT_API size_t ZSTDMT_compressCCtx(ZSTDMT_CCtx* mtctx,
-                                       void* dst, size_t dstCapacity,
-                                 const void* src, size_t srcSize,
-                                       int compressionLevel);
+ZSTDMT_API size_t ZSTDMT_compressCCtx ( ZSTDMT_CCtx* mtctx,
+                                        void* dst, size_t dstCapacity,
+                                        const void* src, size_t srcSize,
+                                        int compressionLevel );
 
 
 
 /* ===   Streaming functions   === */
 
-ZSTDMT_API size_t ZSTDMT_initCStream(ZSTDMT_CCtx* mtctx, int compressionLevel);
-ZSTDMT_API size_t ZSTDMT_resetCStream(ZSTDMT_CCtx* mtctx, unsigned long long pledgedSrcSize);  /**< if srcSize is not known at reset time, use ZSTD_CONTENTSIZE_UNKNOWN. Note: for compatibility with older programs, 0 means the same as ZSTD_CONTENTSIZE_UNKNOWN, but it will change in the future to mean "empty" */
+ZSTDMT_API size_t ZSTDMT_initCStream ( ZSTDMT_CCtx* mtctx, int compressionLevel );
+ZSTDMT_API size_t ZSTDMT_resetCStream ( ZSTDMT_CCtx* mtctx, unsigned long long pledgedSrcSize ); /**< if srcSize is not known at reset time, use ZSTD_CONTENTSIZE_UNKNOWN. Note: for compatibility with older programs, 0 means the same as ZSTD_CONTENTSIZE_UNKNOWN, but it will change in the future to mean "empty" */
 
-ZSTDMT_API size_t ZSTDMT_nextInputSizeHint(const ZSTDMT_CCtx* mtctx);
-ZSTDMT_API size_t ZSTDMT_compressStream(ZSTDMT_CCtx* mtctx, ZSTD_outBuffer* output, ZSTD_inBuffer* input);
+ZSTDMT_API size_t ZSTDMT_nextInputSizeHint ( const ZSTDMT_CCtx* mtctx );
+ZSTDMT_API size_t ZSTDMT_compressStream ( ZSTDMT_CCtx* mtctx, ZSTD_outBuffer* output, ZSTD_inBuffer* input );
 
-ZSTDMT_API size_t ZSTDMT_flushStream(ZSTDMT_CCtx* mtctx, ZSTD_outBuffer* output);   /**< @return : 0 == all flushed; >0 : still some data to be flushed; or an error code (ZSTD_isError()) */
-ZSTDMT_API size_t ZSTDMT_endStream(ZSTDMT_CCtx* mtctx, ZSTD_outBuffer* output);     /**< @return : 0 == all flushed; >0 : still some data to be flushed; or an error code (ZSTD_isError()) */
+ZSTDMT_API size_t ZSTDMT_flushStream ( ZSTDMT_CCtx* mtctx, ZSTD_outBuffer* output ); /**< @return : 0 == all flushed; >0 : still some data to be flushed; or an error code (ZSTD_isError()) */
+ZSTDMT_API size_t ZSTDMT_endStream ( ZSTDMT_CCtx* mtctx, ZSTD_outBuffer* output );  /**< @return : 0 == all flushed; >0 : still some data to be flushed; or an error code (ZSTD_isError()) */
 
 
 /* ===   Advanced functions and parameters  === */
 
-ZSTDMT_API size_t ZSTDMT_compress_advanced(ZSTDMT_CCtx* mtctx,
-                                          void* dst, size_t dstCapacity,
-                                    const void* src, size_t srcSize,
-                                    const ZSTD_CDict* cdict,
-                                          ZSTD_parameters params,
-                                          int overlapLog);
+ZSTDMT_API size_t ZSTDMT_compress_advanced ( ZSTDMT_CCtx* mtctx,
+        void* dst, size_t dstCapacity,
+        const void* src, size_t srcSize,
+        const ZSTD_CDict* cdict,
+        ZSTD_parameters params,
+        int overlapLog );
 
-ZSTDMT_API size_t ZSTDMT_initCStream_advanced(ZSTDMT_CCtx* mtctx,
-                                        const void* dict, size_t dictSize,   /* dict can be released after init, a local copy is preserved within zcs */
-                                        ZSTD_parameters params,
-                                        unsigned long long pledgedSrcSize);  /* pledgedSrcSize is optional and can be zero == unknown */
+ZSTDMT_API size_t ZSTDMT_initCStream_advanced ( ZSTDMT_CCtx* mtctx,
+        const void* dict, size_t dictSize,   /* dict can be released after init, a local copy is preserved within zcs */
+        ZSTD_parameters params,
+        unsigned long long pledgedSrcSize ); /* pledgedSrcSize is optional and can be zero == unknown */
 
-ZSTDMT_API size_t ZSTDMT_initCStream_usingCDict(ZSTDMT_CCtx* mtctx,
-                                        const ZSTD_CDict* cdict,
-                                        ZSTD_frameParameters fparams,
-                                        unsigned long long pledgedSrcSize);  /* note : zero means empty */
+ZSTDMT_API size_t ZSTDMT_initCStream_usingCDict ( ZSTDMT_CCtx* mtctx,
+        const ZSTD_CDict* cdict,
+        ZSTD_frameParameters fparams,
+        unsigned long long pledgedSrcSize ); /* note : zero means empty */
 
 /* ZSTDMT_parameter :
  * List of parameters that can be set using ZSTDMT_setMTCtxParameter() */
@@ -119,12 +119,12 @@ typedef enum {
  * The function must be called typically after ZSTD_createCCtx() but __before ZSTDMT_init*() !__
  * Parameters not explicitly reset by ZSTDMT_init*() remain the same in consecutive compression sessions.
  * @return : 0, or an error code (which can be tested using ZSTD_isError()) */
-ZSTDMT_API size_t ZSTDMT_setMTCtxParameter(ZSTDMT_CCtx* mtctx, ZSTDMT_parameter parameter, int value);
+ZSTDMT_API size_t ZSTDMT_setMTCtxParameter ( ZSTDMT_CCtx* mtctx, ZSTDMT_parameter parameter, int value );
 
 /* ZSTDMT_getMTCtxParameter() :
  * Query the ZSTDMT_CCtx for a parameter value.
  * @return : 0, or an error code (which can be tested using ZSTD_isError()) */
-ZSTDMT_API size_t ZSTDMT_getMTCtxParameter(ZSTDMT_CCtx* mtctx, ZSTDMT_parameter parameter, int* value);
+ZSTDMT_API size_t ZSTDMT_getMTCtxParameter ( ZSTDMT_CCtx* mtctx, ZSTDMT_parameter parameter, int* value );
 
 
 /*! ZSTDMT_compressStream_generic() :
@@ -134,10 +134,10 @@ ZSTDMT_API size_t ZSTDMT_getMTCtxParameter(ZSTDMT_CCtx* mtctx, ZSTDMT_parameter 
  *           0 if fully flushed
  *           or an error code
  *  note : needs to be init using any ZSTD_initCStream*() variant */
-ZSTDMT_API size_t ZSTDMT_compressStream_generic(ZSTDMT_CCtx* mtctx,
-                                                ZSTD_outBuffer* output,
-                                                ZSTD_inBuffer* input,
-                                                ZSTD_EndDirective endOp);
+ZSTDMT_API size_t ZSTDMT_compressStream_generic ( ZSTDMT_CCtx* mtctx,
+        ZSTD_outBuffer* output,
+        ZSTD_inBuffer* input,
+        ZSTD_EndDirective endOp );
 
 
 /* ========================================================
@@ -145,33 +145,33 @@ ZSTDMT_API size_t ZSTDMT_compressStream_generic(ZSTDMT_CCtx* mtctx,
  * ===  Not exposed in libzstd. Never invoke directly   ===
  * ======================================================== */
 
- /*! ZSTDMT_toFlushNow()
-  *  Tell how many bytes are ready to be flushed immediately.
-  *  Probe the oldest active job (not yet entirely flushed) and check its output buffer.
-  *  If return 0, it means there is no active job,
-  *  or, it means oldest job is still active, but everything produced has been flushed so far,
-  *  therefore flushing is limited by speed of oldest job. */
-size_t ZSTDMT_toFlushNow(ZSTDMT_CCtx* mtctx);
+/*! ZSTDMT_toFlushNow()
+ *  Tell how many bytes are ready to be flushed immediately.
+ *  Probe the oldest active job (not yet entirely flushed) and check its output buffer.
+ *  If return 0, it means there is no active job,
+ *  or, it means oldest job is still active, but everything produced has been flushed so far,
+ *  therefore flushing is limited by speed of oldest job. */
+size_t ZSTDMT_toFlushNow ( ZSTDMT_CCtx* mtctx );
 
 /*! ZSTDMT_CCtxParam_setMTCtxParameter()
  *  like ZSTDMT_setMTCtxParameter(), but into a ZSTD_CCtx_Params */
-size_t ZSTDMT_CCtxParam_setMTCtxParameter(ZSTD_CCtx_params* params, ZSTDMT_parameter parameter, int value);
+size_t ZSTDMT_CCtxParam_setMTCtxParameter ( ZSTD_CCtx_params* params, ZSTDMT_parameter parameter, int value );
 
 /*! ZSTDMT_CCtxParam_setNbWorkers()
  *  Set nbWorkers, and clamp it.
  *  Also reset jobSize and overlapLog */
-size_t ZSTDMT_CCtxParam_setNbWorkers(ZSTD_CCtx_params* params, unsigned nbWorkers);
+size_t ZSTDMT_CCtxParam_setNbWorkers ( ZSTD_CCtx_params* params, unsigned nbWorkers );
 
 /*! ZSTDMT_updateCParams_whileCompressing() :
  *  Updates only a selected set of compression parameters, to remain compatible with current frame.
  *  New parameters will be applied to next compression job. */
-void ZSTDMT_updateCParams_whileCompressing(ZSTDMT_CCtx* mtctx, const ZSTD_CCtx_params* cctxParams);
+void ZSTDMT_updateCParams_whileCompressing ( ZSTDMT_CCtx* mtctx, const ZSTD_CCtx_params* cctxParams );
 
 /*! ZSTDMT_getFrameProgression():
  *  tells how much data has been consumed (input) and produced (output) for current frame.
  *  able to count progression inside worker threads.
  */
-ZSTD_frameProgression ZSTDMT_getFrameProgression(ZSTDMT_CCtx* mtctx);
+ZSTD_frameProgression ZSTDMT_getFrameProgression ( ZSTDMT_CCtx* mtctx );
 
 
 /*! ZSTDMT_initCStream_internal() :
@@ -179,10 +179,10 @@ ZSTD_frameProgression ZSTDMT_getFrameProgression(ZSTDMT_CCtx* mtctx);
  *  expects params to be valid.
  *  must receive dict, or cdict, or none, but not both.
  *  @return : 0, or an error code */
-size_t ZSTDMT_initCStream_internal(ZSTDMT_CCtx* zcs,
-                    const void* dict, size_t dictSize, ZSTD_dictContentType_e dictContentType,
-                    const ZSTD_CDict* cdict,
-                    ZSTD_CCtx_params params, unsigned long long pledgedSrcSize);
+size_t ZSTDMT_initCStream_internal ( ZSTDMT_CCtx* zcs,
+                                     const void* dict, size_t dictSize, ZSTD_dictContentType_e dictContentType,
+                                     const ZSTD_CDict* cdict,
+                                     ZSTD_CCtx_params params, unsigned long long pledgedSrcSize );
 
 
 #if defined (__cplusplus)

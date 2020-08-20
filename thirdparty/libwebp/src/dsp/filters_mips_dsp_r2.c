@@ -101,9 +101,10 @@
     );                                                                         \
   } while (0)
 
-static WEBP_INLINE void PredictLine_MIPSdspR2(const uint8_t* src, uint8_t* dst,
-                                              int length) {
-  DO_PREDICT_LINE(src, dst, length, 0);
+static WEBP_INLINE void PredictLine_MIPSdspR2 ( const uint8_t* src, uint8_t* dst,
+        int length )
+{
+    DO_PREDICT_LINE ( src, dst, length, 0 );
 }
 
 #define DO_PREDICT_LINE_VERTICAL(SRC, PRED, DST, LENGTH, INVERSE) do {         \
@@ -192,39 +193,41 @@ static WEBP_INLINE void PredictLine_MIPSdspR2(const uint8_t* src, uint8_t* dst,
     }                                                                          \
   } while (0)
 
-static WEBP_INLINE void DoHorizontalFilter_MIPSdspR2(const uint8_t* in,
-                                                     int width, int height,
-                                                     int stride,
-                                                     int row, int num_rows,
-                                                     uint8_t* out) {
-  const uint8_t* preds;
-  const size_t start_offset = row * stride;
-  const int last_row = row + num_rows;
-  SANITY_CHECK(in, out);
-  in += start_offset;
-  out += start_offset;
-  preds = in;
+static WEBP_INLINE void DoHorizontalFilter_MIPSdspR2 ( const uint8_t* in,
+        int width, int height,
+        int stride,
+        int row, int num_rows,
+        uint8_t* out )
+{
+    const uint8_t* preds;
+    const size_t start_offset = row * stride;
+    const int last_row = row + num_rows;
+    SANITY_CHECK ( in, out );
+    in += start_offset;
+    out += start_offset;
+    preds = in;
 
-  if (row == 0) {
-    // Leftmost pixel is the same as input for topmost scanline.
-    out[0] = in[0];
-    PredictLine_MIPSdspR2(in + 1, out + 1, width - 1);
-    row = 1;
-    preds += stride;
-    in += stride;
-    out += stride;
-  }
+    if ( row == 0 ) {
+        // Leftmost pixel is the same as input for topmost scanline.
+        out[0] = in[0];
+        PredictLine_MIPSdspR2 ( in + 1, out + 1, width - 1 );
+        row = 1;
+        preds += stride;
+        in += stride;
+        out += stride;
+    }
 
-  // Filter line-by-line.
-  FILTER_LINE_BY_LINE;
+    // Filter line-by-line.
+    FILTER_LINE_BY_LINE;
 }
 #undef FILTER_LINE_BY_LINE
 
-static void HorizontalFilter_MIPSdspR2(const uint8_t* data,
-                                       int width, int height,
-                                       int stride, uint8_t* filtered_data) {
-  DoHorizontalFilter_MIPSdspR2(data, width, height, stride, 0, height,
-                               filtered_data);
+static void HorizontalFilter_MIPSdspR2 ( const uint8_t* data,
+        int width, int height,
+        int stride, uint8_t* filtered_data )
+{
+    DoHorizontalFilter_MIPSdspR2 ( data, width, height, stride, 0, height,
+                                   filtered_data );
 }
 
 //------------------------------------------------------------------------------
@@ -240,58 +243,61 @@ static void HorizontalFilter_MIPSdspR2(const uint8_t* data,
     }                                                                          \
   } while (0)
 
-static WEBP_INLINE void DoVerticalFilter_MIPSdspR2(const uint8_t* in,
-                                                   int width, int height,
-                                                   int stride,
-                                                   int row, int num_rows,
-                                                   uint8_t* out) {
-  const uint8_t* preds;
-  const size_t start_offset = row * stride;
-  const int last_row = row + num_rows;
-  SANITY_CHECK(in, out);
-  in += start_offset;
-  out += start_offset;
-  preds = in;
+static WEBP_INLINE void DoVerticalFilter_MIPSdspR2 ( const uint8_t* in,
+        int width, int height,
+        int stride,
+        int row, int num_rows,
+        uint8_t* out )
+{
+    const uint8_t* preds;
+    const size_t start_offset = row * stride;
+    const int last_row = row + num_rows;
+    SANITY_CHECK ( in, out );
+    in += start_offset;
+    out += start_offset;
+    preds = in;
 
-  if (row == 0) {
-    // Very first top-left pixel is copied.
-    out[0] = in[0];
-    // Rest of top scan-line is left-predicted.
-    PredictLine_MIPSdspR2(in + 1, out + 1, width - 1);
-    row = 1;
-    in += stride;
-    out += stride;
-  } else {
-    // We are starting from in-between. Make sure 'preds' points to prev row.
-    preds -= stride;
-  }
+    if ( row == 0 ) {
+        // Very first top-left pixel is copied.
+        out[0] = in[0];
+        // Rest of top scan-line is left-predicted.
+        PredictLine_MIPSdspR2 ( in + 1, out + 1, width - 1 );
+        row = 1;
+        in += stride;
+        out += stride;
+    } else {
+        // We are starting from in-between. Make sure 'preds' points to prev row.
+        preds -= stride;
+    }
 
-  // Filter line-by-line.
-  FILTER_LINE_BY_LINE;
+    // Filter line-by-line.
+    FILTER_LINE_BY_LINE;
 }
 #undef FILTER_LINE_BY_LINE
 
-static void VerticalFilter_MIPSdspR2(const uint8_t* data, int width, int height,
-                                     int stride, uint8_t* filtered_data) {
-  DoVerticalFilter_MIPSdspR2(data, width, height, stride, 0, height,
-                             filtered_data);
+static void VerticalFilter_MIPSdspR2 ( const uint8_t* data, int width, int height,
+                                       int stride, uint8_t* filtered_data )
+{
+    DoVerticalFilter_MIPSdspR2 ( data, width, height, stride, 0, height,
+                                 filtered_data );
 }
 
 //------------------------------------------------------------------------------
 // Gradient filter.
 
-static int GradientPredictor_MIPSdspR2(uint8_t a, uint8_t b, uint8_t c) {
-  int temp0;
-  __asm__ volatile (
-    "addu             %[temp0],   %[a],       %[b]        \n\t"
-    "subu             %[temp0],   %[temp0],   %[c]        \n\t"
-    "shll_s.w         %[temp0],   %[temp0],   23          \n\t"
-    "precrqu_s.qb.ph  %[temp0],   %[temp0],   $zero       \n\t"
-    "srl              %[temp0],   %[temp0],   24          \n\t"
-    : [temp0]"=&r"(temp0)
-    : [a]"r"(a),[b]"r"(b),[c]"r"(c)
-  );
-  return temp0;
+static int GradientPredictor_MIPSdspR2 ( uint8_t a, uint8_t b, uint8_t c )
+{
+    int temp0;
+    __asm__ volatile (
+        "addu             %[temp0],   %[a],       %[b]        \n\t"
+        "subu             %[temp0],   %[temp0],   %[c]        \n\t"
+        "shll_s.w         %[temp0],   %[temp0],   23          \n\t"
+        "precrqu_s.qb.ph  %[temp0],   %[temp0],   $zero       \n\t"
+        "srl              %[temp0],   %[temp0],   24          \n\t"
+        : [temp0]"=&r" ( temp0 )
+        : [a]"r" ( a ),[b]"r" ( b ),[c]"r" ( c )
+    );
+    return temp0;
 }
 
 #define FILTER_LINE_BY_LINE(PREDS, OPERATION) do {                             \
@@ -310,69 +316,74 @@ static int GradientPredictor_MIPSdspR2(uint8_t a, uint8_t b, uint8_t c) {
     }                                                                          \
   } while (0)
 
-static void DoGradientFilter_MIPSdspR2(const uint8_t* in,
-                                       int width, int height, int stride,
-                                       int row, int num_rows, uint8_t* out) {
-  const uint8_t* preds;
-  const size_t start_offset = row * stride;
-  const int last_row = row + num_rows;
-  SANITY_CHECK(in, out);
-  in += start_offset;
-  out += start_offset;
-  preds = in;
+static void DoGradientFilter_MIPSdspR2 ( const uint8_t* in,
+        int width, int height, int stride,
+        int row, int num_rows, uint8_t* out )
+{
+    const uint8_t* preds;
+    const size_t start_offset = row * stride;
+    const int last_row = row + num_rows;
+    SANITY_CHECK ( in, out );
+    in += start_offset;
+    out += start_offset;
+    preds = in;
 
-  // left prediction for top scan-line
-  if (row == 0) {
-    out[0] = in[0];
-    PredictLine_MIPSdspR2(in + 1, out + 1, width - 1);
-    row = 1;
-    preds += stride;
-    in += stride;
-    out += stride;
-  }
+    // left prediction for top scan-line
+    if ( row == 0 ) {
+        out[0] = in[0];
+        PredictLine_MIPSdspR2 ( in + 1, out + 1, width - 1 );
+        row = 1;
+        preds += stride;
+        in += stride;
+        out += stride;
+    }
 
-  // Filter line-by-line.
-  FILTER_LINE_BY_LINE(in, -);
+    // Filter line-by-line.
+    FILTER_LINE_BY_LINE ( in, - );
 }
 #undef FILTER_LINE_BY_LINE
 
-static void GradientFilter_MIPSdspR2(const uint8_t* data, int width, int height,
-                                     int stride, uint8_t* filtered_data) {
-  DoGradientFilter_MIPSdspR2(data, width, height, stride, 0, height,
-                             filtered_data);
+static void GradientFilter_MIPSdspR2 ( const uint8_t* data, int width, int height,
+                                       int stride, uint8_t* filtered_data )
+{
+    DoGradientFilter_MIPSdspR2 ( data, width, height, stride, 0, height,
+                                 filtered_data );
 }
 
 //------------------------------------------------------------------------------
 
-static void HorizontalUnfilter_MIPSdspR2(const uint8_t* prev, const uint8_t* in,
-                                         uint8_t* out, int width) {
- out[0] = in[0] + (prev == NULL ? 0 : prev[0]);
- DO_PREDICT_LINE(in + 1, out + 1, width - 1, 1);
+static void HorizontalUnfilter_MIPSdspR2 ( const uint8_t* prev, const uint8_t* in,
+        uint8_t* out, int width )
+{
+    out[0] = in[0] + ( prev == NULL ? 0 : prev[0] );
+    DO_PREDICT_LINE ( in + 1, out + 1, width - 1, 1 );
 }
 
-static void VerticalUnfilter_MIPSdspR2(const uint8_t* prev, const uint8_t* in,
-                                       uint8_t* out, int width) {
-  if (prev == NULL) {
-    HorizontalUnfilter_MIPSdspR2(NULL, in, out, width);
-  } else {
-    DO_PREDICT_LINE_VERTICAL(in, prev, out, width, 1);
-  }
-}
-
-static void GradientUnfilter_MIPSdspR2(const uint8_t* prev, const uint8_t* in,
-                                       uint8_t* out, int width) {
-  if (prev == NULL) {
-    HorizontalUnfilter_MIPSdspR2(NULL, in, out, width);
-  } else {
-    uint8_t top = prev[0], top_left = top, left = top;
-    int i;
-    for (i = 0; i < width; ++i) {
-      top = prev[i];  // need to read this first, in case prev==dst
-      left = in[i] + GradientPredictor_MIPSdspR2(left, top, top_left);
-      top_left = top;
-      out[i] = left;
+static void VerticalUnfilter_MIPSdspR2 ( const uint8_t* prev, const uint8_t* in,
+        uint8_t* out, int width )
+{
+    if ( prev == NULL ) {
+        HorizontalUnfilter_MIPSdspR2 ( NULL, in, out, width );
+    } else {
+        DO_PREDICT_LINE_VERTICAL ( in, prev, out, width, 1 );
     }
-  }
+}
+
+static void GradientUnfilter_MIPSdspR2 ( const uint8_t* prev, const uint8_t* in,
+        uint8_t* out, int width )
+{
+    if ( prev == NULL ) {
+        HorizontalUnfilter_MIPSdspR2 ( NULL, in, out, width );
+    } else {
+        uint8_t top = prev[0], top_left = top, left = top;
+        int i;
+        for ( i = 0; i < width; ++i ) {
+            top = prev[i];  // need to read this first, in case prev==dst
+            left = in[i] + GradientPredictor_MIPSdspR2 ( left, top, top_left );
+            top_left = top;
+            out[i] = left;
+        }
+    }
 }
 
 #undef DO_PREDICT_LINE_VERTICAL
@@ -383,20 +394,21 @@ static void GradientUnfilter_MIPSdspR2(const uint8_t* prev, const uint8_t* in,
 //------------------------------------------------------------------------------
 // Entry point
 
-extern void VP8FiltersInitMIPSdspR2(void);
+extern void VP8FiltersInitMIPSdspR2 ( void );
 
-WEBP_TSAN_IGNORE_FUNCTION void VP8FiltersInitMIPSdspR2(void) {
-  WebPUnfilters[WEBP_FILTER_HORIZONTAL] = HorizontalUnfilter_MIPSdspR2;
-  WebPUnfilters[WEBP_FILTER_VERTICAL] = VerticalUnfilter_MIPSdspR2;
-  WebPUnfilters[WEBP_FILTER_GRADIENT] = GradientUnfilter_MIPSdspR2;
+WEBP_TSAN_IGNORE_FUNCTION void VP8FiltersInitMIPSdspR2 ( void )
+{
+    WebPUnfilters[WEBP_FILTER_HORIZONTAL] = HorizontalUnfilter_MIPSdspR2;
+    WebPUnfilters[WEBP_FILTER_VERTICAL] = VerticalUnfilter_MIPSdspR2;
+    WebPUnfilters[WEBP_FILTER_GRADIENT] = GradientUnfilter_MIPSdspR2;
 
-  WebPFilters[WEBP_FILTER_HORIZONTAL] = HorizontalFilter_MIPSdspR2;
-  WebPFilters[WEBP_FILTER_VERTICAL] = VerticalFilter_MIPSdspR2;
-  WebPFilters[WEBP_FILTER_GRADIENT] = GradientFilter_MIPSdspR2;
+    WebPFilters[WEBP_FILTER_HORIZONTAL] = HorizontalFilter_MIPSdspR2;
+    WebPFilters[WEBP_FILTER_VERTICAL] = VerticalFilter_MIPSdspR2;
+    WebPFilters[WEBP_FILTER_GRADIENT] = GradientFilter_MIPSdspR2;
 }
 
 #else  // !WEBP_USE_MIPS_DSP_R2
 
-WEBP_DSP_INIT_STUB(VP8FiltersInitMIPSdspR2)
+WEBP_DSP_INIT_STUB ( VP8FiltersInitMIPSdspR2 )
 
 #endif  // WEBP_USE_MIPS_DSP_R2

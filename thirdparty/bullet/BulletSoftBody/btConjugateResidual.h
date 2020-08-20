@@ -1,6 +1,6 @@
 /*
  Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
- 
+
  Bullet Continuous Collision Detection and Physics Library
  Copyright (c) 2019 Google Inc. http://bulletphysics.org
  This software is provided 'as-is', without any express or implied warranty.
@@ -33,30 +33,29 @@ class btConjugateResidual
     int max_iterations;
     btScalar tolerance_squared, best_r;
 public:
-    btConjugateResidual(const int max_it_in)
-    : max_iterations(max_it_in)
+    btConjugateResidual ( const int max_it_in )
+        : max_iterations ( max_it_in )
     {
         tolerance_squared = 1e-2;
     }
-    
-    virtual ~btConjugateResidual(){}
-    
+
+    virtual ~btConjugateResidual() {}
+
     // return the number of iterations taken
-    int solve(MatrixX& A, TVStack& x, const TVStack& b, bool verbose = false)
+    int solve ( MatrixX& A, TVStack& x, const TVStack& b, bool verbose = false )
     {
-        BT_PROFILE("CRSolve");
-        btAssert(x.size() == b.size());
-        reinitialize(b);
+        BT_PROFILE ( "CRSolve" );
+        btAssert ( x.size() == b.size() );
+        reinitialize ( b );
         // r = b - A * x --with assigned dof zeroed out
-        A.multiply(x, temp_r); // borrow temp_r here to store A*x
-        r = sub(b, temp_r);
+        A.multiply ( x, temp_r ); // borrow temp_r here to store A*x
+        r = sub ( b, temp_r );
         // z = M^(-1) * r
-        A.precondition(r, z);  // borrow z to store preconditioned r
+        A.precondition ( r, z ); // borrow z to store preconditioned r
         r = z;
-        btScalar residual_norm = norm(r);
-        if (residual_norm <= tolerance_squared) {
-            if (verbose)
-            {
+        btScalar residual_norm = norm ( r );
+        if ( residual_norm <= tolerance_squared ) {
+            if ( verbose ) {
                 std::cout << "Iteration = 0" << std::endl;
                 std::cout << "Two norm of the residual = " << residual_norm << std::endl;
             }
@@ -65,122 +64,116 @@ public:
         p = r;
         btScalar r_dot_Ar, r_dot_Ar_new;
         // temp_p = A*p
-        A.multiply(p, temp_p);
+        A.multiply ( p, temp_p );
         // temp_r = A*r
         temp_r = temp_p;
-        r_dot_Ar = dot(r, temp_r);
-        for (int k = 1; k <= max_iterations; k++) {
+        r_dot_Ar = dot ( r, temp_r );
+        for ( int k = 1; k <= max_iterations; k++ ) {
             // z = M^(-1) * Ap
-            A.precondition(temp_p, z);
+            A.precondition ( temp_p, z );
             // alpha = r^T * A * r / (Ap)^T * M^-1 * Ap)
-            btScalar alpha = r_dot_Ar / dot(temp_p, z);
+            btScalar alpha = r_dot_Ar / dot ( temp_p, z );
             //  x += alpha * p;
-            multAndAddTo(alpha, p, x);
+            multAndAddTo ( alpha, p, x );
             //  r -= alpha * z;
-            multAndAddTo(-alpha, z, r);
-            btScalar norm_r = norm(r);
-            if (norm_r < best_r)
-            {
+            multAndAddTo ( -alpha, z, r );
+            btScalar norm_r = norm ( r );
+            if ( norm_r < best_r ) {
                 best_x = x;
                 best_r = norm_r;
-                if (norm_r < tolerance_squared) {
-                    if (verbose)
-                    {
+                if ( norm_r < tolerance_squared ) {
+                    if ( verbose ) {
                         std::cout << "ConjugateResidual iterations " << k << std::endl;
                     }
                     return k;
-                }
-                else
-                {
-                    if (verbose)
-                    {
+                } else {
+                    if ( verbose ) {
                         std::cout << "ConjugateResidual iterations " << k << " has residual "<< norm_r << std::endl;
                     }
                 }
             }
             // temp_r = A * r;
-            A.multiply(r, temp_r);
-            r_dot_Ar_new = dot(r, temp_r);
+            A.multiply ( r, temp_r );
+            r_dot_Ar_new = dot ( r, temp_r );
             btScalar beta = r_dot_Ar_new/r_dot_Ar;
             r_dot_Ar = r_dot_Ar_new;
             // p = beta*p + r;
-            p = multAndAdd(beta, p, r);
+            p = multAndAdd ( beta, p, r );
             // temp_p = beta*temp_p + temp_r;
-            temp_p = multAndAdd(beta, temp_p, temp_r);
+            temp_p = multAndAdd ( beta, temp_p, temp_r );
         }
-        if (verbose)
-        {
+        if ( verbose ) {
             std::cout << "ConjugateResidual max iterations reached " << max_iterations << std::endl;
         }
         x = best_x;
         return max_iterations;
     }
-    
-    void reinitialize(const TVStack& b)
+
+    void reinitialize ( const TVStack& b )
     {
-        r.resize(b.size());
-        p.resize(b.size());
-        z.resize(b.size());
-        temp_p.resize(b.size());
-        temp_r.resize(b.size());
-        best_x.resize(b.size());
+        r.resize ( b.size() );
+        p.resize ( b.size() );
+        z.resize ( b.size() );
+        temp_p.resize ( b.size() );
+        temp_r.resize ( b.size() );
+        best_x.resize ( b.size() );
         best_r = SIMD_INFINITY;
     }
-    
-    TVStack sub(const TVStack& a, const TVStack& b)
+
+    TVStack sub ( const TVStack& a, const TVStack& b )
     {
         // c = a-b
-        btAssert(a.size() == b.size());
+        btAssert ( a.size() == b.size() );
         TVStack c;
-        c.resize(a.size());
-        for (int i = 0; i < a.size(); ++i)
-        {
+        c.resize ( a.size() );
+        for ( int i = 0; i < a.size(); ++i ) {
             c[i] = a[i] - b[i];
         }
         return c;
     }
-    
-    btScalar squaredNorm(const TVStack& a)
+
+    btScalar squaredNorm ( const TVStack& a )
     {
-        return dot(a,a);
+        return dot ( a,a );
     }
-    
-    btScalar norm(const TVStack& a)
+
+    btScalar norm ( const TVStack& a )
     {
         btScalar ret = 0;
-        for (int i = 0; i < a.size(); ++i)
-        {
-            for (int d = 0; d < 3; ++d)
-            {
-                ret = btMax(ret, btFabs(a[i][d]));
+        for ( int i = 0; i < a.size(); ++i ) {
+            for ( int d = 0; d < 3; ++d ) {
+                ret = btMax ( ret, btFabs ( a[i][d] ) );
             }
         }
         return ret;
     }
-    
-    btScalar dot(const TVStack& a, const TVStack& b)
+
+    btScalar dot ( const TVStack& a, const TVStack& b )
     {
-        btScalar ans(0);
-        for (int i = 0; i < a.size(); ++i)
-            ans += a[i].dot(b[i]);
+        btScalar ans ( 0 );
+        for ( int i = 0; i < a.size(); ++i ) {
+            ans += a[i].dot ( b[i] );
+        }
         return ans;
     }
-    
-    void multAndAddTo(btScalar s, const TVStack& a, TVStack& result)
+
+    void multAndAddTo ( btScalar s, const TVStack& a, TVStack& result )
     {
         //        result += s*a
-        btAssert(a.size() == result.size());
-        for (int i = 0; i < a.size(); ++i)
+        btAssert ( a.size() == result.size() );
+        for ( int i = 0; i < a.size(); ++i ) {
             result[i] += s * a[i];
+        }
     }
-    
-    TVStack multAndAdd(btScalar s, const TVStack& a, const TVStack& b)
+
+    TVStack multAndAdd ( btScalar s, const TVStack& a, const TVStack& b )
     {
         // result = a*s + b
         TVStack result;
-        result.resize(a.size());
-        for (int i = 0; i < a.size(); ++i)
+        result.resize ( a.size() );
+        for ( int i = 0; i < a.size(); ++i ) {
             result[i] = s * a[i] + b[i];
+        }
         return result;
     }
 };

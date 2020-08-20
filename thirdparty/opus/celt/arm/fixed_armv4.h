@@ -29,35 +29,35 @@
 
 /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
 #undef MULT16_32_Q16
-static OPUS_INLINE opus_val32 MULT16_32_Q16_armv4(opus_val16 a, opus_val32 b)
+static OPUS_INLINE opus_val32 MULT16_32_Q16_armv4 ( opus_val16 a, opus_val32 b )
 {
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      "#MULT16_32_Q16\n\t"
-      "smull %0, %1, %2, %3\n\t"
-      : "=&r"(rd_lo), "=&r"(rd_hi)
-      : "%r"(b),"r"(a<<16)
-  );
-  return rd_hi;
+    unsigned rd_lo;
+    int rd_hi;
+    __asm__ (
+        "#MULT16_32_Q16\n\t"
+        "smull %0, %1, %2, %3\n\t"
+        : "=&r" ( rd_lo ), "=&r" ( rd_hi )
+        : "%r" ( b ),"r" ( a<<16 )
+    );
+    return rd_hi;
 }
 #define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv4(a, b))
 
 
 /** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
 #undef MULT16_32_Q15
-static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
+static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4 ( opus_val16 a, opus_val32 b )
 {
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      "#MULT16_32_Q15\n\t"
-      "smull %0, %1, %2, %3\n\t"
-      : "=&r"(rd_lo), "=&r"(rd_hi)
-      : "%r"(b), "r"(a<<16)
-  );
-  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
-  return rd_hi<<1;
+    unsigned rd_lo;
+    int rd_hi;
+    __asm__ (
+        "#MULT16_32_Q15\n\t"
+        "smull %0, %1, %2, %3\n\t"
+        : "=&r" ( rd_lo ), "=&r" ( rd_hi )
+        : "%r" ( b ), "r" ( a<<16 )
+    );
+    /*We intentionally don't OR in the high bit of rd_lo for speed.*/
+    return rd_hi<<1;
 }
 #define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
 

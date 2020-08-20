@@ -43,13 +43,14 @@
 
 #include <algorithm>
 
-namespace glslang {
+namespace glslang
+{
 
 // This is used to mean there is no size yet (unsized), it is waiting to get a size from somewhere else.
 const int UnsizedArraySize = 0;
 
 class TIntermTyped;
-extern bool SameSpecializationConstants(TIntermTyped*, TIntermTyped*);
+extern bool SameSpecializationConstants ( TIntermTyped*, TIntermTyped* );
 
 // Specialization constants need both a nominal size and a node that defines
 // the specialization constant being used.  Array types are the same when their
@@ -57,14 +58,16 @@ extern bool SameSpecializationConstants(TIntermTyped*, TIntermTyped*);
 struct TArraySize {
     unsigned int size;
     TIntermTyped* node;  // nullptr means no specialization constant node
-    bool operator==(const TArraySize& rhs) const
+    bool operator== ( const TArraySize& rhs ) const
     {
-        if (size != rhs.size)
+        if ( size != rhs.size ) {
             return false;
-        if (node == nullptr || rhs.node == nullptr)
+        }
+        if ( node == nullptr || rhs.node == nullptr ) {
             return node == rhs.node;
+        }
 
-        return SameSpecializationConstants(node, rhs.node);
+        return SameSpecializationConstants ( node, rhs.node );
     }
 };
 
@@ -80,17 +83,20 @@ struct TSmallArrayVector {
     // in 16 bits, needing a real vector only in the cases where there
     // are more than 3 sizes or a size needing more than 16 bits.
     //
-    POOL_ALLOCATOR_NEW_DELETE(GetThreadPoolAllocator())
+    POOL_ALLOCATOR_NEW_DELETE ( GetThreadPoolAllocator() )
 
-    TSmallArrayVector() : sizes(nullptr) { }
-    virtual ~TSmallArrayVector() { dealloc(); }
+    TSmallArrayVector() : sizes ( nullptr ) { }
+    virtual ~TSmallArrayVector()
+    {
+        dealloc();
+    }
 
     // For breaking into two non-shared copies, independently modifiable.
-    TSmallArrayVector& operator=(const TSmallArrayVector& from)
+    TSmallArrayVector& operator= ( const TSmallArrayVector& from )
     {
-        if (from.sizes == nullptr)
+        if ( from.sizes == nullptr ) {
             sizes = nullptr;
-        else {
+        } else {
             alloc();
             *sizes = *from.sizes;
         }
@@ -100,102 +106,110 @@ struct TSmallArrayVector {
 
     int size() const
     {
-        if (sizes == nullptr)
+        if ( sizes == nullptr ) {
             return 0;
-        return (int)sizes->size();
+        }
+        return ( int ) sizes->size();
     }
 
     unsigned int frontSize() const
     {
-        assert(sizes != nullptr && sizes->size() > 0);
+        assert ( sizes != nullptr && sizes->size() > 0 );
         return sizes->front().size;
     }
 
     TIntermTyped* frontNode() const
     {
-        assert(sizes != nullptr && sizes->size() > 0);
+        assert ( sizes != nullptr && sizes->size() > 0 );
         return sizes->front().node;
     }
 
-    void changeFront(unsigned int s)
+    void changeFront ( unsigned int s )
     {
-        assert(sizes != nullptr);
+        assert ( sizes != nullptr );
         // this should only happen for implicitly sized arrays, not specialization constants
-        assert(sizes->front().node == nullptr);
+        assert ( sizes->front().node == nullptr );
         sizes->front().size = s;
     }
 
-    void push_back(unsigned int e, TIntermTyped* n)
+    void push_back ( unsigned int e, TIntermTyped* n )
     {
         alloc();
         TArraySize pair = { e, n };
-        sizes->push_back(pair);
+        sizes->push_back ( pair );
     }
 
-    void push_back(const TSmallArrayVector& newDims)
+    void push_back ( const TSmallArrayVector& newDims )
     {
         alloc();
-        sizes->insert(sizes->end(), newDims.sizes->begin(), newDims.sizes->end());
+        sizes->insert ( sizes->end(), newDims.sizes->begin(), newDims.sizes->end() );
     }
 
     void pop_front()
     {
-        assert(sizes != nullptr && sizes->size() > 0);
-        if (sizes->size() == 1)
+        assert ( sizes != nullptr && sizes->size() > 0 );
+        if ( sizes->size() == 1 ) {
             dealloc();
-        else
-            sizes->erase(sizes->begin());
+        } else {
+            sizes->erase ( sizes->begin() );
+        }
     }
 
     // 'this' should currently not be holding anything, and copyNonFront
     // will make it hold a copy of all but the first element of rhs.
     // (This would be useful for making a type that is dereferenced by
     // one dimension.)
-    void copyNonFront(const TSmallArrayVector& rhs)
+    void copyNonFront ( const TSmallArrayVector& rhs )
     {
-        assert(sizes == nullptr);
-        if (rhs.size() > 1) {
+        assert ( sizes == nullptr );
+        if ( rhs.size() > 1 ) {
             alloc();
-            sizes->insert(sizes->begin(), rhs.sizes->begin() + 1, rhs.sizes->end());
+            sizes->insert ( sizes->begin(), rhs.sizes->begin() + 1, rhs.sizes->end() );
         }
     }
 
-    unsigned int getDimSize(int i) const
+    unsigned int getDimSize ( int i ) const
     {
-        assert(sizes != nullptr && (int)sizes->size() > i);
-        return (*sizes)[i].size;
+        assert ( sizes != nullptr && ( int ) sizes->size() > i );
+        return ( *sizes ) [i].size;
     }
 
-    void setDimSize(int i, unsigned int size) const
+    void setDimSize ( int i, unsigned int size ) const
     {
-        assert(sizes != nullptr && (int)sizes->size() > i);
-        assert((*sizes)[i].node == nullptr);
-        (*sizes)[i].size = size;
+        assert ( sizes != nullptr && ( int ) sizes->size() > i );
+        assert ( ( *sizes ) [i].node == nullptr );
+        ( *sizes ) [i].size = size;
     }
 
-    TIntermTyped* getDimNode(int i) const
+    TIntermTyped* getDimNode ( int i ) const
     {
-        assert(sizes != nullptr && (int)sizes->size() > i);
-        return (*sizes)[i].node;
+        assert ( sizes != nullptr && ( int ) sizes->size() > i );
+        return ( *sizes ) [i].node;
     }
 
-    bool operator==(const TSmallArrayVector& rhs) const
+    bool operator== ( const TSmallArrayVector& rhs ) const
     {
-        if (sizes == nullptr && rhs.sizes == nullptr)
+        if ( sizes == nullptr && rhs.sizes == nullptr ) {
             return true;
-        if (sizes == nullptr || rhs.sizes == nullptr)
+        }
+        if ( sizes == nullptr || rhs.sizes == nullptr ) {
             return false;
+        }
         return *sizes == *rhs.sizes;
     }
-    bool operator!=(const TSmallArrayVector& rhs) const { return ! operator==(rhs); }
+    bool operator!= ( const TSmallArrayVector& rhs ) const
+    {
+        return ! operator== ( rhs );
+    }
 
 protected:
-    TSmallArrayVector(const TSmallArrayVector&);
+    TSmallArrayVector ( const TSmallArrayVector& );
 
     void alloc()
     {
-        if (sizes == nullptr)
+        if ( sizes == nullptr ) {
             sizes = new TVector<TArraySize>;
+        }
     }
     void dealloc()
     {
@@ -220,12 +234,12 @@ protected:
 //  - outer-most to inner-most
 //
 struct TArraySizes {
-    POOL_ALLOCATOR_NEW_DELETE(GetThreadPoolAllocator())
+    POOL_ALLOCATOR_NEW_DELETE ( GetThreadPoolAllocator() )
 
-    TArraySizes() : implicitArraySize(1), variablyIndexed(false) { }
+    TArraySizes() : implicitArraySize ( 1 ), variablyIndexed ( false ) { }
 
     // For breaking into two non-shared copies, independently modifiable.
-    TArraySizes& operator=(const TArraySizes& from)
+    TArraySizes& operator= ( const TArraySizes& from )
     {
         implicitArraySize = from.implicitArraySize;
         variablyIndexed = from.variablyIndexed;
@@ -235,98 +249,165 @@ struct TArraySizes {
     }
 
     // translate from array-of-array semantics to container semantics
-    int getNumDims() const { return sizes.size(); }
-    int getDimSize(int dim) const { return sizes.getDimSize(dim); }
-    TIntermTyped* getDimNode(int dim) const { return sizes.getDimNode(dim); }
-    void setDimSize(int dim, int size) { sizes.setDimSize(dim, size); }
-    int getOuterSize() const { return sizes.frontSize(); }
-    TIntermTyped* getOuterNode() const { return sizes.frontNode(); }
+    int getNumDims() const
+    {
+        return sizes.size();
+    }
+    int getDimSize ( int dim ) const
+    {
+        return sizes.getDimSize ( dim );
+    }
+    TIntermTyped* getDimNode ( int dim ) const
+    {
+        return sizes.getDimNode ( dim );
+    }
+    void setDimSize ( int dim, int size )
+    {
+        sizes.setDimSize ( dim, size );
+    }
+    int getOuterSize() const
+    {
+        return sizes.frontSize();
+    }
+    TIntermTyped* getOuterNode() const
+    {
+        return sizes.frontNode();
+    }
     int getCumulativeSize() const
     {
         int size = 1;
-        for (int d = 0; d < sizes.size(); ++d) {
+        for ( int d = 0; d < sizes.size(); ++d ) {
             // this only makes sense in paths that have a known array size
-            assert(sizes.getDimSize(d) != UnsizedArraySize);
-            size *= sizes.getDimSize(d);
+            assert ( sizes.getDimSize ( d ) != UnsizedArraySize );
+            size *= sizes.getDimSize ( d );
         }
         return size;
     }
-    void addInnerSize() { addInnerSize((unsigned)UnsizedArraySize); }
-    void addInnerSize(int s) { addInnerSize((unsigned)s, nullptr); }
-    void addInnerSize(int s, TIntermTyped* n) { sizes.push_back((unsigned)s, n); }
-    void addInnerSize(TArraySize pair) {
-        sizes.push_back(pair.size, pair.node);
+    void addInnerSize()
+    {
+        addInnerSize ( ( unsigned ) UnsizedArraySize );
     }
-    void addInnerSizes(const TArraySizes& s) { sizes.push_back(s.sizes); }
-    void changeOuterSize(int s) { sizes.changeFront((unsigned)s); }
-    int getImplicitSize() const { return implicitArraySize; }
-    void updateImplicitSize(int s) { implicitArraySize = std::max(implicitArraySize, s); }
+    void addInnerSize ( int s )
+    {
+        addInnerSize ( ( unsigned ) s, nullptr );
+    }
+    void addInnerSize ( int s, TIntermTyped* n )
+    {
+        sizes.push_back ( ( unsigned ) s, n );
+    }
+    void addInnerSize ( TArraySize pair )
+    {
+        sizes.push_back ( pair.size, pair.node );
+    }
+    void addInnerSizes ( const TArraySizes& s )
+    {
+        sizes.push_back ( s.sizes );
+    }
+    void changeOuterSize ( int s )
+    {
+        sizes.changeFront ( ( unsigned ) s );
+    }
+    int getImplicitSize() const
+    {
+        return implicitArraySize;
+    }
+    void updateImplicitSize ( int s )
+    {
+        implicitArraySize = std::max ( implicitArraySize, s );
+    }
     bool isInnerUnsized() const
     {
-        for (int d = 1; d < sizes.size(); ++d) {
-            if (sizes.getDimSize(d) == (unsigned)UnsizedArraySize)
+        for ( int d = 1; d < sizes.size(); ++d ) {
+            if ( sizes.getDimSize ( d ) == ( unsigned ) UnsizedArraySize ) {
                 return true;
+            }
         }
 
         return false;
     }
     bool clearInnerUnsized()
     {
-        for (int d = 1; d < sizes.size(); ++d) {
-            if (sizes.getDimSize(d) == (unsigned)UnsizedArraySize)
-                setDimSize(d, 1);
+        for ( int d = 1; d < sizes.size(); ++d ) {
+            if ( sizes.getDimSize ( d ) == ( unsigned ) UnsizedArraySize ) {
+                setDimSize ( d, 1 );
+            }
         }
 
         return false;
     }
     bool isInnerSpecialization() const
     {
-        for (int d = 1; d < sizes.size(); ++d) {
-            if (sizes.getDimNode(d) != nullptr)
+        for ( int d = 1; d < sizes.size(); ++d ) {
+            if ( sizes.getDimNode ( d ) != nullptr ) {
                 return true;
+            }
         }
 
         return false;
     }
     bool isOuterSpecialization()
     {
-        return sizes.getDimNode(0) != nullptr;
+        return sizes.getDimNode ( 0 ) != nullptr;
     }
 
-    bool hasUnsized() const { return getOuterSize() == UnsizedArraySize || isInnerUnsized(); }
-    bool isSized() const { return getOuterSize() != UnsizedArraySize; }
-    void dereference() { sizes.pop_front(); }
-    void copyDereferenced(const TArraySizes& rhs)
+    bool hasUnsized() const
     {
-        assert(sizes.size() == 0);
-        if (rhs.sizes.size() > 1)
-            sizes.copyNonFront(rhs.sizes);
+        return getOuterSize() == UnsizedArraySize || isInnerUnsized();
+    }
+    bool isSized() const
+    {
+        return getOuterSize() != UnsizedArraySize;
+    }
+    void dereference()
+    {
+        sizes.pop_front();
+    }
+    void copyDereferenced ( const TArraySizes& rhs )
+    {
+        assert ( sizes.size() == 0 );
+        if ( rhs.sizes.size() > 1 ) {
+            sizes.copyNonFront ( rhs.sizes );
+        }
     }
 
-    bool sameInnerArrayness(const TArraySizes& rhs) const
+    bool sameInnerArrayness ( const TArraySizes& rhs ) const
     {
-        if (sizes.size() != rhs.sizes.size())
+        if ( sizes.size() != rhs.sizes.size() ) {
             return false;
+        }
 
-        for (int d = 1; d < sizes.size(); ++d) {
-            if (sizes.getDimSize(d) != rhs.sizes.getDimSize(d) ||
-                sizes.getDimNode(d) != rhs.sizes.getDimNode(d))
+        for ( int d = 1; d < sizes.size(); ++d ) {
+            if ( sizes.getDimSize ( d ) != rhs.sizes.getDimSize ( d ) ||
+                    sizes.getDimNode ( d ) != rhs.sizes.getDimNode ( d ) ) {
                 return false;
+            }
         }
 
         return true;
     }
 
-    void setVariablyIndexed() { variablyIndexed = true; }
-    bool isVariablyIndexed() const { return variablyIndexed; }
+    void setVariablyIndexed()
+    {
+        variablyIndexed = true;
+    }
+    bool isVariablyIndexed() const
+    {
+        return variablyIndexed;
+    }
 
-    bool operator==(const TArraySizes& rhs) const { return sizes == rhs.sizes; }
-    bool operator!=(const TArraySizes& rhs) const { return sizes != rhs.sizes; }
+    bool operator== ( const TArraySizes& rhs ) const
+    {
+        return sizes == rhs.sizes;
+    }
+    bool operator!= ( const TArraySizes& rhs ) const
+    {
+        return sizes != rhs.sizes;
+    }
 
 protected:
     TSmallArrayVector sizes;
 
-    TArraySizes(const TArraySizes&);
+    TArraySizes ( const TArraySizes& );
 
     // For tracking maximum referenced compile-time constant index.
     // Applies only to the outer-most dimension. Potentially becomes

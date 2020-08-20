@@ -1,4 +1,4 @@
-﻿/*
+???/*
 ---------------------------------------------------------------------------
 Open Asset Import Library (assimp)
 ---------------------------------------------------------------------------
@@ -72,7 +72,7 @@ extern "C" {
 #endif
 
 // -------------------------------------------------------------------------------
-/** 
+/**
  * A node in the imported hierarchy.
  *
  * Each node has name, a parent node (except for the root node),
@@ -81,8 +81,7 @@ extern "C" {
  * the imported scene does consist of only a single root node without children.
  */
 // -------------------------------------------------------------------------------
-struct ASSIMP_API aiNode
-{
+struct ASSIMP_API aiNode {
     /** The name of the node.
      *
      * The name might be empty (length of zero) but all nodes which
@@ -139,7 +138,7 @@ struct ASSIMP_API aiNode
     aiNode();
 
     /** Construction from a specific name */
-    explicit aiNode(const std::string& name);
+    explicit aiNode ( const std::string& name );
 
     /** Destructor */
     ~aiNode();
@@ -151,26 +150,28 @@ struct ASSIMP_API aiNode
      *  @param name Name to search for
      *  @return nullptr or a valid Node if the search was successful.
      */
-    inline 
-    const aiNode* FindNode(const aiString& name) const {
-        return FindNode(name.data);
+    inline
+    const aiNode* FindNode ( const aiString& name ) const
+    {
+        return FindNode ( name.data );
     }
 
-    inline 
-    aiNode* FindNode(const aiString& name) {
-        return FindNode(name.data);
+    inline
+    aiNode* FindNode ( const aiString& name )
+    {
+        return FindNode ( name.data );
     }
 
-    const aiNode* FindNode(const char* name) const;
+    const aiNode* FindNode ( const char* name ) const;
 
-    aiNode* FindNode(const char* name);
+    aiNode* FindNode ( const char* name );
 
     /**
      * @brief   Will add new children.
      * @param   numChildren  Number of children to add.
      * @param   children     The array with pointers showing to the children.
      */
-    void addChildren(unsigned int numChildren, aiNode **children);
+    void addChildren ( unsigned int numChildren, aiNode **children );
 #endif // __cplusplus
 };
 
@@ -212,26 +213,26 @@ struct ASSIMP_API aiNode
  */
 #define AI_SCENE_FLAGS_NON_VERBOSE_FORMAT   0x8
 
- /**
- * Denotes pure height-map terrain data. Pure terrains usually consist of quads,
- * sometimes triangles, in a regular grid. The x,y coordinates of all vertex
- * positions refer to the x,y coordinates on the terrain height map, the z-axis
- * stores the elevation at a specific point.
- *
- * TER (Terragen) and HMP (3D Game Studio) are height map formats.
- * @note Assimp is probably not the best choice for loading *huge* terrains -
- * fully triangulated data takes extremely much free store and should be avoided
- * as long as possible (typically you'll do the triangulation when you actually
- * need to render it).
- */
+/**
+* Denotes pure height-map terrain data. Pure terrains usually consist of quads,
+* sometimes triangles, in a regular grid. The x,y coordinates of all vertex
+* positions refer to the x,y coordinates on the terrain height map, the z-axis
+* stores the elevation at a specific point.
+*
+* TER (Terragen) and HMP (3D Game Studio) are height map formats.
+* @note Assimp is probably not the best choice for loading *huge* terrains -
+* fully triangulated data takes extremely much free store and should be avoided
+* as long as possible (typically you'll do the triangulation when you actually
+* need to render it).
+*/
 #define AI_SCENE_FLAGS_TERRAIN 0x10
 
- /**
- * Specifies that the scene data can be shared between structures. For example:
- * one vertex in few faces. \ref AI_SCENE_FLAGS_NON_VERBOSE_FORMAT can not be
- * used for this because \ref AI_SCENE_FLAGS_NON_VERBOSE_FORMAT has internal
- * meaning about postprocessing steps.
- */
+/**
+* Specifies that the scene data can be shared between structures. For example:
+* one vertex in few faces. \ref AI_SCENE_FLAGS_NON_VERBOSE_FORMAT can not be
+* used for this because \ref AI_SCENE_FLAGS_NON_VERBOSE_FORMAT has internal
+* meaning about postprocessing steps.
+*/
 #define AI_SCENE_FLAGS_ALLOW_SHARED			0x20
 
 // -------------------------------------------------------------------------------
@@ -243,8 +244,7 @@ struct ASSIMP_API aiNode
  *  delete a given scene on your own.
  */
 // -------------------------------------------------------------------------------
-struct aiScene
-{
+struct aiScene {
     /** Any combination of the AI_SCENE_FLAGS_XXX flags. By default
     * this value is 0, no flags are set. Most applications will
     * want to reject all scenes with the AI_SCENE_FLAGS_INCOMPLETE
@@ -335,8 +335,8 @@ struct aiScene
     /**
      *  @brief  The global metadata assigned to the scene itself.
      *
-     *  This data contains global metadata which belongs to the scene like 
-     *  unit-conversions, versions, vendors or other model-specific data. This 
+     *  This data contains global metadata which belongs to the scene like
+     *  unit-conversions, versions, vendors or other model-specific data. This
      *  can be used to store format-specific metadata as well.
      */
     C_STRUCT aiMetadata* mMetaData;
@@ -352,60 +352,69 @@ struct aiScene
 
     //! Check whether the scene contains meshes
     //! Unless no special scene flags are set this will always be true.
-    inline bool HasMeshes() const { 
-        return mMeshes != nullptr && mNumMeshes > 0; 
+    inline bool HasMeshes() const
+    {
+        return mMeshes != nullptr && mNumMeshes > 0;
     }
 
     //! Check whether the scene contains materials
     //! Unless no special scene flags are set this will always be true.
-    inline bool HasMaterials() const { 
-        return mMaterials != nullptr && mNumMaterials > 0; 
+    inline bool HasMaterials() const
+    {
+        return mMaterials != nullptr && mNumMaterials > 0;
     }
 
     //! Check whether the scene contains lights
-    inline bool HasLights() const { 
-        return mLights != nullptr && mNumLights > 0; 
+    inline bool HasLights() const
+    {
+        return mLights != nullptr && mNumLights > 0;
     }
 
     //! Check whether the scene contains textures
-    inline bool HasTextures() const {
-        return mTextures != nullptr && mNumTextures > 0; 
+    inline bool HasTextures() const
+    {
+        return mTextures != nullptr && mNumTextures > 0;
     }
 
     //! Check whether the scene contains cameras
-    inline bool HasCameras() const {
-        return mCameras != nullptr && mNumCameras > 0; 
+    inline bool HasCameras() const
+    {
+        return mCameras != nullptr && mNumCameras > 0;
     }
 
     //! Check whether the scene contains animations
-    inline bool HasAnimations() const { 
-        return mAnimations != nullptr && mNumAnimations > 0; 
+    inline bool HasAnimations() const
+    {
+        return mAnimations != nullptr && mNumAnimations > 0;
     }
 
     //! Returns a short filename from a full path
-    static const char* GetShortFilename(const char* filename) {
-        const char* lastSlash = strrchr(filename, '/');
-        if (lastSlash == nullptr) {
-            lastSlash = strrchr(filename, '\\');
+    static const char* GetShortFilename ( const char* filename )
+    {
+        const char* lastSlash = strrchr ( filename, '/' );
+        if ( lastSlash == nullptr ) {
+            lastSlash = strrchr ( filename, '\\' );
         }
         const char* shortFilename = lastSlash != nullptr ? lastSlash + 1 : filename;
         return shortFilename;
     }
 
     //! Returns an embedded texture
-    const aiTexture* GetEmbeddedTexture(const char* filename) const {
+    const aiTexture* GetEmbeddedTexture ( const char* filename ) const
+    {
         // lookup using texture ID (if referenced like: "*1", "*2", etc.)
-        if ('*' == *filename) {
-            int index = std::atoi(filename + 1);
-            if (0 > index || mNumTextures <= static_cast<unsigned>(index))
+        if ( '*' == *filename ) {
+            int index = std::atoi ( filename + 1 );
+            if ( 0 > index || mNumTextures <= static_cast<unsigned> ( index ) ) {
                 return nullptr;
+            }
             return mTextures[index];
         }
         // lookup using filename
-        const char* shortFilename = GetShortFilename(filename);
-        for (unsigned int i = 0; i < mNumTextures; i++) {
-            const char* shortTextureFilename = GetShortFilename(mTextures[i]->mFilename.C_Str());
-            if (strcmp(shortTextureFilename, shortFilename) == 0) {
+        const char* shortFilename = GetShortFilename ( filename );
+        for ( unsigned int i = 0; i < mNumTextures; i++ ) {
+            const char* shortTextureFilename = GetShortFilename ( mTextures[i]->mFilename.C_Str() );
+            if ( strcmp ( shortTextureFilename, shortFilename ) == 0 ) {
                 return mTextures[i];
             }
         }

@@ -38,28 +38,29 @@
 
 #include <windows.h>
 
-class ThreadWindows : public Thread {
-	ThreadCreateCallback callback;
-	void *user;
-	ID id;
-	HANDLE handle = nullptr;
+class ThreadWindows : public Thread
+{
+    ThreadCreateCallback callback;
+    void *user;
+    ID id;
+    HANDLE handle = nullptr;
 
-	static Thread *create_thread_windows();
+    static Thread *create_thread_windows();
 
-	static DWORD WINAPI thread_callback(LPVOID userdata);
+    static DWORD WINAPI thread_callback ( LPVOID userdata );
 
-	static Thread *create_func_windows(ThreadCreateCallback p_callback, void *, const Settings &);
-	static ID get_thread_id_func_windows();
-	static void wait_to_finish_func_windows(Thread *p_thread);
+    static Thread *create_func_windows ( ThreadCreateCallback p_callback, void *, const Settings & );
+    static ID get_thread_id_func_windows();
+    static void wait_to_finish_func_windows ( Thread *p_thread );
 
-	ThreadWindows() {}
+    ThreadWindows() {}
 
 public:
-	virtual ID get_id() const;
+    virtual ID get_id() const;
 
-	static void make_default();
+    static void make_default();
 
-	~ThreadWindows() {}
+    ~ThreadWindows() {}
 };
 
 #endif

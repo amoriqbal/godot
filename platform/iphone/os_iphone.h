@@ -48,84 +48,86 @@
 #include "platform/iphone/vulkan_context_iphone.h"
 #endif
 
-class OSIPhone : public OS_Unix {
+class OSIPhone : public OS_Unix
+{
 private:
-	static HashMap<String, void *> dynamic_symbol_lookup_table;
-	friend void register_dynamic_symbol(char *name, void *address);
+    static HashMap<String, void *> dynamic_symbol_lookup_table;
+    friend void register_dynamic_symbol ( char *name, void *address );
 
-	AudioDriverCoreAudio audio_driver;
+    AudioDriverCoreAudio audio_driver;
 
 #ifdef GAME_CENTER_ENABLED
-	GameCenter *game_center;
+    GameCenter *game_center;
 #endif
 #ifdef STOREKIT_ENABLED
-	InAppStore *store_kit;
+    InAppStore *store_kit;
 #endif
 #ifdef ICLOUD_ENABLED
-	ICloud *icloud;
+    ICloud *icloud;
 #endif
-	iOS *ios;
+    iOS *ios;
 
-	JoypadIPhone *joypad_iphone;
+    JoypadIPhone *joypad_iphone;
 
-	MainLoop *main_loop;
+    MainLoop *main_loop;
 
-	virtual void initialize_core() override;
-	virtual void initialize() override;
+    virtual void initialize_core() override;
+    virtual void initialize() override;
 
-	virtual void initialize_joypads() override {
-	}
+    virtual void initialize_joypads() override
+    {
+    }
 
-	virtual void set_main_loop(MainLoop *p_main_loop) override;
-	virtual MainLoop *get_main_loop() const override;
+    virtual void set_main_loop ( MainLoop *p_main_loop ) override;
+    virtual MainLoop *get_main_loop() const override;
 
-	virtual void delete_main_loop() override;
+    virtual void delete_main_loop() override;
 
-	virtual void finalize() override;
+    virtual void finalize() override;
 
-	String user_data_dir;
+    String user_data_dir;
 
-	bool is_focused = false;
+    bool is_focused = false;
 
-	void deinitialize_modules();
+    void deinitialize_modules();
 
 public:
-	static OSIPhone *get_singleton();
+    static OSIPhone *get_singleton();
 
-	OSIPhone(String p_data_dir);
-	~OSIPhone();
+    OSIPhone ( String p_data_dir );
+    ~OSIPhone();
 
-	void initialize_modules();
+    void initialize_modules();
 
-	bool iterate();
+    bool iterate();
 
-	void start();
+    void start();
 
-	virtual Error open_dynamic_library(const String p_path, void *&p_library_handle, bool p_also_set_library_path = false) override;
-	virtual Error close_dynamic_library(void *p_library_handle) override;
-	virtual Error get_dynamic_library_symbol_handle(void *p_library_handle, const String p_name, void *&p_symbol_handle, bool p_optional = false) override;
+    virtual Error open_dynamic_library ( const String p_path, void *&p_library_handle, bool p_also_set_library_path = false ) override;
+    virtual Error close_dynamic_library ( void *p_library_handle ) override;
+    virtual Error get_dynamic_library_symbol_handle ( void *p_library_handle, const String p_name, void *&p_symbol_handle, bool p_optional = false ) override;
 
-	virtual void alert(const String &p_alert,
-			const String &p_title = "ALERT!") override;
+    virtual void alert ( const String &p_alert,
+                         const String &p_title = "ALERT!" ) override;
 
-	virtual String get_name() const override;
-	virtual String get_model_name() const override;
+    virtual String get_name() const override;
+    virtual String get_model_name() const override;
 
-	virtual Error shell_open(String p_uri) override;
+    virtual Error shell_open ( String p_uri ) override;
 
-	void set_user_data_dir(String p_dir);
-	virtual String get_user_data_dir() const override;
+    void set_user_data_dir ( String p_dir );
+    virtual String get_user_data_dir() const override;
 
-	virtual String get_locale() const override;
+    virtual String get_locale() const override;
 
-	virtual String get_unique_id() const override;
+    virtual String get_unique_id() const override;
 
-	virtual void vibrate_handheld(int p_duration_ms = 500) override;
+    virtual void vibrate_handheld ( int p_duration_ms = 500 ) override;
 
-	virtual bool _check_internal_feature_support(const String &p_feature) override;
+    virtual bool _check_internal_feature_support ( const String &p_feature ) override;
 
-	void on_focus_out();
-	void on_focus_in();
+    void on_focus_out();
+    void on_focus_in();
 };
 
 #endif // OS_IPHONE_H

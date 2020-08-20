@@ -14,7 +14,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #ifndef _SMAZ_H
 #define _SMAZ_H
 
-int smaz_compress(const char *in, int inlen, char *out, int outlen);
-int smaz_decompress(const char *in, int inlen, char *out, int outlen);
+int smaz_compress ( const char *in, int inlen, char *out, int outlen );
+int smaz_decompress ( const char *in, int inlen, char *out, int outlen );
 
 #endif

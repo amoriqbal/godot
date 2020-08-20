@@ -65,7 +65,7 @@
 # endif
 
 # if defined(OPUS_HAVE_RTCD)
-int opus_select_arch(void);
+int opus_select_arch ( void );
 
 #define OPUS_ARCH_ARM_V4    (0)
 #define OPUS_ARCH_ARM_EDSP  (1)

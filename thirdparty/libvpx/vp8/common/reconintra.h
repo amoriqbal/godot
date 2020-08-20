@@ -18,24 +18,24 @@
 extern "C" {
 #endif
 
-void vp8_build_intra_predictors_mby_s(MACROBLOCKD *x,
-                                      unsigned char *yabove_row,
-                                      unsigned char *yleft,
-                                      int left_stride,
-                                      unsigned char *ypred_ptr,
-                                      int y_stride);
+void vp8_build_intra_predictors_mby_s ( MACROBLOCKD *x,
+                                        unsigned char *yabove_row,
+                                        unsigned char *yleft,
+                                        int left_stride,
+                                        unsigned char *ypred_ptr,
+                                        int y_stride );
 
-void vp8_build_intra_predictors_mbuv_s(MACROBLOCKD *x,
-                                       unsigned char * uabove_row,
-                                       unsigned char * vabove_row,
-                                       unsigned char * uleft,
-                                       unsigned char * vleft,
-                                       int left_stride,
-                                       unsigned char * upred_ptr,
-                                       unsigned char * vpred_ptr,
-                                       int pred_stride);
+void vp8_build_intra_predictors_mbuv_s ( MACROBLOCKD *x,
+        unsigned char * uabove_row,
+        unsigned char * vabove_row,
+        unsigned char * uleft,
+        unsigned char * vleft,
+        int left_stride,
+        unsigned char * upred_ptr,
+        unsigned char * vpred_ptr,
+        int pred_stride );
 
-void vp8_init_intra_predictors(void);
+void vp8_init_intra_predictors ( void );
 
 #ifdef __cplusplus
 }  // extern "C"

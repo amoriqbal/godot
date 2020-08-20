@@ -17,7 +17,7 @@
 extern "C" {
 #endif
 
-void vp8_decode_mode_mvs(VP8D_COMP *);
+void vp8_decode_mode_mvs ( VP8D_COMP * );
 
 #ifdef __cplusplus
 }  // extern "C"

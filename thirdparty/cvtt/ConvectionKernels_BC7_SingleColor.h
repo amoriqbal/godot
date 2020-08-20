@@ -1,24 +1,26 @@
 #pragma once
 #include <stdint.h>
 
-namespace cvtt { namespace Tables { namespace BC7SC {
-
-struct TableEntry
+namespace cvtt
 {
+namespace Tables
+{
+namespace BC7SC
+{
+
+struct TableEntry {
     uint8_t m_min;
     uint8_t m_max;
     uint8_t m_actualColor;
 };
 
-struct Table
-{
+struct Table {
     uint8_t m_index;
     uint8_t m_pBits;
     TableEntry m_entries[256];
 };
 
-Table g_mode0_p00_i1=
-{
+Table g_mode0_p00_i1= {
     1,
     0,
     {
@@ -57,8 +59,7 @@ Table g_mode0_p00_i1=
     }
 };
 
-Table g_mode0_p00_i2=
-{
+Table g_mode0_p00_i2= {
     2,
     0,
     {
@@ -97,8 +98,7 @@ Table g_mode0_p00_i2=
     }
 };
 
-Table g_mode0_p00_i3=
-{
+Table g_mode0_p00_i3= {
     3,
     0,
     {
@@ -137,8 +137,7 @@ Table g_mode0_p00_i3=
     }
 };
 
-Table g_mode0_p01_i1=
-{
+Table g_mode0_p01_i1= {
     1,
     2,
     {
@@ -177,8 +176,7 @@ Table g_mode0_p01_i1=
     }
 };
 
-Table g_mode0_p01_i2=
-{
+Table g_mode0_p01_i2= {
     2,
     2,
     {
@@ -217,8 +215,7 @@ Table g_mode0_p01_i2=
     }
 };
 
-Table g_mode0_p01_i3=
-{
+Table g_mode0_p01_i3= {
     3,
     2,
     {
@@ -257,8 +254,7 @@ Table g_mode0_p01_i3=
     }
 };
 
-Table g_mode0_p10_i1=
-{
+Table g_mode0_p10_i1= {
     1,
     1,
     {
@@ -297,8 +293,7 @@ Table g_mode0_p10_i1=
     }
 };
 
-Table g_mode0_p10_i2=
-{
+Table g_mode0_p10_i2= {
     2,
     1,
     {
@@ -337,8 +332,7 @@ Table g_mode0_p10_i2=
     }
 };
 
-Table g_mode0_p10_i3=
-{
+Table g_mode0_p10_i3= {
     3,
     3,
     {
@@ -377,8 +371,7 @@ Table g_mode0_p10_i3=
     }
 };
 
-Table g_mode0_p11_i1=
-{
+Table g_mode0_p11_i1= {
     1,
     3,
     {
@@ -417,8 +410,7 @@ Table g_mode0_p11_i1=
     }
 };
 
-Table g_mode0_p11_i2=
-{
+Table g_mode0_p11_i2= {
     2,
     3,
     {
@@ -457,8 +449,7 @@ Table g_mode0_p11_i2=
     }
 };
 
-Table g_mode0_p11_i3=
-{
+Table g_mode0_p11_i3= {
     3,
     3,
     {
@@ -497,8 +488,7 @@ Table g_mode0_p11_i3=
     }
 };
 
-Table g_mode1_p0_i1=
-{
+Table g_mode1_p0_i1= {
     1,
     0,
     {
@@ -537,8 +527,7 @@ Table g_mode1_p0_i1=
     }
 };
 
-Table g_mode1_p0_i2=
-{
+Table g_mode1_p0_i2= {
     2,
     0,
     {
@@ -577,8 +566,7 @@ Table g_mode1_p0_i2=
     }
 };
 
-Table g_mode1_p0_i3=
-{
+Table g_mode1_p0_i3= {
     3,
     0,
     {
@@ -617,8 +605,7 @@ Table g_mode1_p0_i3=
     }
 };
 
-Table g_mode1_p1_i1=
-{
+Table g_mode1_p1_i1= {
     1,
     1,
     {
@@ -657,8 +644,7 @@ Table g_mode1_p1_i1=
     }
 };
 
-Table g_mode1_p1_i2=
-{
+Table g_mode1_p1_i2= {
     2,
     1,
     {
@@ -697,8 +683,7 @@ Table g_mode1_p1_i2=
     }
 };
 
-Table g_mode1_p1_i3=
-{
+Table g_mode1_p1_i3= {
     3,
     1,
     {
@@ -737,8 +722,7 @@ Table g_mode1_p1_i3=
     }
 };
 
-Table g_mode2=
-{
+Table g_mode2= {
     1,
     0,
     {
@@ -777,8 +761,7 @@ Table g_mode2=
     }
 };
 
-Table g_mode3_p0=
-{
+Table g_mode3_p0= {
     1,
     0,
     {
@@ -817,8 +800,7 @@ Table g_mode3_p0=
     }
 };
 
-Table g_mode3_p1=
-{
+Table g_mode3_p1= {
     1,
     1,
     {
@@ -857,8 +839,7 @@ Table g_mode3_p1=
     }
 };
 
-Table g_mode4_rgb_low=
-{
+Table g_mode4_rgb_low= {
     1,
     0,
     {
@@ -897,8 +878,7 @@ Table g_mode4_rgb_low=
     }
 };
 
-Table g_mode4_rgb_high_i1=
-{
+Table g_mode4_rgb_high_i1= {
     1,
     0,
     {
@@ -937,8 +917,7 @@ Table g_mode4_rgb_high_i1=
     }
 };
 
-Table g_mode4_rgb_high_i2=
-{
+Table g_mode4_rgb_high_i2= {
     2,
     0,
     {
@@ -977,8 +956,7 @@ Table g_mode4_rgb_high_i2=
     }
 };
 
-Table g_mode4_rgb_high_i3=
-{
+Table g_mode4_rgb_high_i3= {
     3,
     0,
     {
@@ -1017,8 +995,7 @@ Table g_mode4_rgb_high_i3=
     }
 };
 
-Table g_mode4_a_low=
-{
+Table g_mode4_a_low= {
     1,
     0,
     {
@@ -1057,8 +1034,7 @@ Table g_mode4_a_low=
     }
 };
 
-Table g_mode4_a_high_i1=
-{
+Table g_mode4_a_high_i1= {
     1,
     0,
     {
@@ -1097,8 +1073,7 @@ Table g_mode4_a_high_i1=
     }
 };
 
-Table g_mode4_a_high_i2=
-{
+Table g_mode4_a_high_i2= {
     2,
     0,
     {
@@ -1137,8 +1112,7 @@ Table g_mode4_a_high_i2=
     }
 };
 
-Table g_mode4_a_high_i3=
-{
+Table g_mode4_a_high_i3= {
     3,
     0,
     {
@@ -1177,8 +1151,7 @@ Table g_mode4_a_high_i3=
     }
 };
 
-Table g_mode5_rgb_low=
-{
+Table g_mode5_rgb_low= {
     1,
     0,
     {
@@ -1217,8 +1190,7 @@ Table g_mode5_rgb_low=
     }
 };
 
-Table g_mode6_p0_i1=
-{
+Table g_mode6_p0_i1= {
     1,
     0,
     {
@@ -1257,8 +1229,7 @@ Table g_mode6_p0_i1=
     }
 };
 
-Table g_mode6_p0_i2=
-{
+Table g_mode6_p0_i2= {
     2,
     0,
     {
@@ -1297,8 +1268,7 @@ Table g_mode6_p0_i2=
     }
 };
 
-Table g_mode6_p0_i3=
-{
+Table g_mode6_p0_i3= {
     3,
     0,
     {
@@ -1337,8 +1307,7 @@ Table g_mode6_p0_i3=
     }
 };
 
-Table g_mode6_p0_i4=
-{
+Table g_mode6_p0_i4= {
     4,
     0,
     {
@@ -1377,8 +1346,7 @@ Table g_mode6_p0_i4=
     }
 };
 
-Table g_mode6_p0_i5=
-{
+Table g_mode6_p0_i5= {
     5,
     0,
     {
@@ -1417,8 +1385,7 @@ Table g_mode6_p0_i5=
     }
 };
 
-Table g_mode6_p0_i6=
-{
+Table g_mode6_p0_i6= {
     6,
     0,
     {
@@ -1457,8 +1424,7 @@ Table g_mode6_p0_i6=
     }
 };
 
-Table g_mode6_p0_i7=
-{
+Table g_mode6_p0_i7= {
     7,
     0,
     {
@@ -1497,8 +1463,7 @@ Table g_mode6_p0_i7=
     }
 };
 
-Table g_mode6_p1_i1=
-{
+Table g_mode6_p1_i1= {
     1,
     1,
     {
@@ -1537,8 +1502,7 @@ Table g_mode6_p1_i1=
     }
 };
 
-Table g_mode6_p1_i2=
-{
+Table g_mode6_p1_i2= {
     2,
     1,
     {
@@ -1577,8 +1541,7 @@ Table g_mode6_p1_i2=
     }
 };
 
-Table g_mode6_p1_i3=
-{
+Table g_mode6_p1_i3= {
     3,
     1,
     {
@@ -1617,8 +1580,7 @@ Table g_mode6_p1_i3=
     }
 };
 
-Table g_mode6_p1_i4=
-{
+Table g_mode6_p1_i4= {
     4,
     1,
     {
@@ -1657,8 +1619,7 @@ Table g_mode6_p1_i4=
     }
 };
 
-Table g_mode6_p1_i5=
-{
+Table g_mode6_p1_i5= {
     5,
     1,
     {
@@ -1697,8 +1658,7 @@ Table g_mode6_p1_i5=
     }
 };
 
-Table g_mode6_p1_i6=
-{
+Table g_mode6_p1_i6= {
     6,
     1,
     {
@@ -1737,8 +1697,7 @@ Table g_mode6_p1_i6=
     }
 };
 
-Table g_mode6_p1_i7=
-{
+Table g_mode6_p1_i7= {
     7,
     1,
     {
@@ -1777,8 +1736,7 @@ Table g_mode6_p1_i7=
     }
 };
 
-Table g_mode7_p00=
-{
+Table g_mode7_p00= {
     1,
     0,
     {
@@ -1817,8 +1775,7 @@ Table g_mode7_p00=
     }
 };
 
-Table g_mode7_p01=
-{
+Table g_mode7_p01= {
     1,
     2,
     {
@@ -1857,8 +1814,7 @@ Table g_mode7_p01=
     }
 };
 
-Table g_mode7_p10=
-{
+Table g_mode7_p10= {
     1,
     1,
     {
@@ -1897,8 +1853,7 @@ Table g_mode7_p10=
     }
 };
 
-Table g_mode7_p11=
-{
+Table g_mode7_p11= {
     1,
     3,
     {
@@ -1937,4 +1892,6 @@ Table g_mode7_p11=
     }
 };
 
-}}}
+}
+}
+}

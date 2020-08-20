@@ -57,7 +57,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <memory>
 #include <vector>
 
-namespace Assimp {
+namespace Assimp
+{
 
 // --------------------------------------------------------------------------------------------
 /** Wrapper class around IOStream to allow for consistent writing of binary data in both
@@ -87,28 +88,29 @@ public:
      *    stream is in little endian byte order. Otherwise the
      *    endianness information is defined by the @c SwapEndianess
      *    template parameter and this parameter is meaningless.  */
-    StreamWriter(std::shared_ptr<IOStream> stream, bool le = false)
-        : stream(stream)
-        , le(le)
+    StreamWriter ( std::shared_ptr<IOStream> stream, bool le = false )
+        : stream ( stream )
+        , le ( le )
         , cursor()
     {
-        ai_assert(stream);
-        buffer.reserve(INITIAL_CAPACITY);
+        ai_assert ( stream );
+        buffer.reserve ( INITIAL_CAPACITY );
     }
 
     // ---------------------------------------------------------------------
-    StreamWriter(IOStream* stream, bool le = false)
-        : stream(std::shared_ptr<IOStream>(stream))
-        , le(le)
+    StreamWriter ( IOStream* stream, bool le = false )
+        : stream ( std::shared_ptr<IOStream> ( stream ) )
+        , le ( le )
         , cursor()
     {
-        ai_assert(stream);
-        buffer.reserve(INITIAL_CAPACITY);
+        ai_assert ( stream );
+        buffer.reserve ( INITIAL_CAPACITY );
     }
 
     // ---------------------------------------------------------------------
-    ~StreamWriter() {
-        stream->Write(buffer.data(), 1, buffer.size());
+    ~StreamWriter()
+    {
+        stream->Write ( buffer.data(), 1, buffer.size() );
         stream->Flush();
     }
 
@@ -118,7 +120,7 @@ public:
     /** Flush the contents of the internal buffer, and the output IOStream */
     void Flush()
     {
-        stream->Write(buffer.data(), 1, buffer.size());
+        stream->Write ( buffer.data(), 1, buffer.size() );
         stream->Flush();
         buffer.clear();
         cursor = 0;
@@ -128,10 +130,10 @@ public:
     /** Seek to the given offset / origin in the output IOStream.
      *
      *  Flushes the internal buffer and the output IOStream prior to seeking. */
-    aiReturn Seek(size_t pOffset, aiOrigin pOrigin=aiOrigin_SET)
+    aiReturn Seek ( size_t pOffset, aiOrigin pOrigin=aiOrigin_SET )
     {
         Flush();
-        return stream->Seek(pOffset, pOrigin);
+        return stream->Seek ( pOffset, pOrigin );
     }
 
     // ---------------------------------------------------------------------
@@ -148,94 +150,104 @@ public:
 
     // ---------------------------------------------------------------------
     /** Write a float to the stream  */
-    void PutF4(float f)
+    void PutF4 ( float f )
     {
-        Put(f);
+        Put ( f );
     }
 
     // ---------------------------------------------------------------------
     /** Write a double to the stream  */
-    void PutF8(double d)    {
-        Put(d);
+    void PutF8 ( double d )
+    {
+        Put ( d );
     }
 
     // ---------------------------------------------------------------------
     /** Write a signed 16 bit integer to the stream */
-    void PutI2(int16_t n)   {
-        Put(n);
+    void PutI2 ( int16_t n )
+    {
+        Put ( n );
     }
 
     // ---------------------------------------------------------------------
     /** Write a signed 8 bit integer to the stream */
-    void PutI1(int8_t n)    {
-        Put(n);
+    void PutI1 ( int8_t n )
+    {
+        Put ( n );
     }
 
     // ---------------------------------------------------------------------
     /** Write an signed 32 bit integer to the stream */
-    void PutI4(int32_t n)   {
-        Put(n);
+    void PutI4 ( int32_t n )
+    {
+        Put ( n );
     }
 
     // ---------------------------------------------------------------------
     /** Write a signed 64 bit integer to the stream */
-    void PutI8(int64_t n)   {
-        Put(n);
+    void PutI8 ( int64_t n )
+    {
+        Put ( n );
     }
 
     // ---------------------------------------------------------------------
     /** Write a unsigned 16 bit integer to the stream */
-    void PutU2(uint16_t n)  {
-        Put(n);
+    void PutU2 ( uint16_t n )
+    {
+        Put ( n );
     }
 
     // ---------------------------------------------------------------------
     /** Write a unsigned 8 bit integer to the stream */
-    void PutU1(uint8_t n)   {
-        Put(n);
+    void PutU1 ( uint8_t n )
+    {
+        Put ( n );
     }
 
     // ---------------------------------------------------------------------
     /** Write an unsigned 32 bit integer to the stream */
-    void PutU4(uint32_t n)  {
-        Put(n);
+    void PutU4 ( uint32_t n )
+    {
+        Put ( n );
     }
 
     // ---------------------------------------------------------------------
     /** Write a unsigned 64 bit integer to the stream */
-    void PutU8(uint64_t n)  {
-        Put(n);
+    void PutU8 ( uint64_t n )
+    {
+        Put ( n );
     }
 
     // ---------------------------------------------------------------------
     /** Write a single character to the stream */
-    void PutChar(char c)    {
-        Put(c);
+    void PutChar ( char c )
+    {
+        Put ( c );
     }
 
     // ---------------------------------------------------------------------
     /** Write an aiString to the stream */
-    void PutString(const aiString& s)
+    void PutString ( const aiString& s )
     {
         // as Put(T f) below
-        if (cursor + s.length >= buffer.size()) {
-            buffer.resize(cursor + s.length);
+        if ( cursor + s.length >= buffer.size() ) {
+            buffer.resize ( cursor + s.length );
         }
         void* dest = &buffer[cursor];
-        ::memcpy(dest, s.C_Str(), s.length);
+        ::memcpy ( dest, s.C_Str(), s.length );
         cursor += s.length;
     }
 
     // ---------------------------------------------------------------------
     /** Write a std::string to the stream */
-    void PutString(const std::string& s)
+    void PutString ( const std::string& s )
     {
         // as Put(T f) below
-        if (cursor + s.size() >= buffer.size()) {
-            buffer.resize(cursor + s.size());
+        if ( cursor + s.size() >= buffer.size() ) {
+            buffer.resize ( cursor + s.size() );
         }
         void* dest = &buffer[cursor];
-        ::memcpy(dest, s.c_str(), s.size());
+        ::memcpy ( dest, s.c_str(), s.size() );
         cursor += s.size();
     }
 
@@ -244,29 +256,33 @@ public:
     // ---------------------------------------------------------------------
     /** overload operator<< and allow chaining of MM ops. */
     template <typename T>
-    StreamWriter& operator << (T f) {
-        Put(f);
+    StreamWriter& operator << ( T f )
+    {
+        Put ( f );
         return *this;
     }
 
     // ---------------------------------------------------------------------
-    std::size_t GetCurrentPos() const {
+    std::size_t GetCurrentPos() const
+    {
         return cursor;
     }
 
     // ---------------------------------------------------------------------
-    void SetCurrentPos(std::size_t new_cursor) {
+    void SetCurrentPos ( std::size_t new_cursor )
+    {
         cursor = new_cursor;
     }
 
     // ---------------------------------------------------------------------
     /** Generic write method. ByteSwap::Swap(T*) *must* be defined */
     template <typename T>
-    void Put(T f)   {
-        Intern :: Getter<SwapEndianess,T,RuntimeSwitch>() (&f, le);
+    void Put ( T f )
+    {
+        Intern :: Getter<SwapEndianess,T,RuntimeSwitch>() ( &f, le );
 
-        if (cursor + sizeof(T) >= buffer.size()) {
-            buffer.resize(cursor + sizeof(T));
+        if ( cursor + sizeof ( T ) >= buffer.size() ) {
+            buffer.resize ( cursor + sizeof ( T ) );
         }
 
         void* dest = &buffer[cursor];
@@ -274,8 +290,8 @@ public:
         // reinterpret_cast + assignment breaks strict aliasing rules
         // and generally causes trouble on platforms such as ARM that
         // do not silently ignore alignment faults.
-        ::memcpy(dest, &f, sizeof(T));
-        cursor += sizeof(T);
+        ::memcpy ( dest, &f, sizeof ( T ) );
+        cursor += sizeof ( T );
     }
 
 private:
@@ -291,11 +307,11 @@ private:
 // --------------------------------------------------------------------------------------------
 // `static` StreamWriter. Their byte order is fixed and they might be a little bit faster.
 #ifdef AI_BUILD_BIG_ENDIAN
-    typedef StreamWriter<true>  StreamWriterLE;
-    typedef StreamWriter<false> StreamWriterBE;
+typedef StreamWriter<true>  StreamWriterLE;
+typedef StreamWriter<false> StreamWriterBE;
 #else
-    typedef StreamWriter<true>  StreamWriterBE;
-    typedef StreamWriter<false> StreamWriterLE;
+typedef StreamWriter<true>  StreamWriterBE;
+typedef StreamWriter<false> StreamWriterLE;
 #endif
 
 // `dynamic` StreamWriter. The byte order of the input data is specified in the

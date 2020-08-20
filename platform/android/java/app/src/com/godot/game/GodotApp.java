@@ -36,5 +36,6 @@ import org.godotengine.godot.FullScreenGodotApp;
  * Template activity for Godot Android custom builds.
  * Feel free to extend and modify this class for your custom logic.
  */
-public class GodotApp extends FullScreenGodotApp {
+public class GodotApp extends FullScreenGodotApp
+{
 }

@@ -57,14 +57,14 @@
  * arch[4] -> avx
  */
 #define OPUS_ARCHMASK 7
-int opus_select_arch(void);
+int opus_select_arch ( void );
 
 #else
 #define OPUS_ARCHMASK 0
 
-static OPUS_INLINE int opus_select_arch(void)
+static OPUS_INLINE int opus_select_arch ( void )
 {
-  return 0;
+    return 0;
 }
 #endif
 #endif

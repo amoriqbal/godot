@@ -56,7 +56,8 @@ struct aiMesh;
 struct aiNode;
 class OptimizeMeshesProcessTest;
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /** @brief Postprocessing step to optimize mesh usage
@@ -66,7 +67,8 @@ namespace Assimp    {
  *
  *  @note Instanced meshes are currently not processed.
  */
-class OptimizeMeshesProcess : public BaseProcess {
+class OptimizeMeshesProcess : public BaseProcess
+{
 public:
     /// @brief  The class constructor.
     OptimizeMeshesProcess();
@@ -78,9 +80,11 @@ public:
      */
     struct MeshInfo {
         MeshInfo() AI_NO_EXCEPT
-        : instance_cnt(0)
-        , vertex_format(0)
-        , output_id(0xffffffff) {
+    :
+        instance_cnt ( 0 )
+        , vertex_format ( 0 )
+        , output_id ( 0xffffffff )
+        {
             // empty
         }
 
@@ -96,13 +100,13 @@ public:
 
 public:
     // -------------------------------------------------------------------
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
     // -------------------------------------------------------------------
-    void SetupProperties(const Importer* pImp);
+    void SetupProperties ( const Importer* pImp );
 
 
     // -------------------------------------------------------------------
@@ -112,12 +116,14 @@ public:
      *  IsActive() sets this property automatically to true if the
      *  aiProcess_SortByPType flag is found.
      */
-    void EnablePrimitiveTypeSorting(bool enable) {
+    void EnablePrimitiveTypeSorting ( bool enable )
+    {
         pts = enable;
     }
 
     // Getter
-    bool IsPrimitiveTypeSortingEnabled () const {
+    bool IsPrimitiveTypeSortingEnabled () const
+    {
         return pts;
     }
 
@@ -130,7 +136,7 @@ public:
      *  @param verts Maximum number of vertices per mesh
      *  @param faces Maximum number of faces per mesh
      */
-    void SetPreferredMeshSizeLimit (unsigned int verts, unsigned int faces)
+    void SetPreferredMeshSizeLimit ( unsigned int verts, unsigned int faces )
     {
         max_verts = verts;
         max_faces = faces;
@@ -143,7 +149,7 @@ protected:
     /** @brief Do the actual optimization on all meshes of this node
      *  @param pNode Node we're working with
      */
-    void ProcessNode( aiNode* pNode);
+    void ProcessNode ( aiNode* pNode );
 
     // -------------------------------------------------------------------
     /** @brief Returns true if b can be joined with a
@@ -152,13 +158,13 @@ protected:
      *  @param faces Number of output faces up to now
      */
     bool CanJoin ( unsigned int a, unsigned int b,
-        unsigned int verts, unsigned int faces );
+                   unsigned int verts, unsigned int faces );
 
     // -------------------------------------------------------------------
     /** @brief Find instanced meshes, for the moment we're excluding
      *   them from all optimizations
      */
-    void FindInstancedMeshes (aiNode* pNode);
+    void FindInstancedMeshes ( aiNode* pNode );
 
 private:
 

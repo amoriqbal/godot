@@ -15,8 +15,7 @@
 
 #include "coefupdateprobs.h"
 
-DECLARE_ALIGNED(16, const unsigned char, vp8_norm[256]) =
-{
+DECLARE_ALIGNED ( 16, const unsigned char, vp8_norm[256] ) = {
     0, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4,
     3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
     2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
@@ -35,27 +34,25 @@ DECLARE_ALIGNED(16, const unsigned char, vp8_norm[256]) =
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
-DECLARE_ALIGNED(16, const unsigned char, vp8_coef_bands[16]) =
+DECLARE_ALIGNED ( 16, const unsigned char, vp8_coef_bands[16] ) =
 { 0, 1, 2, 3, 6, 4, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7};
 
-DECLARE_ALIGNED(16, const unsigned char,
-                vp8_prev_token_class[MAX_ENTROPY_TOKENS]) =
+DECLARE_ALIGNED ( 16, const unsigned char,
+                  vp8_prev_token_class[MAX_ENTROPY_TOKENS] ) =
 { 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0};
 
-DECLARE_ALIGNED(16, const int, vp8_default_zig_zag1d[16]) =
-{
+DECLARE_ALIGNED ( 16, const int, vp8_default_zig_zag1d[16] ) = {
     0,  1,  4,  8,
     5,  2,  3,  6,
     9, 12, 13, 10,
     7, 11, 14, 15,
 };
 
-DECLARE_ALIGNED(16, const short, vp8_default_inv_zig_zag[16]) =
-{
+DECLARE_ALIGNED ( 16, const short, vp8_default_inv_zig_zag[16] ) = {
     1,  2,  6,  7,
     3,  5,  8, 13,
     4,  9, 12, 14,
-   10, 11, 15, 16
+    10, 11, 15, 16
 };
 
 /* vp8_default_zig_zag_mask generated with:
@@ -71,12 +68,11 @@ DECLARE_ALIGNED(16, const short, vp8_default_inv_zig_zag[16]) =
 
     }
 */
-DECLARE_ALIGNED(16, const short, vp8_default_zig_zag_mask[16]) =
-{
-     1,    2,    32,     64,
-     4,   16,   128,   4096,
-     8,  256,  2048,   8192,
-   512, 1024, 16384, -32768
+DECLARE_ALIGNED ( 16, const short, vp8_default_zig_zag_mask[16] ) = {
+    1,    2,    32,     64,
+    4,   16,   128,   4096,
+    8,  256,  2048,   8192,
+    512, 1024, 16384, -32768
 };
 
 const int vp8_mb_feature_data_bits[MB_LVL_MAX] = {7, 6};
@@ -86,23 +82,22 @@ const int vp8_mb_feature_data_bits[MB_LVL_MAX] = {7, 6};
 const vp8_tree_index vp8_coef_tree[ 22] =     /* corresponding _CONTEXT_NODEs */
 {
     -DCT_EOB_TOKEN, 2,                             /* 0 = EOB */
-    -ZERO_TOKEN, 4,                               /* 1 = ZERO */
-    -ONE_TOKEN, 6,                               /* 2 = ONE */
-    8, 12,                                      /* 3 = LOW_VAL */
-    -TWO_TOKEN, 10,                            /* 4 = TWO */
-    -THREE_TOKEN, -FOUR_TOKEN,                /* 5 = THREE */
-    14, 16,                                    /* 6 = HIGH_LOW */
-    -DCT_VAL_CATEGORY1, -DCT_VAL_CATEGORY2,   /* 7 = CAT_ONE */
-    18, 20,                                   /* 8 = CAT_THREEFOUR */
-    -DCT_VAL_CATEGORY3, -DCT_VAL_CATEGORY4,  /* 9 = CAT_THREE */
-    -DCT_VAL_CATEGORY5, -DCT_VAL_CATEGORY6   /* 10 = CAT_FIVE */
-};
+        -ZERO_TOKEN, 4,                               /* 1 = ZERO */
+        -ONE_TOKEN, 6,                               /* 2 = ONE */
+        8, 12,                                      /* 3 = LOW_VAL */
+        -TWO_TOKEN, 10,                            /* 4 = TWO */
+        -THREE_TOKEN, -FOUR_TOKEN,                /* 5 = THREE */
+        14, 16,                                    /* 6 = HIGH_LOW */
+        -DCT_VAL_CATEGORY1, -DCT_VAL_CATEGORY2,   /* 7 = CAT_ONE */
+        18, 20,                                   /* 8 = CAT_THREEFOUR */
+        -DCT_VAL_CATEGORY3, -DCT_VAL_CATEGORY4,  /* 9 = CAT_THREE */
+        -DCT_VAL_CATEGORY5, -DCT_VAL_CATEGORY6   /* 10 = CAT_FIVE */
+    };
 
 /* vp8_coef_encodings generated with:
     vp8_tokens_from_tree(vp8_coef_encodings, vp8_coef_tree);
 */
-vp8_token vp8_coef_encodings[MAX_ENTROPY_TOKENS] =
-{
+vp8_token vp8_coef_encodings[MAX_ENTROPY_TOKENS] = {
     {2, 2},
     {6, 3},
     {28, 5},
@@ -161,10 +156,10 @@ static const vp8_tree_index cat3[6] = { 2, 2, 4, 4, 0, 0 };
 static const vp8_tree_index cat4[8] = { 2, 2, 4, 4, 6, 6, 0, 0 };
 static const vp8_tree_index cat5[10] = { 2, 2, 4, 4, 6, 6, 8, 8, 0, 0 };
 static const vp8_tree_index cat6[22] = { 2, 2, 4, 4, 6, 6, 8, 8, 10, 10, 12, 12,
-                                        14, 14, 16, 16, 18, 18, 20, 20, 0, 0 };
+                                         14, 14, 16, 16, 18, 18, 20, 20, 0, 0
+                                       };
 
-const vp8_extra_bit_struct vp8_extra_bits[12] =
-{
+const vp8_extra_bit_struct vp8_extra_bits[12] = {
     { 0, 0, 0, 0},
     { 0, 0, 0, 1},
     { 0, 0, 0, 2},
@@ -181,8 +176,8 @@ const vp8_extra_bit_struct vp8_extra_bits[12] =
 
 #include "default_coef_probs.h"
 
-void vp8_default_coef_probs(VP8_COMMON *pc)
+void vp8_default_coef_probs ( VP8_COMMON *pc )
 {
-    memcpy(pc->fc.coef_probs, default_coef_probs, sizeof(default_coef_probs));
+    memcpy ( pc->fc.coef_probs, default_coef_probs, sizeof ( default_coef_probs ) );
 }
 

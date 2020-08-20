@@ -47,7 +47,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assimp/IOStream.hpp>
 #include <assimp/DefaultIOSystem.h>
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // ----------------------------------------------------------------------------------
 /** @class  FileLogStream
@@ -57,9 +58,9 @@ class FileLogStream :
     public LogStream
 {
 public:
-    FileLogStream( const char* file, IOSystem* io = NULL );
+    FileLogStream ( const char* file, IOSystem* io = NULL );
     ~FileLogStream();
-    void write( const char* message );
+    void write ( const char* message );
 
 private:
     IOStream *m_pStream;
@@ -67,19 +68,20 @@ private:
 
 // ----------------------------------------------------------------------------------
 //  Constructor
-inline FileLogStream::FileLogStream( const char* file, IOSystem* io ) :
-    m_pStream(NULL)
+inline FileLogStream::FileLogStream ( const char* file, IOSystem* io ) :
+    m_pStream ( NULL )
 {
-    if ( !file || 0 == *file )
+    if ( !file || 0 == *file ) {
         return;
+    }
 
     // If no IOSystem is specified: take a default one
-    if (!io)
-    {
+    if ( !io ) {
         DefaultIOSystem FileSystem;
-        m_pStream = FileSystem.Open( file, "wt");
+        m_pStream = FileSystem.Open ( file, "wt" );
+    } else {
+        m_pStream = io->Open ( file, "wt" );
     }
-    else m_pStream = io->Open( file, "wt" );
 }
 
 // ----------------------------------------------------------------------------------
@@ -92,11 +94,10 @@ inline FileLogStream::~FileLogStream()
 
 // ----------------------------------------------------------------------------------
 //  Write method
-inline void FileLogStream::write( const char* message )
+inline void FileLogStream::write ( const char* message )
 {
-    if (m_pStream != NULL)
-    {
-        m_pStream->Write(message, sizeof(char), ::strlen(message));
+    if ( m_pStream != NULL ) {
+        m_pStream->Write ( message, sizeof ( char ), ::strlen ( message ) );
         m_pStream->Flush();
     }
 }

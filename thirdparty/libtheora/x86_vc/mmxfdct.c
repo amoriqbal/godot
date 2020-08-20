@@ -8,8 +8,8 @@
  * THE Theora SOURCE CODE IS COPYRIGHT (C) 1999-2006                *
  * by the Xiph.Org Foundation http://www.xiph.org/                  *
  *                                                                  *
- ********************************************************************/ 
- /*MMX fDCT implementation for x86_32*/
+ ********************************************************************/
+/*MMX fDCT implementation for x86_32*/
 /*$Id: fdct_ses2.c 14579 2008-03-12 06:42:40Z xiphmont $*/
 #include "x86enc.h"
 
@@ -462,209 +462,210 @@
 }
 
 /*MMX implementation of the fDCT.*/
-void oc_enc_fdct8x8_mmx(ogg_int16_t _y[64],const ogg_int16_t _x[64]){
-  ptrdiff_t a;
-  __asm{
+void oc_enc_fdct8x8_mmx ( ogg_int16_t _y[64],const ogg_int16_t _x[64] )
+{
+    ptrdiff_t a;
+    __asm{
 #define Y eax
 #define A ecx
 #define X edx
-    /*Add two extra bits of working precision to improve accuracy; any more and
-       we could overflow.*/
-    /*We also add biases to correct for some systematic error that remains in
-       the full fDCT->iDCT round trip.*/
-    mov X, _x
-    mov Y, _y
-    movq mm0,[0x00+X]
-    movq mm1,[0x10+X]
-    movq mm2,[0x20+X]
-    movq mm3,[0x30+X]
-    pcmpeqb mm4,mm4
-    pxor mm7,mm7
-    movq mm5,mm0
-    psllw mm0,2
-    pcmpeqw mm5,mm7
-    movq mm7,[0x70+X]
-    psllw mm1,2
-    psubw mm5,mm4
-    psllw mm2,2
-    mov A,1
-    pslld mm5,16
-    movd mm6,A
-    psllq mm5,16
-    mov A,0x10001
-    psllw mm3,2
-    movd mm4,A
-    punpckhwd mm5,mm6
-    psubw mm1,mm6
-    movq mm6,[0x60+X]
-    paddw mm0,mm5
-    movq mm5,[0x50+X]
-    paddw mm0,mm4
-    movq mm4,[0x40+X]
-    /*We inline stage1 of the transform here so we can get better instruction
-       scheduling with the shifts.*/
-    /*mm0=t7'=t0-t7*/
-    psllw mm7,2
-    psubw mm0,mm7
-    psllw mm6,2
-    paddw mm7,mm7
-    /*mm1=t6'=t1-t6*/
-    psllw mm5,2
-    psubw mm1,mm6
-    psllw mm4,2
-    paddw mm6,mm6
-    /*mm2=t5'=t2-t5*/
-    psubw mm2,mm5
-    paddw mm5,mm5
-    /*mm3=t4'=t3-t4*/
-    psubw mm3,mm4
-    paddw mm4,mm4
-    /*mm7=t0'=t0+t7*/
-    paddw mm7,mm0
-    /*mm6=t1'=t1+t6*/
-    paddw mm6,mm1
-    /*mm5=t2'=t2+t5*/
-    paddw mm5,mm2
-    /*mm4=t3'=t3+t4*/
-    paddw mm4,mm3
-    OC_FDCT8x4(0x00,0x10,0x20,0x30,0x40,0x50,0x60,0x70)
-    OC_TRANSPOSE8x4(0x00,0x10,0x20,0x30,0x40,0x50,0x60,0x70)
-    /*Swap out this 8x4 block for the next one.*/
-    movq mm0,[0x08+X]
-    movq [0x30+Y],mm7
-    movq mm7,[0x78+X]
-    movq [0x50+Y],mm1
-    movq mm1,[0x18+X]
-    movq [0x20+Y],mm6
-    movq mm6,[0x68+X]
-    movq [0x60+Y],mm2
-    movq mm2,[0x28+X]
-    movq [0x10+Y],mm5
-    movq mm5,[0x58+X]
-    movq [0x70+Y],mm3
-    movq mm3,[0x38+X]
-    /*And increase its working precision, too.*/
-    psllw mm0,2
-    movq [0x00+Y],mm4
-    psllw mm7,2
-    movq mm4,[0x48+X]
-    /*We inline stage1 of the transform here so we can get better instruction
-       scheduling with the shifts.*/
-    /*mm0=t7'=t0-t7*/
-    psubw mm0,mm7
-    psllw mm1,2
-    paddw mm7,mm7
-    psllw mm6,2
-    /*mm1=t6'=t1-t6*/
-    psubw mm1,mm6
-    psllw mm2,2
-    paddw mm6,mm6
-    psllw mm5,2
-    /*mm2=t5'=t2-t5*/
-    psubw mm2,mm5
-    psllw mm3,2
-    paddw mm5,mm5
-    psllw mm4,2
-    /*mm3=t4'=t3-t4*/
-    psubw mm3,mm4
-    paddw mm4,mm4
-    /*mm7=t0'=t0+t7*/
-    paddw mm7,mm0
-    /*mm6=t1'=t1+t6*/
-    paddw mm6,mm1
-    /*mm5=t2'=t2+t5*/
-    paddw mm5,mm2
-    /*mm4=t3'=t3+t4*/
-    paddw mm4,mm3
-    OC_FDCT8x4(0x08,0x18,0x28,0x38,0x48,0x58,0x68,0x78)
-    OC_TRANSPOSE8x4(0x08,0x18,0x28,0x38,0x48,0x58,0x68,0x78)
-    /*Here the first 4x4 block of output from the last transpose is the second
-       4x4 block of input for the next transform.
-      We have cleverly arranged that it already be in the appropriate place,
-       so we only have to do half the stores and loads.*/
-    movq mm0,[0x00+Y]
-    movq [0x58+Y],mm1
-    movq mm1,[0x10+Y]
-    movq [0x68+Y],mm2
-    movq mm2,[0x20+Y]
-    movq [0x78+Y],mm3
-    movq mm3,[0x30+Y]
-    OC_FDCT_STAGE1_8x4
-    OC_FDCT8x4(0x00,0x10,0x20,0x30,0x08,0x18,0x28,0x38)
-    OC_TRANSPOSE8x4(0x00,0x10,0x20,0x30,0x08,0x18,0x28,0x38)
-    /*mm0={-2}x4*/
-    pcmpeqw mm0,mm0
-    paddw mm0,mm0
-    /*Round the results.*/
-    psubw mm1,mm0
-    psubw mm2,mm0
-    psraw mm1,2
-    psubw mm3,mm0
-    movq [0x18+Y],mm1
-    psraw mm2,2
-    psubw mm4,mm0
-    movq mm1,[0x08+Y]
-    psraw mm3,2
-    psubw mm5,mm0
-    psraw mm4,2
-    psubw mm6,mm0
-    psraw mm5,2
-    psubw mm7,mm0
-    psraw mm6,2
-    psubw mm1,mm0
-    psraw mm7,2
-    movq mm0,[0x40+Y]
-    psraw mm1,2
-    movq [0x30+Y],mm7
-    movq mm7,[0x78+Y]
-    movq [0x08+Y],mm1
-    movq mm1,[0x50+Y]
-    movq [0x20+Y],mm6
-    movq mm6,[0x68+Y]
-    movq [0x28+Y],mm2
-    movq mm2,[0x60+Y]
-    movq [0x10+Y],mm5
-    movq mm5,[0x58+Y]
-    movq [0x38+Y],mm3
-    movq mm3,[0x70+Y]
-    movq [0x00+Y],mm4
-    movq mm4,[0x48+Y]
-    OC_FDCT_STAGE1_8x4
-    OC_FDCT8x4(0x40,0x50,0x60,0x70,0x48,0x58,0x68,0x78)
-    OC_TRANSPOSE8x4(0x40,0x50,0x60,0x70,0x48,0x58,0x68,0x78)
-    /*mm0={-2}x4*/
-    pcmpeqw mm0,mm0
-    paddw mm0,mm0
-    /*Round the results.*/
-    psubw mm1,mm0
-    psubw mm2,mm0
-    psraw mm1,2
-    psubw mm3,mm0
-    movq [0x58+Y],mm1
-    psraw mm2,2
-    psubw mm4,mm0
-    movq mm1,[0x48+Y]
-    psraw mm3,2
-    psubw mm5,mm0
-    movq [0x68+Y],mm2
-    psraw mm4,2
-    psubw mm6,mm0
-    movq [0x78+Y],mm3
-    psraw mm5,2
-    psubw mm7,mm0
-    movq [0x40+Y],mm4
-    psraw mm6,2
-    psubw mm1,mm0
-    movq [0x50+Y],mm5
-    psraw mm7,2
-    movq [0x60+Y],mm6
-    psraw mm1,2
-    movq [0x70+Y],mm7
-    movq [0x48+Y],mm1
+        /*Add two extra bits of working precision to improve accuracy; any more and
+           we could overflow.*/
+        /*We also add biases to correct for some systematic error that remains in
+           the full fDCT->iDCT round trip.*/
+        mov X, _x
+        mov Y, _y
+        movq mm0,[0x00+X]
+        movq mm1,[0x10+X]
+        movq mm2,[0x20+X]
+        movq mm3,[0x30+X]
+        pcmpeqb mm4,mm4
+        pxor mm7,mm7
+        movq mm5,mm0
+        psllw mm0,2
+        pcmpeqw mm5,mm7
+        movq mm7,[0x70+X]
+        psllw mm1,2
+        psubw mm5,mm4
+        psllw mm2,2
+        mov A,1
+        pslld mm5,16
+        movd mm6,A
+        psllq mm5,16
+        mov A,0x10001
+        psllw mm3,2
+        movd mm4,A
+        punpckhwd mm5,mm6
+        psubw mm1,mm6
+        movq mm6,[0x60+X]
+        paddw mm0,mm5
+        movq mm5,[0x50+X]
+        paddw mm0,mm4
+        movq mm4,[0x40+X]
+        /*We inline stage1 of the transform here so we can get better instruction
+           scheduling with the shifts.*/
+        /*mm0=t7'=t0-t7*/
+        psllw mm7,2
+        psubw mm0,mm7
+        psllw mm6,2
+        paddw mm7,mm7
+        /*mm1=t6'=t1-t6*/
+        psllw mm5,2
+        psubw mm1,mm6
+        psllw mm4,2
+        paddw mm6,mm6
+        /*mm2=t5'=t2-t5*/
+        psubw mm2,mm5
+        paddw mm5,mm5
+        /*mm3=t4'=t3-t4*/
+        psubw mm3,mm4
+        paddw mm4,mm4
+        /*mm7=t0'=t0+t7*/
+        paddw mm7,mm0
+        /*mm6=t1'=t1+t6*/
+        paddw mm6,mm1
+        /*mm5=t2'=t2+t5*/
+        paddw mm5,mm2
+        /*mm4=t3'=t3+t4*/
+        paddw mm4,mm3
+        OC_FDCT8x4 ( 0x00,0x10,0x20,0x30,0x40,0x50,0x60,0x70 )
+        OC_TRANSPOSE8x4 ( 0x00,0x10,0x20,0x30,0x40,0x50,0x60,0x70 )
+        /*Swap out this 8x4 block for the next one.*/
+        movq mm0,[0x08+X]
+        movq [0x30+Y],mm7
+        movq mm7,[0x78+X]
+        movq [0x50+Y],mm1
+        movq mm1,[0x18+X]
+        movq [0x20+Y],mm6
+        movq mm6,[0x68+X]
+        movq [0x60+Y],mm2
+        movq mm2,[0x28+X]
+        movq [0x10+Y],mm5
+        movq mm5,[0x58+X]
+        movq [0x70+Y],mm3
+        movq mm3,[0x38+X]
+        /*And increase its working precision, too.*/
+        psllw mm0,2
+        movq [0x00+Y],mm4
+        psllw mm7,2
+        movq mm4,[0x48+X]
+        /*We inline stage1 of the transform here so we can get better instruction
+           scheduling with the shifts.*/
+        /*mm0=t7'=t0-t7*/
+        psubw mm0,mm7
+        psllw mm1,2
+        paddw mm7,mm7
+        psllw mm6,2
+        /*mm1=t6'=t1-t6*/
+        psubw mm1,mm6
+        psllw mm2,2
+        paddw mm6,mm6
+        psllw mm5,2
+        /*mm2=t5'=t2-t5*/
+        psubw mm2,mm5
+        psllw mm3,2
+        paddw mm5,mm5
+        psllw mm4,2
+        /*mm3=t4'=t3-t4*/
+        psubw mm3,mm4
+        paddw mm4,mm4
+        /*mm7=t0'=t0+t7*/
+        paddw mm7,mm0
+        /*mm6=t1'=t1+t6*/
+        paddw mm6,mm1
+        /*mm5=t2'=t2+t5*/
+        paddw mm5,mm2
+        /*mm4=t3'=t3+t4*/
+        paddw mm4,mm3
+        OC_FDCT8x4 ( 0x08,0x18,0x28,0x38,0x48,0x58,0x68,0x78 )
+        OC_TRANSPOSE8x4 ( 0x08,0x18,0x28,0x38,0x48,0x58,0x68,0x78 )
+        /*Here the first 4x4 block of output from the last transpose is the second
+           4x4 block of input for the next transform.
+          We have cleverly arranged that it already be in the appropriate place,
+           so we only have to do half the stores and loads.*/
+        movq mm0,[0x00+Y]
+        movq [0x58+Y],mm1
+        movq mm1,[0x10+Y]
+        movq [0x68+Y],mm2
+        movq mm2,[0x20+Y]
+        movq [0x78+Y],mm3
+        movq mm3,[0x30+Y]
+        OC_FDCT_STAGE1_8x4
+        OC_FDCT8x4 ( 0x00,0x10,0x20,0x30,0x08,0x18,0x28,0x38 )
+        OC_TRANSPOSE8x4 ( 0x00,0x10,0x20,0x30,0x08,0x18,0x28,0x38 )
+        /*mm0={-2}x4*/
+        pcmpeqw mm0,mm0
+        paddw mm0,mm0
+        /*Round the results.*/
+        psubw mm1,mm0
+        psubw mm2,mm0
+        psraw mm1,2
+        psubw mm3,mm0
+        movq [0x18+Y],mm1
+        psraw mm2,2
+        psubw mm4,mm0
+        movq mm1,[0x08+Y]
+        psraw mm3,2
+        psubw mm5,mm0
+        psraw mm4,2
+        psubw mm6,mm0
+        psraw mm5,2
+        psubw mm7,mm0
+        psraw mm6,2
+        psubw mm1,mm0
+        psraw mm7,2
+        movq mm0,[0x40+Y]
+        psraw mm1,2
+        movq [0x30+Y],mm7
+        movq mm7,[0x78+Y]
+        movq [0x08+Y],mm1
+        movq mm1,[0x50+Y]
+        movq [0x20+Y],mm6
+        movq mm6,[0x68+Y]
+        movq [0x28+Y],mm2
+        movq mm2,[0x60+Y]
+        movq [0x10+Y],mm5
+        movq mm5,[0x58+Y]
+        movq [0x38+Y],mm3
+        movq mm3,[0x70+Y]
+        movq [0x00+Y],mm4
+        movq mm4,[0x48+Y]
+        OC_FDCT_STAGE1_8x4
+        OC_FDCT8x4 ( 0x40,0x50,0x60,0x70,0x48,0x58,0x68,0x78 )
+        OC_TRANSPOSE8x4 ( 0x40,0x50,0x60,0x70,0x48,0x58,0x68,0x78 )
+        /*mm0={-2}x4*/
+        pcmpeqw mm0,mm0
+        paddw mm0,mm0
+        /*Round the results.*/
+        psubw mm1,mm0
+        psubw mm2,mm0
+        psraw mm1,2
+        psubw mm3,mm0
+        movq [0x58+Y],mm1
+        psraw mm2,2
+        psubw mm4,mm0
+        movq mm1,[0x48+Y]
+        psraw mm3,2
+        psubw mm5,mm0
+        movq [0x68+Y],mm2
+        psraw mm4,2
+        psubw mm6,mm0
+        movq [0x78+Y],mm3
+        psraw mm5,2
+        psubw mm7,mm0
+        movq [0x40+Y],mm4
+        psraw mm6,2
+        psubw mm1,mm0
+        movq [0x50+Y],mm5
+        psraw mm7,2
+        movq [0x60+Y],mm6
+        psraw mm1,2
+        movq [0x70+Y],mm7
+        movq [0x48+Y],mm1
 #undef Y
 #undef A
 #undef X
-  }
+    }
 }
 
 #endif

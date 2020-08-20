@@ -68,20 +68,20 @@ The `dependencies` section and fields are optional and defined as follow:
  See https://github.com/godotengine/godot/issues/38157#issuecomment-618773871
  */
 struct PluginConfig {
-	// Set to true when the config file is properly loaded.
-	bool valid_config = false;
-	// Unix timestamp of last change to this plugin.
-	uint64_t last_updated = 0;
+    // Set to true when the config file is properly loaded.
+    bool valid_config = false;
+    // Unix timestamp of last change to this plugin.
+    uint64_t last_updated = 0;
 
-	// Required config section
-	String name;
-	String binary_type;
-	String binary;
+    // Required config section
+    String name;
+    String binary_type;
+    String binary;
 
-	// Optional dependencies section
-	Vector<String> local_dependencies;
-	Vector<String> remote_dependencies;
-	Vector<String> custom_maven_repos;
+    // Optional dependencies section
+    Vector<String> local_dependencies;
+    Vector<String> remote_dependencies;
+    Vector<String> custom_maven_repos;
 };
 
 /*
@@ -99,170 +99,179 @@ struct PluginConfig {
 // 	/*.custom_maven_repos =*/{}
 // };
 
-static inline String resolve_local_dependency_path(String plugin_config_dir, String dependency_path) {
-	String absolute_path;
-	if (!dependency_path.empty()) {
-		if (dependency_path.is_abs_path()) {
-			absolute_path = ProjectSettings::get_singleton()->globalize_path(dependency_path);
-		} else {
-			absolute_path = plugin_config_dir.plus_file(dependency_path);
-		}
-	}
+static inline String resolve_local_dependency_path ( String plugin_config_dir, String dependency_path )
+{
+    String absolute_path;
+    if ( !dependency_path.empty() ) {
+        if ( dependency_path.is_abs_path() ) {
+            absolute_path = ProjectSettings::get_singleton()->globalize_path ( dependency_path );
+        } else {
+            absolute_path = plugin_config_dir.plus_file ( dependency_path );
+        }
+    }
 
-	return absolute_path;
+    return absolute_path;
 }
 
-static inline PluginConfig resolve_prebuilt_plugin(PluginConfig prebuilt_plugin, String plugin_config_dir) {
-	PluginConfig resolved = prebuilt_plugin;
-	resolved.binary = resolved.binary_type == BINARY_TYPE_LOCAL ? resolve_local_dependency_path(plugin_config_dir, prebuilt_plugin.binary) : prebuilt_plugin.binary;
-	if (!prebuilt_plugin.local_dependencies.empty()) {
-		resolved.local_dependencies.clear();
-		for (int i = 0; i < prebuilt_plugin.local_dependencies.size(); i++) {
-			resolved.local_dependencies.push_back(resolve_local_dependency_path(plugin_config_dir, prebuilt_plugin.local_dependencies[i]));
-		}
-	}
-	return resolved;
+static inline PluginConfig resolve_prebuilt_plugin ( PluginConfig prebuilt_plugin, String plugin_config_dir )
+{
+    PluginConfig resolved = prebuilt_plugin;
+    resolved.binary = resolved.binary_type == BINARY_TYPE_LOCAL ? resolve_local_dependency_path ( plugin_config_dir, prebuilt_plugin.binary ) : prebuilt_plugin.binary;
+    if ( !prebuilt_plugin.local_dependencies.empty() ) {
+        resolved.local_dependencies.clear();
+        for ( int i = 0; i < prebuilt_plugin.local_dependencies.size(); i++ ) {
+            resolved.local_dependencies.push_back ( resolve_local_dependency_path ( plugin_config_dir, prebuilt_plugin.local_dependencies[i] ) );
+        }
+    }
+    return resolved;
 }
 
-static inline Vector<PluginConfig> get_prebuilt_plugins(String plugins_base_dir) {
-	Vector<PluginConfig> prebuilt_plugins;
-	// prebuilt_plugins.push_back(resolve_prebuilt_plugin(MY_PREBUILT_PLUGIN, plugins_base_dir));
-	return prebuilt_plugins;
+static inline Vector<PluginConfig> get_prebuilt_plugins ( String plugins_base_dir )
+{
+    Vector<PluginConfig> prebuilt_plugins;
+    // prebuilt_plugins.push_back(resolve_prebuilt_plugin(MY_PREBUILT_PLUGIN, plugins_base_dir));
+    return prebuilt_plugins;
 }
 
-static inline bool is_plugin_config_valid(PluginConfig plugin_config) {
-	bool valid_name = !plugin_config.name.empty();
-	bool valid_binary_type = plugin_config.binary_type == BINARY_TYPE_LOCAL ||
-							 plugin_config.binary_type == BINARY_TYPE_REMOTE;
+static inline bool is_plugin_config_valid ( PluginConfig plugin_config )
+{
+    bool valid_name = !plugin_config.name.empty();
+    bool valid_binary_type = plugin_config.binary_type == BINARY_TYPE_LOCAL ||
+                             plugin_config.binary_type == BINARY_TYPE_REMOTE;
 
-	bool valid_binary = false;
-	if (valid_binary_type) {
-		valid_binary = !plugin_config.binary.empty() &&
-					   (plugin_config.binary_type == BINARY_TYPE_REMOTE ||
-							   FileAccess::exists(plugin_config.binary));
-	}
+    bool valid_binary = false;
+    if ( valid_binary_type ) {
+        valid_binary = !plugin_config.binary.empty() &&
+                       ( plugin_config.binary_type == BINARY_TYPE_REMOTE ||
+                         FileAccess::exists ( plugin_config.binary ) );
+    }
 
-	bool valid_local_dependencies = true;
-	if (!plugin_config.local_dependencies.empty()) {
-		for (int i = 0; i < plugin_config.local_dependencies.size(); i++) {
-			if (!FileAccess::exists(plugin_config.local_dependencies[i])) {
-				valid_local_dependencies = false;
-				break;
-			}
-		}
-	}
-	return valid_name && valid_binary && valid_binary_type && valid_local_dependencies;
+    bool valid_local_dependencies = true;
+    if ( !plugin_config.local_dependencies.empty() ) {
+        for ( int i = 0; i < plugin_config.local_dependencies.size(); i++ ) {
+            if ( !FileAccess::exists ( plugin_config.local_dependencies[i] ) ) {
+                valid_local_dependencies = false;
+                break;
+            }
+        }
+    }
+    return valid_name && valid_binary && valid_binary_type && valid_local_dependencies;
 }
 
-static inline uint64_t get_plugin_modification_time(const PluginConfig &plugin_config, const String &config_path) {
-	uint64_t last_updated = FileAccess::get_modified_time(config_path);
-	last_updated = MAX(last_updated, FileAccess::get_modified_time(plugin_config.binary));
+static inline uint64_t get_plugin_modification_time ( const PluginConfig &plugin_config, const String &config_path )
+{
+    uint64_t last_updated = FileAccess::get_modified_time ( config_path );
+    last_updated = MAX ( last_updated, FileAccess::get_modified_time ( plugin_config.binary ) );
 
-	for (int i = 0; i < plugin_config.local_dependencies.size(); i++) {
-		String binary = plugin_config.local_dependencies.get(i);
-		last_updated = MAX(last_updated, FileAccess::get_modified_time(binary));
-	}
+    for ( int i = 0; i < plugin_config.local_dependencies.size(); i++ ) {
+        String binary = plugin_config.local_dependencies.get ( i );
+        last_updated = MAX ( last_updated, FileAccess::get_modified_time ( binary ) );
+    }
 
-	return last_updated;
+    return last_updated;
 }
 
-static inline PluginConfig load_plugin_config(Ref<ConfigFile> config_file, const String &path) {
-	PluginConfig plugin_config = {};
+static inline PluginConfig load_plugin_config ( Ref<ConfigFile> config_file, const String &path )
+{
+    PluginConfig plugin_config = {};
 
-	if (config_file.is_valid()) {
-		Error err = config_file->load(path);
-		if (err == OK) {
-			String config_base_dir = path.get_base_dir();
+    if ( config_file.is_valid() ) {
+        Error err = config_file->load ( path );
+        if ( err == OK ) {
+            String config_base_dir = path.get_base_dir();
 
-			plugin_config.name = config_file->get_value(CONFIG_SECTION, CONFIG_NAME_KEY, String());
-			plugin_config.binary_type = config_file->get_value(CONFIG_SECTION, CONFIG_BINARY_TYPE_KEY, String());
+            plugin_config.name = config_file->get_value ( CONFIG_SECTION, CONFIG_NAME_KEY, String() );
+            plugin_config.binary_type = config_file->get_value ( CONFIG_SECTION, CONFIG_BINARY_TYPE_KEY, String() );
 
-			String binary_path = config_file->get_value(CONFIG_SECTION, CONFIG_BINARY_KEY, String());
-			plugin_config.binary = plugin_config.binary_type == BINARY_TYPE_LOCAL ? resolve_local_dependency_path(config_base_dir, binary_path) : binary_path;
+            String binary_path = config_file->get_value ( CONFIG_SECTION, CONFIG_BINARY_KEY, String() );
+            plugin_config.binary = plugin_config.binary_type == BINARY_TYPE_LOCAL ? resolve_local_dependency_path ( config_base_dir, binary_path ) : binary_path;
 
-			if (config_file->has_section(DEPENDENCIES_SECTION)) {
-				Vector<String> local_dependencies_paths = config_file->get_value(DEPENDENCIES_SECTION, DEPENDENCIES_LOCAL_KEY, Vector<String>());
-				if (!local_dependencies_paths.empty()) {
-					for (int i = 0; i < local_dependencies_paths.size(); i++) {
-						plugin_config.local_dependencies.push_back(resolve_local_dependency_path(config_base_dir, local_dependencies_paths[i]));
-					}
-				}
+            if ( config_file->has_section ( DEPENDENCIES_SECTION ) ) {
+                Vector<String> local_dependencies_paths = config_file->get_value ( DEPENDENCIES_SECTION, DEPENDENCIES_LOCAL_KEY, Vector<String>() );
+                if ( !local_dependencies_paths.empty() ) {
+                    for ( int i = 0; i < local_dependencies_paths.size(); i++ ) {
+                        plugin_config.local_dependencies.push_back ( resolve_local_dependency_path ( config_base_dir, local_dependencies_paths[i] ) );
+                    }
+                }
 
-				plugin_config.remote_dependencies = config_file->get_value(DEPENDENCIES_SECTION, DEPENDENCIES_REMOTE_KEY, Vector<String>());
-				plugin_config.custom_maven_repos = config_file->get_value(DEPENDENCIES_SECTION, DEPENDENCIES_CUSTOM_MAVEN_REPOS_KEY, Vector<String>());
-			}
+                plugin_config.remote_dependencies = config_file->get_value ( DEPENDENCIES_SECTION, DEPENDENCIES_REMOTE_KEY, Vector<String>() );
+                plugin_config.custom_maven_repos = config_file->get_value ( DEPENDENCIES_SECTION, DEPENDENCIES_CUSTOM_MAVEN_REPOS_KEY, Vector<String>() );
+            }
 
-			plugin_config.valid_config = is_plugin_config_valid(plugin_config);
-			plugin_config.last_updated = get_plugin_modification_time(plugin_config, path);
-		}
-	}
+            plugin_config.valid_config = is_plugin_config_valid ( plugin_config );
+            plugin_config.last_updated = get_plugin_modification_time ( plugin_config, path );
+        }
+    }
 
-	return plugin_config;
+    return plugin_config;
 }
 
-static inline String get_plugins_binaries(String binary_type, Vector<PluginConfig> plugins_configs) {
-	String plugins_binaries;
-	if (!plugins_configs.empty()) {
-		Vector<String> binaries;
-		for (int i = 0; i < plugins_configs.size(); i++) {
-			PluginConfig config = plugins_configs[i];
-			if (!config.valid_config) {
-				continue;
-			}
+static inline String get_plugins_binaries ( String binary_type, Vector<PluginConfig> plugins_configs )
+{
+    String plugins_binaries;
+    if ( !plugins_configs.empty() ) {
+        Vector<String> binaries;
+        for ( int i = 0; i < plugins_configs.size(); i++ ) {
+            PluginConfig config = plugins_configs[i];
+            if ( !config.valid_config ) {
+                continue;
+            }
 
-			if (config.binary_type == binary_type) {
-				binaries.push_back(config.binary);
-			}
+            if ( config.binary_type == binary_type ) {
+                binaries.push_back ( config.binary );
+            }
 
-			if (binary_type == BINARY_TYPE_LOCAL) {
-				binaries.append_array(config.local_dependencies);
-			}
+            if ( binary_type == BINARY_TYPE_LOCAL ) {
+                binaries.append_array ( config.local_dependencies );
+            }
 
-			if (binary_type == BINARY_TYPE_REMOTE) {
-				binaries.append_array(config.remote_dependencies);
-			}
-		}
+            if ( binary_type == BINARY_TYPE_REMOTE ) {
+                binaries.append_array ( config.remote_dependencies );
+            }
+        }
 
-		plugins_binaries = String(PLUGIN_VALUE_SEPARATOR).join(binaries);
-	}
+        plugins_binaries = String ( PLUGIN_VALUE_SEPARATOR ).join ( binaries );
+    }
 
-	return plugins_binaries;
+    return plugins_binaries;
 }
 
-static inline String get_plugins_custom_maven_repos(Vector<PluginConfig> plugins_configs) {
-	String custom_maven_repos;
-	if (!plugins_configs.empty()) {
-		Vector<String> repos_urls;
-		for (int i = 0; i < plugins_configs.size(); i++) {
-			PluginConfig config = plugins_configs[i];
-			if (!config.valid_config) {
-				continue;
-			}
+static inline String get_plugins_custom_maven_repos ( Vector<PluginConfig> plugins_configs )
+{
+    String custom_maven_repos;
+    if ( !plugins_configs.empty() ) {
+        Vector<String> repos_urls;
+        for ( int i = 0; i < plugins_configs.size(); i++ ) {
+            PluginConfig config = plugins_configs[i];
+            if ( !config.valid_config ) {
+                continue;
+            }
 
-			repos_urls.append_array(config.custom_maven_repos);
-		}
+            repos_urls.append_array ( config.custom_maven_repos );
+        }
 
-		custom_maven_repos = String(PLUGIN_VALUE_SEPARATOR).join(repos_urls);
-	}
-	return custom_maven_repos;
+        custom_maven_repos = String ( PLUGIN_VALUE_SEPARATOR ).join ( repos_urls );
+    }
+    return custom_maven_repos;
 }
 
-static inline String get_plugins_names(Vector<PluginConfig> plugins_configs) {
-	String plugins_names;
-	if (!plugins_configs.empty()) {
-		Vector<String> names;
-		for (int i = 0; i < plugins_configs.size(); i++) {
-			PluginConfig config = plugins_configs[i];
-			if (!config.valid_config) {
-				continue;
-			}
+static inline String get_plugins_names ( Vector<PluginConfig> plugins_configs )
+{
+    String plugins_names;
+    if ( !plugins_configs.empty() ) {
+        Vector<String> names;
+        for ( int i = 0; i < plugins_configs.size(); i++ ) {
+            PluginConfig config = plugins_configs[i];
+            if ( !config.valid_config ) {
+                continue;
+            }
 
-			names.push_back(config.name);
-		}
-		plugins_names = String(PLUGIN_VALUE_SEPARATOR).join(names);
-	}
+            names.push_back ( config.name );
+        }
+        plugins_names = String ( PLUGIN_VALUE_SEPARATOR ).join ( names );
+    }
 
-	return plugins_names;
+    return plugins_names;
 }
 
 #endif // GODOT_PLUGIN_CONFIG_H

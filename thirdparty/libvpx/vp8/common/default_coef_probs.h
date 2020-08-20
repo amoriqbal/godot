@@ -19,10 +19,9 @@ extern "C" {
 
 
 static const vp8_prob default_coef_probs [BLOCK_TYPES]
-                                         [COEF_BANDS]
-                                         [PREV_COEF_CONTEXTS]
-                                         [ENTROPY_NODES] =
-{
+[COEF_BANDS]
+[PREV_COEF_CONTEXTS]
+[ENTROPY_NODES] = {
     { /* Block Type ( 0 ) */
         { /* Coeff Band ( 0 )*/
             { 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128 },

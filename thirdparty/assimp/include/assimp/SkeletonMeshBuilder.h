@@ -62,7 +62,8 @@ struct aiMaterial;
 struct aiScene;
 struct aiNode;
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /**
@@ -83,8 +84,8 @@ public:
      * @param bKnobsOnly Set this to true if you don't want the connectors
      *   between the knobs representing the nodes.
      */
-    SkeletonMeshBuilder( aiScene* pScene, aiNode* root = NULL,
-        bool bKnobsOnly = false);
+    SkeletonMeshBuilder ( aiScene* pScene, aiNode* root = NULL,
+                          bool bKnobsOnly = false );
 
 protected:
 
@@ -94,7 +95,7 @@ protected:
      * the mesh.
      * @param pNode The node to build geometry for.
      */
-    void CreateGeometry( const aiNode* pNode);
+    void CreateGeometry ( const aiNode* pNode );
 
     // -------------------------------------------------------------------
     /** Creates the mesh from the internally accumulated stuff and returns it.
@@ -110,12 +111,15 @@ protected:
     std::vector<aiVector3D> mVertices;
 
     /** faces */
-    struct Face
-    {
+    struct Face {
         unsigned int mIndices[3];
         Face();
-        Face( unsigned int p0, unsigned int p1, unsigned int p2)
-        { mIndices[0] = p0; mIndices[1] = p1; mIndices[2] = p2; }
+        Face ( unsigned int p0, unsigned int p1, unsigned int p2 )
+        {
+            mIndices[0] = p0;
+            mIndices[1] = p1;
+            mIndices[2] = p2;
+        }
     };
     std::vector<Face> mFaces;
 

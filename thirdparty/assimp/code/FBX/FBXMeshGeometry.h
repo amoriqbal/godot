@@ -49,16 +49,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "FBXParser.h"
 #include "FBXDocument.h"
 
-namespace Assimp {
-namespace FBX {
+namespace Assimp
+{
+namespace FBX
+{
 
-/** 
- *  DOM base class for all kinds of FBX geometry 
+/**
+ *  DOM base class for all kinds of FBX geometry
  */
 class Geometry : public Object
 {
 public:
-    Geometry( uint64_t id, const Element& element, const std::string& name, const Document& doc );
+    Geometry ( uint64_t id, const Element& element, const std::string& name, const Document& doc );
     virtual ~Geometry();
 
     /** Get the Skin attached to this geometry or NULL */
@@ -76,15 +78,15 @@ private:
 typedef std::vector<int> MatIndexArray;
 
 
-/** 
+/**
  *  DOM class for FBX geometry of type "Mesh"
  */
 class MeshGeometry : public Geometry
 {
 public:
     /** The class constructor */
-    MeshGeometry( uint64_t id, const Element& element, const std::string& name, const Document& doc );
-    
+    MeshGeometry ( uint64_t id, const Element& element, const std::string& name, const Document& doc );
+
     /** The class destructor */
     virtual ~MeshGeometry();
 
@@ -110,54 +112,54 @@ public:
 
     /** Get a UV coordinate slot, returns an empty array if
     *  the requested slot does not exist. */
-    const std::vector<aiVector2D>& GetTextureCoords( unsigned int index ) const;
+    const std::vector<aiVector2D>& GetTextureCoords ( unsigned int index ) const;
 
     /** Get a UV coordinate slot, returns an empty array if
     *  the requested slot does not exist. */
-    std::string GetTextureCoordChannelName( unsigned int index ) const;
+    std::string GetTextureCoordChannelName ( unsigned int index ) const;
 
     /** Get a vertex color coordinate slot, returns an empty array if
     *  the requested slot does not exist. */
-    const std::vector<aiColor4D>& GetVertexColors( unsigned int index ) const;
+    const std::vector<aiColor4D>& GetVertexColors ( unsigned int index ) const;
 
     /** Get per-face-vertex material assignments */
     const MatIndexArray& GetMaterialIndices() const;
 
     /** Convert from a fbx file vertex index (for example from a #Cluster weight) or NULL
     * if the vertex index is not valid. */
-    const unsigned int* ToOutputVertexIndex( unsigned int in_index, unsigned int& count ) const;
+    const unsigned int* ToOutputVertexIndex ( unsigned int in_index, unsigned int& count ) const;
 
     /** Determine the face to which a particular output vertex index belongs.
     *  This mapping is always unique. */
-    unsigned int FaceForVertexIndex( unsigned int in_index ) const;
+    unsigned int FaceForVertexIndex ( unsigned int in_index ) const;
 private:
-    void ReadLayer( const Scope& layer );
-    void ReadLayerElement( const Scope& layerElement );
-    void ReadVertexData( const std::string& type, int index, const Scope& source );
+    void ReadLayer ( const Scope& layer );
+    void ReadLayerElement ( const Scope& layerElement );
+    void ReadVertexData ( const std::string& type, int index, const Scope& source );
 
-    void ReadVertexDataUV( std::vector<aiVector2D>& uv_out, const Scope& source,
-        const std::string& MappingInformationType,
-        const std::string& ReferenceInformationType );
+    void ReadVertexDataUV ( std::vector<aiVector2D>& uv_out, const Scope& source,
+                            const std::string& MappingInformationType,
+                            const std::string& ReferenceInformationType );
 
-    void ReadVertexDataNormals( std::vector<aiVector3D>& normals_out, const Scope& source,
-        const std::string& MappingInformationType,
-        const std::string& ReferenceInformationType );
+    void ReadVertexDataNormals ( std::vector<aiVector3D>& normals_out, const Scope& source,
+                                 const std::string& MappingInformationType,
+                                 const std::string& ReferenceInformationType );
 
-    void ReadVertexDataColors( std::vector<aiColor4D>& colors_out, const Scope& source,
-        const std::string& MappingInformationType,
-        const std::string& ReferenceInformationType );
+    void ReadVertexDataColors ( std::vector<aiColor4D>& colors_out, const Scope& source,
+                                const std::string& MappingInformationType,
+                                const std::string& ReferenceInformationType );
 
-    void ReadVertexDataTangents( std::vector<aiVector3D>& tangents_out, const Scope& source,
-        const std::string& MappingInformationType,
-        const std::string& ReferenceInformationType );
+    void ReadVertexDataTangents ( std::vector<aiVector3D>& tangents_out, const Scope& source,
+                                  const std::string& MappingInformationType,
+                                  const std::string& ReferenceInformationType );
 
-    void ReadVertexDataBinormals( std::vector<aiVector3D>& binormals_out, const Scope& source,
-        const std::string& MappingInformationType,
-        const std::string& ReferenceInformationType );
+    void ReadVertexDataBinormals ( std::vector<aiVector3D>& binormals_out, const Scope& source,
+                                   const std::string& MappingInformationType,
+                                   const std::string& ReferenceInformationType );
 
-    void ReadVertexDataMaterials( MatIndexArray& materials_out, const Scope& source,
-        const std::string& MappingInformationType,
-        const std::string& ReferenceInformationType );
+    void ReadVertexDataMaterials ( MatIndexArray& materials_out, const Scope& source,
+                                   const std::string& MappingInformationType,
+                                   const std::string& ReferenceInformationType );
 
 private:
     // cached data arrays
@@ -185,7 +187,7 @@ class ShapeGeometry : public Geometry
 {
 public:
     /** The class constructor */
-    ShapeGeometry(uint64_t id, const Element& element, const std::string& name, const Document& doc);
+    ShapeGeometry ( uint64_t id, const Element& element, const std::string& name, const Document& doc );
 
     /** The class destructor */
     virtual ~ShapeGeometry();
@@ -212,7 +214,7 @@ class LineGeometry : public Geometry
 {
 public:
     /** The class constructor */
-    LineGeometry(uint64_t id, const Element& element, const std::string& name, const Document& doc);
+    LineGeometry ( uint64_t id, const Element& element, const std::string& name, const Document& doc );
 
     /** The class destructor */
     virtual ~LineGeometry();

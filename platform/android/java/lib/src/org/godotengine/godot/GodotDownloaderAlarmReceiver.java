@@ -45,15 +45,17 @@ import com.google.android.vending.expansion.downloader.DownloaderClientMarshalle
  * file with a section like this:
  *         <receiver android:name=".GodotDownloaderAlarmReceiver"/>
  */
-public class GodotDownloaderAlarmReceiver extends BroadcastReceiver {
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		Log.d("GODOT", "Alarma recivida");
-		try {
-			DownloaderClientMarshaller.startDownloadServiceIfRequired(context, intent, GodotDownloaderService.class);
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-			Log.d("GODOT", "Exception: " + e.getClass().getName() + ":" + e.getMessage());
-		}
-	}
+public class GodotDownloaderAlarmReceiver extends BroadcastReceiver
+{
+    @Override
+    public void onReceive ( Context context, Intent intent )
+    {
+        Log.d ( "GODOT", "Alarma recivida" );
+        try {
+            DownloaderClientMarshaller.startDownloadServiceIfRequired ( context, intent, GodotDownloaderService.class );
+        } catch ( NameNotFoundException e ) {
+            e.printStackTrace();
+            Log.d ( "GODOT", "Exception: " + e.getClass().getName() + ":" + e.getMessage() );
+        }
+    }
 }

@@ -1,52 +1,64 @@
 namespace GodotTools.IdeMessaging
 {
-    public class Message
+public class Message
+{
+    public MessageKind Kind
     {
-        public MessageKind Kind { get; }
-        public string Id { get; }
-        public MessageContent Content { get; }
-
-        public Message(MessageKind kind, string id, MessageContent content)
-        {
-            Kind = kind;
-            Id = id;
-            Content = content;
-        }
-
-        public override string ToString()
-        {
-            return $"{Kind} | {Id}";
-        }
+        get;
+    }
+    public string Id
+    {
+        get;
+    }
+    public MessageContent Content
+    {
+        get;
     }
 
-    public enum MessageKind
+    public Message ( MessageKind kind, string id, MessageContent content )
     {
-        Request,
-        Response
+        Kind = kind;
+        Id = id;
+        Content = content;
     }
 
-    public enum MessageStatus
+    public override string ToString()
     {
-        Ok,
-        RequestNotSupported,
-        InvalidRequestBody
+        return $"{Kind} | {Id}";
+    }
+}
+
+public enum MessageKind {
+    Request,
+    Response
+}
+
+public enum MessageStatus {
+    Ok,
+    RequestNotSupported,
+    InvalidRequestBody
+}
+
+public readonly struct MessageContent {
+    public MessageStatus Status
+    {
+        get;
+    }
+    public string Body
+    {
+        get;
     }
 
-    public readonly struct MessageContent
+    public MessageContent ( string body )
     {
-        public MessageStatus Status { get; }
-        public string Body { get; }
-
-        public MessageContent(string body)
-        {
-            Status = MessageStatus.Ok;
-            Body = body;
-        }
-
-        public MessageContent(MessageStatus status, string body)
-        {
-            Status = status;
-            Body = body;
-        }
+        Status = MessageStatus.Ok;
+        Body = body;
     }
+
+    public MessageContent ( MessageStatus status, string body )
+    {
+        Status = status;
+        Body = body;
+    }
+}
 }

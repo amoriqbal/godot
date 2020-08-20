@@ -41,13 +41,13 @@ POSSIBILITY OF SUCH DAMAGE.
   See NSQ_neon.h for details.*/
 
 opus_int32
- (*const SILK_NSQ_NOISE_SHAPE_FEEDBACK_LOOP_IMPL[OPUS_ARCHMASK+1])(
- const opus_int32 *data0, opus_int32 *data1, const opus_int16 *coef,
- opus_int order) = {
-  silk_NSQ_noise_shape_feedback_loop_c,    /* ARMv4 */
-  silk_NSQ_noise_shape_feedback_loop_c,    /* EDSP */
-  silk_NSQ_noise_shape_feedback_loop_c,    /* Media */
-  silk_NSQ_noise_shape_feedback_loop_neon, /* NEON */
+( *const SILK_NSQ_NOISE_SHAPE_FEEDBACK_LOOP_IMPL[OPUS_ARCHMASK+1] ) (
+    const opus_int32 *data0, opus_int32 *data1, const opus_int16 *coef,
+    opus_int order ) = {
+    silk_NSQ_noise_shape_feedback_loop_c,    /* ARMv4 */
+    silk_NSQ_noise_shape_feedback_loop_c,    /* EDSP */
+    silk_NSQ_noise_shape_feedback_loop_c,    /* Media */
+    silk_NSQ_noise_shape_feedback_loop_neon, /* NEON */
 };
 
 # endif

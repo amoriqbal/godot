@@ -36,12 +36,13 @@
 
 #include "servers/camera_server.h"
 
-class CameraOSX : public CameraServer {
+class CameraOSX : public CameraServer
+{
 public:
-	CameraOSX();
-	~CameraOSX();
+    CameraOSX();
+    ~CameraOSX();
 
-	void update_feeds();
+    void update_feeds();
 };
 
 #endif /* CAMERAOSX_H */

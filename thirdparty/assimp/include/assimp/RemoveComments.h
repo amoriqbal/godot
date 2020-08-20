@@ -52,7 +52,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <assimp/defs.h>
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /** \brief Helper class to remove single and multi line comments from a file
@@ -61,7 +62,8 @@ namespace Assimp    {
  *  to those in C or C++ so this code has been moved to a separate
  *  module.
  */
-class ASSIMP_API CommentRemover {
+class ASSIMP_API CommentRemover
+{
     // class cannot be instanced
     CommentRemover() {}
 
@@ -73,8 +75,8 @@ public:
     //! \param szBuffer Buffer to work with
     //! \param chReplacement Character to be used as replacement
     //! for commented lines. By default this is ' '
-    static void RemoveLineComments(const char* szComment,
-        char* szBuffer, char chReplacement = ' ');
+    static void RemoveLineComments ( const char* szComment,
+                                     char* szBuffer, char chReplacement = ' ' );
 
     //! Remove multi-line comments. The end of a line is
     //! expected to be either NL or CR or NLCR. Multi-line comments
@@ -84,9 +86,9 @@ public:
     //! \param szBuffer Buffer to work with
     //! \param chReplacement Character to be used as replacement
     //! for commented lines. By default this is ' '
-    static void RemoveMultiLineComments(const char* szCommentStart,
-        const char* szCommentEnd,char* szBuffer,
-        char chReplacement = ' ');
+    static void RemoveMultiLineComments ( const char* szCommentStart,
+                                          const char* szCommentEnd,char* szBuffer,
+                                          char chReplacement = ' ' );
 };
 } // ! Assimp
 

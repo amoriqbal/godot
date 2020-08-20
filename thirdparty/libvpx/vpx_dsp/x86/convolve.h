@@ -17,12 +17,12 @@
 #include "vpx_ports/mem.h"
 
 typedef void filter8_1dfunction (
-  const uint8_t *src_ptr,
-  ptrdiff_t src_pitch,
-  uint8_t *output_ptr,
-  ptrdiff_t out_pitch,
-  uint32_t output_height,
-  const int16_t *filter
+    const uint8_t *src_ptr,
+    ptrdiff_t src_pitch,
+    uint8_t *output_ptr,
+    ptrdiff_t out_pitch,
+    uint32_t output_height,
+    const int16_t *filter
 );
 
 #define FUN_CONV_1D(name, step_q4, filter, dir, src_start, avg, opt) \
@@ -124,13 +124,13 @@ void vpx_convolve8_##avg##opt(const uint8_t *src, ptrdiff_t src_stride, \
 #if CONFIG_VP9_HIGHBITDEPTH
 
 typedef void highbd_filter8_1dfunction (
-  const uint16_t *src_ptr,
-  const ptrdiff_t src_pitch,
-  uint16_t *output_ptr,
-  ptrdiff_t out_pitch,
-  unsigned int output_height,
-  const int16_t *filter,
-  int bd
+    const uint16_t *src_ptr,
+    const ptrdiff_t src_pitch,
+    uint16_t *output_ptr,
+    ptrdiff_t out_pitch,
+    unsigned int output_height,
+    const int16_t *filter,
+    int bd
 );
 
 #define HIGH_FUN_CONV_1D(name, step_q4, filter, dir, src_start, avg, opt) \

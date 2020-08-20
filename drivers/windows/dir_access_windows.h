@@ -41,50 +41,51 @@
 
 struct DirAccessWindowsPrivate;
 
-class DirAccessWindows : public DirAccess {
-	enum {
-		MAX_DRIVES = 26
-	};
+class DirAccessWindows : public DirAccess
+{
+    enum {
+        MAX_DRIVES = 26
+    };
 
-	DirAccessWindowsPrivate *p;
-	/* Windows stuff */
+    DirAccessWindowsPrivate *p;
+    /* Windows stuff */
 
-	char drives[MAX_DRIVES]; // a-z:
-	int drive_count;
+    char drives[MAX_DRIVES]; // a-z:
+    int drive_count;
 
-	String current_dir;
+    String current_dir;
 
-	bool _cisdir;
-	bool _cishidden;
+    bool _cisdir;
+    bool _cishidden;
 
 public:
-	virtual Error list_dir_begin(); ///< This starts dir listing
-	virtual String get_next();
-	virtual bool current_is_dir() const;
-	virtual bool current_is_hidden() const;
-	virtual void list_dir_end(); ///<
+    virtual Error list_dir_begin(); ///< This starts dir listing
+    virtual String get_next();
+    virtual bool current_is_dir() const;
+    virtual bool current_is_hidden() const;
+    virtual void list_dir_end(); ///<
 
-	virtual int get_drive_count();
-	virtual String get_drive(int p_drive);
+    virtual int get_drive_count();
+    virtual String get_drive ( int p_drive );
 
-	virtual Error change_dir(String p_dir); ///< can be relative or absolute, return false on success
-	virtual String get_current_dir(bool p_include_drive = true); ///< return current dir location
+    virtual Error change_dir ( String p_dir ); ///< can be relative or absolute, return false on success
+    virtual String get_current_dir ( bool p_include_drive = true ); ///< return current dir location
 
-	virtual bool file_exists(String p_file);
-	virtual bool dir_exists(String p_dir);
+    virtual bool file_exists ( String p_file );
+    virtual bool dir_exists ( String p_dir );
 
-	virtual Error make_dir(String p_dir);
+    virtual Error make_dir ( String p_dir );
 
-	virtual Error rename(String p_path, String p_new_path);
-	virtual Error remove(String p_path);
+    virtual Error rename ( String p_path, String p_new_path );
+    virtual Error remove ( String p_path );
 
-	//virtual FileType get_file_type() const;
-	size_t get_space_left();
+    //virtual FileType get_file_type() const;
+    size_t get_space_left();
 
-	virtual String get_filesystem_type() const;
+    virtual String get_filesystem_type() const;
 
-	DirAccessWindows();
-	~DirAccessWindows();
+    DirAccessWindows();
+    ~DirAccessWindows();
 };
 
 #endif //WINDOWS_ENABLED

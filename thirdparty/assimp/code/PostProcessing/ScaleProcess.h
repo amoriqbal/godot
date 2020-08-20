@@ -50,17 +50,19 @@ struct aiNode;
 #   define AI_CONFIG_GLOBAL_SCALE_FACTOR_DEFAULT  1.0f
 #endif // !! AI_DEBONE_THRESHOLD
 
-namespace Assimp {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /** ScaleProcess: Class to rescale the whole model.
  * Now rescales animations, bones, and blend shapes properly.
- * Please note this will not write to 'scale' transform it will rewrite mesh 
- * and matrixes so that your scale values 
+ * Please note this will not write to 'scale' transform it will rewrite mesh
+ * and matrixes so that your scale values
  * from your model package are preserved, so this is completely intentional
  * bugs should be reported as soon as they are found.
 */
-class ASSIMP_API ScaleProcess : public BaseProcess {
+class ASSIMP_API ScaleProcess : public BaseProcess
+{
 public:
     /// The default class constructor.
     ScaleProcess();
@@ -69,23 +71,23 @@ public:
     virtual ~ScaleProcess();
 
     /// Will set the scale manually.
-    void setScale( ai_real scale );
+    void setScale ( ai_real scale );
 
     /// Returns the current scaling value.
     ai_real getScale() const;
 
     /// Overwritten, @see BaseProcess
-    virtual bool IsActive( unsigned int pFlags ) const;
+    virtual bool IsActive ( unsigned int pFlags ) const;
 
     /// Overwritten, @see BaseProcess
-    virtual void SetupProperties( const Importer* pImp );
+    virtual void SetupProperties ( const Importer* pImp );
 
     /// Overwritten, @see BaseProcess
-    virtual void Execute( aiScene* pScene );
+    virtual void Execute ( aiScene* pScene );
 
 private:
-    void traverseNodes( aiNode *currentNode, unsigned int nested_node_id = 0 );
-    void applyScaling( aiNode *currentNode );
+    void traverseNodes ( aiNode *currentNode, unsigned int nested_node_id = 0 );
+    void applyScaling ( aiNode *currentNode );
 
 private:
     ai_real mScale;

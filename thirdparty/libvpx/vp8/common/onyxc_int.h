@@ -38,8 +38,7 @@ extern "C" {
 
 #define MAX_PARTITIONS 9
 
-typedef struct frame_contexts
-{
+typedef struct frame_contexts {
     vp8_prob bmode_prob [VP8_BINTRAMODES-1];
     vp8_prob ymode_prob [VP8_YMODES-1];   /* interframe intra mode probs */
     vp8_prob uv_mode_prob [VP8_UV_MODES-1];
@@ -48,16 +47,14 @@ typedef struct frame_contexts
     MV_CONTEXT mvc[2];
 } FRAME_CONTEXT;
 
-typedef enum
-{
+typedef enum {
     ONE_PARTITION  = 0,
     TWO_PARTITION  = 1,
     FOUR_PARTITION = 2,
     EIGHT_PARTITION = 3
 } TOKEN_PARTITION;
 
-typedef enum
-{
+typedef enum {
     RECON_CLAMP_REQUIRED        = 0,
     RECON_CLAMP_NOTREQUIRED     = 1
 } CLAMP_TYPE;
@@ -67,9 +64,9 @@ typedef struct VP8Common
 {
     struct vpx_internal_error_info  error;
 
-    DECLARE_ALIGNED(16, short, Y1dequant[QINDEX_RANGE][2]);
-    DECLARE_ALIGNED(16, short, Y2dequant[QINDEX_RANGE][2]);
-    DECLARE_ALIGNED(16, short, UVdequant[QINDEX_RANGE][2]);
+    DECLARE_ALIGNED ( 16, short, Y1dequant[QINDEX_RANGE][2] );
+    DECLARE_ALIGNED ( 16, short, Y2dequant[QINDEX_RANGE][2] );
+    DECLARE_ALIGNED ( 16, short, UVdequant[QINDEX_RANGE][2] );
 
     int Width;
     int Height;

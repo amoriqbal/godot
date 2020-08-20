@@ -1273,7 +1273,7 @@ String NativeScriptLanguage::get_extension() const {
 }
 
 Error NativeScriptLanguage::execute_file(const String &p_path) {
-	return OK; // Qué?
+	return OK; // Qu???
 }
 
 void NativeScriptLanguage::finish() {

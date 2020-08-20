@@ -34,19 +34,20 @@
 #include "core/ordered_hash_map.h"
 #include "core/set.h"
 
-class POTGenerator {
-	static POTGenerator *singleton;
-	// Stores all translatable strings and the source files containing them.
-	OrderedHashMap<String, Set<String>> all_translation_strings;
+class POTGenerator
+{
+    static POTGenerator *singleton;
+    // Stores all translatable strings and the source files containing them.
+    OrderedHashMap<String, Set<String>> all_translation_strings;
 
-	void _write_to_pot(const String &p_file);
+    void _write_to_pot ( const String &p_file );
 
 public:
-	static POTGenerator *get_singleton();
-	void generate_pot(const String &p_file);
+    static POTGenerator *get_singleton();
+    void generate_pot ( const String &p_file );
 
-	POTGenerator();
-	~POTGenerator();
+    POTGenerator();
+    ~POTGenerator();
 };
 
 #endif // POT_GENERATOR_H

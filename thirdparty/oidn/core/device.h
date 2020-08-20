@@ -18,22 +18,22 @@
 
 #include "common.h"
 
-namespace oidn {
+namespace oidn
+{
 
-  class Buffer;
-  class Filter;
+class Buffer;
+class Filter;
 
-  class Device : public RefCount, public Verbose
-  {
-  private:
+class Device : public RefCount, public Verbose
+{
+private:
     // Thread-safety
     std::mutex mutex;
 
     // Error handling
-    struct ErrorState
-    {
-      Error code = Error::None;
-      std::string message;
+    struct ErrorState {
+        Error code = Error::None;
+        std::string message;
     };
 
     static thread_local ErrorState globalError;
@@ -54,17 +54,17 @@ namespace oidn {
 
     bool dirty = true;
 
-  public:
+public:
     Device();
     ~Device();
 
-    static void setError(Device* device, Error code, const std::string& message);
-    static Error getError(Device* device, const char** outMessage);
+    static void setError ( Device* device, Error code, const std::string& message );
+    static Error getError ( Device* device, const char** outMessage );
 
-    void setErrorFunction(ErrorFunction func, void* userPtr);
+    void setErrorFunction ( ErrorFunction func, void* userPtr );
 
-    int get1i(const std::string& name);
-    void set1i(const std::string& name, int value);
+    int get1i ( const std::string& name );
+    void set1i ( const std::string& name, int value );
 
     void commit();
 
@@ -82,21 +82,30 @@ namespace oidn {
 //    }
 // -- GODOT end --
 
-    Ref<Buffer> newBuffer(size_t byteSize);
-    Ref<Buffer> newBuffer(void* ptr, size_t byteSize);
-    Ref<Filter> newFilter(const std::string& type);
+    Ref<Buffer> newBuffer ( size_t byteSize );
+    Ref<Buffer> newBuffer ( void* ptr, size_t byteSize );
+    Ref<Filter> newFilter ( const std::string& type );
 
-    __forceinline Device* getDevice() { return this; }
-    __forceinline std::mutex& getMutex() { return mutex; }
+    __forceinline Device* getDevice()
+    {
+        return this;
+    }
+    __forceinline std::mutex& getMutex()
+    {
+        return mutex;
+    }
 
-  private:
+private:
 // -- GODOT start --
-  //bool isCommitted() const { return bool(arena); }
-  bool isCommitted() const { return false; }
+    //bool isCommitted() const { return bool(arena); }
+    bool isCommitted() const
+    {
+        return false;
+    }
 // -- GODOT end --
     void checkCommitted();
 
     void print();
-  };
+};
 
 } // namespace oidn

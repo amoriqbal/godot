@@ -36,7 +36,8 @@
 
 #include "../glslang/OSDependent/osinclude.h"
 
-namespace glslang {
+namespace glslang
+{
 
 bool InitProcess();
 bool InitThread();

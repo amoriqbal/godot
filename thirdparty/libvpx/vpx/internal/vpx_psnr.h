@@ -25,7 +25,7 @@ extern "C" {
  * \param[in]    peak          Max sample value
  * \param[in]    sse           Sum of squared errors
  */
-double vpx_sse_to_psnr(double samples, double peak, double sse);
+double vpx_sse_to_psnr ( double samples, double peak, double sse );
 
 #ifdef __cplusplus
 }  // extern "C"

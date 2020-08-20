@@ -17,34 +17,40 @@
 extern "C" {
 #endif
 
-void vp9_iht16x16_256_add_c(const tran_low_t *input, uint8_t *output, int pitch, int tx_type);
-void vp9_iht16x16_256_add_sse2(const tran_low_t *input, uint8_t *output, int pitch, int tx_type);
-RTCD_EXTERN void (*vp9_iht16x16_256_add)(const tran_low_t *input, uint8_t *output, int pitch, int tx_type);
+void vp9_iht16x16_256_add_c ( const tran_low_t *input, uint8_t *output, int pitch, int tx_type );
+void vp9_iht16x16_256_add_sse2 ( const tran_low_t *input, uint8_t *output, int pitch, int tx_type );
+RTCD_EXTERN void ( *vp9_iht16x16_256_add ) ( const tran_low_t *input, uint8_t *output, int pitch, int tx_type );
 
-void vp9_iht4x4_16_add_c(const tran_low_t *input, uint8_t *dest, int dest_stride, int tx_type);
-void vp9_iht4x4_16_add_sse2(const tran_low_t *input, uint8_t *dest, int dest_stride, int tx_type);
-RTCD_EXTERN void (*vp9_iht4x4_16_add)(const tran_low_t *input, uint8_t *dest, int dest_stride, int tx_type);
+void vp9_iht4x4_16_add_c ( const tran_low_t *input, uint8_t *dest, int dest_stride, int tx_type );
+void vp9_iht4x4_16_add_sse2 ( const tran_low_t *input, uint8_t *dest, int dest_stride, int tx_type );
+RTCD_EXTERN void ( *vp9_iht4x4_16_add ) ( const tran_low_t *input, uint8_t *dest, int dest_stride, int tx_type );
 
-void vp9_iht8x8_64_add_c(const tran_low_t *input, uint8_t *dest, int dest_stride, int tx_type);
-void vp9_iht8x8_64_add_sse2(const tran_low_t *input, uint8_t *dest, int dest_stride, int tx_type);
-RTCD_EXTERN void (*vp9_iht8x8_64_add)(const tran_low_t *input, uint8_t *dest, int dest_stride, int tx_type);
+void vp9_iht8x8_64_add_c ( const tran_low_t *input, uint8_t *dest, int dest_stride, int tx_type );
+void vp9_iht8x8_64_add_sse2 ( const tran_low_t *input, uint8_t *dest, int dest_stride, int tx_type );
+RTCD_EXTERN void ( *vp9_iht8x8_64_add ) ( const tran_low_t *input, uint8_t *dest, int dest_stride, int tx_type );
 
-void vp9_rtcd(void);
+void vp9_rtcd ( void );
 
 #ifdef RTCD_C
 #include "vpx_ports/x86.h"
-static void setup_rtcd_internal(void)
+static void setup_rtcd_internal ( void )
 {
     int flags = x86_simd_caps();
 
     vp9_iht16x16_256_add = vp9_iht16x16_256_add_c;
-    if (flags & HAS_SSE2) vp9_iht16x16_256_add = vp9_iht16x16_256_add_sse2;
+    if ( flags & HAS_SSE2 ) {
+        vp9_iht16x16_256_add = vp9_iht16x16_256_add_sse2;
+    }
 
     vp9_iht4x4_16_add = vp9_iht4x4_16_add_c;
-    if (flags & HAS_SSE2) vp9_iht4x4_16_add = vp9_iht4x4_16_add_sse2;
+    if ( flags & HAS_SSE2 ) {
+        vp9_iht4x4_16_add = vp9_iht4x4_16_add_sse2;
+    }
 
     vp9_iht8x8_64_add = vp9_iht8x8_64_add_c;
-    if (flags & HAS_SSE2) vp9_iht8x8_64_add = vp9_iht8x8_64_add_sse2;
+    if ( flags & HAS_SSE2 ) {
+        vp9_iht8x8_64_add = vp9_iht8x8_64_add_sse2;
+    }
 }
 #endif
 

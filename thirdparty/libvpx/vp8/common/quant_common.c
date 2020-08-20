@@ -11,8 +11,7 @@
 
 #include "quant_common.h"
 
-static const int dc_qlookup[QINDEX_RANGE] =
-{
+static const int dc_qlookup[QINDEX_RANGE] = {
     4,    5,    6,    7,    8,    9,   10,   10,   11,   12,   13,   14,   15,   16,   17,   17,
     18,   19,   20,   20,   21,   21,   22,   22,   23,   23,   24,   25,   25,   26,   27,   28,
     29,   30,   31,   32,   33,   34,   35,   36,   37,   37,   38,   39,   40,   41,   42,   43,
@@ -23,8 +22,7 @@ static const int dc_qlookup[QINDEX_RANGE] =
     122,  124,  126,  128,  130,  132,  134,  136,  138,  140,  143,  145,  148,  151,  154,  157,
 };
 
-static const int ac_qlookup[QINDEX_RANGE] =
-{
+static const int ac_qlookup[QINDEX_RANGE] = {
     4,    5,    6,    7,    8,    9,   10,   11,   12,   13,   14,   15,   16,   17,   18,   19,
     20,   21,   22,   23,   24,   25,   26,   27,   28,   29,   30,   31,   32,   33,   34,   35,
     36,   37,   38,   39,   40,   41,   42,   43,   44,   45,   46,   47,   48,   49,   50,   51,
@@ -36,99 +34,107 @@ static const int ac_qlookup[QINDEX_RANGE] =
 };
 
 
-int vp8_dc_quant(int QIndex, int Delta)
+int vp8_dc_quant ( int QIndex, int Delta )
 {
     int retval;
 
     QIndex = QIndex + Delta;
 
-    if (QIndex > 127)
+    if ( QIndex > 127 ) {
         QIndex = 127;
-    else if (QIndex < 0)
+    } else if ( QIndex < 0 ) {
         QIndex = 0;
+    }
 
     retval = dc_qlookup[ QIndex ];
     return retval;
 }
 
-int vp8_dc2quant(int QIndex, int Delta)
+int vp8_dc2quant ( int QIndex, int Delta )
 {
     int retval;
 
     QIndex = QIndex + Delta;
 
-    if (QIndex > 127)
+    if ( QIndex > 127 ) {
         QIndex = 127;
-    else if (QIndex < 0)
+    } else if ( QIndex < 0 ) {
         QIndex = 0;
+    }
 
     retval = dc_qlookup[ QIndex ] * 2;
     return retval;
 
 }
-int vp8_dc_uv_quant(int QIndex, int Delta)
+int vp8_dc_uv_quant ( int QIndex, int Delta )
 {
     int retval;
 
     QIndex = QIndex + Delta;
 
-    if (QIndex > 127)
+    if ( QIndex > 127 ) {
         QIndex = 127;
-    else if (QIndex < 0)
+    } else if ( QIndex < 0 ) {
         QIndex = 0;
+    }
 
     retval = dc_qlookup[ QIndex ];
 
-    if (retval > 132)
+    if ( retval > 132 ) {
         retval = 132;
+    }
 
     return retval;
 }
 
-int vp8_ac_yquant(int QIndex)
+int vp8_ac_yquant ( int QIndex )
 {
     int retval;
 
-    if (QIndex > 127)
+    if ( QIndex > 127 ) {
         QIndex = 127;
-    else if (QIndex < 0)
+    } else if ( QIndex < 0 ) {
         QIndex = 0;
+    }
 
     retval = ac_qlookup[ QIndex ];
     return retval;
 }
 
-int vp8_ac2quant(int QIndex, int Delta)
+int vp8_ac2quant ( int QIndex, int Delta )
 {
     int retval;
 
     QIndex = QIndex + Delta;
 
-    if (QIndex > 127)
+    if ( QIndex > 127 ) {
         QIndex = 127;
-    else if (QIndex < 0)
+    } else if ( QIndex < 0 ) {
         QIndex = 0;
+    }
 
     /* For all x in [0..284], x*155/100 is bitwise equal to (x*101581) >> 16.
      * The smallest precision for that is '(x*6349) >> 12' but 16 is a good
      * word size. */
-    retval = (ac_qlookup[ QIndex ] * 101581) >> 16;
+    retval = ( ac_qlookup[ QIndex ] * 101581 ) >> 16;
 
-    if (retval < 8)
+    if ( retval < 8 ) {
         retval = 8;
+    }
 
     return retval;
 }
-int vp8_ac_uv_quant(int QIndex, int Delta)
+int vp8_ac_uv_quant ( int QIndex, int Delta )
 {
     int retval;
 
     QIndex = QIndex + Delta;
 
-    if (QIndex > 127)
+    if ( QIndex > 127 ) {
         QIndex = 127;
-    else if (QIndex < 0)
+    } else if ( QIndex < 0 ) {
         QIndex = 0;
+    }
 
     retval = ac_qlookup[ QIndex ];
     return retval;

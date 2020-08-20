@@ -33,13 +33,14 @@
 
 #include "servers/camera_server.h"
 
-class CameraIOS : public CameraServer {
+class CameraIOS : public CameraServer
+{
 private:
 public:
-	CameraIOS();
-	~CameraIOS();
+    CameraIOS();
+    ~CameraIOS();
 
-	void update_feeds();
+    void update_feeds();
 };
 
 #endif /* CAMERAIOS_H */

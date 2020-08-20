@@ -49,7 +49,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assimp/ai_assert.h>
 #include <assimp/scene.h>
 
-namespace Assimp {
+namespace Assimp
+{
 
 // Forward declarations
 class Importer;
@@ -75,29 +76,33 @@ struct ScenePrivateData {
 
 inline
 ScenePrivateData::ScenePrivateData() AI_NO_EXCEPT
-: mOrigImporter( nullptr )
-, mPPStepsApplied( 0 )
-, mIsCopy( false ) {
+:
+mOrigImporter ( nullptr )
+, mPPStepsApplied ( 0 )
+, mIsCopy ( false )
+{
     // empty
 }
 
 // Access private data stored in the scene
 inline
-ScenePrivateData* ScenePriv(aiScene* in) {
-    ai_assert( nullptr != in );
+ScenePrivateData* ScenePriv ( aiScene* in )
+{
+    ai_assert ( nullptr != in );
     if ( nullptr == in ) {
         return nullptr;
     }
-    return static_cast<ScenePrivateData*>(in->mPrivate);
+    return static_cast<ScenePrivateData*> ( in->mPrivate );
 }
 
 inline
-const ScenePrivateData* ScenePriv(const aiScene* in) {
-    ai_assert( nullptr != in );
+const ScenePrivateData* ScenePriv ( const aiScene* in )
+{
+    ai_assert ( nullptr != in );
     if ( nullptr == in ) {
         return nullptr;
     }
-    return static_cast<const ScenePrivateData*>(in->mPrivate);
+    return static_cast<const ScenePrivateData*> ( in->mPrivate );
 }
 
 } // Namespace Assimp

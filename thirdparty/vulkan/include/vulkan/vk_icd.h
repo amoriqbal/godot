@@ -44,12 +44,12 @@
 #define CURRENT_LOADER_ICD_INTERFACE_VERSION 5
 #define MIN_SUPPORTED_LOADER_ICD_INTERFACE_VERSION 0
 #define MIN_PHYS_DEV_EXTENSION_ICD_INTERFACE_VERSION 4
-typedef VkResult(VKAPI_PTR *PFN_vkNegotiateLoaderICDInterfaceVersion)(uint32_t *pVersion);
+typedef VkResult ( VKAPI_PTR *PFN_vkNegotiateLoaderICDInterfaceVersion ) ( uint32_t *pVersion );
 
 // This is defined in vk_layer.h which will be found by the loader, but if an ICD is building against this
 // file directly, it won't be found.
 #ifndef PFN_GetPhysicalDeviceProcAddr
-typedef PFN_vkVoidFunction(VKAPI_PTR *PFN_GetPhysicalDeviceProcAddr)(VkInstance instance, const char *pName);
+typedef PFN_vkVoidFunction ( VKAPI_PTR *PFN_GetPhysicalDeviceProcAddr ) ( VkInstance instance, const char *pName );
 #endif
 
 /*
@@ -65,14 +65,16 @@ typedef union {
     void *loaderData;
 } VK_LOADER_DATA;
 
-static inline void set_loader_magic_value(void *pNewObject) {
-    VK_LOADER_DATA *loader_info = (VK_LOADER_DATA *)pNewObject;
+static inline void set_loader_magic_value ( void *pNewObject )
+{
+    VK_LOADER_DATA *loader_info = ( VK_LOADER_DATA * ) pNewObject;
     loader_info->loaderMagic = ICD_LOADER_MAGIC;
 }
 
-static inline bool valid_loader_magic_value(void *pNewObject) {
-    const VK_LOADER_DATA *loader_info = (VK_LOADER_DATA *)pNewObject;
-    return (loader_info->loaderMagic & 0xffffffff) == ICD_LOADER_MAGIC;
+static inline bool valid_loader_magic_value ( void *pNewObject )
+{
+    const VK_LOADER_DATA *loader_info = ( VK_LOADER_DATA * ) pNewObject;
+    return ( loader_info->loaderMagic & 0xffffffff ) == ICD_LOADER_MAGIC;
 }
 
 /*

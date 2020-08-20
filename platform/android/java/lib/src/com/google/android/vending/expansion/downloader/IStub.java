@@ -32,10 +32,11 @@ import android.os.Messenger;
  * should call {@link #getMessenger} to pass the stub's Messenger object to
  * {@link IDownloaderService#onClientUpdated}.
  */
-public interface IStub {
+public interface IStub
+{
     Messenger getMessenger();
 
-    void connect(Context c);
+    void connect ( Context c );
 
-    void disconnect(Context c);
+    void disconnect ( Context c );
 }

@@ -42,7 +42,7 @@ extern "C" {
 #define RESAMPLER_MAX_BATCH_SIZE_IN             ( RESAMPLER_MAX_BATCH_SIZE_MS * RESAMPLER_MAX_FS_KHZ )
 
 /* Description: Hybrid IIR/FIR polyphase implementation of resampling */
-void silk_resampler_private_IIR_FIR(
+void silk_resampler_private_IIR_FIR (
     void                            *SS,            /* I/O  Resampler state             */
     opus_int16                      out[],          /* O    Output signal               */
     const opus_int16                in[],           /* I    Input signal                */
@@ -50,7 +50,7 @@ void silk_resampler_private_IIR_FIR(
 );
 
 /* Description: Hybrid IIR/FIR polyphase implementation of resampling */
-void silk_resampler_private_down_FIR(
+void silk_resampler_private_down_FIR (
     void                            *SS,            /* I/O  Resampler state             */
     opus_int16                      out[],          /* O    Output signal               */
     const opus_int16                in[],           /* I    Input signal                */
@@ -58,7 +58,7 @@ void silk_resampler_private_down_FIR(
 );
 
 /* Upsample by a factor 2, high quality */
-void silk_resampler_private_up2_HQ_wrapper(
+void silk_resampler_private_up2_HQ_wrapper (
     void                            *SS,            /* I/O  Resampler state (unused)    */
     opus_int16                      *out,           /* O    Output signal [ 2 * len ]   */
     const opus_int16                *in,            /* I    Input signal [ len ]        */
@@ -66,7 +66,7 @@ void silk_resampler_private_up2_HQ_wrapper(
 );
 
 /* Upsample by a factor 2, high quality */
-void silk_resampler_private_up2_HQ(
+void silk_resampler_private_up2_HQ (
     opus_int32                      *S,             /* I/O  Resampler state [ 6 ]       */
     opus_int16                      *out,           /* O    Output signal [ 2 * len ]   */
     const opus_int16                *in,            /* I    Input signal [ len ]        */
@@ -74,7 +74,7 @@ void silk_resampler_private_up2_HQ(
 );
 
 /* Second order AR filter */
-void silk_resampler_private_AR2(
+void silk_resampler_private_AR2 (
     opus_int32                      S[],            /* I/O  State vector [ 2 ]          */
     opus_int32                      out_Q8[],       /* O    Output signal               */
     const opus_int16                in[],           /* I    Input signal                */

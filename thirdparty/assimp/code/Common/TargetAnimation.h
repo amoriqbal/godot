@@ -48,7 +48,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assimp/anim.h>
 #include <vector>
 
-namespace Assimp    {
+namespace Assimp
+{
 
 
 
@@ -73,23 +74,27 @@ public:
      *  @param defaultTargetPos Default target position to be used if
      *    no animated track is available. May be NULL.
      */
-    KeyIterator(const std::vector<aiVectorKey>* _objPos,
-        const std::vector<aiVectorKey>* _targetObjPos,
-        const aiVector3D*  defaultObjectPos = NULL,
-        const aiVector3D*  defaultTargetPos = NULL);
+    KeyIterator ( const std::vector<aiVectorKey>* _objPos,
+                  const std::vector<aiVectorKey>* _targetObjPos,
+                  const aiVector3D*  defaultObjectPos = NULL,
+                  const aiVector3D*  defaultTargetPos = NULL );
 
     // ------------------------------------------------------------------
     /** Returns true if all keys have been processed
      */
     bool Finished() const
-        {return reachedEnd;}
+    {
+        return reachedEnd;
+    }
 
     // ------------------------------------------------------------------
     /** Increment the iterator
      */
     void operator++();
-    inline void operator++(int)
-        {return ++(*this);}
+    inline void operator++ ( int )
+    {
+        return ++ ( *this );
+    }
 
 
 
@@ -97,13 +102,19 @@ public:
     /** Getters to retrieve the current state of the iterator
      */
     inline const aiVector3D& GetCurPosition() const
-        {return curPosition;}
+    {
+        return curPosition;
+    }
 
     inline const aiVector3D& GetCurTargetPosition() const
-        {return curTargetPosition;}
+    {
+        return curTargetPosition;
+    }
 
     inline double GetCurTime() const
-        {return curTime;}
+    {
+        return curTime;
+    }
 
 private:
 
@@ -135,8 +146,8 @@ class TargetAnimationHelper
 public:
 
     TargetAnimationHelper()
-        :   targetPositions     (NULL)
-        ,   objectPositions     (NULL)
+        :   targetPositions ( NULL )
+        ,   objectPositions ( NULL )
     {}
 
 
@@ -147,8 +158,8 @@ public:
      *  target at a specific position.
      *
      *  @param targetPositions Translation channel*/
-    void SetTargetAnimationChannel (const
-        std::vector<aiVectorKey>* targetPositions);
+    void SetTargetAnimationChannel ( const
+                                     std::vector<aiVectorKey>* targetPositions );
 
 
     // ------------------------------------------------------------------
@@ -156,19 +167,19 @@ public:
      *
      *  @param objectPositions Translation channel */
     void SetMainAnimationChannel ( const
-        std::vector<aiVectorKey>* objectPositions);
+                                   std::vector<aiVectorKey>* objectPositions );
 
     // ------------------------------------------------------------------
     /** Sets the main animation channel to a fixed value
      *
      *  @param fixed Fixed value for the main animation channel*/
-    void SetFixedMainAnimationChannel(const aiVector3D& fixed);
+    void SetFixedMainAnimationChannel ( const aiVector3D& fixed );
 
 
     // ------------------------------------------------------------------
     /** Computes final animation channels
      * @param distanceTrack Receive camera translation keys ... != NULL. */
-    void Process( std::vector<aiVectorKey>* distanceTrack );
+    void Process ( std::vector<aiVectorKey>* distanceTrack );
 
 
 private:

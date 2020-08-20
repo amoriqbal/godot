@@ -60,8 +60,10 @@ http://www.jalix.org/ressources/graphics/3DS/_unofficials/3ds-unofficial.txt */
 /** Helper structure representing a face with smoothing groups assigned */
 struct FaceWithSmoothingGroup {
     FaceWithSmoothingGroup() AI_NO_EXCEPT
-    : mIndices()
-    , iSmoothGroup(0) {
+:
+    mIndices()
+    , iSmoothGroup ( 0 )
+    {
         // in debug builds set all indices to a common magic value
 #ifdef ASSIMP_BUILD_DEBUG
         this->mIndices[0] = 0xffffffff;
@@ -89,8 +91,7 @@ struct FaceWithSmoothingGroup {
     need to use a template here.
     */
 template <class T>
-struct MeshWithSmoothingGroups
-{
+struct MeshWithSmoothingGroups {
     //! Vertex positions
     std::vector<aiVector3D> mPositions;
 
@@ -105,7 +106,7 @@ struct MeshWithSmoothingGroups
 /** Computes normal vectors for the mesh
  */
 template <class T>
-void ComputeNormalsWithSmoothingsGroups(MeshWithSmoothingGroups<T>& sMesh);
+void ComputeNormalsWithSmoothingsGroups ( MeshWithSmoothingGroups<T>& sMesh );
 
 
 // include implementations

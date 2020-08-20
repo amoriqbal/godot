@@ -50,7 +50,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class SortByPTypeProcessTest;
 
-namespace Assimp    {
+namespace Assimp
+{
 
 
 // ---------------------------------------------------------------------------
@@ -58,19 +59,20 @@ namespace Assimp    {
  *  A mesh with 5 lines, 3 points and 145 triangles would be split in 3
  * submeshes.
 */
-class ASSIMP_API SortByPTypeProcess : public BaseProcess {
+class ASSIMP_API SortByPTypeProcess : public BaseProcess
+{
 public:
     SortByPTypeProcess();
     ~SortByPTypeProcess();
 
     // -------------------------------------------------------------------
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
     // -------------------------------------------------------------------
-    void SetupProperties(const Importer* pImp);
+    void SetupProperties ( const Importer* pImp );
 
 private:
     int mConfigRemoveMeshes;

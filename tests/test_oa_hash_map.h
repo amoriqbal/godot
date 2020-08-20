@@ -33,7 +33,8 @@
 
 #include "core/os/main_loop.h"
 
-namespace TestOAHashMap {
+namespace TestOAHashMap
+{
 
 MainLoop *test();
 }

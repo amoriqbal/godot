@@ -34,37 +34,42 @@ int g_ZSTD_threading_useless_symbol;
 
 /* ===  Implementation  === */
 
-static unsigned __stdcall worker(void *arg)
+static unsigned __stdcall worker ( void *arg )
 {
-    ZSTD_pthread_t* const thread = (ZSTD_pthread_t*) arg;
-    thread->arg = thread->start_routine(thread->arg);
+    ZSTD_pthread_t* const thread = ( ZSTD_pthread_t* ) arg;
+    thread->arg = thread->start_routine ( thread->arg );
     return 0;
 }
 
-int ZSTD_pthread_create(ZSTD_pthread_t* thread, const void* unused,
-            void* (*start_routine) (void*), void* arg)
+int ZSTD_pthread_create ( ZSTD_pthread_t* thread, const void* unused,
+                          void* ( *start_routine ) ( void* ), void* arg )
 {
-    (void)unused;
+    ( void ) unused;
     thread->arg = arg;
     thread->start_routine = start_routine;
-    thread->handle = (HANDLE) _beginthreadex(NULL, 0, worker, thread, 0, NULL);
+    thread->handle = ( HANDLE ) _beginthreadex ( NULL, 0, worker, thread, 0, NULL );
 
-    if (!thread->handle)
+    if ( !thread->handle ) {
         return errno;
-    else
+    } else {
         return 0;
+    }
 }
 
-int ZSTD_pthread_join(ZSTD_pthread_t thread, void **value_ptr)
+int ZSTD_pthread_join ( ZSTD_pthread_t thread, void **value_ptr )
 {
     DWORD result;
 
-    if (!thread.handle) return 0;
+    if ( !thread.handle ) {
+        return 0;
+    }
 
-    result = WaitForSingleObject(thread.handle, INFINITE);
-    switch (result) {
+    result = WaitForSingleObject ( thread.handle, INFINITE );
+    switch ( result ) {
     case WAIT_OBJECT_0:
-        if (value_ptr) *value_ptr = thread.arg;
+        if ( value_ptr ) {
+            *value_ptr = thread.arg;
+        }
         return 0;
     case WAIT_ABANDONED:
         return EINVAL;
@@ -79,40 +84,44 @@ int ZSTD_pthread_join(ZSTD_pthread_t thread, void **value_ptr)
 
 #include <stdlib.h>
 
-int ZSTD_pthread_mutex_init(ZSTD_pthread_mutex_t* mutex, pthread_mutexattr_t const* attr)
+int ZSTD_pthread_mutex_init ( ZSTD_pthread_mutex_t* mutex, pthread_mutexattr_t const* attr )
 {
-    *mutex = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
-    if (!*mutex)
+    *mutex = ( pthread_mutex_t* ) malloc ( sizeof ( pthread_mutex_t ) );
+    if ( !*mutex ) {
         return 1;
-    return pthread_mutex_init(*mutex, attr);
+    }
+    return pthread_mutex_init ( *mutex, attr );
 }
 
-int ZSTD_pthread_mutex_destroy(ZSTD_pthread_mutex_t* mutex)
+int ZSTD_pthread_mutex_destroy ( ZSTD_pthread_mutex_t* mutex )
 {
-    if (!*mutex)
+    if ( !*mutex ) {
         return 0;
+    }
     {
-        int const ret = pthread_mutex_destroy(*mutex);
-        free(*mutex);
+        int const ret = pthread_mutex_destroy ( *mutex );
+        free ( *mutex );
         return ret;
     }
 }
 
-int ZSTD_pthread_cond_init(ZSTD_pthread_cond_t* cond, pthread_condattr_t const* attr)
+int ZSTD_pthread_cond_init ( ZSTD_pthread_cond_t* cond, pthread_condattr_t const* attr )
 {
-    *cond = (pthread_cond_t*)malloc(sizeof(pthread_cond_t));
-    if (!*cond)
+    *cond = ( pthread_cond_t* ) malloc ( sizeof ( pthread_cond_t ) );
+    if ( !*cond ) {
         return 1;
-    return pthread_cond_init(*cond, attr);
+    }
+    return pthread_cond_init ( *cond, attr );
 }
 
-int ZSTD_pthread_cond_destroy(ZSTD_pthread_cond_t* cond)
+int ZSTD_pthread_cond_destroy ( ZSTD_pthread_cond_t* cond )
 {
-    if (!*cond)
+    if ( !*cond ) {
         return 0;
+    }
     {
-        int const ret = pthread_cond_destroy(*cond);
-        free(*cond);
+        int const ret = pthread_cond_destroy ( *cond );
+        free ( *cond );
         return ret;
     }
 }

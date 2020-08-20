@@ -46,27 +46,29 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef INCLUDED_AI_FBX_IMPORTSETTINGS_H
 #define INCLUDED_AI_FBX_IMPORTSETTINGS_H
 
-namespace Assimp {
-namespace FBX {
+namespace Assimp
+{
+namespace FBX
+{
 
 /** FBX import settings, parts of which are publicly accessible via their corresponding AI_CONFIG constants */
-struct ImportSettings
-{
+struct ImportSettings {
     ImportSettings()
-    : strictMode(true)
-    , readAllLayers(true)
-    , readAllMaterials(false)
-    , readMaterials(true)
-    , readTextures(true)
-    , readCameras(true)
-    , readLights(true)
-    , readAnimations(true)
-    , readWeights(true)
-    , preservePivots(true)
-    , optimizeEmptyAnimationCurves(true)
-    , useLegacyEmbeddedTextureNaming(false)
-    , removeEmptyBones( true )
-    , convertToMeters( false ) {
+        : strictMode ( true )
+        , readAllLayers ( true )
+        , readAllMaterials ( false )
+        , readMaterials ( true )
+        , readTextures ( true )
+        , readCameras ( true )
+        , readLights ( true )
+        , readAnimations ( true )
+        , readWeights ( true )
+        , preservePivots ( true )
+        , optimizeEmptyAnimationCurves ( true )
+        , useLegacyEmbeddedTextureNaming ( false )
+        , removeEmptyBones ( true )
+        , convertToMeters ( false )
+    {
         // empty
     }
 

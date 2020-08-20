@@ -60,7 +60,8 @@ struct aiNodeAnim;
 struct aiNode;
 struct aiMaterial;
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // -----------------------------------------------------------------------------------
 /** @brief The MakeLeftHandedProcess converts all imported data to a left-handed
@@ -81,17 +82,17 @@ public:
     ~MakeLeftHandedProcess();
 
     // -------------------------------------------------------------------
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
 protected:
 
     // -------------------------------------------------------------------
     /** Recursively converts a node and all of its children
      */
-    void ProcessNode( aiNode* pNode, const aiMatrix4x4& pParentGlobalRotation);
+    void ProcessNode ( aiNode* pNode, const aiMatrix4x4& pParentGlobalRotation );
 
     // -------------------------------------------------------------------
     /** Converts a single mesh to left handed coordinates.
@@ -99,13 +100,13 @@ protected:
      * the local Z axis and the order of all faces are inverted.
      * @param pMesh The mesh to convert.
      */
-    void ProcessMesh( aiMesh* pMesh);
+    void ProcessMesh ( aiMesh* pMesh );
 
     // -------------------------------------------------------------------
     /** Converts a single material to left-handed coordinates
      * @param pMat Material to convert
      */
-    void ProcessMaterial( aiMaterial* pMat);
+    void ProcessMaterial ( aiMaterial* pMat );
 
     // -------------------------------------------------------------------
     /** Converts the given animation to LH coordinates.
@@ -113,7 +114,7 @@ protected:
      * work in local space and can therefore be left untouched.
      * @param pAnim The bone animation to transform
      */
-    void ProcessAnimation( aiNodeAnim* pAnim);
+    void ProcessAnimation ( aiNodeAnim* pAnim );
 };
 
 
@@ -132,13 +133,13 @@ public:
     ~FlipWindingOrderProcess();
 
     // -------------------------------------------------------------------
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
 protected:
-    void ProcessMesh( aiMesh* pMesh);
+    void ProcessMesh ( aiMesh* pMesh );
 };
 
 // ---------------------------------------------------------------------------
@@ -156,14 +157,14 @@ public:
     ~FlipUVsProcess();
 
     // -------------------------------------------------------------------
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
 protected:
-    void ProcessMesh( aiMesh* pMesh);
-    void ProcessMaterial( aiMaterial* mat);
+    void ProcessMesh ( aiMesh* pMesh );
+    void ProcessMaterial ( aiMaterial* mat );
 };
 
 } // end of namespace Assimp

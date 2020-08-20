@@ -39,7 +39,7 @@
  * The OC_ILOG_32() or OC_ILOGNZ_32() macros may be able to use a builtin
  *  function instead, which should be faster.
  */
-int oc_ilog32(ogg_uint32_t _v);
+int oc_ilog32 ( ogg_uint32_t _v );
 /**
  * oc_ilog64 - Integer binary logarithm of a 64-bit value.
  * @_v: A 64-bit value.
@@ -49,7 +49,7 @@ int oc_ilog32(ogg_uint32_t _v);
  * The OC_ILOG_64() or OC_ILOGNZ_64() macros may be able to use a builtin
  *  function instead, which should be faster.
  */
-int oc_ilog64(ogg_int64_t _v);
+int oc_ilog64 ( ogg_int64_t _v );
 
 
 # if defined(OC_CLZ32)
@@ -135,7 +135,7 @@ int oc_ilog64(ogg_int64_t _v);
 
 #define OC_Q57(_v) ((ogg_int64_t)(_v)<<57)
 
-ogg_int64_t oc_bexp64(ogg_int64_t _z);
-ogg_int64_t oc_blog64(ogg_int64_t _w);
+ogg_int64_t oc_bexp64 ( ogg_int64_t _z );
+ogg_int64_t oc_blog64 ( ogg_int64_t _w );
 
 #endif

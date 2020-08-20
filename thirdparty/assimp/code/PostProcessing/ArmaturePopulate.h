@@ -51,7 +51,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 struct aiNode;
 struct aiBone;
 
-namespace Assimp {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /** Armature Populate: This is a post process designed
@@ -66,7 +67,8 @@ namespace Assimp {
  * You can contact RevoluPowered <gordon@gordonite.tech>
  * For more info about this
 */
-class ASSIMP_API ArmaturePopulate : public BaseProcess {
+class ASSIMP_API ArmaturePopulate : public BaseProcess
+{
 public:
     /// The default class constructor.
     ArmaturePopulate();
@@ -75,35 +77,35 @@ public:
     virtual ~ArmaturePopulate();
 
     /// Overwritten, @see BaseProcess
-    virtual bool IsActive( unsigned int pFlags ) const;
+    virtual bool IsActive ( unsigned int pFlags ) const;
 
     /// Overwritten, @see BaseProcess
-    virtual void SetupProperties( const Importer* pImp );
+    virtual void SetupProperties ( const Importer* pImp );
 
     /// Overwritten, @see BaseProcess
-    virtual void Execute( aiScene* pScene );
+    virtual void Execute ( aiScene* pScene );
 
-    static aiNode *GetArmatureRoot(aiNode *bone_node,
-                                      std::vector<aiBone *> &bone_list);
+    static aiNode *GetArmatureRoot ( aiNode *bone_node,
+                                     std::vector<aiBone *> &bone_list );
 
-    static bool IsBoneNode(const aiString &bone_name,
-                              std::vector<aiBone *> &bones);
+    static bool IsBoneNode ( const aiString &bone_name,
+                             std::vector<aiBone *> &bones );
 
-    static aiNode *GetNodeFromStack(const aiString &node_name,
-                                       std::vector<aiNode *> &nodes);
+    static aiNode *GetNodeFromStack ( const aiString &node_name,
+                                      std::vector<aiNode *> &nodes );
 
-    static void BuildNodeList(const aiNode *current_node,
-                                 std::vector<aiNode *> &nodes);
+    static void BuildNodeList ( const aiNode *current_node,
+                                std::vector<aiNode *> &nodes );
 
-    static void BuildBoneList(aiNode *current_node, const aiNode *root_node,
+    static void BuildBoneList ( aiNode *current_node, const aiNode *root_node,
+                                const aiScene *scene,
+                                std::vector<aiBone *> &bones );
+
+    static void BuildBoneStack ( aiNode *current_node, const aiNode *root_node,
                                  const aiScene *scene,
-                                 std::vector<aiBone *> &bones);                        
-
-    static void BuildBoneStack(aiNode *current_node, const aiNode *root_node,
-                                  const aiScene *scene,
-                                  const std::vector<aiBone *> &bones,
-                                  std::map<aiBone *, aiNode *> &bone_stack,
-                                  std::vector<aiNode *> &node_stack);
+                                 const std::vector<aiBone *> &bones,
+                                 std::map<aiBone *, aiNode *> &bone_stack,
+                                 std::vector<aiNode *> &node_stack );
 };
 
 } // Namespace Assimp

@@ -37,12 +37,19 @@
 	@author AndreaCatania
 */
 
-class NavRid {
-	RID self;
+class NavRid
+{
+    RID self;
 
 public:
-	_FORCE_INLINE_ void set_self(const RID &p_self) { self = p_self; }
-	_FORCE_INLINE_ RID get_self() const { return self; }
+    _FORCE_INLINE_ void set_self ( const RID &p_self )
+    {
+        self = p_self;
+    }
+    _FORCE_INLINE_ RID get_self() const
+    {
+        return self;
+    }
 };
 
 #endif // NAV_RID_H

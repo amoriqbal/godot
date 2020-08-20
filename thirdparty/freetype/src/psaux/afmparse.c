@@ -28,32 +28,30 @@
 #include "psauxerr.h"
 
 
-  /**************************************************************************
-   *
-   * AFM_Stream
-   *
-   * The use of AFM_Stream is largely inspired by parseAFM.[ch] from t1lib.
-   *
-   */
+/**************************************************************************
+ *
+ * AFM_Stream
+ *
+ * The use of AFM_Stream is largely inspired by parseAFM.[ch] from t1lib.
+ *
+ */
 
-  enum
-  {
+enum {
     AFM_STREAM_STATUS_NORMAL,
     AFM_STREAM_STATUS_EOC,
     AFM_STREAM_STATUS_EOL,
     AFM_STREAM_STATUS_EOF
-  };
+};
 
 
-  typedef struct  AFM_StreamRec_
-  {
+typedef struct  AFM_StreamRec_ {
     FT_Byte*  cursor;
     FT_Byte*  base;
     FT_Byte*  limit;
 
     FT_Int    status;
 
-  } AFM_StreamRec;
+} AFM_StreamRec;
 
 
 #ifndef EOF
@@ -61,13 +59,13 @@
 #endif
 
 
-  /* this works because empty lines are ignored */
+/* this works because empty lines are ignored */
 #define AFM_IS_NEWLINE( ch )  ( (ch) == '\r' || (ch) == '\n' )
 
 #define AFM_IS_EOF( ch )      ( (ch) == EOF  || (ch) == '\x1a' )
 #define AFM_IS_SPACE( ch )    ( (ch) == ' '  || (ch) == '\t' )
 
-  /* column separator; there is no `column' in the spec actually */
+/* column separator; there is no `column' in the spec actually */
 #define AFM_IS_SEP( ch )      ( (ch) == ';' )
 
 #define AFM_GETC()                                                       \
@@ -90,118 +88,111 @@
           ( (stream)->status >= AFM_STREAM_STATUS_EOF )
 
 
-  static int
-  afm_stream_skip_spaces( AFM_Stream  stream )
-  {
+static int
+afm_stream_skip_spaces ( AFM_Stream  stream )
+{
     int  ch = 0;  /* make stupid compiler happy */
 
 
-    if ( AFM_STATUS_EOC( stream ) )
-      return ';';
-
-    while ( 1 )
-    {
-      ch = AFM_GETC();
-      if ( !AFM_IS_SPACE( ch ) )
-        break;
+    if ( AFM_STATUS_EOC ( stream ) ) {
+        return ';';
     }
 
-    if ( AFM_IS_NEWLINE( ch ) )
-      stream->status = AFM_STREAM_STATUS_EOL;
-    else if ( AFM_IS_SEP( ch ) )
-      stream->status = AFM_STREAM_STATUS_EOC;
-    else if ( AFM_IS_EOF( ch ) )
-      stream->status = AFM_STREAM_STATUS_EOF;
+    while ( 1 ) {
+        ch = AFM_GETC();
+        if ( !AFM_IS_SPACE ( ch ) ) {
+            break;
+        }
+    }
+
+    if ( AFM_IS_NEWLINE ( ch ) ) {
+        stream->status = AFM_STREAM_STATUS_EOL;
+    } else if ( AFM_IS_SEP ( ch ) ) {
+        stream->status = AFM_STREAM_STATUS_EOC;
+    } else if ( AFM_IS_EOF ( ch ) ) {
+        stream->status = AFM_STREAM_STATUS_EOF;
+    }
 
     return ch;
-  }
+}
 
 
-  /* read a key or value in current column */
-  static char*
-  afm_stream_read_one( AFM_Stream  stream )
-  {
+/* read a key or value in current column */
+static char*
+afm_stream_read_one ( AFM_Stream  stream )
+{
     char*  str;
 
 
-    afm_stream_skip_spaces( stream );
-    if ( AFM_STATUS_EOC( stream ) )
-      return NULL;
+    afm_stream_skip_spaces ( stream );
+    if ( AFM_STATUS_EOC ( stream ) ) {
+        return NULL;
+    }
 
-    str = AFM_STREAM_KEY_BEGIN( stream );
+    str = AFM_STREAM_KEY_BEGIN ( stream );
 
-    while ( 1 )
-    {
-      int  ch = AFM_GETC();
+    while ( 1 ) {
+        int  ch = AFM_GETC();
 
 
-      if ( AFM_IS_SPACE( ch ) )
-        break;
-      else if ( AFM_IS_NEWLINE( ch ) )
-      {
-        stream->status = AFM_STREAM_STATUS_EOL;
-        break;
-      }
-      else if ( AFM_IS_SEP( ch ) )
-      {
-        stream->status = AFM_STREAM_STATUS_EOC;
-        break;
-      }
-      else if ( AFM_IS_EOF( ch ) )
-      {
-        stream->status = AFM_STREAM_STATUS_EOF;
-        break;
-      }
+        if ( AFM_IS_SPACE ( ch ) ) {
+            break;
+        } else if ( AFM_IS_NEWLINE ( ch ) ) {
+            stream->status = AFM_STREAM_STATUS_EOL;
+            break;
+        } else if ( AFM_IS_SEP ( ch ) ) {
+            stream->status = AFM_STREAM_STATUS_EOC;
+            break;
+        } else if ( AFM_IS_EOF ( ch ) ) {
+            stream->status = AFM_STREAM_STATUS_EOF;
+            break;
+        }
     }
 
     return str;
-  }
+}
 
 
-  /* read a string (i.e., read to EOL) */
-  static char*
-  afm_stream_read_string( AFM_Stream  stream )
-  {
+/* read a string (i.e., read to EOL) */
+static char*
+afm_stream_read_string ( AFM_Stream  stream )
+{
     char*  str;
 
 
-    afm_stream_skip_spaces( stream );
-    if ( AFM_STATUS_EOL( stream ) )
-      return NULL;
+    afm_stream_skip_spaces ( stream );
+    if ( AFM_STATUS_EOL ( stream ) ) {
+        return NULL;
+    }
 
-    str = AFM_STREAM_KEY_BEGIN( stream );
+    str = AFM_STREAM_KEY_BEGIN ( stream );
 
     /* scan to eol */
-    while ( 1 )
-    {
-      int  ch = AFM_GETC();
+    while ( 1 ) {
+        int  ch = AFM_GETC();
 
 
-      if ( AFM_IS_NEWLINE( ch ) )
-      {
-        stream->status = AFM_STREAM_STATUS_EOL;
-        break;
-      }
-      else if ( AFM_IS_EOF( ch ) )
-      {
-        stream->status = AFM_STREAM_STATUS_EOF;
-        break;
-      }
+        if ( AFM_IS_NEWLINE ( ch ) ) {
+            stream->status = AFM_STREAM_STATUS_EOL;
+            break;
+        } else if ( AFM_IS_EOF ( ch ) ) {
+            stream->status = AFM_STREAM_STATUS_EOF;
+            break;
+        }
     }
 
     return str;
-  }
+}
 
 
-  /**************************************************************************
-   *
-   * AFM_Parser
-   *
-   */
+/**************************************************************************
+ *
+ * AFM_Parser
+ *
+ */
 
-  /* all keys defined in Ch. 7-10 of 5004.AFM_Spec.pdf */
-  typedef enum  AFM_Token_
-  {
+/* all keys defined in Ch. 7-10 of 5004.AFM_Spec.pdf */
+typedef enum  AFM_Token_ {
     AFM_TOKEN_ASCENDER,
     AFM_TOKEN_AXISLABEL,
     AFM_TOKEN_AXISTYPE,
@@ -279,11 +270,10 @@
     N_AFM_TOKENS,
     AFM_TOKEN_UNKNOWN
 
-  } AFM_Token;
+} AFM_Token;
 
 
-  static const char*  const afm_key_table[N_AFM_TOKENS] =
-  {
+static const char*  const afm_key_table[N_AFM_TOKENS] = {
     "Ascender",
     "AxisLabel",
     "AxisType",
@@ -358,186 +348,185 @@
     "Weight",
     "WeightVector",
     "XHeight"
-  };
+};
 
 
-  /*
-   * `afm_parser_read_vals' and `afm_parser_next_key' provide
-   * high-level operations to an AFM_Stream.  The rest of the
-   * parser functions should use them without accessing the
-   * AFM_Stream directly.
-   */
+/*
+ * `afm_parser_read_vals' and `afm_parser_next_key' provide
+ * high-level operations to an AFM_Stream.  The rest of the
+ * parser functions should use them without accessing the
+ * AFM_Stream directly.
+ */
 
-  FT_LOCAL_DEF( FT_Int )
-  afm_parser_read_vals( AFM_Parser  parser,
-                        AFM_Value   vals,
-                        FT_Int      n )
-  {
+FT_LOCAL_DEF ( FT_Int )
+afm_parser_read_vals ( AFM_Parser  parser,
+                       AFM_Value   vals,
+                       FT_Int      n )
+{
     AFM_Stream  stream = parser->stream;
     char*       str;
     FT_Int      i;
 
 
-    if ( n > AFM_MAX_ARGUMENTS )
-      return 0;
+    if ( n > AFM_MAX_ARGUMENTS ) {
+        return 0;
+    }
 
-    for ( i = 0; i < n; i++ )
-    {
-      FT_Offset  len;
-      AFM_Value  val = vals + i;
-
-
-      if ( val->type == AFM_VALUE_TYPE_STRING )
-        str = afm_stream_read_string( stream );
-      else
-        str = afm_stream_read_one( stream );
-
-      if ( !str )
-        break;
-
-      len = AFM_STREAM_KEY_LEN( stream, str );
-
-      switch ( val->type )
-      {
-      case AFM_VALUE_TYPE_STRING:
-      case AFM_VALUE_TYPE_NAME:
-        {
-          FT_Memory  memory = parser->memory;
-          FT_Error   error;
+    for ( i = 0; i < n; i++ ) {
+        FT_Offset  len;
+        AFM_Value  val = vals + i;
 
 
-          if ( !FT_QALLOC( val->u.s, len + 1 ) )
-          {
-            ft_memcpy( val->u.s, str, len );
-            val->u.s[len] = '\0';
-          }
+        if ( val->type == AFM_VALUE_TYPE_STRING ) {
+            str = afm_stream_read_string ( stream );
+        } else {
+            str = afm_stream_read_one ( stream );
+        }
+
+        if ( !str ) {
+            break;
+        }
+
+        len = AFM_STREAM_KEY_LEN ( stream, str );
+
+        switch ( val->type ) {
+        case AFM_VALUE_TYPE_STRING:
+        case AFM_VALUE_TYPE_NAME: {
+            FT_Memory  memory = parser->memory;
+            FT_Error   error;
+
+
+            if ( !FT_QALLOC ( val->u.s, len + 1 ) ) {
+                ft_memcpy ( val->u.s, str, len );
+                val->u.s[len] = '\0';
+            }
         }
         break;
 
-      case AFM_VALUE_TYPE_FIXED:
-        val->u.f = PS_Conv_ToFixed( (FT_Byte**)(void*)&str,
-                                    (FT_Byte*)str + len, 0 );
-        break;
+        case AFM_VALUE_TYPE_FIXED:
+            val->u.f = PS_Conv_ToFixed ( ( FT_Byte** ) ( void* ) &str,
+                                         ( FT_Byte* ) str + len, 0 );
+            break;
 
-      case AFM_VALUE_TYPE_INTEGER:
-        val->u.i = PS_Conv_ToInt( (FT_Byte**)(void*)&str,
-                                  (FT_Byte*)str + len );
-        break;
+        case AFM_VALUE_TYPE_INTEGER:
+            val->u.i = PS_Conv_ToInt ( ( FT_Byte** ) ( void* ) &str,
+                                       ( FT_Byte* ) str + len );
+            break;
 
-      case AFM_VALUE_TYPE_BOOL:
-        val->u.b = FT_BOOL( len == 4                      &&
-                            !ft_strncmp( str, "true", 4 ) );
-        break;
+        case AFM_VALUE_TYPE_BOOL:
+            val->u.b = FT_BOOL ( len == 4                      &&
+                                 !ft_strncmp ( str, "true", 4 ) );
+            break;
 
-      case AFM_VALUE_TYPE_INDEX:
-        if ( parser->get_index )
-          val->u.i = parser->get_index( str, len, parser->user_data );
-        else
-          val->u.i = 0;
-        break;
-      }
+        case AFM_VALUE_TYPE_INDEX:
+            if ( parser->get_index ) {
+                val->u.i = parser->get_index ( str, len, parser->user_data );
+            } else {
+                val->u.i = 0;
+            }
+            break;
+        }
     }
 
     return i;
-  }
+}
 
 
-  FT_LOCAL_DEF( char* )
-  afm_parser_next_key( AFM_Parser  parser,
-                       FT_Bool     line,
-                       FT_Offset*  len )
-  {
+FT_LOCAL_DEF ( char* )
+afm_parser_next_key ( AFM_Parser  parser,
+                      FT_Bool     line,
+                      FT_Offset*  len )
+{
     AFM_Stream  stream = parser->stream;
     char*       key    = NULL;  /* make stupid compiler happy */
 
 
-    if ( line )
-    {
-      while ( 1 )
-      {
-        /* skip current line */
-        if ( !AFM_STATUS_EOL( stream ) )
-          afm_stream_read_string( stream );
+    if ( line ) {
+        while ( 1 ) {
+            /* skip current line */
+            if ( !AFM_STATUS_EOL ( stream ) ) {
+                afm_stream_read_string ( stream );
+            }
 
-        stream->status = AFM_STREAM_STATUS_NORMAL;
-        key = afm_stream_read_one( stream );
+            stream->status = AFM_STREAM_STATUS_NORMAL;
+            key = afm_stream_read_one ( stream );
 
-        /* skip empty line */
-        if ( !key                      &&
-             !AFM_STATUS_EOF( stream ) &&
-             AFM_STATUS_EOL( stream )  )
-          continue;
+            /* skip empty line */
+            if ( !key                      &&
+                    !AFM_STATUS_EOF ( stream ) &&
+                    AFM_STATUS_EOL ( stream ) ) {
+                continue;
+            }
 
-        break;
-      }
-    }
-    else
-    {
-      while ( 1 )
-      {
-        /* skip current column */
-        while ( !AFM_STATUS_EOC( stream ) )
-          afm_stream_read_one( stream );
+            break;
+        }
+    } else {
+        while ( 1 ) {
+            /* skip current column */
+            while ( !AFM_STATUS_EOC ( stream ) ) {
+                afm_stream_read_one ( stream );
+            }
 
-        stream->status = AFM_STREAM_STATUS_NORMAL;
-        key = afm_stream_read_one( stream );
+            stream->status = AFM_STREAM_STATUS_NORMAL;
+            key = afm_stream_read_one ( stream );
 
-        /* skip empty column */
-        if ( !key                      &&
-             !AFM_STATUS_EOF( stream ) &&
-             AFM_STATUS_EOC( stream )  )
-          continue;
+            /* skip empty column */
+            if ( !key                      &&
+                    !AFM_STATUS_EOF ( stream ) &&
+                    AFM_STATUS_EOC ( stream ) ) {
+                continue;
+            }
 
-        break;
-      }
+            break;
+        }
     }
 
     if ( len )
-      *len = ( key ) ? (FT_Offset)AFM_STREAM_KEY_LEN( stream, key )
-                     : 0;
+        *len = ( key ) ? ( FT_Offset ) AFM_STREAM_KEY_LEN ( stream, key )
+               : 0;
 
     return key;
-  }
+}
 
 
-  static AFM_Token
-  afm_tokenize( const char*  key,
-                FT_Offset    len )
-  {
+static AFM_Token
+afm_tokenize ( const char*  key,
+               FT_Offset    len )
+{
     int  n;
 
 
-    for ( n = 0; n < N_AFM_TOKENS; n++ )
-    {
-      if ( *( afm_key_table[n] ) == *key )
-      {
-        for ( ; n < N_AFM_TOKENS; n++ )
-        {
-          if ( *( afm_key_table[n] ) != *key )
-            return AFM_TOKEN_UNKNOWN;
+    for ( n = 0; n < N_AFM_TOKENS; n++ ) {
+        if ( * ( afm_key_table[n] ) == *key ) {
+            for ( ; n < N_AFM_TOKENS; n++ ) {
+                if ( * ( afm_key_table[n] ) != *key ) {
+                    return AFM_TOKEN_UNKNOWN;
+                }
 
-          if ( ft_strncmp( afm_key_table[n], key, len ) == 0 )
-            return (AFM_Token) n;
+                if ( ft_strncmp ( afm_key_table[n], key, len ) == 0 ) {
+                    return ( AFM_Token ) n;
+                }
+            }
         }
-      }
     }
 
     return AFM_TOKEN_UNKNOWN;
-  }
+}
 
 
-  FT_LOCAL_DEF( FT_Error )
-  afm_parser_init( AFM_Parser  parser,
-                   FT_Memory   memory,
-                   FT_Byte*    base,
-                   FT_Byte*    limit )
-  {
+FT_LOCAL_DEF ( FT_Error )
+afm_parser_init ( AFM_Parser  parser,
+                  FT_Memory   memory,
+                  FT_Byte*    base,
+                  FT_Byte*    limit )
+{
     AFM_Stream  stream = NULL;
     FT_Error    error;
 
 
-    if ( FT_NEW( stream ) )
-      return error;
+    if ( FT_NEW ( stream ) ) {
+        return error;
+    }
 
     stream->cursor = stream->base = base;
     stream->limit  = limit;
@@ -551,42 +540,41 @@
     parser->get_index = NULL;
 
     return FT_Err_Ok;
-  }
+}
 
 
-  FT_LOCAL( void )
-  afm_parser_done( AFM_Parser  parser )
-  {
+FT_LOCAL ( void )
+afm_parser_done ( AFM_Parser  parser )
+{
     FT_Memory  memory = parser->memory;
 
 
-    FT_FREE( parser->stream );
-  }
+    FT_FREE ( parser->stream );
+}
 
 
-  static FT_Error
-  afm_parser_read_int( AFM_Parser  parser,
-                       FT_Int*     aint )
-  {
+static FT_Error
+afm_parser_read_int ( AFM_Parser  parser,
+                      FT_Int*     aint )
+{
     AFM_ValueRec  val;
 
 
     val.type = AFM_VALUE_TYPE_INTEGER;
 
-    if ( afm_parser_read_vals( parser, &val, 1 ) == 1 )
-    {
-      *aint = val.u.i;
+    if ( afm_parser_read_vals ( parser, &val, 1 ) == 1 ) {
+        *aint = val.u.i;
 
-      return FT_Err_Ok;
+        return FT_Err_Ok;
+    } else {
+        return FT_THROW ( Syntax_Error );
     }
-    else
-      return FT_THROW( Syntax_Error );
-  }
+}
 
 
-  static FT_Error
-  afm_parse_track_kern( AFM_Parser  parser )
-  {
+static FT_Error
+afm_parse_track_kern ( AFM_Parser  parser )
+{
     AFM_FontInfo   fi = parser->FontInfo;
     AFM_TrackKern  tk;
     char*          key;
@@ -595,102 +583,105 @@
     FT_Int         tmp;
 
 
-    if ( afm_parser_read_int( parser, &tmp ) )
+    if ( afm_parser_read_int ( parser, &tmp ) ) {
         goto Fail;
-
-    if ( tmp < 0 )
-      goto Fail;
-
-    fi->NumTrackKern = (FT_UInt)tmp;
-
-    if ( fi->NumTrackKern )
-    {
-      FT_Memory  memory = parser->memory;
-      FT_Error   error;
-
-
-      if ( FT_QNEW_ARRAY( fi->TrackKerns, fi->NumTrackKern ) )
-        return error;
     }
 
-    while ( ( key = afm_parser_next_key( parser, 1, &len ) ) != 0 )
-    {
-      AFM_ValueRec  shared_vals[5];
-
-
-      switch ( afm_tokenize( key, len ) )
-      {
-      case AFM_TOKEN_TRACKKERN:
-        n++;
-
-        if ( n >= (int)fi->NumTrackKern )
-          goto Fail;
-
-        tk = fi->TrackKerns + n;
-
-        shared_vals[0].type = AFM_VALUE_TYPE_INTEGER;
-        shared_vals[1].type = AFM_VALUE_TYPE_FIXED;
-        shared_vals[2].type = AFM_VALUE_TYPE_FIXED;
-        shared_vals[3].type = AFM_VALUE_TYPE_FIXED;
-        shared_vals[4].type = AFM_VALUE_TYPE_FIXED;
-        if ( afm_parser_read_vals( parser, shared_vals, 5 ) != 5 )
-          goto Fail;
-
-        tk->degree     = shared_vals[0].u.i;
-        tk->min_ptsize = shared_vals[1].u.f;
-        tk->min_kern   = shared_vals[2].u.f;
-        tk->max_ptsize = shared_vals[3].u.f;
-        tk->max_kern   = shared_vals[4].u.f;
-
-        break;
-
-      case AFM_TOKEN_ENDTRACKKERN:
-      case AFM_TOKEN_ENDKERNDATA:
-      case AFM_TOKEN_ENDFONTMETRICS:
-        fi->NumTrackKern = (FT_UInt)( n + 1 );
-        return FT_Err_Ok;
-
-      case AFM_TOKEN_UNKNOWN:
-        break;
-
-      default:
+    if ( tmp < 0 ) {
         goto Fail;
-      }
     }
 
-  Fail:
-    return FT_THROW( Syntax_Error );
-  }
+    fi->NumTrackKern = ( FT_UInt ) tmp;
+
+    if ( fi->NumTrackKern ) {
+        FT_Memory  memory = parser->memory;
+        FT_Error   error;
+
+
+        if ( FT_QNEW_ARRAY ( fi->TrackKerns, fi->NumTrackKern ) ) {
+            return error;
+        }
+    }
+
+    while ( ( key = afm_parser_next_key ( parser, 1, &len ) ) != 0 ) {
+        AFM_ValueRec  shared_vals[5];
+
+
+        switch ( afm_tokenize ( key, len ) ) {
+        case AFM_TOKEN_TRACKKERN:
+            n++;
+
+            if ( n >= ( int ) fi->NumTrackKern ) {
+                goto Fail;
+            }
+
+            tk = fi->TrackKerns + n;
+
+            shared_vals[0].type = AFM_VALUE_TYPE_INTEGER;
+            shared_vals[1].type = AFM_VALUE_TYPE_FIXED;
+            shared_vals[2].type = AFM_VALUE_TYPE_FIXED;
+            shared_vals[3].type = AFM_VALUE_TYPE_FIXED;
+            shared_vals[4].type = AFM_VALUE_TYPE_FIXED;
+            if ( afm_parser_read_vals ( parser, shared_vals, 5 ) != 5 ) {
+                goto Fail;
+            }
+
+            tk->degree     = shared_vals[0].u.i;
+            tk->min_ptsize = shared_vals[1].u.f;
+            tk->min_kern   = shared_vals[2].u.f;
+            tk->max_ptsize = shared_vals[3].u.f;
+            tk->max_kern   = shared_vals[4].u.f;
+
+            break;
+
+        case AFM_TOKEN_ENDTRACKKERN:
+        case AFM_TOKEN_ENDKERNDATA:
+        case AFM_TOKEN_ENDFONTMETRICS:
+            fi->NumTrackKern = ( FT_UInt ) ( n + 1 );
+            return FT_Err_Ok;
+
+        case AFM_TOKEN_UNKNOWN:
+            break;
+
+        default:
+            goto Fail;
+        }
+    }
+
+Fail:
+    return FT_THROW ( Syntax_Error );
+}
 
 
 #undef  KERN_INDEX
 #define KERN_INDEX( g1, g2 )  ( ( (FT_ULong)g1 << 16 ) | g2 )
 
 
-  /* compare two kerning pairs */
-  FT_CALLBACK_DEF( int )
-  afm_compare_kern_pairs( const void*  a,
-                          const void*  b )
-  {
-    AFM_KernPair  kp1 = (AFM_KernPair)a;
-    AFM_KernPair  kp2 = (AFM_KernPair)b;
+/* compare two kerning pairs */
+FT_CALLBACK_DEF ( int )
+afm_compare_kern_pairs ( const void*  a,
+                         const void*  b )
+{
+    AFM_KernPair  kp1 = ( AFM_KernPair ) a;
+    AFM_KernPair  kp2 = ( AFM_KernPair ) b;
 
-    FT_ULong  index1 = KERN_INDEX( kp1->index1, kp1->index2 );
-    FT_ULong  index2 = KERN_INDEX( kp2->index1, kp2->index2 );
-
-
-    if ( index1 > index2 )
-      return 1;
-    else if ( index1 < index2 )
-      return -1;
-    else
-      return 0;
-  }
+    FT_ULong  index1 = KERN_INDEX ( kp1->index1, kp1->index2 );
+    FT_ULong  index2 = KERN_INDEX ( kp2->index1, kp2->index2 );
 
 
-  static FT_Error
-  afm_parse_kern_pairs( AFM_Parser  parser )
-  {
+    if ( index1 > index2 ) {
+        return 1;
+    } else if ( index1 < index2 ) {
+        return -1;
+    } else {
+        return 0;
+    }
+}
+
+
+static FT_Error
+afm_parse_kern_pairs ( AFM_Parser  parser )
+{
     AFM_FontInfo  fi = parser->FontInfo;
     AFM_KernPair  kp;
     char*         key;
@@ -699,287 +690,291 @@
     FT_Int        tmp;
 
 
-    if ( afm_parser_read_int( parser, &tmp ) )
-      goto Fail;
-
-    if ( tmp < 0 )
-      goto Fail;
-
-    fi->NumKernPair = (FT_UInt)tmp;
-
-    if ( fi->NumKernPair )
-    {
-      FT_Memory  memory = parser->memory;
-      FT_Error   error;
-
-
-      if ( FT_QNEW_ARRAY( fi->KernPairs, fi->NumKernPair ) )
-        return error;
+    if ( afm_parser_read_int ( parser, &tmp ) ) {
+        goto Fail;
     }
 
-    while ( ( key = afm_parser_next_key( parser, 1, &len ) ) != 0 )
-    {
-      AFM_Token  token = afm_tokenize( key, len );
+    if ( tmp < 0 ) {
+        goto Fail;
+    }
+
+    fi->NumKernPair = ( FT_UInt ) tmp;
+
+    if ( fi->NumKernPair ) {
+        FT_Memory  memory = parser->memory;
+        FT_Error   error;
 
 
-      switch ( token )
-      {
-      case AFM_TOKEN_KP:
-      case AFM_TOKEN_KPX:
-      case AFM_TOKEN_KPY:
-        {
-          FT_Int        r;
-          AFM_ValueRec  shared_vals[4];
+        if ( FT_QNEW_ARRAY ( fi->KernPairs, fi->NumKernPair ) ) {
+            return error;
+        }
+    }
+
+    while ( ( key = afm_parser_next_key ( parser, 1, &len ) ) != 0 ) {
+        AFM_Token  token = afm_tokenize ( key, len );
 
 
-          n++;
+        switch ( token ) {
+        case AFM_TOKEN_KP:
+        case AFM_TOKEN_KPX:
+        case AFM_TOKEN_KPY: {
+            FT_Int        r;
+            AFM_ValueRec  shared_vals[4];
 
-          if ( n >= (int)fi->NumKernPair )
-            goto Fail;
 
-          kp = fi->KernPairs + n;
+            n++;
 
-          shared_vals[0].type = AFM_VALUE_TYPE_INDEX;
-          shared_vals[1].type = AFM_VALUE_TYPE_INDEX;
-          shared_vals[2].type = AFM_VALUE_TYPE_INTEGER;
-          shared_vals[3].type = AFM_VALUE_TYPE_INTEGER;
-          r = afm_parser_read_vals( parser, shared_vals, 4 );
-          if ( r < 3 )
-            goto Fail;
+            if ( n >= ( int ) fi->NumKernPair ) {
+                goto Fail;
+            }
 
-          /* index values can't be negative */
-          kp->index1 = shared_vals[0].u.u;
-          kp->index2 = shared_vals[1].u.u;
-          if ( token == AFM_TOKEN_KPY )
-          {
-            kp->x = 0;
-            kp->y = shared_vals[2].u.i;
-          }
-          else
-          {
-            kp->x = shared_vals[2].u.i;
-            kp->y = ( token == AFM_TOKEN_KP && r == 4 )
-                      ? shared_vals[3].u.i : 0;
-          }
+            kp = fi->KernPairs + n;
+
+            shared_vals[0].type = AFM_VALUE_TYPE_INDEX;
+            shared_vals[1].type = AFM_VALUE_TYPE_INDEX;
+            shared_vals[2].type = AFM_VALUE_TYPE_INTEGER;
+            shared_vals[3].type = AFM_VALUE_TYPE_INTEGER;
+            r = afm_parser_read_vals ( parser, shared_vals, 4 );
+            if ( r < 3 ) {
+                goto Fail;
+            }
+
+            /* index values can't be negative */
+            kp->index1 = shared_vals[0].u.u;
+            kp->index2 = shared_vals[1].u.u;
+            if ( token == AFM_TOKEN_KPY ) {
+                kp->x = 0;
+                kp->y = shared_vals[2].u.i;
+            } else {
+                kp->x = shared_vals[2].u.i;
+                kp->y = ( token == AFM_TOKEN_KP && r == 4 )
+                        ? shared_vals[3].u.i : 0;
+            }
         }
         break;
 
-      case AFM_TOKEN_ENDKERNPAIRS:
-      case AFM_TOKEN_ENDKERNDATA:
-      case AFM_TOKEN_ENDFONTMETRICS:
-        fi->NumKernPair = (FT_UInt)( n + 1 );
-        ft_qsort( fi->KernPairs, fi->NumKernPair,
-                  sizeof ( AFM_KernPairRec ),
-                  afm_compare_kern_pairs );
-        return FT_Err_Ok;
+        case AFM_TOKEN_ENDKERNPAIRS:
+        case AFM_TOKEN_ENDKERNDATA:
+        case AFM_TOKEN_ENDFONTMETRICS:
+            fi->NumKernPair = ( FT_UInt ) ( n + 1 );
+            ft_qsort ( fi->KernPairs, fi->NumKernPair,
+                       sizeof ( AFM_KernPairRec ),
+                       afm_compare_kern_pairs );
+            return FT_Err_Ok;
 
-      case AFM_TOKEN_UNKNOWN:
-        break;
+        case AFM_TOKEN_UNKNOWN:
+            break;
 
-      default:
-        goto Fail;
-      }
+        default:
+            goto Fail;
+        }
     }
 
-  Fail:
-    return FT_THROW( Syntax_Error );
-  }
+Fail:
+    return FT_THROW ( Syntax_Error );
+}
 
 
-  static FT_Error
-  afm_parse_kern_data( AFM_Parser  parser )
-  {
+static FT_Error
+afm_parse_kern_data ( AFM_Parser  parser )
+{
     FT_Error   error;
     char*      key;
     FT_Offset  len;
 
 
-    while ( ( key = afm_parser_next_key( parser, 1, &len ) ) != 0 )
-    {
-      switch ( afm_tokenize( key, len ) )
-      {
-      case AFM_TOKEN_STARTTRACKKERN:
-        error = afm_parse_track_kern( parser );
-        if ( error )
-          return error;
-        break;
+    while ( ( key = afm_parser_next_key ( parser, 1, &len ) ) != 0 ) {
+        switch ( afm_tokenize ( key, len ) ) {
+        case AFM_TOKEN_STARTTRACKKERN:
+            error = afm_parse_track_kern ( parser );
+            if ( error ) {
+                return error;
+            }
+            break;
 
-      case AFM_TOKEN_STARTKERNPAIRS:
-      case AFM_TOKEN_STARTKERNPAIRS0:
-        error = afm_parse_kern_pairs( parser );
-        if ( error )
-          return error;
-        break;
+        case AFM_TOKEN_STARTKERNPAIRS:
+        case AFM_TOKEN_STARTKERNPAIRS0:
+            error = afm_parse_kern_pairs ( parser );
+            if ( error ) {
+                return error;
+            }
+            break;
 
-      case AFM_TOKEN_ENDKERNDATA:
-      case AFM_TOKEN_ENDFONTMETRICS:
-        return FT_Err_Ok;
+        case AFM_TOKEN_ENDKERNDATA:
+        case AFM_TOKEN_ENDFONTMETRICS:
+            return FT_Err_Ok;
 
-      case AFM_TOKEN_UNKNOWN:
-        break;
+        case AFM_TOKEN_UNKNOWN:
+            break;
 
-      default:
-        goto Fail;
-      }
+        default:
+            goto Fail;
+        }
     }
 
-  Fail:
-    return FT_THROW( Syntax_Error );
-  }
+Fail:
+    return FT_THROW ( Syntax_Error );
+}
 
 
-  static FT_Error
-  afm_parser_skip_section( AFM_Parser  parser,
-                           FT_Int      n,
-                           AFM_Token   end_section )
-  {
+static FT_Error
+afm_parser_skip_section ( AFM_Parser  parser,
+                          FT_Int      n,
+                          AFM_Token   end_section )
+{
     char*      key;
     FT_Offset  len;
 
 
-    while ( n-- > 0 )
-    {
-      key = afm_parser_next_key( parser, 1, NULL );
-      if ( !key )
-        goto Fail;
+    while ( n-- > 0 ) {
+        key = afm_parser_next_key ( parser, 1, NULL );
+        if ( !key ) {
+            goto Fail;
+        }
     }
 
-    while ( ( key = afm_parser_next_key( parser, 1, &len ) ) != 0 )
-    {
-      AFM_Token  token = afm_tokenize( key, len );
+    while ( ( key = afm_parser_next_key ( parser, 1, &len ) ) != 0 ) {
+        AFM_Token  token = afm_tokenize ( key, len );
 
 
-      if ( token == end_section || token == AFM_TOKEN_ENDFONTMETRICS )
-        return FT_Err_Ok;
+        if ( token == end_section || token == AFM_TOKEN_ENDFONTMETRICS ) {
+            return FT_Err_Ok;
+        }
     }
 
-  Fail:
-    return FT_THROW( Syntax_Error );
-  }
+Fail:
+    return FT_THROW ( Syntax_Error );
+}
 
 
-  FT_LOCAL_DEF( FT_Error )
-  afm_parser_parse( AFM_Parser  parser )
-  {
+FT_LOCAL_DEF ( FT_Error )
+afm_parser_parse ( AFM_Parser  parser )
+{
     FT_Memory     memory = parser->memory;
     AFM_FontInfo  fi     = parser->FontInfo;
-    FT_Error      error  = FT_ERR( Syntax_Error );
+    FT_Error      error  = FT_ERR ( Syntax_Error );
     char*         key;
     FT_Offset     len;
     FT_Int        metrics_sets = 0;
 
 
-    if ( !fi )
-      return FT_THROW( Invalid_Argument );
+    if ( !fi ) {
+        return FT_THROW ( Invalid_Argument );
+    }
 
-    key = afm_parser_next_key( parser, 1, &len );
+    key = afm_parser_next_key ( parser, 1, &len );
     if ( !key || len != 16                              ||
-         ft_strncmp( key, "StartFontMetrics", 16 ) != 0 )
-      return FT_THROW( Unknown_File_Format );
+            ft_strncmp ( key, "StartFontMetrics", 16 ) != 0 ) {
+        return FT_THROW ( Unknown_File_Format );
+    }
 
-    while ( ( key = afm_parser_next_key( parser, 1, &len ) ) != 0 )
-    {
-      AFM_ValueRec  shared_vals[4];
+    while ( ( key = afm_parser_next_key ( parser, 1, &len ) ) != 0 ) {
+        AFM_ValueRec  shared_vals[4];
 
 
-      switch ( afm_tokenize( key, len ) )
-      {
-      case AFM_TOKEN_METRICSSETS:
-        if ( afm_parser_read_int( parser, &metrics_sets ) )
-          goto Fail;
+        switch ( afm_tokenize ( key, len ) ) {
+        case AFM_TOKEN_METRICSSETS:
+            if ( afm_parser_read_int ( parser, &metrics_sets ) ) {
+                goto Fail;
+            }
 
-        if ( metrics_sets != 0 && metrics_sets != 2 )
-        {
-          error = FT_THROW( Unimplemented_Feature );
+            if ( metrics_sets != 0 && metrics_sets != 2 ) {
+                error = FT_THROW ( Unimplemented_Feature );
 
-          goto Fail;
+                goto Fail;
+            }
+            break;
+
+        case AFM_TOKEN_ISCIDFONT:
+            shared_vals[0].type = AFM_VALUE_TYPE_BOOL;
+            if ( afm_parser_read_vals ( parser, shared_vals, 1 ) != 1 ) {
+                goto Fail;
+            }
+
+            fi->IsCIDFont = shared_vals[0].u.b;
+            break;
+
+        case AFM_TOKEN_FONTBBOX:
+            shared_vals[0].type = AFM_VALUE_TYPE_FIXED;
+            shared_vals[1].type = AFM_VALUE_TYPE_FIXED;
+            shared_vals[2].type = AFM_VALUE_TYPE_FIXED;
+            shared_vals[3].type = AFM_VALUE_TYPE_FIXED;
+            if ( afm_parser_read_vals ( parser, shared_vals, 4 ) != 4 ) {
+                goto Fail;
+            }
+
+            fi->FontBBox.xMin = shared_vals[0].u.f;
+            fi->FontBBox.yMin = shared_vals[1].u.f;
+            fi->FontBBox.xMax = shared_vals[2].u.f;
+            fi->FontBBox.yMax = shared_vals[3].u.f;
+            break;
+
+        case AFM_TOKEN_ASCENDER:
+            shared_vals[0].type = AFM_VALUE_TYPE_FIXED;
+            if ( afm_parser_read_vals ( parser, shared_vals, 1 ) != 1 ) {
+                goto Fail;
+            }
+
+            fi->Ascender = shared_vals[0].u.f;
+            break;
+
+        case AFM_TOKEN_DESCENDER:
+            shared_vals[0].type = AFM_VALUE_TYPE_FIXED;
+            if ( afm_parser_read_vals ( parser, shared_vals, 1 ) != 1 ) {
+                goto Fail;
+            }
+
+            fi->Descender = shared_vals[0].u.f;
+            break;
+
+        case AFM_TOKEN_STARTCHARMETRICS: {
+            FT_Int  n = 0;
+
+
+            if ( afm_parser_read_int ( parser, &n ) ) {
+                goto Fail;
+            }
+
+            error = afm_parser_skip_section ( parser, n,
+                                              AFM_TOKEN_ENDCHARMETRICS );
+            if ( error ) {
+                return error;
+            }
         }
         break;
 
-      case AFM_TOKEN_ISCIDFONT:
-        shared_vals[0].type = AFM_VALUE_TYPE_BOOL;
-        if ( afm_parser_read_vals( parser, shared_vals, 1 ) != 1 )
-          goto Fail;
-
-        fi->IsCIDFont = shared_vals[0].u.b;
-        break;
-
-      case AFM_TOKEN_FONTBBOX:
-        shared_vals[0].type = AFM_VALUE_TYPE_FIXED;
-        shared_vals[1].type = AFM_VALUE_TYPE_FIXED;
-        shared_vals[2].type = AFM_VALUE_TYPE_FIXED;
-        shared_vals[3].type = AFM_VALUE_TYPE_FIXED;
-        if ( afm_parser_read_vals( parser, shared_vals, 4 ) != 4 )
-          goto Fail;
-
-        fi->FontBBox.xMin = shared_vals[0].u.f;
-        fi->FontBBox.yMin = shared_vals[1].u.f;
-        fi->FontBBox.xMax = shared_vals[2].u.f;
-        fi->FontBBox.yMax = shared_vals[3].u.f;
-        break;
-
-      case AFM_TOKEN_ASCENDER:
-        shared_vals[0].type = AFM_VALUE_TYPE_FIXED;
-        if ( afm_parser_read_vals( parser, shared_vals, 1 ) != 1 )
-          goto Fail;
-
-        fi->Ascender = shared_vals[0].u.f;
-        break;
-
-      case AFM_TOKEN_DESCENDER:
-        shared_vals[0].type = AFM_VALUE_TYPE_FIXED;
-        if ( afm_parser_read_vals( parser, shared_vals, 1 ) != 1 )
-          goto Fail;
-
-        fi->Descender = shared_vals[0].u.f;
-        break;
-
-      case AFM_TOKEN_STARTCHARMETRICS:
-        {
-          FT_Int  n = 0;
-
-
-          if ( afm_parser_read_int( parser, &n ) )
-            goto Fail;
-
-          error = afm_parser_skip_section( parser, n,
-                                           AFM_TOKEN_ENDCHARMETRICS );
-          if ( error )
-            return error;
-        }
-        break;
-
-      case AFM_TOKEN_STARTKERNDATA:
-        error = afm_parse_kern_data( parser );
-        if ( error )
-          goto Fail;
+        case AFM_TOKEN_STARTKERNDATA:
+            error = afm_parse_kern_data ( parser );
+            if ( error ) {
+                goto Fail;
+            }
         /* we only support kern data, so ... */
         /* fall through                      */
 
-      case AFM_TOKEN_ENDFONTMETRICS:
-        return FT_Err_Ok;
+        case AFM_TOKEN_ENDFONTMETRICS:
+            return FT_Err_Ok;
 
-      default:
-        break;
-      }
+        default:
+            break;
+        }
     }
 
-  Fail:
-    FT_FREE( fi->TrackKerns );
+Fail:
+    FT_FREE ( fi->TrackKerns );
     fi->NumTrackKern = 0;
 
-    FT_FREE( fi->KernPairs );
+    FT_FREE ( fi->KernPairs );
     fi->NumKernPair = 0;
 
     fi->IsCIDFont = 0;
 
     return error;
-  }
+}
 
 #else /* T1_CONFIG_OPTION_NO_AFM */
 
-  /* ANSI C doesn't like empty source files */
-  typedef int  _afm_parse_dummy;
+/* ANSI C doesn't like empty source files */
+typedef int  _afm_parse_dummy;
 
 #endif /* T1_CONFIG_OPTION_NO_AFM */
 

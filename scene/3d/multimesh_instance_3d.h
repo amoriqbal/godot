@@ -34,25 +34,26 @@
 #include "scene/3d/visual_instance_3d.h"
 #include "scene/resources/multimesh.h"
 
-class MultiMeshInstance3D : public GeometryInstance3D {
-	GDCLASS(MultiMeshInstance3D, GeometryInstance3D);
+class MultiMeshInstance3D : public GeometryInstance3D
+{
+    GDCLASS ( MultiMeshInstance3D, GeometryInstance3D );
 
-	Ref<MultiMesh> multimesh;
+    Ref<MultiMesh> multimesh;
 
 protected:
-	static void _bind_methods();
-	// bind helpers
+    static void _bind_methods();
+    // bind helpers
 
 public:
-	virtual Vector<Face3> get_faces(uint32_t p_usage_flags) const override;
+    virtual Vector<Face3> get_faces ( uint32_t p_usage_flags ) const override;
 
-	void set_multimesh(const Ref<MultiMesh> &p_multimesh);
-	Ref<MultiMesh> get_multimesh() const;
+    void set_multimesh ( const Ref<MultiMesh> &p_multimesh );
+    Ref<MultiMesh> get_multimesh() const;
 
-	virtual AABB get_aabb() const override;
+    virtual AABB get_aabb() const override;
 
-	MultiMeshInstance3D();
-	~MultiMeshInstance3D();
+    MultiMeshInstance3D();
+    ~MultiMeshInstance3D();
 };
 
 #endif // MULTIMESH_INSTANCE_H

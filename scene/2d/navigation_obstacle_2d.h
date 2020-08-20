@@ -35,37 +35,40 @@
 
 class Navigation2D;
 
-class NavigationObstacle2D : public Node {
-	GDCLASS(NavigationObstacle2D, Node);
+class NavigationObstacle2D : public Node
+{
+    GDCLASS ( NavigationObstacle2D, Node );
 
-	Navigation2D *navigation = nullptr;
+    Navigation2D *navigation = nullptr;
 
-	RID agent;
+    RID agent;
 
 protected:
-	static void _bind_methods();
-	void _notification(int p_what);
+    static void _bind_methods();
+    void _notification ( int p_what );
 
 public:
-	NavigationObstacle2D();
-	virtual ~NavigationObstacle2D();
+    NavigationObstacle2D();
+    virtual ~NavigationObstacle2D();
 
-	void set_navigation(Navigation2D *p_nav);
-	const Navigation2D *get_navigation() const {
-		return navigation;
-	}
+    void set_navigation ( Navigation2D *p_nav );
+    const Navigation2D *get_navigation() const
+    {
+        return navigation;
+    }
 
-	void set_navigation_node(Node *p_nav);
-	Node *get_navigation_node() const;
+    void set_navigation_node ( Node *p_nav );
+    Node *get_navigation_node() const;
 
-	RID get_rid() const {
-		return agent;
-	}
+    RID get_rid() const
+    {
+        return agent;
+    }
 
-	virtual String get_configuration_warning() const override;
+    virtual String get_configuration_warning() const override;
 
 private:
-	void update_agent_shape();
+    void update_agent_shape();
 };
 
 #endif

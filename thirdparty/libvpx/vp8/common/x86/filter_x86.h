@@ -21,10 +21,10 @@ extern "C" {
  * duplicated values */
 
 /* duplicated 4x */
-extern DECLARE_ALIGNED(16, const short, vp8_bilinear_filters_x86_4[8][8]);
+extern DECLARE_ALIGNED ( 16, const short, vp8_bilinear_filters_x86_4[8][8] );
 
 /* duplicated 8x */
-extern DECLARE_ALIGNED(16, const short, vp8_bilinear_filters_x86_8[8][16]);
+extern DECLARE_ALIGNED ( 16, const short, vp8_bilinear_filters_x86_8[8][16] );
 
 #ifdef __cplusplus
 }  // extern "C"

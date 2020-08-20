@@ -51,13 +51,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include <string>
 
-namespace Assimp {
-namespace FBX {
+namespace Assimp
+{
+namespace FBX
+{
 
 /** Rough classification for text FBX tokens used for constructing the
  *  basic scope hierarchy. */
-enum TokenType
-{
+enum TokenType {
     // {
     TokenType_OPEN_BRACKET = 0,
 
@@ -86,50 +87,58 @@ enum TokenType
 class Token
 {
 private:
-    static const unsigned int BINARY_MARKER = static_cast<unsigned int>(-1);
+    static const unsigned int BINARY_MARKER = static_cast<unsigned int> ( -1 );
 
 public:
     /** construct a textual token */
-    Token(const char* sbegin, const char* send, TokenType type, unsigned int line, unsigned int column);
+    Token ( const char* sbegin, const char* send, TokenType type, unsigned int line, unsigned int column );
 
     /** construct a binary token */
-    Token(const char* sbegin, const char* send, TokenType type, size_t offset);
+    Token ( const char* sbegin, const char* send, TokenType type, size_t offset );
 
     ~Token();
 
 public:
-    std::string StringContents() const {
-        return std::string(begin(),end());
+    std::string StringContents() const
+    {
+        return std::string ( begin(),end() );
     }
 
-    bool IsBinary() const {
+    bool IsBinary() const
+    {
         return column == BINARY_MARKER;
     }
 
-    const char* begin() const {
+    const char* begin() const
+    {
         return sbegin;
     }
 
-    const char* end() const {
+    const char* end() const
+    {
         return send;
     }
 
-    TokenType Type() const {
+    TokenType Type() const
+    {
         return type;
     }
 
-    size_t Offset() const {
-        ai_assert(IsBinary());
+    size_t Offset() const
+    {
+        ai_assert ( IsBinary() );
         return offset;
     }
 
-    unsigned int Line() const {
-        ai_assert(!IsBinary());
-        return static_cast<unsigned int>(line);
+    unsigned int Line() const
+    {
+        ai_assert ( !IsBinary() );
+        return static_cast<unsigned int> ( line );
     }
 
-    unsigned int Column() const {
-        ai_assert(!IsBinary());
+    unsigned int Column() const
+    {
+        ai_assert ( !IsBinary() );
         return column;
     }
 
@@ -167,7 +176,7 @@ typedef std::vector< TokenPtr > TokenList;
  * @param output_tokens Receives a list of all tokens in the input data.
  * @param input_buffer Textual input buffer to be processed, 0-terminated.
  * @throw DeadlyImportError if something goes wrong */
-void Tokenize(TokenList& output_tokens, const char* input);
+void Tokenize ( TokenList& output_tokens, const char* input );
 
 
 /** Tokenizer function for binary FBX files.
@@ -178,7 +187,7 @@ void Tokenize(TokenList& output_tokens, const char* input);
  * @param input_buffer Binary input buffer to be processed.
  * @param length Length of input buffer, in bytes. There is no 0-terminal.
  * @throw DeadlyImportError if something goes wrong */
-void TokenizeBinary(TokenList& output_tokens, const char* input, size_t length);
+void TokenizeBinary ( TokenList& output_tokens, const char* input, size_t length );
 
 
 } // ! FBX

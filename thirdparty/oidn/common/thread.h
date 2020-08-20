@@ -19,108 +19,117 @@
 #include "platform.h"
 
 #if !defined(_WIN32)
-  #include <pthread.h>
-  #include <sched.h>
-  #if defined(__APPLE__)
-    #include <mach/thread_policy.h>
-  #endif
+#include <pthread.h>
+#include <sched.h>
+#if defined(__APPLE__)
+#include <mach/thread_policy.h>
+#endif
 #endif
 
 #include <vector>
 #include <mutex>
 
-namespace oidn {
+namespace oidn
+{
 
-  // --------------------------------------------------------------------------
-  // ThreadLocal
-  // --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// ThreadLocal
+// --------------------------------------------------------------------------
 
-  // Wrapper which makes any variable thread-local
-  template<typename T>
-  class ThreadLocal : public Verbose
-  {
-  private:
-  #if defined(_WIN32)
+// Wrapper which makes any variable thread-local
+template<typename T>
+class ThreadLocal : public Verbose
+{
+private:
+#if defined(_WIN32)
     DWORD key;
-  #else
+#else
     pthread_key_t key;
-  #endif
+#endif
 
     std::vector<T*> instances;
     std::mutex mutex;
 
-  public:
-    ThreadLocal(int verbose = 0)
-      : Verbose(verbose)
+public:
+    ThreadLocal ( int verbose = 0 )
+        : Verbose ( verbose )
     {
-    #if defined(_WIN32)
-      key = TlsAlloc();
-      if (key == TLS_OUT_OF_INDEXES)
-        OIDN_FATAL("TlsAlloc failed");
-    #else
-      if (pthread_key_create(&key, nullptr) != 0)
-        OIDN_FATAL("pthread_key_create failed");
-    #endif
+#if defined(_WIN32)
+        key = TlsAlloc();
+        if ( key == TLS_OUT_OF_INDEXES ) {
+            OIDN_FATAL ( "TlsAlloc failed" );
+        }
+#else
+        if ( pthread_key_create ( &key, nullptr ) != 0 ) {
+            OIDN_FATAL ( "pthread_key_create failed" );
+        }
+#endif
     }
 
     ~ThreadLocal()
     {
-      std::lock_guard<std::mutex> lock(mutex);
-      for (T* ptr : instances)
-        delete ptr;
+        std::lock_guard<std::mutex> lock ( mutex );
+        for ( T* ptr : instances ) {
+            delete ptr;
+        }
 
-    #if defined(_WIN32)
-      if (!TlsFree(key))
-        OIDN_WARNING("TlsFree failed");
-    #else
-      if (pthread_key_delete(key) != 0)
-        OIDN_WARNING("pthread_key_delete failed");
-    #endif
+#if defined(_WIN32)
+        if ( !TlsFree ( key ) ) {
+            OIDN_WARNING ( "TlsFree failed" );
+        }
+#else
+        if ( pthread_key_delete ( key ) != 0 ) {
+            OIDN_WARNING ( "pthread_key_delete failed" );
+        }
+#endif
     }
 
     T& get()
     {
-    #if defined(_WIN32)
-      T* ptr = (T*)TlsGetValue(key);
-    #else
-      T* ptr = (T*)pthread_getspecific(key);
-    #endif
+#if defined(_WIN32)
+        T* ptr = ( T* ) TlsGetValue ( key );
+#else
+        T* ptr = ( T* ) pthread_getspecific ( key );
+#endif
 
-      if (ptr)
+        if ( ptr ) {
+            return *ptr;
+        }
+
+        ptr = new T;
+        std::lock_guard<std::mutex> lock ( mutex );
+        instances.push_back ( ptr );
+
+#if defined(_WIN32)
+        if ( !TlsSetValue ( key, ptr ) ) {
+            OIDN_FATAL ( "TlsSetValue failed" );
+        }
+#else
+        if ( pthread_setspecific ( key, ptr ) != 0 ) {
+            OIDN_FATAL ( "pthread_setspecific failed" );
+        }
+#endif
+
         return *ptr;
-
-      ptr = new T;
-      std::lock_guard<std::mutex> lock(mutex);
-      instances.push_back(ptr);
-
-    #if defined(_WIN32)
-      if (!TlsSetValue(key, ptr))
-        OIDN_FATAL("TlsSetValue failed");
-    #else
-      if (pthread_setspecific(key, ptr) != 0)
-        OIDN_FATAL("pthread_setspecific failed");
-    #endif
-
-      return *ptr;
     }
-  };
+};
 
 #if defined(_WIN32)
 
-  // --------------------------------------------------------------------------
-  // ThreadAffinity - Windows
-  // --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// ThreadAffinity - Windows
+// --------------------------------------------------------------------------
 
-  class ThreadAffinity : public Verbose
-  {
-  private:
-    typedef BOOL (WINAPI *GetLogicalProcessorInformationExFunc)(LOGICAL_PROCESSOR_RELATIONSHIP,
-                                                                PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX,
-                                                                PDWORD);
+class ThreadAffinity : public Verbose
+{
+private:
+    typedef BOOL ( WINAPI *GetLogicalProcessorInformationExFunc ) ( LOGICAL_PROCESSOR_RELATIONSHIP,
+            PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX,
+            PDWORD );
 
-    typedef BOOL (WINAPI *SetThreadGroupAffinityFunc)(HANDLE,
-                                                      CONST GROUP_AFFINITY*,
-                                                      PGROUP_AFFINITY);
+    typedef BOOL ( WINAPI *SetThreadGroupAffinityFunc ) ( HANDLE,
+            CONST GROUP_AFFINITY*,
+            PGROUP_AFFINITY );
 
     GetLogicalProcessorInformationExFunc pGetLogicalProcessorInformationEx = nullptr;
     SetThreadGroupAffinityFunc pSetThreadGroupAffinity = nullptr;
@@ -128,74 +137,74 @@ namespace oidn {
     std::vector<GROUP_AFFINITY> affinities;    // thread affinities
     std::vector<GROUP_AFFINITY> oldAffinities; // original thread affinities
 
-  public:
-    ThreadAffinity(int numThreadsPerCore = INT_MAX, int verbose = 0);
+public:
+    ThreadAffinity ( int numThreadsPerCore = INT_MAX, int verbose = 0 );
 
     int getNumThreads() const
     {
-      return (int)affinities.size();
+        return ( int ) affinities.size();
     }
 
     // Sets the affinity (0..numThreads-1) of the thread after saving the current affinity
-    void set(int threadIndex);
+    void set ( int threadIndex );
 
     // Restores the affinity of the thread
-    void restore(int threadIndex);
-  };
+    void restore ( int threadIndex );
+};
 
 #elif defined(__linux__)
 
-  // --------------------------------------------------------------------------
-  // ThreadAffinity - Linux
-  // --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// ThreadAffinity - Linux
+// --------------------------------------------------------------------------
 
-  class ThreadAffinity : public Verbose
-  {
-  private:
+class ThreadAffinity : public Verbose
+{
+private:
     std::vector<cpu_set_t> affinities;    // thread affinities
     std::vector<cpu_set_t> oldAffinities; // original thread affinities
 
-  public:
-    ThreadAffinity(int numThreadsPerCore = INT_MAX, int verbose = 0);
+public:
+    ThreadAffinity ( int numThreadsPerCore = INT_MAX, int verbose = 0 );
 
     int getNumThreads() const
     {
-      return (int)affinities.size();
+        return ( int ) affinities.size();
     }
 
     // Sets the affinity (0..numThreads-1) of the thread after saving the current affinity
-    void set(int threadIndex);
+    void set ( int threadIndex );
 
     // Restores the affinity of the thread
-    void restore(int threadIndex);
-  };
+    void restore ( int threadIndex );
+};
 
 #elif defined(__APPLE__)
 
-  // --------------------------------------------------------------------------
-  // ThreadAffinity - macOS
-  // --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// ThreadAffinity - macOS
+// --------------------------------------------------------------------------
 
-  class ThreadAffinity : public Verbose
-  {
-  private:
+class ThreadAffinity : public Verbose
+{
+private:
     std::vector<thread_affinity_policy> affinities;    // thread affinities
     std::vector<thread_affinity_policy> oldAffinities; // original thread affinities
 
-  public:
-    ThreadAffinity(int numThreadsPerCore = INT_MAX, int verbose = 0);
+public:
+    ThreadAffinity ( int numThreadsPerCore = INT_MAX, int verbose = 0 );
 
     int getNumThreads() const
     {
-      return (int)affinities.size();
+        return ( int ) affinities.size();
     }
 
     // Sets the affinity (0..numThreads-1) of the thread after saving the current affinity
-    void set(int threadIndex);
+    void set ( int threadIndex );
 
     // Restores the affinity of the thread
-    void restore(int threadIndex);
-  };
+    void restore ( int threadIndex );
+};
 
 #endif
 

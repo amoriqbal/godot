@@ -51,12 +51,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "FBXImportSettings.h"
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // TinyFormatter.h
-namespace Formatter {
-    template <typename T,typename TR, typename A> class basic_formatter;
-    typedef class basic_formatter< char, std::char_traits<char>, std::allocator<char> > format;
+namespace Formatter
+{
+template <typename T,typename TR, typename A> class basic_formatter;
+typedef class basic_formatter< char, std::char_traits<char>, std::allocator<char> > format;
 }
 
 // -------------------------------------------------------------------------------------------
@@ -72,10 +74,10 @@ public:
     virtual ~FBXImporter();
 
     // --------------------
-    bool CanRead( const std::string& pFile,
-        IOSystem* pIOHandler,
-        bool checkSig
-    ) const;
+    bool CanRead ( const std::string& pFile,
+                   IOSystem* pIOHandler,
+                   bool checkSig
+                 ) const;
 
 protected:
 
@@ -83,13 +85,13 @@ protected:
     const aiImporterDesc* GetInfo () const;
 
     // --------------------
-    void SetupProperties(const Importer* pImp);
+    void SetupProperties ( const Importer* pImp );
 
     // --------------------
-    void InternReadFile( const std::string& pFile,
-        aiScene* pScene,
-        IOSystem* pIOHandler
-    );
+    void InternReadFile ( const std::string& pFile,
+                          aiScene* pScene,
+                          IOSystem* pIOHandler
+                        );
 
 private:
     FBX::ImportSettings settings;

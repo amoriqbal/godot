@@ -33,7 +33,8 @@
 
 #include "core/os/main_loop.h"
 
-namespace TestPhysics3D {
+namespace TestPhysics3D
+{
 
 MainLoop *test();
 }

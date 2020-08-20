@@ -24,54 +24,54 @@ struct btSolverInfo;
 class btMultiBodySphericalJointMotor : public btMultiBodyConstraint
 {
 protected:
-	btVector3 m_desiredVelocity;
-	btQuaternion m_desiredPosition;
-	btScalar m_kd;
-	btScalar m_kp;
-	btScalar m_erp;
-	btScalar m_rhsClamp;  //maximum error
+    btVector3 m_desiredVelocity;
+    btQuaternion m_desiredPosition;
+    btScalar m_kd;
+    btScalar m_kp;
+    btScalar m_erp;
+    btScalar m_rhsClamp;  //maximum error
 
 public:
-	btMultiBodySphericalJointMotor(btMultiBody* body, int link, btScalar maxMotorImpulse);
-	
-	virtual ~btMultiBodySphericalJointMotor();
-	virtual void finalizeMultiDof();
+    btMultiBodySphericalJointMotor ( btMultiBody* body, int link, btScalar maxMotorImpulse );
 
-	virtual int getIslandIdA() const;
-	virtual int getIslandIdB() const;
+    virtual ~btMultiBodySphericalJointMotor();
+    virtual void finalizeMultiDof();
 
-	virtual void createConstraintRows(btMultiBodyConstraintArray& constraintRows,
-									  btMultiBodyJacobianData& data,
-									  const btContactSolverInfo& infoGlobal);
+    virtual int getIslandIdA() const;
+    virtual int getIslandIdB() const;
 
-	virtual void setVelocityTarget(const btVector3& velTarget, btScalar kd = 1.f)
-	{
-		m_desiredVelocity = velTarget;
-		m_kd = kd;
-	}
+    virtual void createConstraintRows ( btMultiBodyConstraintArray& constraintRows,
+                                        btMultiBodyJacobianData& data,
+                                        const btContactSolverInfo& infoGlobal );
 
-	virtual void setPositionTarget(const btQuaternion& posTarget, btScalar kp = 1.f)
-	{
-		m_desiredPosition = posTarget;
-		m_kp = kp;
-	}
+    virtual void setVelocityTarget ( const btVector3& velTarget, btScalar kd = 1.f )
+    {
+        m_desiredVelocity = velTarget;
+        m_kd = kd;
+    }
 
-	virtual void setErp(btScalar erp)
-	{
-		m_erp = erp;
-	}
-	virtual btScalar getErp() const
-	{
-		return m_erp;
-	}
-	virtual void setRhsClamp(btScalar rhsClamp)
-	{
-		m_rhsClamp = rhsClamp;
-	}
-	virtual void debugDraw(class btIDebugDraw* drawer)
-	{
-		//todo(erwincoumans)
-	}
+    virtual void setPositionTarget ( const btQuaternion& posTarget, btScalar kp = 1.f )
+    {
+        m_desiredPosition = posTarget;
+        m_kp = kp;
+    }
+
+    virtual void setErp ( btScalar erp )
+    {
+        m_erp = erp;
+    }
+    virtual btScalar getErp() const
+    {
+        return m_erp;
+    }
+    virtual void setRhsClamp ( btScalar rhsClamp )
+    {
+        m_rhsClamp = rhsClamp;
+    }
+    virtual void debugDraw ( class btIDebugDraw* drawer )
+    {
+        //todo(erwincoumans)
+    }
 };
 
 #endif  //BT_MULTIBODY_SPHERICAL_JOINT_MOTOR_H

@@ -53,14 +53,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <assimp/mesh.h>
 
-namespace Assimp {
+namespace Assimp
+{
 
 /**
  *  Create aiAnimMesh from aiMesh.
  *  @param  mesh    The input mesh to create an animated mesh from.
  *  @return The new created animated mesh.
  */
-ASSIMP_API aiAnimMesh *aiCreateAnimMesh(const aiMesh *mesh);
+ASSIMP_API aiAnimMesh *aiCreateAnimMesh ( const aiMesh *mesh );
 
 } // end of namespace Assimp
 

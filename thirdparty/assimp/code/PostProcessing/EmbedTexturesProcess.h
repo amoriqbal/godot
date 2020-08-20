@@ -48,7 +48,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 struct aiNode;
 
-namespace Assimp {
+namespace Assimp
+{
 
 /**
  *  Force embedding of textures (using the path = "*1" convention).
@@ -57,7 +58,8 @@ namespace Assimp {
  *  it will check if a file with the same name exists at the root folder
  *  of the imported model. And if so, it uses that.
  */
-class ASSIMP_API EmbedTexturesProcess : public BaseProcess {
+class ASSIMP_API EmbedTexturesProcess : public BaseProcess
+{
 public:
     /// The default class constructor.
     EmbedTexturesProcess();
@@ -66,17 +68,17 @@ public:
     virtual ~EmbedTexturesProcess();
 
     /// Overwritten, @see BaseProcess
-    virtual bool IsActive(unsigned int pFlags) const;
+    virtual bool IsActive ( unsigned int pFlags ) const;
 
     /// Overwritten, @see BaseProcess
-    virtual void SetupProperties(const Importer* pImp);
+    virtual void SetupProperties ( const Importer* pImp );
 
     /// Overwritten, @see BaseProcess
-    virtual void Execute(aiScene* pScene);
+    virtual void Execute ( aiScene* pScene );
 
 private:
     // Resolve the path and add the file content to the scene as a texture.
-    bool addTexture(aiScene* pScene, std::string path) const;
+    bool addTexture ( aiScene* pScene, std::string path ) const;
 
 private:
     std::string mRootPath;

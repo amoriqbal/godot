@@ -201,8 +201,7 @@
 /**
  * @brief Enumerator for the types of notifications
  */
-typedef enum iJIT_jvm_event
-{
+typedef enum iJIT_jvm_event {
     iJVM_EVENT_TYPE_SHUTDOWN = 2,               /**<\brief Send this to shutdown the agent.
                                                  * Use NULL for event data. */
 
@@ -212,11 +211,11 @@ typedef enum iJIT_jvm_event
                                                  * before the code is executed.
                                                  * Use iJIT_Method_Load as event
                                                  * data. */
-/** @cond exclude_from_documentation */
+    /** @cond exclude_from_documentation */
     iJVM_EVENT_TYPE_METHOD_UNLOAD_START,    /**<\brief Send when compiled dynamic
                                              * code is being unloaded from memory.
                                              * Use iJIT_Method_Load as event data.*/
-/** @endcond */
+    /** @endcond */
 
     iJVM_EVENT_TYPE_METHOD_UPDATE,   /**<\brief Send to provide new content for
                                       * a previously reported dynamic code.
@@ -239,9 +238,9 @@ typedef enum iJIT_jvm_event
                                                   * starts executing.
                                                   * Use iJIT_Method_Inline_Load as event data.*/
 
-/** @cond exclude_from_documentation */
+    /** @cond exclude_from_documentation */
     iJVM_EVENT_TYPE_METHOD_UPDATE_V2,
-/** @endcond */
+    /** @endcond */
 
     iJVM_EVENT_TYPE_METHOD_LOAD_FINISHED_V2 = 21, /**<\brief Send when a dynamic code is
                                                    * JIT compiled and loaded into
@@ -259,8 +258,7 @@ typedef enum iJIT_jvm_event
 /**
  * @brief Enumerator for the agent's mode
  */
-typedef enum _iJIT_IsProfilingActiveFlags
-{
+typedef enum _iJIT_IsProfilingActiveFlags {
     iJIT_NOTHING_RUNNING           = 0x0000,    /**<\brief The agent is not running;
                                                  * iJIT_NotifyEvent calls will
                                                  * not be processed. */
@@ -293,8 +291,7 @@ typedef enum _iJIT_IsProfilingActiveFlags
  *      18-21           30
  * @endcode
  */
-typedef struct _LineNumberInfo
-{
+typedef struct _LineNumberInfo {
     unsigned int Offset;     /**<\brief Offset from the begining of the code region. */
     unsigned int LineNumber; /**<\brief Matching source line number offset (from beginning of source file). */
 
@@ -303,8 +300,7 @@ typedef struct _LineNumberInfo
 /**
  * @brief Enumerator for the code architecture.
  */
-typedef enum _iJIT_CodeArchitecture
-{
+typedef enum _iJIT_CodeArchitecture {
     iJIT_CA_NATIVE = 0, /**<\brief Native to the process architecture that is calling it. */
 
     iJIT_CA_32,         /**<\brief 32-bit machine code. */
@@ -321,8 +317,7 @@ typedef enum _iJIT_CodeArchitecture
  *  the JIT compiled method, use iJVM_EVENT_TYPE_METHOD_LOAD_FINISHED
  *  as an event type to report it.
  */
-typedef struct _iJIT_Method_Load
-{
+typedef struct _iJIT_Method_Load {
     unsigned int method_id; /**<\brief Unique method ID. Cannot be 0.
                              *  You must either use the API function
                              *  iJIT_GetNewMethodID to get a valid and unique
@@ -368,8 +363,7 @@ typedef struct _iJIT_Method_Load
  *  the JIT compiled method, use iJVM_EVENT_TYPE_METHOD_LOAD_FINISHED_V2
  *  as an event type to report it.
  */
-typedef struct _iJIT_Method_Load_V2
-{
+typedef struct _iJIT_Method_Load_V2 {
     unsigned int method_id; /**<\brief Unique method ID. Cannot be 0.
                              *  You must either use the API function
                              *  iJIT_GetNewMethodID to get a valid and unique
@@ -420,8 +414,7 @@ typedef struct _iJIT_Method_Load_V2
  *  the JIT compiled method, use iJVM_EVENT_TYPE_METHOD_LOAD_FINISHED_V3
  *  as an event type to report it.
  */
-typedef struct _iJIT_Method_Load_V3
-{
+typedef struct _iJIT_Method_Load_V3 {
     unsigned int method_id; /**<\brief Unique method ID. Cannot be 0.
                              *  You must either use the API function
                              *  iJIT_GetNewMethodID to get a valid and unique
@@ -483,8 +476,7 @@ typedef struct _iJIT_Method_Load_V3
  *  the JIT compiled method, use iJVM_EVENT_TYPE_METHOD_INLINE_LOAD_FINISHED
  *  as an event type to report it.
  */
-typedef struct _iJIT_Method_Inline_Load
-{
+typedef struct _iJIT_Method_Inline_Load {
     unsigned int method_id; /**<\brief Unique method ID. Cannot be 0.
                              *  You must either use the API function
                              *  iJIT_GetNewMethodID to get a valid and unique
@@ -533,8 +525,7 @@ typedef struct _iJIT_Method_Inline_Load
  * with the iJVM_EVENT_TYPE_METHOD_UPDATE_V2 event to be applied to
  * a certain code trace.
  */
-typedef enum _iJIT_SegmentType
-{
+typedef enum _iJIT_SegmentType {
     iJIT_CT_UNKNOWN = 0,
 
     iJIT_CT_CODE,           /**<\brief Executable code. */
@@ -589,8 +580,7 @@ typedef enum _iJIT_SegmentType
  * @endcode
  */
 
-typedef struct _iJIT_Method_Update
-{
+typedef struct _iJIT_Method_Update {
     void* load_address;         /**<\brief Start address of the update within a method */
 
     unsigned int size;          /**<\brief The update size */
@@ -638,7 +628,7 @@ extern "C" {
  * @return a new unique method ID. When out of unique method IDs, this API
  * returns 0, which is not an accepted value.
  */
-unsigned int JITAPI iJIT_GetNewMethodID(void);
+unsigned int JITAPI iJIT_GetNewMethodID ( void );
 
 /**
  * @brief Returns the current mode of the agent.
@@ -646,7 +636,7 @@ unsigned int JITAPI iJIT_GetNewMethodID(void);
  * @return iJIT_SAMPLING_ON, indicating that agent is running, or
  * iJIT_NOTHING_RUNNING if no agent is running.
  */
-iJIT_IsProfilingActiveFlags JITAPI iJIT_IsProfilingActive(void);
+iJIT_IsProfilingActiveFlags JITAPI iJIT_IsProfilingActive ( void );
 
 /**
  * @brief Reports infomation about JIT-compiled code to the agent.
@@ -661,7 +651,7 @@ iJIT_IsProfilingActiveFlags JITAPI iJIT_IsProfilingActive(void);
  *
  * @returns 1 on success, otherwise 0.
  */
-int JITAPI iJIT_NotifyEvent(iJIT_JVM_EVENT event_type, void *EventSpecificData);
+int JITAPI iJIT_NotifyEvent ( iJIT_JVM_EVENT event_type, void *EventSpecificData );
 
 #ifdef __cplusplus
 }

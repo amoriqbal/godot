@@ -33,142 +33,154 @@
 
 #include "editor/animation_track_editor.h"
 
-class AnimationTrackEditBool : public AnimationTrackEdit {
-	GDCLASS(AnimationTrackEditBool, AnimationTrackEdit);
-	Ref<Texture2D> icon_checked;
-	Ref<Texture2D> icon_unchecked;
+class AnimationTrackEditBool : public AnimationTrackEdit
+{
+    GDCLASS ( AnimationTrackEditBool, AnimationTrackEdit );
+    Ref<Texture2D> icon_checked;
+    Ref<Texture2D> icon_unchecked;
 
 public:
-	virtual int get_key_height() const override;
-	virtual Rect2 get_key_rect(int p_index, float p_pixels_sec) override;
-	virtual bool is_key_selectable_by_distance() const override;
-	virtual void draw_key(int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right) override;
+    virtual int get_key_height() const override;
+    virtual Rect2 get_key_rect ( int p_index, float p_pixels_sec ) override;
+    virtual bool is_key_selectable_by_distance() const override;
+    virtual void draw_key ( int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right ) override;
 };
 
-class AnimationTrackEditColor : public AnimationTrackEdit {
-	GDCLASS(AnimationTrackEditColor, AnimationTrackEdit);
+class AnimationTrackEditColor : public AnimationTrackEdit
+{
+    GDCLASS ( AnimationTrackEditColor, AnimationTrackEdit );
 
 public:
-	virtual int get_key_height() const override;
-	virtual Rect2 get_key_rect(int p_index, float p_pixels_sec) override;
-	virtual bool is_key_selectable_by_distance() const override;
-	virtual void draw_key(int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right) override;
-	virtual void draw_key_link(int p_index, float p_pixels_sec, int p_x, int p_next_x, int p_clip_left, int p_clip_right) override;
+    virtual int get_key_height() const override;
+    virtual Rect2 get_key_rect ( int p_index, float p_pixels_sec ) override;
+    virtual bool is_key_selectable_by_distance() const override;
+    virtual void draw_key ( int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right ) override;
+    virtual void draw_key_link ( int p_index, float p_pixels_sec, int p_x, int p_next_x, int p_clip_left, int p_clip_right ) override;
 };
 
-class AnimationTrackEditAudio : public AnimationTrackEdit {
-	GDCLASS(AnimationTrackEditAudio, AnimationTrackEdit);
+class AnimationTrackEditAudio : public AnimationTrackEdit
+{
+    GDCLASS ( AnimationTrackEditAudio, AnimationTrackEdit );
 
-	ObjectID id;
+    ObjectID id;
 
-	void _preview_changed(ObjectID p_which);
+    void _preview_changed ( ObjectID p_which );
 
 protected:
-	static void _bind_methods();
+    static void _bind_methods();
 
 public:
-	virtual int get_key_height() const override;
-	virtual Rect2 get_key_rect(int p_index, float p_pixels_sec) override;
-	virtual bool is_key_selectable_by_distance() const override;
-	virtual void draw_key(int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right) override;
+    virtual int get_key_height() const override;
+    virtual Rect2 get_key_rect ( int p_index, float p_pixels_sec ) override;
+    virtual bool is_key_selectable_by_distance() const override;
+    virtual void draw_key ( int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right ) override;
 
-	void set_node(Object *p_object);
+    void set_node ( Object *p_object );
 
-	AnimationTrackEditAudio();
+    AnimationTrackEditAudio();
 };
 
-class AnimationTrackEditSpriteFrame : public AnimationTrackEdit {
-	GDCLASS(AnimationTrackEditSpriteFrame, AnimationTrackEdit);
+class AnimationTrackEditSpriteFrame : public AnimationTrackEdit
+{
+    GDCLASS ( AnimationTrackEditSpriteFrame, AnimationTrackEdit );
 
-	ObjectID id;
-	bool is_coords;
+    ObjectID id;
+    bool is_coords;
 
 public:
-	virtual int get_key_height() const override;
-	virtual Rect2 get_key_rect(int p_index, float p_pixels_sec) override;
-	virtual bool is_key_selectable_by_distance() const override;
-	virtual void draw_key(int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right) override;
+    virtual int get_key_height() const override;
+    virtual Rect2 get_key_rect ( int p_index, float p_pixels_sec ) override;
+    virtual bool is_key_selectable_by_distance() const override;
+    virtual void draw_key ( int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right ) override;
 
-	void set_node(Object *p_object);
-	void set_as_coords();
+    void set_node ( Object *p_object );
+    void set_as_coords();
 
-	AnimationTrackEditSpriteFrame() { is_coords = false; }
+    AnimationTrackEditSpriteFrame()
+    {
+        is_coords = false;
+    }
 };
 
-class AnimationTrackEditSubAnim : public AnimationTrackEdit {
-	GDCLASS(AnimationTrackEditSubAnim, AnimationTrackEdit);
+class AnimationTrackEditSubAnim : public AnimationTrackEdit
+{
+    GDCLASS ( AnimationTrackEditSubAnim, AnimationTrackEdit );
 
-	ObjectID id;
+    ObjectID id;
 
 public:
-	virtual int get_key_height() const override;
-	virtual Rect2 get_key_rect(int p_index, float p_pixels_sec) override;
-	virtual bool is_key_selectable_by_distance() const override;
-	virtual void draw_key(int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right) override;
+    virtual int get_key_height() const override;
+    virtual Rect2 get_key_rect ( int p_index, float p_pixels_sec ) override;
+    virtual bool is_key_selectable_by_distance() const override;
+    virtual void draw_key ( int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right ) override;
 
-	void set_node(Object *p_object);
+    void set_node ( Object *p_object );
 };
 
-class AnimationTrackEditTypeAudio : public AnimationTrackEdit {
-	GDCLASS(AnimationTrackEditTypeAudio, AnimationTrackEdit);
+class AnimationTrackEditTypeAudio : public AnimationTrackEdit
+{
+    GDCLASS ( AnimationTrackEditTypeAudio, AnimationTrackEdit );
 
-	void _preview_changed(ObjectID p_which);
+    void _preview_changed ( ObjectID p_which );
 
-	bool len_resizing;
-	bool len_resizing_start;
-	int len_resizing_index;
-	float len_resizing_from_px;
-	float len_resizing_rel;
+    bool len_resizing;
+    bool len_resizing_start;
+    int len_resizing_index;
+    float len_resizing_from_px;
+    float len_resizing_rel;
 
 protected:
-	static void _bind_methods();
+    static void _bind_methods();
 
 public:
-	virtual void _gui_input(const Ref<InputEvent> &p_event) override;
+    virtual void _gui_input ( const Ref<InputEvent> &p_event ) override;
 
-	virtual bool can_drop_data(const Point2 &p_point, const Variant &p_data) const override;
-	virtual void drop_data(const Point2 &p_point, const Variant &p_data) override;
+    virtual bool can_drop_data ( const Point2 &p_point, const Variant &p_data ) const override;
+    virtual void drop_data ( const Point2 &p_point, const Variant &p_data ) override;
 
-	virtual int get_key_height() const override;
-	virtual Rect2 get_key_rect(int p_index, float p_pixels_sec) override;
-	virtual bool is_key_selectable_by_distance() const override;
-	virtual void draw_key(int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right) override;
+    virtual int get_key_height() const override;
+    virtual Rect2 get_key_rect ( int p_index, float p_pixels_sec ) override;
+    virtual bool is_key_selectable_by_distance() const override;
+    virtual void draw_key ( int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right ) override;
 
-	AnimationTrackEditTypeAudio();
+    AnimationTrackEditTypeAudio();
 };
 
-class AnimationTrackEditTypeAnimation : public AnimationTrackEdit {
-	GDCLASS(AnimationTrackEditTypeAnimation, AnimationTrackEdit);
+class AnimationTrackEditTypeAnimation : public AnimationTrackEdit
+{
+    GDCLASS ( AnimationTrackEditTypeAnimation, AnimationTrackEdit );
 
-	ObjectID id;
+    ObjectID id;
 
 public:
-	virtual int get_key_height() const override;
-	virtual Rect2 get_key_rect(int p_index, float p_pixels_sec) override;
-	virtual bool is_key_selectable_by_distance() const override;
-	virtual void draw_key(int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right) override;
+    virtual int get_key_height() const override;
+    virtual Rect2 get_key_rect ( int p_index, float p_pixels_sec ) override;
+    virtual bool is_key_selectable_by_distance() const override;
+    virtual void draw_key ( int p_index, float p_pixels_sec, int p_x, bool p_selected, int p_clip_left, int p_clip_right ) override;
 
-	void set_node(Object *p_object);
-	AnimationTrackEditTypeAnimation();
+    void set_node ( Object *p_object );
+    AnimationTrackEditTypeAnimation();
 };
 
-class AnimationTrackEditVolumeDB : public AnimationTrackEdit {
-	GDCLASS(AnimationTrackEditVolumeDB, AnimationTrackEdit);
+class AnimationTrackEditVolumeDB : public AnimationTrackEdit
+{
+    GDCLASS ( AnimationTrackEditVolumeDB, AnimationTrackEdit );
 
 public:
-	virtual void draw_bg(int p_clip_left, int p_clip_right) override;
-	virtual void draw_fg(int p_clip_left, int p_clip_right) override;
-	virtual int get_key_height() const override;
-	virtual void draw_key_link(int p_index, float p_pixels_sec, int p_x, int p_next_x, int p_clip_left, int p_clip_right) override;
+    virtual void draw_bg ( int p_clip_left, int p_clip_right ) override;
+    virtual void draw_fg ( int p_clip_left, int p_clip_right ) override;
+    virtual int get_key_height() const override;
+    virtual void draw_key_link ( int p_index, float p_pixels_sec, int p_x, int p_next_x, int p_clip_left, int p_clip_right ) override;
 };
 
-class AnimationTrackEditDefaultPlugin : public AnimationTrackEditPlugin {
-	GDCLASS(AnimationTrackEditDefaultPlugin, AnimationTrackEditPlugin);
+class AnimationTrackEditDefaultPlugin : public AnimationTrackEditPlugin
+{
+    GDCLASS ( AnimationTrackEditDefaultPlugin, AnimationTrackEditPlugin );
 
 public:
-	virtual AnimationTrackEdit *create_value_track_edit(Object *p_object, Variant::Type p_type, const String &p_property, PropertyHint p_hint, const String &p_hint_string, int p_usage) override;
-	virtual AnimationTrackEdit *create_audio_track_edit() override;
-	virtual AnimationTrackEdit *create_animation_track_edit(Object *p_object) override;
+    virtual AnimationTrackEdit *create_value_track_edit ( Object *p_object, Variant::Type p_type, const String &p_property, PropertyHint p_hint, const String &p_hint_string, int p_usage ) override;
+    virtual AnimationTrackEdit *create_audio_track_edit() override;
+    virtual AnimationTrackEdit *create_animation_track_edit ( Object *p_object ) override;
 };
 
 #endif // ANIMATION_TRACK_EDITOR_PLUGINS_H

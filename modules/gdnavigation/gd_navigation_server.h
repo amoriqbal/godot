@@ -63,76 +63,77 @@
 class GdNavigationServer;
 
 struct SetCommand {
-	virtual ~SetCommand() {}
-	virtual void exec(GdNavigationServer *server) = 0;
+    virtual ~SetCommand() {}
+    virtual void exec ( GdNavigationServer *server ) = 0;
 };
 
-class GdNavigationServer : public NavigationServer3D {
-	Mutex commands_mutex;
-	/// Mutex used to make any operation threadsafe.
-	Mutex operations_mutex;
+class GdNavigationServer : public NavigationServer3D
+{
+    Mutex commands_mutex;
+    /// Mutex used to make any operation threadsafe.
+    Mutex operations_mutex;
 
-	std::vector<SetCommand *> commands;
+    std::vector<SetCommand *> commands;
 
-	mutable RID_PtrOwner<NavMap> map_owner;
-	mutable RID_PtrOwner<NavRegion> region_owner;
-	mutable RID_PtrOwner<RvoAgent> agent_owner;
+    mutable RID_PtrOwner<NavMap> map_owner;
+    mutable RID_PtrOwner<NavRegion> region_owner;
+    mutable RID_PtrOwner<RvoAgent> agent_owner;
 
-	bool active = true;
-	Vector<NavMap *> active_maps;
+    bool active = true;
+    Vector<NavMap *> active_maps;
 
 public:
-	GdNavigationServer();
-	virtual ~GdNavigationServer();
+    GdNavigationServer();
+    virtual ~GdNavigationServer();
 
-	void add_command(SetCommand *command) const;
+    void add_command ( SetCommand *command ) const;
 
-	virtual RID map_create() const;
-	COMMAND_2(map_set_active, RID, p_map, bool, p_active);
-	virtual bool map_is_active(RID p_map) const;
+    virtual RID map_create() const;
+    COMMAND_2 ( map_set_active, RID, p_map, bool, p_active );
+    virtual bool map_is_active ( RID p_map ) const;
 
-	COMMAND_2(map_set_up, RID, p_map, Vector3, p_up);
-	virtual Vector3 map_get_up(RID p_map) const;
+    COMMAND_2 ( map_set_up, RID, p_map, Vector3, p_up );
+    virtual Vector3 map_get_up ( RID p_map ) const;
 
-	COMMAND_2(map_set_cell_size, RID, p_map, real_t, p_cell_size);
-	virtual real_t map_get_cell_size(RID p_map) const;
+    COMMAND_2 ( map_set_cell_size, RID, p_map, real_t, p_cell_size );
+    virtual real_t map_get_cell_size ( RID p_map ) const;
 
-	COMMAND_2(map_set_edge_connection_margin, RID, p_map, real_t, p_connection_margin);
-	virtual real_t map_get_edge_connection_margin(RID p_map) const;
+    COMMAND_2 ( map_set_edge_connection_margin, RID, p_map, real_t, p_connection_margin );
+    virtual real_t map_get_edge_connection_margin ( RID p_map ) const;
 
-	virtual Vector<Vector3> map_get_path(RID p_map, Vector3 p_origin, Vector3 p_destination, bool p_optimize) const;
+    virtual Vector<Vector3> map_get_path ( RID p_map, Vector3 p_origin, Vector3 p_destination, bool p_optimize ) const;
 
-	virtual Vector3 map_get_closest_point_to_segment(RID p_map, const Vector3 &p_from, const Vector3 &p_to, const bool p_use_collision = false) const;
-	virtual Vector3 map_get_closest_point(RID p_map, const Vector3 &p_point) const;
-	virtual Vector3 map_get_closest_point_normal(RID p_map, const Vector3 &p_point) const;
-	virtual RID map_get_closest_point_owner(RID p_map, const Vector3 &p_point) const;
+    virtual Vector3 map_get_closest_point_to_segment ( RID p_map, const Vector3 &p_from, const Vector3 &p_to, const bool p_use_collision = false ) const;
+    virtual Vector3 map_get_closest_point ( RID p_map, const Vector3 &p_point ) const;
+    virtual Vector3 map_get_closest_point_normal ( RID p_map, const Vector3 &p_point ) const;
+    virtual RID map_get_closest_point_owner ( RID p_map, const Vector3 &p_point ) const;
 
-	virtual RID region_create() const;
-	COMMAND_2(region_set_map, RID, p_region, RID, p_map);
-	COMMAND_2(region_set_transform, RID, p_region, Transform, p_transform);
-	COMMAND_2(region_set_navmesh, RID, p_region, Ref<NavigationMesh>, p_nav_mesh);
-	virtual void region_bake_navmesh(Ref<NavigationMesh> r_mesh, Node *p_node) const;
+    virtual RID region_create() const;
+    COMMAND_2 ( region_set_map, RID, p_region, RID, p_map );
+    COMMAND_2 ( region_set_transform, RID, p_region, Transform, p_transform );
+    COMMAND_2 ( region_set_navmesh, RID, p_region, Ref<NavigationMesh>, p_nav_mesh );
+    virtual void region_bake_navmesh ( Ref<NavigationMesh> r_mesh, Node *p_node ) const;
 
-	virtual RID agent_create() const;
-	COMMAND_2(agent_set_map, RID, p_agent, RID, p_map);
-	COMMAND_2(agent_set_neighbor_dist, RID, p_agent, real_t, p_dist);
-	COMMAND_2(agent_set_max_neighbors, RID, p_agent, int, p_count);
-	COMMAND_2(agent_set_time_horizon, RID, p_agent, real_t, p_time);
-	COMMAND_2(agent_set_radius, RID, p_agent, real_t, p_radius);
-	COMMAND_2(agent_set_max_speed, RID, p_agent, real_t, p_max_speed);
-	COMMAND_2(agent_set_velocity, RID, p_agent, Vector3, p_velocity);
-	COMMAND_2(agent_set_target_velocity, RID, p_agent, Vector3, p_velocity);
-	COMMAND_2(agent_set_position, RID, p_agent, Vector3, p_position);
-	COMMAND_2(agent_set_ignore_y, RID, p_agent, bool, p_ignore);
-	virtual bool agent_is_map_changed(RID p_agent) const;
-	COMMAND_4_DEF(agent_set_callback, RID, p_agent, Object *, p_receiver, StringName, p_method, Variant, p_udata, Variant());
+    virtual RID agent_create() const;
+    COMMAND_2 ( agent_set_map, RID, p_agent, RID, p_map );
+    COMMAND_2 ( agent_set_neighbor_dist, RID, p_agent, real_t, p_dist );
+    COMMAND_2 ( agent_set_max_neighbors, RID, p_agent, int, p_count );
+    COMMAND_2 ( agent_set_time_horizon, RID, p_agent, real_t, p_time );
+    COMMAND_2 ( agent_set_radius, RID, p_agent, real_t, p_radius );
+    COMMAND_2 ( agent_set_max_speed, RID, p_agent, real_t, p_max_speed );
+    COMMAND_2 ( agent_set_velocity, RID, p_agent, Vector3, p_velocity );
+    COMMAND_2 ( agent_set_target_velocity, RID, p_agent, Vector3, p_velocity );
+    COMMAND_2 ( agent_set_position, RID, p_agent, Vector3, p_position );
+    COMMAND_2 ( agent_set_ignore_y, RID, p_agent, bool, p_ignore );
+    virtual bool agent_is_map_changed ( RID p_agent ) const;
+    COMMAND_4_DEF ( agent_set_callback, RID, p_agent, Object *, p_receiver, StringName, p_method, Variant, p_udata, Variant() );
 
-	COMMAND_1(free, RID, p_object);
+    COMMAND_1 ( free, RID, p_object );
 
-	virtual void set_active(bool p_active) const;
+    virtual void set_active ( bool p_active ) const;
 
-	void flush_queries();
-	virtual void process(real_t p_delta_time);
+    void flush_queries();
+    virtual void process ( real_t p_delta_time );
 };
 
 #undef COMMAND_1

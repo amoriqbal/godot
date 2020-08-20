@@ -37,126 +37,139 @@
 class Node3D;
 class Navigation3D;
 
-class NavigationAgent3D : public Node {
-	GDCLASS(NavigationAgent3D, Node);
+class NavigationAgent3D : public Node
+{
+    GDCLASS ( NavigationAgent3D, Node );
 
-	Node3D *agent_parent = nullptr;
-	Navigation3D *navigation = nullptr;
+    Node3D *agent_parent = nullptr;
+    Navigation3D *navigation = nullptr;
 
-	RID agent;
+    RID agent;
 
-	real_t target_desired_distance = 1.0;
-	real_t radius;
-	real_t navigation_height_offset = 0.0;
-	bool ignore_y;
-	real_t neighbor_dist;
-	int max_neighbors;
-	real_t time_horizon;
-	real_t max_speed;
+    real_t target_desired_distance = 1.0;
+    real_t radius;
+    real_t navigation_height_offset = 0.0;
+    bool ignore_y;
+    real_t neighbor_dist;
+    int max_neighbors;
+    real_t time_horizon;
+    real_t max_speed;
 
-	real_t path_max_distance = 3.0;
+    real_t path_max_distance = 3.0;
 
-	Vector3 target_location;
-	Vector<Vector3> navigation_path;
-	int nav_path_index;
-	bool velocity_submitted = false;
-	Vector3 prev_safe_velocity;
-	/// The submitted target velocity
-	Vector3 target_velocity;
-	bool target_reached = false;
-	bool navigation_finished = true;
-	// No initialized on purpose
-	uint32_t update_frame_id;
+    Vector3 target_location;
+    Vector<Vector3> navigation_path;
+    int nav_path_index;
+    bool velocity_submitted = false;
+    Vector3 prev_safe_velocity;
+    /// The submitted target velocity
+    Vector3 target_velocity;
+    bool target_reached = false;
+    bool navigation_finished = true;
+    // No initialized on purpose
+    uint32_t update_frame_id;
 
 protected:
-	static void _bind_methods();
-	void _notification(int p_what);
+    static void _bind_methods();
+    void _notification ( int p_what );
 
 public:
-	NavigationAgent3D();
-	virtual ~NavigationAgent3D();
+    NavigationAgent3D();
+    virtual ~NavigationAgent3D();
 
-	void set_navigation(Navigation3D *p_nav);
-	const Navigation3D *get_navigation() const {
-		return navigation;
-	}
+    void set_navigation ( Navigation3D *p_nav );
+    const Navigation3D *get_navigation() const
+    {
+        return navigation;
+    }
 
-	void set_navigation_node(Node *p_nav);
-	Node *get_navigation_node() const;
+    void set_navigation_node ( Node *p_nav );
+    Node *get_navigation_node() const;
 
-	RID get_rid() const {
-		return agent;
-	}
+    RID get_rid() const
+    {
+        return agent;
+    }
 
-	void set_target_desired_distance(real_t p_dd);
-	real_t get_target_desired_distance() const {
-		return target_desired_distance;
-	}
+    void set_target_desired_distance ( real_t p_dd );
+    real_t get_target_desired_distance() const
+    {
+        return target_desired_distance;
+    }
 
-	void set_radius(real_t p_radius);
-	real_t get_radius() const {
-		return radius;
-	}
+    void set_radius ( real_t p_radius );
+    real_t get_radius() const
+    {
+        return radius;
+    }
 
-	void set_agent_height_offset(real_t p_hh);
-	real_t get_agent_height_offset() const {
-		return navigation_height_offset;
-	}
+    void set_agent_height_offset ( real_t p_hh );
+    real_t get_agent_height_offset() const
+    {
+        return navigation_height_offset;
+    }
 
-	void set_ignore_y(bool p_ignore_y);
-	bool get_ignore_y() const {
-		return ignore_y;
-	}
+    void set_ignore_y ( bool p_ignore_y );
+    bool get_ignore_y() const
+    {
+        return ignore_y;
+    }
 
-	void set_neighbor_dist(real_t p_dist);
-	real_t get_neighbor_dist() const {
-		return neighbor_dist;
-	}
+    void set_neighbor_dist ( real_t p_dist );
+    real_t get_neighbor_dist() const
+    {
+        return neighbor_dist;
+    }
 
-	void set_max_neighbors(int p_count);
-	int get_max_neighbors() const {
-		return max_neighbors;
-	}
+    void set_max_neighbors ( int p_count );
+    int get_max_neighbors() const
+    {
+        return max_neighbors;
+    }
 
-	void set_time_horizon(real_t p_time);
-	real_t get_time_horizon() const {
-		return time_horizon;
-	}
+    void set_time_horizon ( real_t p_time );
+    real_t get_time_horizon() const
+    {
+        return time_horizon;
+    }
 
-	void set_max_speed(real_t p_max_speed);
-	real_t get_max_speed() const {
-		return max_speed;
-	}
+    void set_max_speed ( real_t p_max_speed );
+    real_t get_max_speed() const
+    {
+        return max_speed;
+    }
 
-	void set_path_max_distance(real_t p_pmd);
-	real_t get_path_max_distance();
+    void set_path_max_distance ( real_t p_pmd );
+    real_t get_path_max_distance();
 
-	void set_target_location(Vector3 p_location);
-	Vector3 get_target_location() const;
+    void set_target_location ( Vector3 p_location );
+    Vector3 get_target_location() const;
 
-	Vector3 get_next_location();
+    Vector3 get_next_location();
 
-	Vector<Vector3> get_nav_path() const {
-		return navigation_path;
-	}
+    Vector<Vector3> get_nav_path() const
+    {
+        return navigation_path;
+    }
 
-	int get_nav_path_index() const {
-		return nav_path_index;
-	}
+    int get_nav_path_index() const
+    {
+        return nav_path_index;
+    }
 
-	real_t distance_to_target() const;
-	bool is_target_reached() const;
-	bool is_target_reachable();
-	bool is_navigation_finished();
-	Vector3 get_final_location();
+    real_t distance_to_target() const;
+    bool is_target_reached() const;
+    bool is_target_reachable();
+    bool is_navigation_finished();
+    Vector3 get_final_location();
 
-	void set_velocity(Vector3 p_velocity);
-	void _avoidance_done(Vector3 p_new_velocity);
+    void set_velocity ( Vector3 p_velocity );
+    void _avoidance_done ( Vector3 p_new_velocity );
 
-	virtual String get_configuration_warning() const override;
+    virtual String get_configuration_warning() const override;
 
 private:
-	void update_navigation();
+    void update_navigation();
 };
 
 #endif

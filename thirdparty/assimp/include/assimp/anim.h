@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-/** 
+/**
   * @file   anim.h
   * @brief  Defines the data structures in which the imported animations
   *         are returned.
@@ -63,8 +63,7 @@ extern "C" {
 
 // ---------------------------------------------------------------------------
 /** A time-value pair specifying a certain 3D vector for the given time. */
-struct aiVectorKey
-{
+struct aiVectorKey {
     /** The time of this key */
     double mTime;
 
@@ -75,34 +74,41 @@ struct aiVectorKey
 
     /// @brief  The default constructor.
     aiVectorKey() AI_NO_EXCEPT
-    : mTime( 0.0 )
-    , mValue() {
+:
+    mTime ( 0.0 )
+    , mValue()
+    {
         // empty
     }
 
     /// @brief  Construction from a given time and key value.
 
-    aiVectorKey(double time, const aiVector3D& value)
-    : mTime( time )
-    , mValue( value ) {
+    aiVectorKey ( double time, const aiVector3D& value )
+        : mTime ( time )
+        , mValue ( value )
+    {
         // empty
     }
 
     typedef aiVector3D elem_type;
 
     // Comparison operators. For use with std::find();
-    bool operator == (const aiVectorKey& rhs) const {
+    bool operator == ( const aiVectorKey& rhs ) const
+    {
         return rhs.mValue == this->mValue;
     }
-    bool operator != (const aiVectorKey& rhs ) const {
+    bool operator != ( const aiVectorKey& rhs ) const
+    {
         return rhs.mValue != this->mValue;
     }
 
     // Relational operators. For use with std::sort();
-    bool operator < (const aiVectorKey& rhs ) const {
+    bool operator < ( const aiVectorKey& rhs ) const
+    {
         return mTime < rhs.mTime;
     }
-    bool operator > (const aiVectorKey& rhs ) const {
+    bool operator > ( const aiVectorKey& rhs ) const
+    {
         return mTime > rhs.mTime;
     }
 #endif // __cplusplus
@@ -111,8 +117,7 @@ struct aiVectorKey
 // ---------------------------------------------------------------------------
 /** A time-value pair specifying a rotation for the given time.
  *  Rotations are expressed with quaternions. */
-struct aiQuatKey
-{
+struct aiQuatKey {
     /** The time of this key */
     double mTime;
 
@@ -121,32 +126,38 @@ struct aiQuatKey
 
 #ifdef __cplusplus
     aiQuatKey() AI_NO_EXCEPT
-    : mTime( 0.0 )
-    , mValue() {
+:
+    mTime ( 0.0 )
+    , mValue()
+    {
         // empty
     }
 
     /** Construction from a given time and key value */
-    aiQuatKey(double time, const aiQuaternion& value)
-        :   mTime   (time)
-        ,   mValue  (value)
+    aiQuatKey ( double time, const aiQuaternion& value )
+        :   mTime ( time )
+        ,   mValue ( value )
     {}
 
     typedef aiQuaternion elem_type;
 
     // Comparison operators. For use with std::find();
-    bool operator == (const aiQuatKey& rhs ) const {
+    bool operator == ( const aiQuatKey& rhs ) const
+    {
         return rhs.mValue == this->mValue;
     }
-    bool operator != (const aiQuatKey& rhs ) const {
+    bool operator != ( const aiQuatKey& rhs ) const
+    {
         return rhs.mValue != this->mValue;
     }
 
     // Relational operators. For use with std::sort();
-    bool operator < (const aiQuatKey& rhs ) const {
+    bool operator < ( const aiQuatKey& rhs ) const
+    {
         return mTime < rhs.mTime;
     }
-    bool operator > (const aiQuatKey& rhs ) const {
+    bool operator > ( const aiQuatKey& rhs ) const
+    {
         return mTime > rhs.mTime;
     }
 #endif
@@ -154,8 +165,7 @@ struct aiQuatKey
 
 // ---------------------------------------------------------------------------
 /** Binds a anim-mesh to a specific point in time. */
-struct aiMeshKey
-{
+struct aiMeshKey {
     /** The time of this key */
     double mTime;
 
@@ -168,32 +178,37 @@ struct aiMeshKey
 #ifdef __cplusplus
 
     aiMeshKey() AI_NO_EXCEPT
-    : mTime(0.0)
-    , mValue(0)
+:
+    mTime ( 0.0 )
+    , mValue ( 0 )
     {
     }
 
     /** Construction from a given time and key value */
-    aiMeshKey(double time, const unsigned int value)
-        :   mTime   (time)
-        ,   mValue  (value)
+    aiMeshKey ( double time, const unsigned int value )
+        :   mTime ( time )
+        ,   mValue ( value )
     {}
 
     typedef unsigned int elem_type;
 
     // Comparison operators. For use with std::find();
-    bool operator == (const aiMeshKey& o) const {
+    bool operator == ( const aiMeshKey& o ) const
+    {
         return o.mValue == this->mValue;
     }
-    bool operator != (const aiMeshKey& o) const {
+    bool operator != ( const aiMeshKey& o ) const
+    {
         return o.mValue != this->mValue;
     }
 
     // Relational operators. For use with std::sort();
-    bool operator < (const aiMeshKey& o) const {
+    bool operator < ( const aiMeshKey& o ) const
+    {
         return mTime < o.mTime;
     }
-    bool operator > (const aiMeshKey& o) const {
+    bool operator > ( const aiMeshKey& o ) const
+    {
         return mTime > o.mTime;
     }
 
@@ -202,8 +217,7 @@ struct aiMeshKey
 
 // ---------------------------------------------------------------------------
 /** Binds a morph anim mesh to a specific point in time. */
-struct aiMeshMorphKey
-{
+struct aiMeshMorphKey {
     /** The time of this key */
     double mTime;
 
@@ -214,18 +228,19 @@ struct aiMeshMorphKey
     /** The number of values and weights */
     unsigned int mNumValuesAndWeights;
 #ifdef __cplusplus
-	aiMeshMorphKey() AI_NO_EXCEPT
-		: mTime(0.0)
-		, mValues(nullptr)
-		, mWeights(nullptr)
-		, mNumValuesAndWeights(0)
-	{
+    aiMeshMorphKey() AI_NO_EXCEPT
+:
+    mTime ( 0.0 )
+    , mValues ( nullptr )
+    , mWeights ( nullptr )
+    , mNumValuesAndWeights ( 0 )
+    {
 
-	}
+    }
 
     ~aiMeshMorphKey()
     {
-        if (mNumValuesAndWeights && mValues && mWeights) {
+        if ( mNumValuesAndWeights && mValues && mWeights ) {
             delete [] mValues;
             delete [] mWeights;
         }
@@ -237,8 +252,7 @@ struct aiMeshMorphKey
 /** Defines how an animation channel behaves outside the defined time
  *  range. This corresponds to aiNodeAnim::mPreState and
  *  aiNodeAnim::mPostState.*/
-enum aiAnimBehaviour
-{
+enum aiAnimBehaviour {
     /** The value from the default node transformation is taken*/
     aiAnimBehaviour_DEFAULT  = 0x0,
 
@@ -329,18 +343,21 @@ struct aiNodeAnim {
 
 #ifdef __cplusplus
     aiNodeAnim() AI_NO_EXCEPT
-    : mNumPositionKeys( 0 )
-    , mPositionKeys( nullptr )
-    , mNumRotationKeys( 0 )
-    , mRotationKeys( nullptr )
-    , mNumScalingKeys( 0 )
-    , mScalingKeys( nullptr )
-    , mPreState( aiAnimBehaviour_DEFAULT )
-    , mPostState( aiAnimBehaviour_DEFAULT ) {
-         // empty
+:
+    mNumPositionKeys ( 0 )
+    , mPositionKeys ( nullptr )
+    , mNumRotationKeys ( 0 )
+    , mRotationKeys ( nullptr )
+    , mNumScalingKeys ( 0 )
+    , mScalingKeys ( nullptr )
+    , mPreState ( aiAnimBehaviour_DEFAULT )
+    , mPostState ( aiAnimBehaviour_DEFAULT )
+    {
+        // empty
     }
 
-    ~aiNodeAnim() {
+    ~aiNodeAnim()
+    {
         delete [] mPositionKeys;
         delete [] mRotationKeys;
         delete [] mScalingKeys;
@@ -354,8 +371,7 @@ struct aiNodeAnim {
  *  aiMesh::mAnimMeshes array. The purpose of aiMeshAnim is to
  *  define keyframes linking each mesh attachment to a particular
  *  point in time. */
-struct aiMeshAnim
-{
+struct aiMeshAnim {
     /** Name of the mesh to be animated. An empty string is not allowed,
      *  animated meshes need to be named (not necessarily uniquely,
      *  the name can basically serve as wild-card to select a group
@@ -371,8 +387,9 @@ struct aiMeshAnim
 #ifdef __cplusplus
 
     aiMeshAnim() AI_NO_EXCEPT
-        : mNumKeys()
-        , mKeys()
+:
+    mNumKeys()
+    , mKeys()
     {}
 
     ~aiMeshAnim()
@@ -385,8 +402,7 @@ struct aiMeshAnim
 
 // ---------------------------------------------------------------------------
 /** Describes a morphing animation of a given mesh. */
-struct aiMeshMorphAnim
-{
+struct aiMeshMorphAnim {
     /** Name of the mesh to be animated. An empty string is not allowed,
      *  animated meshes need to be named (not necessarily uniquely,
      *  the name can basically serve as wildcard to select a group
@@ -402,8 +418,9 @@ struct aiMeshMorphAnim
 #ifdef __cplusplus
 
     aiMeshMorphAnim() AI_NO_EXCEPT
-        : mNumKeys()
-        , mKeys()
+:
+    mNumKeys()
+    , mKeys()
     {}
 
     ~aiMeshMorphAnim()
@@ -456,38 +473,41 @@ struct aiAnimation {
 
 #ifdef __cplusplus
     aiAnimation() AI_NO_EXCEPT
-    : mDuration(-1.)
-    , mTicksPerSecond(0.)
-    , mNumChannels(0)
-    , mChannels(nullptr)
-    , mNumMeshChannels(0)
-    , mMeshChannels(nullptr)
-    , mNumMorphMeshChannels(0)
-    , mMorphMeshChannels(nullptr) {
+:
+    mDuration ( -1. )
+    , mTicksPerSecond ( 0. )
+    , mNumChannels ( 0 )
+    , mChannels ( nullptr )
+    , mNumMeshChannels ( 0 )
+    , mMeshChannels ( nullptr )
+    , mNumMorphMeshChannels ( 0 )
+    , mMorphMeshChannels ( nullptr )
+    {
         // empty
     }
 
-    ~aiAnimation() {
+    ~aiAnimation()
+    {
         // DO NOT REMOVE THIS ADDITIONAL CHECK
         if ( mNumChannels && mChannels )  {
-            for( unsigned int a = 0; a < mNumChannels; a++) {
+            for ( unsigned int a = 0; a < mNumChannels; a++ ) {
                 delete mChannels[ a ];
             }
 
             delete [] mChannels;
         }
-        if (mNumMeshChannels && mMeshChannels)  {
-            for( unsigned int a = 0; a < mNumMeshChannels; a++) {
+        if ( mNumMeshChannels && mMeshChannels )  {
+            for ( unsigned int a = 0; a < mNumMeshChannels; a++ ) {
                 delete mMeshChannels[a];
             }
 
             delete [] mMeshChannels;
         }
-        if (mNumMorphMeshChannels && mMorphMeshChannels) {
-                for( unsigned int a = 0; a < mNumMorphMeshChannels; a++) {
-                        delete mMorphMeshChannels[a];
-                }
-            
+        if ( mNumMorphMeshChannels && mMorphMeshChannels ) {
+            for ( unsigned int a = 0; a < mNumMorphMeshChannels; a++ ) {
+                delete mMorphMeshChannels[a];
+            }
+
             delete [] mMorphMeshChannels;
         }
     }
@@ -499,26 +519,27 @@ struct aiAnimation {
 }
 
 /// @brief  Some C++ utilities for inter- and extrapolation
-namespace Assimp {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
-/** 
+/**
   * @brief CPP-API: Utility class to simplify interpolations of various data types.
   *
   *  The type of interpolation is chosen automatically depending on the
-  *  types of the arguments. 
+  *  types of the arguments.
   */
 template <typename T>
-struct Interpolator
-{
+struct Interpolator {
     // ------------------------------------------------------------------
     /** @brief Get the result of the interpolation between a,b.
      *
      *  The interpolation algorithm depends on the type of the operands.
      *  aiQuaternion's and aiQuatKey's SLERP, the rest does a simple
      *  linear interpolation. */
-    void operator () (T& out,const T& a, const T& b, ai_real d) const {
-        out = a + (b-a)*d;
+    void operator () ( T& out,const T& a, const T& b, ai_real d ) const
+    {
+        out = a + ( b-a ) *d;
     }
 }; // ! Interpolator <T>
 
@@ -526,17 +547,17 @@ struct Interpolator
 
 template <>
 struct Interpolator <aiQuaternion>  {
-    void operator () (aiQuaternion& out,const aiQuaternion& a,
-        const aiQuaternion& b, ai_real d) const
+    void operator () ( aiQuaternion& out,const aiQuaternion& a,
+                       const aiQuaternion& b, ai_real d ) const
     {
-        aiQuaternion::Interpolate(out,a,b,d);
+        aiQuaternion::Interpolate ( out,a,b,d );
     }
 }; // ! Interpolator <aiQuaternion>
 
 template <>
 struct Interpolator <unsigned int>  {
-    void operator () (unsigned int& out,unsigned int a,
-        unsigned int b, ai_real d) const
+    void operator () ( unsigned int& out,unsigned int a,
+                       unsigned int b, ai_real d ) const
     {
         out = d>0.5f ? b : a;
     }
@@ -544,31 +565,31 @@ struct Interpolator <unsigned int>  {
 
 template <>
 struct Interpolator<aiVectorKey>  {
-    void operator () (aiVector3D& out,const aiVectorKey& a,
-        const aiVectorKey& b, ai_real d) const
+    void operator () ( aiVector3D& out,const aiVectorKey& a,
+                       const aiVectorKey& b, ai_real d ) const
     {
         Interpolator<aiVector3D> ipl;
-        ipl(out,a.mValue,b.mValue,d);
+        ipl ( out,a.mValue,b.mValue,d );
     }
 }; // ! Interpolator <aiVectorKey>
 
 template <>
 struct Interpolator<aiQuatKey>  {
-    void operator () (aiQuaternion& out, const aiQuatKey& a,
-        const aiQuatKey& b, ai_real d) const
+    void operator () ( aiQuaternion& out, const aiQuatKey& a,
+                       const aiQuatKey& b, ai_real d ) const
     {
         Interpolator<aiQuaternion> ipl;
-        ipl(out,a.mValue,b.mValue,d);
+        ipl ( out,a.mValue,b.mValue,d );
     }
 }; // ! Interpolator <aiQuatKey>
 
 template <>
 struct Interpolator<aiMeshKey>     {
-    void operator () (unsigned int& out, const aiMeshKey& a,
-        const aiMeshKey& b, ai_real d) const
+    void operator () ( unsigned int& out, const aiMeshKey& a,
+                       const aiMeshKey& b, ai_real d ) const
     {
         Interpolator<unsigned int> ipl;
-        ipl(out,a.mValue,b.mValue,d);
+        ipl ( out,a.mValue,b.mValue,d );
     }
 }; // ! Interpolator <aiQuatKey>
 

@@ -78,40 +78,42 @@ typedef uint32_t ai_uint32 ;
 #include <new>      // for std::nothrow_t
 #include <string>   // for aiString::Set(const std::string&)
 
-namespace Assimp    {
+namespace Assimp
+{
 //! @cond never
-namespace Intern        {
-    // --------------------------------------------------------------------
-    /** @brief Internal helper class to utilize our internal new/delete
-     *    routines for allocating object of this and derived classes.
-     *
-     * By doing this you can safely share class objects between Assimp
-     * and the application - it works even over DLL boundaries. A good
-     * example is the #IOSystem where the application allocates its custom
-     * #IOSystem, then calls #Importer::SetIOSystem(). When the Importer
-     * destructs, Assimp calls operator delete on the stored #IOSystem.
-     * If it lies on a different heap than Assimp is working with,
-     * the application is determined to crash.
-     */
-    // --------------------------------------------------------------------
+namespace Intern
+{
+// --------------------------------------------------------------------
+/** @brief Internal helper class to utilize our internal new/delete
+ *    routines for allocating object of this and derived classes.
+ *
+ * By doing this you can safely share class objects between Assimp
+ * and the application - it works even over DLL boundaries. A good
+ * example is the #IOSystem where the application allocates its custom
+ * #IOSystem, then calls #Importer::SetIOSystem(). When the Importer
+ * destructs, Assimp calls operator delete on the stored #IOSystem.
+ * If it lies on a different heap than Assimp is working with,
+ * the application is determined to crash.
+ */
+// --------------------------------------------------------------------
 #ifndef SWIG
-    struct ASSIMP_API AllocateFromAssimpHeap    {
-        // http://www.gotw.ca/publications/mill15.htm
+struct ASSIMP_API AllocateFromAssimpHeap    {
+    // http://www.gotw.ca/publications/mill15.htm
 
-        // new/delete overload
-        void *operator new    ( size_t num_bytes) /* throw( std::bad_alloc ) */;
-        void *operator new    ( size_t num_bytes, const std::nothrow_t& ) throw();
-        void  operator delete ( void* data);
+    // new/delete overload
+    void *operator new ( size_t num_bytes ) /* throw( std::bad_alloc ) */;
+    void *operator new ( size_t num_bytes, const std::nothrow_t& ) throw();
+    void  operator delete ( void* data );
 
-        // array new/delete overload
-        void *operator new[]    ( size_t num_bytes) /* throw( std::bad_alloc ) */;
-        void *operator new[]    ( size_t num_bytes, const std::nothrow_t& )  throw();
-        void  operator delete[] ( void* data);
+    // array new/delete overload
+    void *operator new[] ( size_t num_bytes ) /* throw( std::bad_alloc ) */;
+    void *operator new[] ( size_t num_bytes, const std::nothrow_t& )  throw();
+    void  operator delete[] ( void* data );
 
-    }; // struct AllocateFromAssimpHeap
+}; // struct AllocateFromAssimpHeap
 #endif
 } // namespace Intern
-    //! @endcond
+//! @endcond
 } // namespace Assimp
 
 extern "C" {
@@ -119,7 +121,7 @@ extern "C" {
 
 /** Maximum dimension for strings, ASSIMP strings are zero terminated. */
 #ifdef __cplusplus
-    static const size_t MAXLEN = 1024;
+static const size_t MAXLEN = 1024;
 #else
 #   define MAXLEN 1024
 #endif
@@ -129,11 +131,12 @@ extern "C" {
 */
 struct aiPlane {
 #ifdef __cplusplus
-    aiPlane () AI_NO_EXCEPT : a(0.f), b(0.f), c(0.f), d(0.f) {}
-    aiPlane (ai_real _a, ai_real _b, ai_real _c, ai_real _d)
-        : a(_a), b(_b), c(_c), d(_d) {}
+aiPlane () AI_NO_EXCEPT :
+    a ( 0.f ), b ( 0.f ), c ( 0.f ), d ( 0.f ) {}
+    aiPlane ( ai_real _a, ai_real _b, ai_real _c, ai_real _d )
+        : a ( _a ), b ( _b ), c ( _c ), d ( _d ) {}
 
-    aiPlane (const aiPlane& o) : a(o.a), b(o.b), c(o.c), d(o.d) {}
+    aiPlane ( const aiPlane& o ) : a ( o.a ), b ( o.b ), c ( o.c ), d ( o.d ) {}
 
 #endif // !__cplusplus
 
@@ -147,10 +150,10 @@ struct aiPlane {
 struct aiRay {
 #ifdef __cplusplus
     aiRay () AI_NO_EXCEPT {}
-    aiRay (const aiVector3D& _pos, const aiVector3D& _dir)
-        : pos(_pos), dir(_dir) {}
+    aiRay ( const aiVector3D& _pos, const aiVector3D& _dir )
+        : pos ( _pos ), dir ( _dir ) {}
 
-    aiRay (const aiRay& o) : pos (o.pos), dir (o.dir) {}
+    aiRay ( const aiRay& o ) : pos ( o.pos ), dir ( o.dir ) {}
 
 #endif // !__cplusplus
 
@@ -161,64 +164,76 @@ struct aiRay {
 // ----------------------------------------------------------------------------------
 /** Represents a color in Red-Green-Blue space.
 */
-struct aiColor3D
-{
+struct aiColor3D {
 #ifdef __cplusplus
-    aiColor3D () AI_NO_EXCEPT : r(0.0f), g(0.0f), b(0.0f) {}
-    aiColor3D (ai_real _r, ai_real _g, ai_real _b) : r(_r), g(_g), b(_b) {}
-    explicit aiColor3D (ai_real _r) : r(_r), g(_r), b(_r) {}
-    aiColor3D (const aiColor3D& o) : r(o.r), g(o.g), b(o.b) {}
+aiColor3D () AI_NO_EXCEPT :
+    r ( 0.0f ), g ( 0.0f ), b ( 0.0f ) {}
+    aiColor3D ( ai_real _r, ai_real _g, ai_real _b ) : r ( _r ), g ( _g ), b ( _b ) {}
+    explicit aiColor3D ( ai_real _r ) : r ( _r ), g ( _r ), b ( _r ) {}
+    aiColor3D ( const aiColor3D& o ) : r ( o.r ), g ( o.g ), b ( o.b ) {}
 
-	aiColor3D &operator=(const aiColor3D &o) {
-		r = o.r;
-		g = o.g;
-		b = o.b;
-		return *this;
-	}
-
-	/** Component-wise comparison */
-    // TODO: add epsilon?
-    bool operator == (const aiColor3D& other) const
-        {return r == other.r && g == other.g && b == other.b;}
-
-    /** Component-wise inverse comparison */
-    // TODO: add epsilon?
-    bool operator != (const aiColor3D& other) const
-        {return r != other.r || g != other.g || b != other.b;}
+    aiColor3D &operator= ( const aiColor3D &o )
+    {
+        r = o.r;
+        g = o.g;
+        b = o.b;
+        return *this;
+    }
 
     /** Component-wise comparison */
     // TODO: add epsilon?
-    bool operator < (const aiColor3D& other) const {
-        return r < other.r || ( r == other.r && (g < other.g || (g == other.g && b < other.b ) ) );
+    bool operator == ( const aiColor3D& other ) const
+    {
+        return r == other.r && g == other.g && b == other.b;
+    }
+
+    /** Component-wise inverse comparison */
+    // TODO: add epsilon?
+    bool operator != ( const aiColor3D& other ) const
+    {
+        return r != other.r || g != other.g || b != other.b;
+    }
+
+    /** Component-wise comparison */
+    // TODO: add epsilon?
+    bool operator < ( const aiColor3D& other ) const
+    {
+        return r < other.r || ( r == other.r && ( g < other.g || ( g == other.g && b < other.b ) ) );
     }
 
     /** Component-wise addition */
-    aiColor3D operator+(const aiColor3D& c) const {
-        return aiColor3D(r+c.r,g+c.g,b+c.b);
+    aiColor3D operator+ ( const aiColor3D& c ) const
+    {
+        return aiColor3D ( r+c.r,g+c.g,b+c.b );
     }
 
     /** Component-wise subtraction */
-    aiColor3D operator-(const aiColor3D& c) const {
-        return aiColor3D(r-c.r,g-c.g,b-c.b);
+    aiColor3D operator- ( const aiColor3D& c ) const
+    {
+        return aiColor3D ( r-c.r,g-c.g,b-c.b );
     }
 
     /** Component-wise multiplication */
-    aiColor3D operator*(const aiColor3D& c) const {
-        return aiColor3D(r*c.r,g*c.g,b*c.b);
+    aiColor3D operator* ( const aiColor3D& c ) const
+    {
+        return aiColor3D ( r*c.r,g*c.g,b*c.b );
     }
 
     /** Multiply with a scalar */
-    aiColor3D operator*(ai_real f) const {
-        return aiColor3D(r*f,g*f,b*f);
+    aiColor3D operator* ( ai_real f ) const
+    {
+        return aiColor3D ( r*f,g*f,b*f );
     }
 
     /** Access a specific color component */
-    ai_real operator[](unsigned int i) const {
-        return *(&r + i);
+    ai_real operator[] ( unsigned int i ) const
+    {
+        return * ( &r + i );
     }
 
     /** Access a specific color component */
-    ai_real& operator[](unsigned int i) {
+    ai_real& operator[] ( unsigned int i )
+    {
         if ( 0 == i ) {
             return r;
         } else if ( 1 == i ) {
@@ -230,9 +245,10 @@ struct aiColor3D
     }
 
     /** Check whether a color is black */
-    bool IsBlack() const {
-        static const ai_real epsilon = ai_real(10e-3);
-        return std::fabs( r ) < epsilon && std::fabs( g ) < epsilon && std::fabs( b ) < epsilon;
+    bool IsBlack() const
+    {
+        static const ai_real epsilon = ai_real ( 10e-3 );
+        return std::fabs ( r ) < epsilon && std::fabs ( g ) < epsilon && std::fabs ( b ) < epsilon;
     }
 
 #endif // !__cplusplus
@@ -262,123 +278,134 @@ struct aiColor3D
  *  (binary) length of such a string is limited to MAXLEN characters (including the
  *  the terminating zero).
 */
-struct aiString
-{
+struct aiString {
 #ifdef __cplusplus
     /** Default constructor, the string is set to have zero length */
     aiString() AI_NO_EXCEPT
-    : length( 0 ) {
+:
+    length ( 0 )
+    {
         data[0] = '\0';
 
 #ifdef ASSIMP_BUILD_DEBUG
         // Debug build: overwrite the string on its full length with ESC (27)
-        memset(data+1,27,MAXLEN-1);
+        memset ( data+1,27,MAXLEN-1 );
 #endif
     }
 
     /** Copy constructor */
-    aiString(const aiString& rOther)
-    : length(rOther.length)
+    aiString ( const aiString& rOther )
+        : length ( rOther.length )
     {
         // Crop the string to the maximum length
         length = length>=MAXLEN?MAXLEN-1:length;
-        memcpy( data, rOther.data, length);
+        memcpy ( data, rOther.data, length );
         data[length] = '\0';
     }
 
     /** Constructor from std::string */
-    explicit aiString(const std::string& pString) :
-        length( (ai_uint32) pString.length())
+    explicit aiString ( const std::string& pString ) :
+        length ( ( ai_uint32 ) pString.length() )
     {
         length = length>=MAXLEN?MAXLEN-1:length;
-        memcpy( data, pString.c_str(), length);
+        memcpy ( data, pString.c_str(), length );
         data[length] = '\0';
     }
 
     /** Copy a std::string to the aiString */
-    void Set( const std::string& pString) {
-        if( pString.length() > MAXLEN - 1) {
+    void Set ( const std::string& pString )
+    {
+        if ( pString.length() > MAXLEN - 1 ) {
             return;
         }
-        length = (ai_uint32)pString.length();
-        memcpy( data, pString.c_str(), length);
+        length = ( ai_uint32 ) pString.length();
+        memcpy ( data, pString.c_str(), length );
         data[length] = 0;
     }
 
     /** Copy a const char* to the aiString */
-    void Set( const char* sz) {
-        const ai_int32 len = (ai_uint32) ::strlen(sz);
-        if( len > (ai_int32)MAXLEN - 1) {
+    void Set ( const char* sz )
+    {
+        const ai_int32 len = ( ai_uint32 ) ::strlen ( sz );
+        if ( len > ( ai_int32 ) MAXLEN - 1 ) {
             return;
         }
         length = len;
-        memcpy( data, sz, len);
+        memcpy ( data, sz, len );
         data[len] = 0;
     }
 
 
     /** Assignment operator */
-    aiString& operator = (const aiString &rOther) {
-        if (this == &rOther) {
+    aiString& operator = ( const aiString &rOther )
+    {
+        if ( this == &rOther ) {
             return *this;
         }
 
         length = rOther.length;;
-        memcpy( data, rOther.data, length);
+        memcpy ( data, rOther.data, length );
         data[length] = '\0';
         return *this;
     }
 
 
     /** Assign a const char* to the string */
-    aiString& operator = (const char* sz) {
-        Set(sz);
+    aiString& operator = ( const char* sz )
+    {
+        Set ( sz );
         return *this;
     }
 
     /** Assign a cstd::string to the string */
-    aiString& operator = ( const std::string& pString) {
-        Set(pString);
+    aiString& operator = ( const std::string& pString )
+    {
+        Set ( pString );
         return *this;
     }
 
     /** Comparison operator */
-    bool operator==(const aiString& other) const {
-        return  (length == other.length && 0 == memcmp(data,other.data,length));
+    bool operator== ( const aiString& other ) const
+    {
+        return ( length == other.length && 0 == memcmp ( data,other.data,length ) );
     }
 
     /** Inverse comparison operator */
-    bool operator!=(const aiString& other) const {
-        return  (length != other.length || 0 != memcmp(data,other.data,length));
+    bool operator!= ( const aiString& other ) const
+    {
+        return ( length != other.length || 0 != memcmp ( data,other.data,length ) );
     }
 
     /** Append a string to the string */
-    void Append (const char* app)   {
-        const ai_uint32 len = (ai_uint32) ::strlen(app);
-        if (!len) {
+    void Append ( const char* app )
+    {
+        const ai_uint32 len = ( ai_uint32 ) ::strlen ( app );
+        if ( !len ) {
             return;
         }
-        if (length + len >= MAXLEN) {
+        if ( length + len >= MAXLEN ) {
             return;
         }
 
-        memcpy(&data[length],app,len+1);
+        memcpy ( &data[length],app,len+1 );
         length += len;
     }
 
     /** Clear the string - reset its length to zero */
-    void Clear ()   {
+    void Clear ()
+    {
         length  = 0;
         data[0] = '\0';
 
 #ifdef ASSIMP_BUILD_DEBUG
         // Debug build: overwrite the string on its full length with ESC (27)
-        memset(data+1,27,MAXLEN-1);
+        memset ( data+1,27,MAXLEN-1 );
 #endif
     }
 
     /** Returns a pointer to the underlying zero-terminated array of characters */
-    const char* C_Str() const {
+    const char* C_Str() const
+    {
         return data;
     }
 
@@ -398,8 +425,7 @@ struct aiString
 /** Standard return type for some library functions.
  * Rarely used, and if, mostly in the C API.
  */
-typedef enum aiReturn
-{
+typedef enum aiReturn {
     /** Indicates that a function was successful */
     aiReturn_SUCCESS = 0x0,
 
@@ -416,7 +442,7 @@ typedef enum aiReturn
      */
     _AI_ENFORCE_ENUM_SIZE = 0x7fffffff
 
-    /// @endcond
+                            /// @endcond
 } aiReturn;  // !enum aiReturn
 
 // just for backwards compatibility, don't use these constants anymore
@@ -428,8 +454,7 @@ typedef enum aiReturn
 /** Seek origins (for the virtual file system API).
  *  Much cooler than using SEEK_SET, SEEK_CUR or SEEK_END.
  */
-enum aiOrigin
-{
+enum aiOrigin {
     /** Beginning of the file */
     aiOrigin_SET = 0x0,
 
@@ -444,7 +469,7 @@ enum aiOrigin
      */
     _AI_ORIGIN_ENFORCE_ENUM_SIZE = 0x7fffffff
 
-    /// @endcond
+                                   /// @endcond
 }; // !enum aiOrigin
 
 // ----------------------------------------------------------------------------------
@@ -452,8 +477,7 @@ enum aiOrigin
  *  Logging to these streams can be enabled with a single call to
  *   #LogStream::createDefaultStream.
  */
-enum aiDefaultLogStream
-{
+enum aiDefaultLogStream {
     /** Stream the log to a file */
     aiDefaultLogStream_FILE = 0x1,
 
@@ -472,7 +496,7 @@ enum aiDefaultLogStream
      *  Force 32-bit size enum
      */
     _AI_DLS_ENFORCE_ENUM_SIZE = 0x7fffffff
-    /// @endcond
+                                /// @endcond
 }; // !enum aiDefaultLogStream
 
 // just for backwards compatibility, don't use these constants anymore
@@ -486,20 +510,20 @@ enum aiDefaultLogStream
  *  animations) of an import. All sizes are in bytes.
  *  @see Importer::GetMemoryRequirements()
 */
-struct aiMemoryInfo
-{
+struct aiMemoryInfo {
 #ifdef __cplusplus
 
     /** Default constructor */
     aiMemoryInfo() AI_NO_EXCEPT
-        : textures   (0)
-        , materials  (0)
-        , meshes     (0)
-        , nodes      (0)
-        , animations (0)
-        , cameras    (0)
-        , lights     (0)
-        , total      (0)
+:
+    textures ( 0 )
+    , materials ( 0 )
+    , meshes ( 0 )
+    , nodes ( 0 )
+    , animations ( 0 )
+    , cameras ( 0 )
+    , lights ( 0 )
+    , total ( 0 )
     {}
 
 #endif

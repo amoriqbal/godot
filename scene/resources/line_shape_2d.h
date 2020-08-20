@@ -33,31 +33,32 @@
 
 #include "scene/resources/shape_2d.h"
 
-class LineShape2D : public Shape2D {
-	GDCLASS(LineShape2D, Shape2D);
+class LineShape2D : public Shape2D
+{
+    GDCLASS ( LineShape2D, Shape2D );
 
-	Vector2 normal;
-	real_t distance;
+    Vector2 normal;
+    real_t distance;
 
-	void _update_shape();
+    void _update_shape();
 
 protected:
-	static void _bind_methods();
+    static void _bind_methods();
 
 public:
-	virtual bool _edit_is_selected_on_click(const Point2 &p_point, double p_tolerance) const override;
+    virtual bool _edit_is_selected_on_click ( const Point2 &p_point, double p_tolerance ) const override;
 
-	void set_normal(const Vector2 &p_normal);
-	void set_distance(real_t p_distance);
+    void set_normal ( const Vector2 &p_normal );
+    void set_distance ( real_t p_distance );
 
-	Vector2 get_normal() const;
-	real_t get_distance() const;
+    Vector2 get_normal() const;
+    real_t get_distance() const;
 
-	virtual void draw(const RID &p_to_rid, const Color &p_color) override;
-	virtual Rect2 get_rect() const override;
-	virtual real_t get_enclosing_radius() const override;
+    virtual void draw ( const RID &p_to_rid, const Color &p_color ) override;
+    virtual Rect2 get_rect() const override;
+    virtual real_t get_enclosing_radius() const override;
 
-	LineShape2D();
+    LineShape2D();
 };
 
 #endif // LINE_SHAPE_2D_H

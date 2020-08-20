@@ -1,9 +1,8 @@
 #ifndef B3_PLATFORM_DEFINITIONS_H
 #define B3_PLATFORM_DEFINITIONS_H
 
-struct MyTest
-{
-	int bla;
+struct MyTest {
+    int bla;
 };
 
 #ifdef __cplusplus
@@ -11,12 +10,12 @@ struct MyTest
 #define b3ConstArray(a) const a *
 #define b3AtomicInc(a) ((*a)++)
 
-inline int b3AtomicAdd(volatile int *p, int val)
+inline int b3AtomicAdd ( volatile int *p, int val )
 {
-	int oldValue = *p;
-	int newValue = oldValue + val;
-	*p = newValue;
-	return oldValue;
+    int oldValue = *p;
+    int newValue = oldValue + val;
+    *p = newValue;
+    return oldValue;
 }
 
 #define __global

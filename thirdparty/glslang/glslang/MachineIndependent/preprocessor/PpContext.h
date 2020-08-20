@@ -88,14 +88,19 @@ NVIDIA HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /* windows only pragma */
 #ifdef _MSC_VER
-    #pragma warning(disable : 4127)
+#pragma warning(disable : 4127)
 #endif
 
-namespace glslang {
+namespace glslang
+{
 
-class TPpToken {
+class TPpToken
+{
 public:
-    TPpToken() { clear(); }
+    TPpToken()
+    {
+        clear();
+    }
     void clear()
     {
         space = false;
@@ -105,13 +110,16 @@ public:
     }
 
     // Used for comparing macro definitions, so checks what is relevant for that.
-    bool operator==(const TPpToken& right)
+    bool operator== ( const TPpToken& right )
     {
         return space == right.space &&
                ival == right.ival && dval == right.dval && i64val == right.i64val &&
-               strncmp(name, right.name, MaxTokenLength) == 0;
+               strncmp ( name, right.name, MaxTokenLength ) == 0;
     }
-    bool operator!=(const TPpToken& right) { return ! operator==(right); }
+    bool operator!= ( const TPpToken& right )
+    {
+        return ! operator== ( right );
+    }
 
     TSourceLoc loc;
     // True if a space (for white space or a removed comment) should also be
@@ -127,7 +135,8 @@ public:
     char name[MaxTokenLength + 1];
 };
 
-class TStringAtomMap {
+class TStringAtomMap
+{
 //
 // Implementation is in PpAtom.cpp
 //
@@ -139,29 +148,32 @@ public:
 
     // Map string -> atom.
     // Return 0 if no existing string.
-    int getAtom(const char* s) const
+    int getAtom ( const char* s ) const
     {
-        auto it = atomMap.find(s);
+        auto it = atomMap.find ( s );
         return it == atomMap.end() ? 0 : it->second;
     }
 
     // Map a new or existing string -> atom, inventing a new atom if necessary.
-    int getAddAtom(const char* s)
+    int getAddAtom ( const char* s )
     {
-        int atom = getAtom(s);
-        if (atom == 0) {
+        int atom = getAtom ( s );
+        if ( atom == 0 ) {
             atom = nextAtom++;
-            addAtomFixed(s, atom);
+            addAtomFixed ( s, atom );
         }
         return atom;
     }
 
     // Map atom -> string.
-    const char* getString(int atom) const { return stringMap[atom]->c_str(); }
+    const char* getString ( int atom ) const
+    {
+        return stringMap[atom]->c_str();
+    }
 
 protected:
-    TStringAtomMap(TStringAtomMap&);
-    TStringAtomMap& operator=(TStringAtomMap&);
+    TStringAtomMap ( TStringAtomMap& );
+    TStringAtomMap& operator= ( TStringAtomMap& );
 
     TUnorderedMap<TString, int> atomMap;
     TVector<const TString*> stringMap;    // these point into the TString in atomMap
@@ -174,11 +186,12 @@ protected:
     // Add bi-directional mappings:
     //  - string -> atom
     //  - atom -> string
-    void addAtomFixed(const char* s, int atom)
+    void addAtomFixed ( const char* s, int atom )
     {
-        auto it = atomMap.insert(std::pair<TString, int>(s, atom)).first;
-        if (stringMap.size() < (size_t)atom + 1)
-            stringMap.resize(atom + 100, &badToken);
+        auto it = atomMap.insert ( std::pair<TString, int> ( s, atom ) ).first;
+        if ( stringMap.size() < ( size_t ) atom + 1 ) {
+            stringMap.resize ( atom + 100, &badToken );
+        }
         stringMap[atom] = &it->first;
     }
 };
@@ -195,28 +208,42 @@ enum MacroExpandResult {
 // This class is the result of turning a huge pile of C code communicating through globals
 // into a class.  This was done to allowing instancing to attain thread safety.
 // Don't expect too much in terms of OO design.
-class TPpContext {
+class TPpContext
+{
 public:
-    TPpContext(TParseContextBase&, const std::string& rootFileName, TShader::Includer&);
+    TPpContext ( TParseContextBase&, const std::string& rootFileName, TShader::Includer& );
     virtual ~TPpContext();
 
-    void setPreamble(const char* preamble, size_t length);
+    void setPreamble ( const char* preamble, size_t length );
 
-    int tokenize(TPpToken& ppToken);
-    int tokenPaste(int token, TPpToken&);
+    int tokenize ( TPpToken& ppToken );
+    int tokenPaste ( int token, TPpToken& );
 
-    class tInput {
+    class tInput
+    {
     public:
-        tInput(TPpContext* p) : done(false), pp(p) { }
+        tInput ( TPpContext* p ) : done ( false ), pp ( p ) { }
         virtual ~tInput() { }
 
-        virtual int scan(TPpToken*) = 0;
+        virtual int scan ( TPpToken* ) = 0;
         virtual int getch() = 0;
         virtual void ungetch() = 0;
-        virtual bool peekPasting() { return false; }             // true when about to see ##
-        virtual bool peekContinuedPasting(int) { return false; } // true when non-spaced tokens can paste
-        virtual bool endOfReplacementList() { return false; } // true when at the end of a macro replacement list (RHS of #define)
-        virtual bool isMacroInput() { return false; }
+        virtual bool peekPasting()
+        {
+            return false;    // true when about to see ##
+        }
+        virtual bool peekContinuedPasting ( int )
+        {
+            return false;    // true when non-spaced tokens can paste
+        }
+        virtual bool endOfReplacementList()
+        {
+            return false;    // true when at the end of a macro replacement list (RHS of #define)
+        }
+        virtual bool isMacroInput()
+        {
+            return false;
+        }
 
         // Will be called when we start reading tokens from this instance
         virtual void notifyActivated() {}
@@ -227,11 +254,11 @@ public:
         TPpContext* pp;
     };
 
-    void setInput(TInputScanner& input, bool versionWillBeError);
+    void setInput ( TInputScanner& input, bool versionWillBeError );
 
-    void pushInput(tInput* in)
+    void pushInput ( tInput* in )
     {
-        inputStack.push_back(in);
+        inputStack.push_back ( in );
         in->notifyActivated();
     }
     void popInput()
@@ -246,28 +273,39 @@ public:
     //
 
     // Capture the needed parts of a token stream for macro recording/playback.
-    class TokenStream {
+    class TokenStream
+    {
     public:
         // Manage a stream of these 'Token', which capture the relevant parts
         // of a TPpToken, plus its atom.
-        class Token {
+        class Token
+        {
         public:
-            Token(int atom, const TPpToken& ppToken) : 
-                atom(atom),
-                space(ppToken.space),
-                i64val(ppToken.i64val),
-                name(ppToken.name) { }
-            int get(TPpToken& ppToken)
+            Token ( int atom, const TPpToken& ppToken ) :
+                atom ( atom ),
+                space ( ppToken.space ),
+                i64val ( ppToken.i64val ),
+                name ( ppToken.name ) { }
+            int get ( TPpToken& ppToken )
             {
                 ppToken.clear();
                 ppToken.space = space;
                 ppToken.i64val = i64val;
-                snprintf(ppToken.name, sizeof(ppToken.name), "%s", name.c_str());
+                snprintf ( ppToken.name, sizeof ( ppToken.name ), "%s", name.c_str() );
                 return atom;
             }
-            bool isAtom(int a) const { return atom == a; }
-            int getAtom() const { return atom; }
-            bool nonSpaced() const { return !space; }
+            bool isAtom ( int a ) const
+            {
+                return atom == a;
+            }
+            int getAtom() const
+            {
+                return atom;
+            }
+            bool nonSpaced() const
+            {
+                return !space;
+            }
         protected:
             Token() {}
             int atom;
@@ -276,11 +314,14 @@ public:
             TString name;
         };
 
-        TokenStream() : currentPos(0) { }
+        TokenStream() : currentPos ( 0 ) { }
 
-        void putToken(int token, TPpToken* ppToken);
-        bool peekToken(int atom) { return !atEnd() && stream[currentPos].isAtom(atom); }
-        bool peekContinuedPasting(int atom)
+        void putToken ( int token, TPpToken* ppToken );
+        bool peekToken ( int atom )
+        {
+            return !atEnd() && stream[currentPos].isAtom ( atom );
+        }
+        bool peekContinuedPasting ( int atom )
         {
             // This is basically necessary because, for example, the PP
             // tokenizer only accepts valid numeric-literals plus suffixes, so
@@ -288,32 +329,38 @@ public:
             // should get both pasted together as one token when token pasting.
             //
             // The following code is a bit more generalized than the above example.
-            if (!atEnd() && atom == PpAtomIdentifier && stream[currentPos].nonSpaced()) {
-                switch(stream[currentPos].getAtom()) {
-                    case PpAtomConstInt:
-                    case PpAtomConstUint:
-                    case PpAtomConstInt64:
-                    case PpAtomConstUint64:
-                    case PpAtomConstInt16:
-                    case PpAtomConstUint16:
-                    case PpAtomConstFloat:
-                    case PpAtomConstDouble:
-                    case PpAtomConstFloat16:
-                    case PpAtomConstString:
-                    case PpAtomIdentifier:
-                        return true;
-                    default:
-                        break;
+            if ( !atEnd() && atom == PpAtomIdentifier && stream[currentPos].nonSpaced() ) {
+                switch ( stream[currentPos].getAtom() ) {
+                case PpAtomConstInt:
+                case PpAtomConstUint:
+                case PpAtomConstInt64:
+                case PpAtomConstUint64:
+                case PpAtomConstInt16:
+                case PpAtomConstUint16:
+                case PpAtomConstFloat:
+                case PpAtomConstDouble:
+                case PpAtomConstFloat16:
+                case PpAtomConstString:
+                case PpAtomIdentifier:
+                    return true;
+                default:
+                    break;
                 }
             }
 
             return false;
         }
-        int getToken(TParseContextBase&, TPpToken*);
-        bool atEnd() { return currentPos >= stream.size(); }
-        bool peekTokenizedPasting(bool lastTokenPastes);
+        int getToken ( TParseContextBase&, TPpToken* );
+        bool atEnd()
+        {
+            return currentPos >= stream.size();
+        }
+        bool peekTokenizedPasting ( bool lastTokenPastes );
         bool peekUntokenizedPasting();
-        void reset() { currentPos = 0; }
+        void reset()
+        {
+            currentPos = 0;
+        }
 
     protected:
         TVector<Token> stream;
@@ -325,7 +372,7 @@ public:
     //
 
     struct MacroSymbol {
-        MacroSymbol() : functionLike(0), busy(0), undef(0) { }
+        MacroSymbol() : functionLike ( 0 ), busy ( 0 ), undef ( 0 ) { }
         TVector<int> args;
         TokenStream body;
         unsigned functionLike : 1;  // 0 means object-like, 1 means function-like
@@ -335,16 +382,19 @@ public:
 
     typedef TMap<int, MacroSymbol> TSymbolMap;
     TSymbolMap macroDefs;  // map atoms to macro definitions
-    MacroSymbol* lookupMacroDef(int atom)
+    MacroSymbol* lookupMacroDef ( int atom )
     {
-        auto existingMacroIt = macroDefs.find(atom);
-        return (existingMacroIt == macroDefs.end()) ? nullptr : &(existingMacroIt->second);
+        auto existingMacroIt = macroDefs.find ( atom );
+        return ( existingMacroIt == macroDefs.end() ) ? nullptr : & ( existingMacroIt->second );
     }
-    void addMacroDef(int atom, MacroSymbol& macroDef) { macroDefs[atom] = macroDef; }
+    void addMacroDef ( int atom, MacroSymbol& macroDef )
+    {
+        macroDefs[atom] = macroDef;
+    }
 
 protected:
-    TPpContext(TPpContext&);
-    TPpContext& operator=(TPpContext&);
+    TPpContext ( TPpContext& );
+    TPpContext& operator= ( TPpContext& );
 
     TStringAtomMap atomStrings;
     char*   preamble;               // string to parse, all before line 1 of string 0, it is 0 if no preamble
@@ -361,28 +411,44 @@ protected:
     // Get the next token from *stack* of input sources, popping input sources
     // that are out of tokens, down until an input source is found that has a token.
     // Return EndOfInput when there are no more tokens to be found by doing this.
-    int scanToken(TPpToken* ppToken)
+    int scanToken ( TPpToken* ppToken )
     {
         int token = EndOfInput;
 
-        while (! inputStack.empty()) {
-            token = inputStack.back()->scan(ppToken);
-            if (token != EndOfInput || inputStack.empty())
+        while ( ! inputStack.empty() ) {
+            token = inputStack.back()->scan ( ppToken );
+            if ( token != EndOfInput || inputStack.empty() ) {
                 break;
+            }
             popInput();
         }
 
         return token;
     }
-    int  getChar() { return inputStack.back()->getch(); }
-    void ungetChar() { inputStack.back()->ungetch(); }
-    bool peekPasting() { return !inputStack.empty() && inputStack.back()->peekPasting(); }
-    bool peekContinuedPasting(int a)
+    int  getChar()
     {
-        return !inputStack.empty() && inputStack.back()->peekContinuedPasting(a);
+        return inputStack.back()->getch();
     }
-    bool endOfReplacementList() { return inputStack.empty() || inputStack.back()->endOfReplacementList(); }
-    bool isMacroInput() { return inputStack.size() > 0 && inputStack.back()->isMacroInput(); }
+    void ungetChar()
+    {
+        inputStack.back()->ungetch();
+    }
+    bool peekPasting()
+    {
+        return !inputStack.empty() && inputStack.back()->peekPasting();
+    }
+    bool peekContinuedPasting ( int a )
+    {
+        return !inputStack.empty() && inputStack.back()->peekContinuedPasting ( a );
+    }
+    bool endOfReplacementList()
+    {
+        return inputStack.empty() || inputStack.back()->endOfReplacementList();
+    }
+    bool isMacroInput()
+    {
+        return inputStack.size() > 0 && inputStack.back()->isMacroInput();
+    }
 
     static const int maxIfNesting = 65;
 
@@ -390,24 +456,46 @@ protected:
     bool elseSeen[maxIfNesting];  // Keep a track of whether an else has been seen at a particular depth
     int elsetracker;              // #if-#else and #endif constructs...Counter.
 
-    class tMacroInput : public tInput {
+    class tMacroInput : public tInput
+    {
     public:
-        tMacroInput(TPpContext* pp) : tInput(pp), prepaste(false), postpaste(false) { }
+        tMacroInput ( TPpContext* pp ) : tInput ( pp ), prepaste ( false ), postpaste ( false ) { }
         virtual ~tMacroInput()
         {
-            for (size_t i = 0; i < args.size(); ++i)
+            for ( size_t i = 0; i < args.size(); ++i ) {
                 delete args[i];
-            for (size_t i = 0; i < expandedArgs.size(); ++i)
+            }
+            for ( size_t i = 0; i < expandedArgs.size(); ++i ) {
                 delete expandedArgs[i];
+            }
         }
 
-        virtual int scan(TPpToken*) override;
-        virtual int getch() override { assert(0); return EndOfInput; }
-        virtual void ungetch() override { assert(0); }
-        bool peekPasting() override { return prepaste; }
-        bool peekContinuedPasting(int a) override { return mac->body.peekContinuedPasting(a); }
-        bool endOfReplacementList() override { return mac->body.atEnd(); }
-        bool isMacroInput() override { return true; }
+        virtual int scan ( TPpToken* ) override;
+        virtual int getch() override
+        {
+            assert ( 0 );
+            return EndOfInput;
+        }
+        virtual void ungetch() override
+        {
+            assert ( 0 );
+        }
+        bool peekPasting() override
+        {
+            return prepaste;
+        }
+        bool peekContinuedPasting ( int a ) override
+        {
+            return mac->body.peekContinuedPasting ( a );
+        }
+        bool endOfReplacementList() override
+        {
+            return mac->body.atEnd();
+        }
+        bool isMacroInput() override
+        {
+            return true;
+        }
 
         MacroSymbol *mac;
         TVector<TokenStream*> args;
@@ -418,28 +506,45 @@ protected:
         bool postpaste;        // true if we are right after ##
     };
 
-    class tMarkerInput : public tInput {
+    class tMarkerInput : public tInput
+    {
     public:
-        tMarkerInput(TPpContext* pp) : tInput(pp) { }
-        virtual int scan(TPpToken*) override
+        tMarkerInput ( TPpContext* pp ) : tInput ( pp ) { }
+        virtual int scan ( TPpToken* ) override
         {
-            if (done)
+            if ( done ) {
                 return EndOfInput;
+            }
             done = true;
 
             return marker;
         }
-        virtual int getch() override { assert(0); return EndOfInput; }
-        virtual void ungetch() override { assert(0); }
+        virtual int getch() override
+        {
+            assert ( 0 );
+            return EndOfInput;
+        }
+        virtual void ungetch() override
+        {
+            assert ( 0 );
+        }
         static const int marker = -3;
     };
 
-    class tZeroInput : public tInput {
+    class tZeroInput : public tInput
+    {
     public:
-        tZeroInput(TPpContext* pp) : tInput(pp) { }
-        virtual int scan(TPpToken*) override;
-        virtual int getch() override { assert(0); return EndOfInput; }
-        virtual void ungetch() override { assert(0); }
+        tZeroInput ( TPpContext* pp ) : tInput ( pp ) { }
+        virtual int scan ( TPpToken* ) override;
+        virtual int getch() override
+        {
+            assert ( 0 );
+            return EndOfInput;
+        }
+        virtual void ungetch() override
+        {
+            assert ( 0 );
+        }
     };
 
     std::vector<tInput*> inputStack;
@@ -453,53 +558,78 @@ protected:
     // Used to obtain #include content.
     TShader::Includer& includer;
 
-    int CPPdefine(TPpToken * ppToken);
-    int CPPundef(TPpToken * ppToken);
-    int CPPelse(int matchelse, TPpToken * ppToken);
-    int extraTokenCheck(int atom, TPpToken* ppToken, int token);
-    int eval(int token, int precedence, bool shortCircuit, int& res, bool& err, TPpToken * ppToken);
-    int evalToToken(int token, bool shortCircuit, int& res, bool& err, TPpToken * ppToken);
-    int CPPif (TPpToken * ppToken);
-    int CPPifdef(int defined, TPpToken * ppToken);
-    int CPPinclude(TPpToken * ppToken);
-    int CPPline(TPpToken * ppToken);
-    int CPPerror(TPpToken * ppToken);
-    int CPPpragma(TPpToken * ppToken);
-    int CPPversion(TPpToken * ppToken);
-    int CPPextension(TPpToken * ppToken);
-    int readCPPline(TPpToken * ppToken);
-    int scanHeaderName(TPpToken* ppToken, char delimit);
-    TokenStream* PrescanMacroArg(TokenStream&, TPpToken*, bool newLineOkay);
-    MacroExpandResult MacroExpand(TPpToken* ppToken, bool expandUndef, bool newLineOkay);
+    int CPPdefine ( TPpToken * ppToken );
+    int CPPundef ( TPpToken * ppToken );
+    int CPPelse ( int matchelse, TPpToken * ppToken );
+    int extraTokenCheck ( int atom, TPpToken* ppToken, int token );
+    int eval ( int token, int precedence, bool shortCircuit, int& res, bool& err, TPpToken * ppToken );
+    int evalToToken ( int token, bool shortCircuit, int& res, bool& err, TPpToken * ppToken );
+    int CPPif ( TPpToken * ppToken );
+    int CPPifdef ( int defined, TPpToken * ppToken );
+    int CPPinclude ( TPpToken * ppToken );
+    int CPPline ( TPpToken * ppToken );
+    int CPPerror ( TPpToken * ppToken );
+    int CPPpragma ( TPpToken * ppToken );
+    int CPPversion ( TPpToken * ppToken );
+    int CPPextension ( TPpToken * ppToken );
+    int readCPPline ( TPpToken * ppToken );
+    int scanHeaderName ( TPpToken* ppToken, char delimit );
+    TokenStream* PrescanMacroArg ( TokenStream&, TPpToken*, bool newLineOkay );
+    MacroExpandResult MacroExpand ( TPpToken* ppToken, bool expandUndef, bool newLineOkay );
 
     //
     // From PpTokens.cpp
     //
-    void pushTokenStreamInput(TokenStream&, bool pasting = false);
-    void UngetToken(int token, TPpToken*);
+    void pushTokenStreamInput ( TokenStream&, bool pasting = false );
+    void UngetToken ( int token, TPpToken* );
 
-    class tTokenInput : public tInput {
+    class tTokenInput : public tInput
+    {
     public:
-        tTokenInput(TPpContext* pp, TokenStream* t, bool prepasting) :
-            tInput(pp),
-            tokens(t),
-            lastTokenPastes(prepasting) { }
-        virtual int scan(TPpToken *ppToken) override { return tokens->getToken(pp->parseContext, ppToken); }
-        virtual int getch() override { assert(0); return EndOfInput; }
-        virtual void ungetch() override { assert(0); }
-        virtual bool peekPasting() override { return tokens->peekTokenizedPasting(lastTokenPastes); }
-        bool peekContinuedPasting(int a) override { return tokens->peekContinuedPasting(a); }
+        tTokenInput ( TPpContext* pp, TokenStream* t, bool prepasting ) :
+            tInput ( pp ),
+            tokens ( t ),
+            lastTokenPastes ( prepasting ) { }
+        virtual int scan ( TPpToken *ppToken ) override
+        {
+            return tokens->getToken ( pp->parseContext, ppToken );
+        }
+        virtual int getch() override
+        {
+            assert ( 0 );
+            return EndOfInput;
+        }
+        virtual void ungetch() override
+        {
+            assert ( 0 );
+        }
+        virtual bool peekPasting() override
+        {
+            return tokens->peekTokenizedPasting ( lastTokenPastes );
+        }
+        bool peekContinuedPasting ( int a ) override
+        {
+            return tokens->peekContinuedPasting ( a );
+        }
     protected:
         TokenStream* tokens;
         bool lastTokenPastes; // true if the last token in the input is to be pasted, rather than consumed as a token
     };
 
-    class tUngotTokenInput : public tInput {
+    class tUngotTokenInput : public tInput
+    {
     public:
-        tUngotTokenInput(TPpContext* pp, int t, TPpToken* p) : tInput(pp), token(t), lval(*p) { }
-        virtual int scan(TPpToken *) override;
-        virtual int getch() override { assert(0); return EndOfInput; }
-        virtual void ungetch() override { assert(0); }
+        tUngotTokenInput ( TPpContext* pp, int t, TPpToken* p ) : tInput ( pp ), token ( t ), lval ( *p ) { }
+        virtual int scan ( TPpToken * ) override;
+        virtual int getch() override
+        {
+            assert ( 0 );
+            return EndOfInput;
+        }
+        virtual void ungetch() override
+        {
+            assert ( 0 );
+        }
     protected:
         int token;
         TPpToken lval;
@@ -508,10 +638,11 @@ protected:
     //
     // From PpScanner.cpp
     //
-    class tStringInput : public tInput {
+    class tStringInput : public tInput
+    {
     public:
-        tStringInput(TPpContext* pp, TInputScanner& i) : tInput(pp), input(&i) { }
-        virtual int scan(TPpToken*) override;
+        tStringInput ( TPpContext* pp, TInputScanner& i ) : tInput ( pp ), input ( &i ) { }
+        virtual int scan ( TPpToken* ) override;
 
         // Scanner used to get source stream characters.
         //  - Escaped newlines are handled here, invisibly to the caller.
@@ -520,30 +651,34 @@ protected:
         {
             int ch = input->get();
 
-            if (ch == '\\') {
+            if ( ch == '\\' ) {
                 // Move past escaped newlines, as many as sequentially exist
                 do {
-                    if (input->peek() == '\r' || input->peek() == '\n') {
-                        bool allowed = pp->parseContext.lineContinuationCheck(input->getSourceLoc(), pp->inComment);
-                        if (! allowed && pp->inComment)
+                    if ( input->peek() == '\r' || input->peek() == '\n' ) {
+                        bool allowed = pp->parseContext.lineContinuationCheck ( input->getSourceLoc(), pp->inComment );
+                        if ( ! allowed && pp->inComment ) {
                             return '\\';
+                        }
 
                         // escape one newline now
                         ch = input->get();
                         int nextch = input->get();
-                        if (ch == '\r' && nextch == '\n')
+                        if ( ch == '\r' && nextch == '\n' ) {
                             ch = input->get();
-                        else
+                        } else {
                             ch = nextch;
-                    } else
+                        }
+                    } else {
                         return '\\';
-                } while (ch == '\\');
+                    }
+                } while ( ch == '\\' );
             }
 
             // handle any non-escaped newline
-            if (ch == '\r' || ch == '\n') {
-                if (ch == '\r' && input->peek() == '\n')
+            if ( ch == '\r' || ch == '\n' ) {
+                if ( ch == '\r' && input->peek() == '\n' ) {
                     input->get();
+                }
                 return '\n';
             }
 
@@ -560,24 +695,26 @@ protected:
 
             do {
                 int ch = input->peek();
-                if (ch == '\r' || ch == '\n') {
-                    if (ch == '\n') {
+                if ( ch == '\r' || ch == '\n' ) {
+                    if ( ch == '\n' ) {
                         // correct for two-character newline
                         input->unget();
-                        if (input->peek() != '\r')
+                        if ( input->peek() != '\r' ) {
                             input->get();
+                        }
                     }
                     // now in front of a complete newline, move past an escape character
                     input->unget();
-                    if (input->peek() == '\\')
+                    if ( input->peek() == '\\' ) {
                         input->unget();
-                    else {
+                    } else {
                         input->get();
                         break;
                     }
-                } else
+                } else {
                     break;
-            } while (true);
+                }
+            } while ( true );
         }
 
     protected:
@@ -587,59 +724,69 @@ protected:
     // Holds a reference to included file data, as well as a
     // prologue and an epilogue string. This can be scanned using the tInput
     // interface and acts as a single source string.
-    class TokenizableIncludeFile : public tInput {
+    class TokenizableIncludeFile : public tInput
+    {
     public:
         // Copies prologue and epilogue. The includedFile must remain valid
         // until this TokenizableIncludeFile is no longer used.
-        TokenizableIncludeFile(const TSourceLoc& startLoc,
-                          const std::string& prologue,
-                          TShader::Includer::IncludeResult* includedFile,
-                          const std::string& epilogue,
-                          TPpContext* pp)
-            : tInput(pp),
-              prologue_(prologue),
-              epilogue_(epilogue),
-              includedFile_(includedFile),
-              scanner(3, strings, lengths, nullptr, 0, 0, true),
-              prevScanner(nullptr),
-              stringInput(pp, scanner)
+        TokenizableIncludeFile ( const TSourceLoc& startLoc,
+                                 const std::string& prologue,
+                                 TShader::Includer::IncludeResult* includedFile,
+                                 const std::string& epilogue,
+                                 TPpContext* pp )
+            : tInput ( pp ),
+              prologue_ ( prologue ),
+              epilogue_ ( epilogue ),
+              includedFile_ ( includedFile ),
+              scanner ( 3, strings, lengths, nullptr, 0, 0, true ),
+              prevScanner ( nullptr ),
+              stringInput ( pp, scanner )
         {
-              strings[0] = prologue_.data();
-              strings[1] = includedFile_->headerData;
-              strings[2] = epilogue_.data();
+            strings[0] = prologue_.data();
+            strings[1] = includedFile_->headerData;
+            strings[2] = epilogue_.data();
 
-              lengths[0] = prologue_.size();
-              lengths[1] = includedFile_->headerLength;
-              lengths[2] = epilogue_.size();
+            lengths[0] = prologue_.size();
+            lengths[1] = includedFile_->headerLength;
+            lengths[2] = epilogue_.size();
 
-              scanner.setLine(startLoc.line);
-              scanner.setString(startLoc.string);
+            scanner.setLine ( startLoc.line );
+            scanner.setString ( startLoc.string );
 
-              scanner.setFile(startLoc.getFilenameStr(), 0);
-              scanner.setFile(startLoc.getFilenameStr(), 1);
-              scanner.setFile(startLoc.getFilenameStr(), 2);
+            scanner.setFile ( startLoc.getFilenameStr(), 0 );
+            scanner.setFile ( startLoc.getFilenameStr(), 1 );
+            scanner.setFile ( startLoc.getFilenameStr(), 2 );
         }
 
         // tInput methods:
-        int scan(TPpToken* t) override { return stringInput.scan(t); }
-        int getch() override { return stringInput.getch(); }
-        void ungetch() override { stringInput.ungetch(); }
+        int scan ( TPpToken* t ) override
+        {
+            return stringInput.scan ( t );
+        }
+        int getch() override
+        {
+            return stringInput.getch();
+        }
+        void ungetch() override
+        {
+            stringInput.ungetch();
+        }
 
         void notifyActivated() override
         {
             prevScanner = pp->parseContext.getScanner();
-            pp->parseContext.setScanner(&scanner);
-            pp->push_include(includedFile_);
+            pp->parseContext.setScanner ( &scanner );
+            pp->push_include ( includedFile_ );
         }
 
         void notifyDeleted() override
         {
-            pp->parseContext.setScanner(prevScanner);
+            pp->parseContext.setScanner ( prevScanner );
             pp->pop_include();
         }
 
     private:
-        TokenizableIncludeFile& operator=(const TokenizableIncludeFile&);
+        TokenizableIncludeFile& operator= ( const TokenizableIncludeFile& );
 
         // Stores the prologue for this string.
         const std::string prologue_;
@@ -666,23 +813,23 @@ protected:
         tStringInput stringInput;
     };
 
-    int ScanFromString(char* s);
+    int ScanFromString ( char* s );
     void missingEndifCheck();
-    int lFloatConst(int len, int ch, TPpToken* ppToken);
-    int characterLiteral(TPpToken* ppToken);
+    int lFloatConst ( int len, int ch, TPpToken* ppToken );
+    int characterLiteral ( TPpToken* ppToken );
 
-    void push_include(TShader::Includer::IncludeResult* result)
+    void push_include ( TShader::Includer::IncludeResult* result )
     {
         currentSourceFile = result->headerName;
-        includeStack.push(result);
+        includeStack.push ( result );
     }
 
     void pop_include()
     {
         TShader::Includer::IncludeResult* include = includeStack.top();
         includeStack.pop();
-        includer.releaseInclude(include);
-        if (includeStack.empty()) {
+        includer.releaseInclude ( include );
+        if ( includeStack.empty() ) {
             currentSourceFile = rootFileName;
         } else {
             currentSourceFile = includeStack.top()->headerName;

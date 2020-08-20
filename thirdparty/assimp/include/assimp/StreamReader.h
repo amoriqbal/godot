@@ -59,7 +59,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <memory>
 
-namespace Assimp {
+namespace Assimp
+{
 
 // --------------------------------------------------------------------------------------------
 /** Wrapper class around IOStream to allow for consistent reading of binary data in both
@@ -72,7 +73,8 @@ namespace Assimp {
  *  XXX switch from unsigned int for size types to size_t? or ptrdiff_t?*/
 // --------------------------------------------------------------------------------------------
 template <bool SwapEndianess = false, bool RuntimeSwitch = false>
-class StreamReader {
+class StreamReader
+{
 public:
     // FIXME: use these data types throughout the whole library,
     // then change them to 64 bit values :-)
@@ -91,25 +93,26 @@ public:
      *    stream is in little endian byte order. Otherwise the
      *    endianness information is contained in the @c SwapEndianess
      *    template parameter and this parameter is meaningless.  */
-    StreamReader(std::shared_ptr<IOStream> stream, bool le = false)
-        : stream(stream)
-        , le(le)
+    StreamReader ( std::shared_ptr<IOStream> stream, bool le = false )
+        : stream ( stream )
+        , le ( le )
     {
-        ai_assert(stream);
+        ai_assert ( stream );
         InternBegin();
     }
 
     // ---------------------------------------------------------------------
-    StreamReader(IOStream* stream, bool le = false)
-        : stream(std::shared_ptr<IOStream>(stream))
-        , le(le)
+    StreamReader ( IOStream* stream, bool le = false )
+        : stream ( std::shared_ptr<IOStream> ( stream ) )
+        , le ( le )
     {
-        ai_assert(stream);
+        ai_assert ( stream );
         InternBegin();
     }
 
     // ---------------------------------------------------------------------
-    ~StreamReader() {
+    ~StreamReader()
+    {
         delete[] buffer;
     }
 
@@ -124,84 +127,97 @@ public:
 
     // ---------------------------------------------------------------------
     /** Read a double from the stream  */
-    double GetF8()  {
+    double GetF8()
+    {
         return Get<double>();
     }
 
     // ---------------------------------------------------------------------
     /** Read a signed 16 bit integer from the stream */
-    int16_t GetI2() {
+    int16_t GetI2()
+    {
         return Get<int16_t>();
     }
 
     // ---------------------------------------------------------------------
     /** Read a signed 8 bit integer from the stream */
-    int8_t GetI1()  {
+    int8_t GetI1()
+    {
         return Get<int8_t>();
     }
 
     // ---------------------------------------------------------------------
     /** Read an signed 32 bit integer from the stream */
-    int32_t GetI4() {
+    int32_t GetI4()
+    {
         return Get<int32_t>();
     }
 
     // ---------------------------------------------------------------------
     /** Read a signed 64 bit integer from the stream */
-    int64_t GetI8() {
+    int64_t GetI8()
+    {
         return Get<int64_t>();
     }
 
     // ---------------------------------------------------------------------
     /** Read a unsigned 16 bit integer from the stream */
-    uint16_t GetU2()    {
+    uint16_t GetU2()
+    {
         return Get<uint16_t>();
     }
 
     // ---------------------------------------------------------------------
     /** Read a unsigned 8 bit integer from the stream */
-    uint8_t GetU1() {
+    uint8_t GetU1()
+    {
         return Get<uint8_t>();
     }
 
     // ---------------------------------------------------------------------
     /** Read an unsigned 32 bit integer from the stream */
-    uint32_t GetU4()    {
+    uint32_t GetU4()
+    {
         return Get<uint32_t>();
     }
 
     // ---------------------------------------------------------------------
     /** Read a unsigned 64 bit integer from the stream */
-    uint64_t GetU8()    {
+    uint64_t GetU8()
+    {
         return Get<uint64_t>();
     }
 
     // ---------------------------------------------------------------------
     /** Get the remaining stream size (to the end of the stream) */
-    unsigned int GetRemainingSize() const {
-        return (unsigned int)(end - current);
+    unsigned int GetRemainingSize() const
+    {
+        return ( unsigned int ) ( end - current );
     }
 
     // ---------------------------------------------------------------------
     /** Get the remaining stream size (to the current read limit). The
      *  return value is the remaining size of the stream if no custom
      *  read limit has been set. */
-    unsigned int GetRemainingSizeToLimit() const {
-        return (unsigned int)(limit - current);
+    unsigned int GetRemainingSizeToLimit() const
+    {
+        return ( unsigned int ) ( limit - current );
     }
 
     // ---------------------------------------------------------------------
     /** Increase the file pointer (relative seeking)  */
-    void IncPtr(intptr_t plus)    {
+    void IncPtr ( intptr_t plus )
+    {
         current += plus;
-        if (current > limit) {
-            throw DeadlyImportError("End of file or read limit was reached");
+        if ( current > limit ) {
+            throw DeadlyImportError ( "End of file or read limit was reached" );
         }
     }
 
     // ---------------------------------------------------------------------
     /** Get the current file pointer */
-    int8_t* GetPtr() const  {
+    int8_t* GetPtr() const
+    {
         return current;
     }
 
@@ -211,10 +227,11 @@ public:
      *  large chunks of data at once.
      *  @param p The new pointer, which is validated against the size
      *    limit and buffer boundaries. */
-    void SetPtr(int8_t* p)  {
+    void SetPtr ( int8_t* p )
+    {
         current = p;
-        if (current > limit || current < buffer) {
-            throw DeadlyImportError("End of file or read limit was reached");
+        if ( current > limit || current < buffer ) {
+            throw DeadlyImportError ( "End of file or read limit was reached" );
         }
     }
 
@@ -222,21 +239,24 @@ public:
     /** Copy n bytes to an external buffer
      *  @param out Destination for copying
      *  @param bytes Number of bytes to copy */
-    void CopyAndAdvance(void* out, size_t bytes)    {
+    void CopyAndAdvance ( void* out, size_t bytes )
+    {
         int8_t* ur = GetPtr();
-        SetPtr(ur+bytes); // fire exception if eof
+        SetPtr ( ur+bytes ); // fire exception if eof
 
-        ::memcpy(out,ur,bytes);
+        ::memcpy ( out,ur,bytes );
     }
 
     // ---------------------------------------------------------------------
     /** Get the current offset from the beginning of the file */
-    int GetCurrentPos() const   {
-        return (unsigned int)(current - buffer);
+    int GetCurrentPos() const
+    {
+        return ( unsigned int ) ( current - buffer );
     }
 
-    void SetCurrentPos(size_t pos) {
-        SetPtr(buffer + pos);
+    void SetCurrentPos ( size_t pos )
+    {
+        SetPtr ( buffer + pos );
     }
 
     // ---------------------------------------------------------------------
@@ -246,16 +266,17 @@ public:
      *    the beginning of the file. Specifying UINT_MAX
      *    resets the limit to the original end of the stream.
      *  Returns the previously set limit. */
-    unsigned int SetReadLimit(unsigned int _limit)  {
+    unsigned int SetReadLimit ( unsigned int _limit )
+    {
         unsigned int prev = GetReadLimit();
-        if (UINT_MAX == _limit) {
+        if ( UINT_MAX == _limit ) {
             limit = end;
             return prev;
         }
 
         limit = buffer + _limit;
-        if (limit > end) {
-            throw DeadlyImportError("StreamReader: Invalid read limit");
+        if ( limit > end ) {
+            throw DeadlyImportError ( "StreamReader: Invalid read limit" );
         }
         return prev;
     }
@@ -263,21 +284,24 @@ public:
     // ---------------------------------------------------------------------
     /** Get the current read limit in bytes. Reading over this limit
      *  accidentally raises an exception.  */
-    unsigned int GetReadLimit() const    {
-        return (unsigned int)(limit - buffer);
+    unsigned int GetReadLimit() const
+    {
+        return ( unsigned int ) ( limit - buffer );
     }
 
     // ---------------------------------------------------------------------
     /** Skip to the read limit in bytes. Reading over this limit
      *  accidentally raises an exception. */
-    void SkipToReadLimit()  {
+    void SkipToReadLimit()
+    {
         current = limit;
     }
 
     // ---------------------------------------------------------------------
     /** overload operator>> and allow chaining of >> ops. */
     template <typename T>
-    StreamReader& operator >> (T& f) {
+    StreamReader& operator >> ( T& f )
+    {
         f = Get<T>();
         return *this;
     }
@@ -285,40 +309,42 @@ public:
     // ---------------------------------------------------------------------
     /** Generic read method. ByteSwap::Swap(T*) *must* be defined */
     template <typename T>
-    T Get() {
-        if ( current + sizeof(T) > limit) {
-            throw DeadlyImportError("End of file or stream limit was reached");
+    T Get()
+    {
+        if ( current + sizeof ( T ) > limit ) {
+            throw DeadlyImportError ( "End of file or stream limit was reached" );
         }
 
         T f;
-        ::memcpy (&f, current, sizeof(T));
-        Intern::Getter<SwapEndianess,T,RuntimeSwitch>() (&f,le);
-        current += sizeof(T);
+        ::memcpy ( &f, current, sizeof ( T ) );
+        Intern::Getter<SwapEndianess,T,RuntimeSwitch>() ( &f,le );
+        current += sizeof ( T );
 
         return f;
     }
 
 private:
     // ---------------------------------------------------------------------
-    void InternBegin() {
-        if (!stream) {
+    void InternBegin()
+    {
+        if ( !stream ) {
             // in case someone wonders: StreamReader is frequently invoked with
             // no prior validation whether the input stream is valid. Since
             // no one bothers changing the error message, this message here
             // is passed down to the caller and 'unable to open file'
             // simply describes best what happened.
-            throw DeadlyImportError("StreamReader: Unable to open file");
+            throw DeadlyImportError ( "StreamReader: Unable to open file" );
         }
 
         const size_t s = stream->FileSize() - stream->Tell();
-        if (!s) {
-            throw DeadlyImportError("StreamReader: File is empty or EOF is already reached");
+        if ( !s ) {
+            throw DeadlyImportError ( "StreamReader: File is empty or EOF is already reached" );
         }
 
         current = buffer = new int8_t[s];
-        const size_t read = stream->Read(current,1,s);
+        const size_t read = stream->Read ( current,1,s );
         // (read < s) can only happen if the stream was opened in text mode, in which case FileSize() is not reliable
-        ai_assert(read <= s);
+        ai_assert ( read <= s );
         end = limit = &buffer[read-1] + 1;
     }
 
@@ -331,11 +357,11 @@ private:
 // --------------------------------------------------------------------------------------------
 // `static` StreamReaders. Their byte order is fixed and they might be a little bit faster.
 #ifdef AI_BUILD_BIG_ENDIAN
-    typedef StreamReader<true>  StreamReaderLE;
-    typedef StreamReader<false> StreamReaderBE;
+typedef StreamReader<true>  StreamReaderLE;
+typedef StreamReader<false> StreamReaderBE;
 #else
-    typedef StreamReader<true>  StreamReaderBE;
-    typedef StreamReader<false> StreamReaderLE;
+typedef StreamReader<true>  StreamReaderBE;
+typedef StreamReader<false> StreamReaderLE;
 #endif
 
 // `dynamic` StreamReader. The byte order of the input data is specified in the

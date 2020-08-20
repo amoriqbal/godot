@@ -62,12 +62,12 @@ POSSIBILITY OF SUCH DAMAGE.
 #  include <stdlib.h>
 #define silk_fatal(str) _silk_fatal(str, __FILE__, __LINE__);
 #ifdef __GNUC__
-__attribute__((noreturn))
+__attribute__ ( ( noreturn ) )
 #endif
-static OPUS_INLINE void _silk_fatal(const char *str, const char *file, int line)
+static OPUS_INLINE void _silk_fatal ( const char *str, const char *file, int line )
 {
-   fprintf (stderr, "Fatal (internal) error in %s, line %d: %s\n", file, line, str);
-   abort();
+    fprintf ( stderr, "Fatal (internal) error in %s, line %d: %s\n", file, line, str );
+    abort();
 }
 #  define silk_assert(COND) {if (!(COND)) {silk_fatal("assertion failed: " #COND);}}
 # else

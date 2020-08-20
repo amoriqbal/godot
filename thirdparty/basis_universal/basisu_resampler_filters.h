@@ -18,18 +18,17 @@
 
 namespace basisu
 {
-	typedef float (*resample_filter_func)(float t);
+typedef float ( *resample_filter_func ) ( float t );
 
-	struct resample_filter
-	{
-		const char *name;
-		resample_filter_func func;
-		float support;
-	};
+struct resample_filter {
+    const char *name;
+    resample_filter_func func;
+    float support;
+};
 
-	extern const resample_filter g_resample_filters[];
-	extern const int g_num_resample_filters;
+extern const resample_filter g_resample_filters[];
+extern const int g_num_resample_filters;
 
-	int find_resample_filter(const char *pName);
+int find_resample_filter ( const char *pName );
 
 } // namespace basisu

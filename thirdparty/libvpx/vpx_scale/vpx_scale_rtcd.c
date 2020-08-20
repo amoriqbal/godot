@@ -14,5 +14,5 @@
 
 void vpx_scale_rtcd()
 {
-    once(setup_rtcd_internal);
+    once ( setup_rtcd_internal );
 }

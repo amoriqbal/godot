@@ -39,138 +39,157 @@ import java.lang.ref.WeakReference;
  * an {@link IDownloaderService} object that you can then use to issue commands to the {@link
  * DownloaderService} (such as to pause and resume downloads).
  */
-public class DownloaderServiceMarshaller {
+public class DownloaderServiceMarshaller
+{
 
     public static final int MSG_REQUEST_ABORT_DOWNLOAD =
-            1;
+        1;
     public static final int MSG_REQUEST_PAUSE_DOWNLOAD =
-            2;
+        2;
     public static final int MSG_SET_DOWNLOAD_FLAGS =
-            3;
+        3;
     public static final int MSG_REQUEST_CONTINUE_DOWNLOAD =
-            4;
+        4;
     public static final int MSG_REQUEST_DOWNLOAD_STATE =
-            5;
+        5;
     public static final int MSG_REQUEST_CLIENT_UPDATE =
-            6;
+        6;
 
     public static final String PARAMS_FLAGS = "flags";
     public static final String PARAM_MESSENGER = DownloaderService.EXTRA_MESSAGE_HANDLER;
 
-    private static class Proxy implements IDownloaderService {
+    private static class Proxy implements IDownloaderService
+    {
         private Messenger mMsg;
 
-        private void send(int method, Bundle params) {
-            Message m = Message.obtain(null, method);
-            m.setData(params);
+        private void send ( int method, Bundle params )
+        {
+            Message m = Message.obtain ( null, method );
+            m.setData ( params );
             try {
-                mMsg.send(m);
-            } catch (RemoteException e) {
+                mMsg.send ( m );
+            } catch ( RemoteException e ) {
                 e.printStackTrace();
             }
         }
 
-        public Proxy(Messenger msg) {
+        public Proxy ( Messenger msg )
+        {
             mMsg = msg;
         }
 
         @Override
-        public void requestAbortDownload() {
-            send(MSG_REQUEST_ABORT_DOWNLOAD, new Bundle());
+        public void requestAbortDownload()
+        {
+            send ( MSG_REQUEST_ABORT_DOWNLOAD, new Bundle() );
         }
 
         @Override
-        public void requestPauseDownload() {
-            send(MSG_REQUEST_PAUSE_DOWNLOAD, new Bundle());
+        public void requestPauseDownload()
+        {
+            send ( MSG_REQUEST_PAUSE_DOWNLOAD, new Bundle() );
         }
 
         @Override
-        public void setDownloadFlags(int flags) {
+        public void setDownloadFlags ( int flags )
+        {
             Bundle params = new Bundle();
-            params.putInt(PARAMS_FLAGS, flags);
-            send(MSG_SET_DOWNLOAD_FLAGS, params);
+            params.putInt ( PARAMS_FLAGS, flags );
+            send ( MSG_SET_DOWNLOAD_FLAGS, params );
         }
 
         @Override
-        public void requestContinueDownload() {
-            send(MSG_REQUEST_CONTINUE_DOWNLOAD, new Bundle());
+        public void requestContinueDownload()
+        {
+            send ( MSG_REQUEST_CONTINUE_DOWNLOAD, new Bundle() );
         }
 
         @Override
-        public void requestDownloadStatus() {
-            send(MSG_REQUEST_DOWNLOAD_STATE, new Bundle());
+        public void requestDownloadStatus()
+        {
+            send ( MSG_REQUEST_DOWNLOAD_STATE, new Bundle() );
         }
 
         @Override
-        public void onClientUpdated(Messenger clientMessenger) {
-            Bundle bundle = new Bundle(1);
-            bundle.putParcelable(PARAM_MESSENGER, clientMessenger);
-            send(MSG_REQUEST_CLIENT_UPDATE, bundle);
+        public void onClientUpdated ( Messenger clientMessenger )
+        {
+            Bundle bundle = new Bundle ( 1 );
+            bundle.putParcelable ( PARAM_MESSENGER, clientMessenger );
+            send ( MSG_REQUEST_CLIENT_UPDATE, bundle );
         }
     }
 
-    private static class Stub implements IStub {
+    private static class Stub implements IStub
+    {
         private IDownloaderService mItf = null;
         // -- GODOT start --
-        private final MessengerHandlerServer mMsgHandler = new MessengerHandlerServer(this);
-        final Messenger mMessenger = new Messenger(mMsgHandler);
+        private final MessengerHandlerServer mMsgHandler = new MessengerHandlerServer ( this );
+        final Messenger mMessenger = new Messenger ( mMsgHandler );
 
-        private static class MessengerHandlerServer extends Handler {
+        private static class MessengerHandlerServer extends Handler
+        {
             private final WeakReference<Stub> mDownloader;
-            public MessengerHandlerServer(Stub downloader) {
-                mDownloader = new WeakReference<>(downloader);
+            public MessengerHandlerServer ( Stub downloader )
+            {
+                mDownloader = new WeakReference<> ( downloader );
             }
 
             @Override
-            public void handleMessage(Message msg) {
+            public void handleMessage ( Message msg )
+            {
                 Stub downloader = mDownloader.get();
-                if (downloader != null) {
-                    downloader.handleMessage(msg);
+                if ( downloader != null ) {
+                    downloader.handleMessage ( msg );
                 }
             }
         }
 
-        private void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_REQUEST_ABORT_DOWNLOAD:
-                    mItf.requestAbortDownload();
-                    break;
-                case MSG_REQUEST_CONTINUE_DOWNLOAD:
-                    mItf.requestContinueDownload();
-                    break;
-                case MSG_REQUEST_PAUSE_DOWNLOAD:
-                    mItf.requestPauseDownload();
-                    break;
-                case MSG_SET_DOWNLOAD_FLAGS:
-                    mItf.setDownloadFlags(msg.getData().getInt(PARAMS_FLAGS));
-                    break;
-                case MSG_REQUEST_DOWNLOAD_STATE:
-                    mItf.requestDownloadStatus();
-                    break;
-                case MSG_REQUEST_CLIENT_UPDATE:
-                    mItf.onClientUpdated((Messenger)msg.getData().getParcelable(
-                            PARAM_MESSENGER));
-                    break;
+        private void handleMessage ( Message msg )
+        {
+            switch ( msg.what ) {
+            case MSG_REQUEST_ABORT_DOWNLOAD:
+                mItf.requestAbortDownload();
+                break;
+            case MSG_REQUEST_CONTINUE_DOWNLOAD:
+                mItf.requestContinueDownload();
+                break;
+            case MSG_REQUEST_PAUSE_DOWNLOAD:
+                mItf.requestPauseDownload();
+                break;
+            case MSG_SET_DOWNLOAD_FLAGS:
+                mItf.setDownloadFlags ( msg.getData().getInt ( PARAMS_FLAGS ) );
+                break;
+            case MSG_REQUEST_DOWNLOAD_STATE:
+                mItf.requestDownloadStatus();
+                break;
+            case MSG_REQUEST_CLIENT_UPDATE:
+                mItf.onClientUpdated ( ( Messenger ) msg.getData().getParcelable (
+                                           PARAM_MESSENGER ) );
+                break;
             }
         }
         // -- GODOT end --
 
-        public Stub(IDownloaderService itf) {
+        public Stub ( IDownloaderService itf )
+        {
             mItf = itf;
         }
 
         @Override
-        public Messenger getMessenger() {
+        public Messenger getMessenger()
+        {
             return mMessenger;
         }
 
         @Override
-        public void connect(Context c) {
+        public void connect ( Context c )
+        {
 
         }
 
         @Override
-        public void disconnect(Context c) {
+        public void disconnect ( Context c )
+        {
 
         }
     }
@@ -181,8 +200,9 @@ public class DownloaderServiceMarshaller {
      * @param ctx
      * @return
      */
-    public static IDownloaderService CreateProxy(Messenger msg) {
-        return new Proxy(msg);
+    public static IDownloaderService CreateProxy ( Messenger msg )
+    {
+        return new Proxy ( msg );
     }
 
     /**
@@ -194,8 +214,9 @@ public class DownloaderServiceMarshaller {
      *            when remote method calls are unmarshalled.
      * @return
      */
-    public static IStub CreateStub(IDownloaderService itf) {
-        return new Stub(itf);
+    public static IStub CreateStub ( IDownloaderService itf )
+    {
+        return new Stub ( itf );
     }
 
 }

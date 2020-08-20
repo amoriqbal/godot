@@ -52,13 +52,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assimp/LogStream.hpp>
 #include "windows.h"
 
-namespace Assimp    {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /** @class  Win32DebugLogStream
  *  @brief  Logs into the debug stream from win32.
  */
-class Win32DebugLogStream : public LogStream {
+class Win32DebugLogStream : public LogStream
+{
 public:
     /** @brief  Default constructor */
     Win32DebugLogStream();
@@ -67,25 +69,28 @@ public:
     ~Win32DebugLogStream();
 
     /** @brief  Writer  */
-    void write(const char* messgae);
+    void write ( const char* messgae );
 };
 
 // ---------------------------------------------------------------------------
-inline 
-Win32DebugLogStream::Win32DebugLogStream(){ 
+inline
+Win32DebugLogStream::Win32DebugLogStream()
+{
     // empty
 }
 
 // ---------------------------------------------------------------------------
-inline 
-Win32DebugLogStream::~Win32DebugLogStream(){
+inline
+Win32DebugLogStream::~Win32DebugLogStream()
+{
     // empty
 }
 
 // ---------------------------------------------------------------------------
-inline 
-void Win32DebugLogStream::write(const char* message) {
-    ::OutputDebugStringA( message);
+inline
+void Win32DebugLogStream::write ( const char* message )
+{
+    ::OutputDebugStringA ( message );
 }
 
 // ---------------------------------------------------------------------------

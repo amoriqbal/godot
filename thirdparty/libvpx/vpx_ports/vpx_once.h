@@ -48,17 +48,17 @@
  * As a static, once_state will be zero-initialized as program start.
  */
 static LONG once_state;
-static void once(void (*func)(void))
+static void once ( void ( *func ) ( void ) )
 {
     /* Try to advance once_state from its initial value of 0 to 1.
      * Only one thread can succeed in doing so.
      */
-    if (InterlockedCompareExchange(&once_state, 1, 0) == 0) {
+    if ( InterlockedCompareExchange ( &once_state, 1, 0 ) == 0 ) {
         /* We're the winning thread, having set once_state to 1.
          * Call our function. */
         func();
         /* Now advance once_state to 2, unblocking any other threads. */
-        InterlockedIncrement(&once_state);
+        InterlockedIncrement ( &once_state );
         return;
     }
 
@@ -69,7 +69,7 @@ static void once(void (*func)(void))
      * Try to advance once_state from 2 to 2, which is only possible
      * after the winning thead advances it from 1 to 2.
      */
-    while (InterlockedCompareExchange(&once_state, 2, 2) != 2) {
+    while ( InterlockedCompareExchange ( &once_state, 2, 2 ) != 2 ) {
         /* State isn't yet 2. Try again.
          *
          * We are used for singleton initialization functions,
@@ -80,7 +80,7 @@ static void once(void (*func)(void))
          *
          * We can at least yield our timeslice.
          */
-        Sleep(0);
+        Sleep ( 0 );
     }
 
     /* We've seen once_state advance to 2, so we know func()
@@ -96,21 +96,21 @@ static void once(void (*func)(void))
 #elif CONFIG_MULTITHREAD && defined(__OS2__)
 #define INCL_DOS
 #include <os2.h>
-static void once(void (*func)(void))
+static void once ( void ( *func ) ( void ) )
 {
     static int done;
 
     /* If the initialization is complete, return early. */
-    if(done)
+    if ( done ) {
         return;
+    }
 
     /* Causes all other threads in the process to block themselves
      * and give up their time slice.
      */
     DosEnterCritSec();
 
-    if (!done)
-    {
+    if ( !done ) {
         func();
         done = 1;
     }
@@ -122,10 +122,10 @@ static void once(void (*func)(void))
 
 #elif CONFIG_MULTITHREAD && HAVE_PTHREAD_H
 #include <pthread.h>
-static void once(void (*func)(void))
+static void once ( void ( *func ) ( void ) )
 {
     static pthread_once_t lock = PTHREAD_ONCE_INIT;
-    pthread_once(&lock, func);
+    pthread_once ( &lock, func );
 }
 
 
@@ -135,12 +135,11 @@ static void once(void (*func)(void))
  * no synchronization is strictly necessary.
  */
 
-static void once(void (*func)(void))
+static void once ( void ( *func ) ( void ) )
 {
     static int done;
 
-    if(!done)
-    {
+    if ( !done ) {
         func();
         done = 1;
     }

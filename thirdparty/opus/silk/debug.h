@@ -37,24 +37,24 @@ extern "C"
 {
 #endif
 
-unsigned long GetHighResolutionTime(void); /* O  time in usec*/
+unsigned long GetHighResolutionTime ( void ); /* O  time in usec*/
 
 /* make SILK_DEBUG dependent on compiler's _DEBUG */
 #if defined _WIN32
-    #ifdef _DEBUG
-        #define SILK_DEBUG  1
-    #else
-        #define SILK_DEBUG  0
-    #endif
-
-    /* overrule the above */
-    #if 0
-    /*  #define NO_ASSERTS*/
-    #undef  SILK_DEBUG
-    #define SILK_DEBUG  1
-    #endif
+#ifdef _DEBUG
+#define SILK_DEBUG  1
 #else
-    #define SILK_DEBUG  0
+#define SILK_DEBUG  0
+#endif
+
+/* overrule the above */
+#if 0
+/*  #define NO_ASSERTS*/
+#undef  SILK_DEBUG
+#define SILK_DEBUG  1
+#endif
+#else
+#define SILK_DEBUG  0
 #endif
 
 /* Flag for using timers */
@@ -84,7 +84,7 @@ unsigned long GetHighResolutionTime(void); /* O  time in usec*/
 /*                                                                  */
 /* results are now in silk_TimingData.txt                           */
 
-void silk_TimerSave(char *file_name);
+void silk_TimerSave ( char *file_name );
 
 /* max number of timers (in different locations) */
 #define silk_NUM_TIMERS_MAX                  50

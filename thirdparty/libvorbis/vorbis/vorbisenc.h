@@ -56,13 +56,13 @@ extern "C"
  * \retval OV_EINVAL  Invalid setup request, eg, out of range argument.
  * \retval OV_EIMPL   Unimplemented mode; unable to comply with bitrate request.
  */
-extern int vorbis_encode_init(vorbis_info *vi,
-                              long channels,
-                              long rate,
+extern int vorbis_encode_init ( vorbis_info *vi,
+                                long channels,
+                                long rate,
 
-                              long max_bitrate,
-                              long nominal_bitrate,
-                              long min_bitrate);
+                                long max_bitrate,
+                                long nominal_bitrate,
+                                long min_bitrate );
 
 /**
  * This function performs step-one of a three-step bitrate-managed encode
@@ -93,13 +93,13 @@ extern int vorbis_encode_init(vorbis_info *vi,
  * \retval OV_EINVAL   Invalid setup request, eg, out of range argument.
  * \retval OV_EIMPL    Unimplemented mode; unable to comply with bitrate request.
  */
-extern int vorbis_encode_setup_managed(vorbis_info *vi,
-                                       long channels,
-                                       long rate,
+extern int vorbis_encode_setup_managed ( vorbis_info *vi,
+        long channels,
+        long rate,
 
-                                       long max_bitrate,
-                                       long nominal_bitrate,
-                                       long min_bitrate);
+        long max_bitrate,
+        long nominal_bitrate,
+        long min_bitrate );
 
 /**
  * This function performs step-one of a three-step variable bitrate
@@ -125,12 +125,12 @@ extern int vorbis_encode_setup_managed(vorbis_info *vi,
  * \retval  OV_EINVAL  Invalid setup request, eg, out of range argument.
  * \retval  OV_EIMPL   Unimplemented mode; unable to comply with quality level request.
  */
-extern int vorbis_encode_setup_vbr(vorbis_info *vi,
-                                  long channels,
-                                  long rate,
+extern int vorbis_encode_setup_vbr ( vorbis_info *vi,
+                                     long channels,
+                                     long rate,
 
-                                  float quality
-                                  );
+                                     float quality
+                                   );
 
 /**
  * This is the primary function within libvorbisenc for setting up variable
@@ -154,11 +154,11 @@ extern int vorbis_encode_setup_vbr(vorbis_info *vi,
  * \retval OV_EINVAL   Invalid setup request, eg, out of range argument.
  * \retval OV_EIMPL    Unimplemented mode; unable to comply with quality level request.
  */
-extern int vorbis_encode_init_vbr(vorbis_info *vi,
-                                  long channels,
-                                  long rate,
+extern int vorbis_encode_init_vbr ( vorbis_info *vi,
+                                    long channels,
+                                    long rate,
 
-                                  float base_quality
+                                    float base_quality
                                   );
 
 /**
@@ -188,7 +188,7 @@ extern int vorbis_encode_init_vbr(vorbis_info *vi,
  * initialize the high-level encoding setup
  *
  */
-extern int vorbis_encode_setup_init(vorbis_info *vi);
+extern int vorbis_encode_setup_init ( vorbis_info *vi );
 
 /**
  * This function implements a generic interface to miscellaneous encoder
@@ -216,7 +216,7 @@ extern int vorbis_encode_setup_init(vorbis_info *vi);
  *
  * \retval OV_EIMPL   Unimplemented or unknown request
  */
-extern int vorbis_encode_ctl(vorbis_info *vi,int number,void *arg);
+extern int vorbis_encode_ctl ( vorbis_info *vi,int number,void *arg );
 
 /**
  * \deprecated This is a deprecated interface. Please use vorbis_encode_ctl()
@@ -230,31 +230,31 @@ extern int vorbis_encode_ctl(vorbis_info *vi,int number,void *arg);
  * configuration.
 */
 struct ovectl_ratemanage_arg {
-  int    management_active; /**< nonzero if bitrate management is active*/
-/** hard lower limit (in kilobits per second) below which the stream bitrate
-    will never be allowed for any given bitrate_hard_window seconds of time.*/
-  long   bitrate_hard_min;
-/** hard upper limit (in kilobits per second) above which the stream bitrate
-    will never be allowed for any given bitrate_hard_window seconds of time.*/
-  long   bitrate_hard_max;
-/** the window period (in seconds) used to regulate the hard bitrate minimum
-    and maximum*/
-  double bitrate_hard_window;
-/** soft lower limit (in kilobits per second) below which the average bitrate
-    tracker will start nudging the bitrate higher.*/
-  long   bitrate_av_lo;
-/** soft upper limit (in kilobits per second) above which the average bitrate
-    tracker will start nudging the bitrate lower.*/
-  long   bitrate_av_hi;
-/** the window period (in seconds) used to regulate the average bitrate
-    minimum and maximum.*/
-  double bitrate_av_window;
-/** Regulates the relative centering of the average and hard windows; in
-    libvorbis 1.0 and 1.0.1, the hard window regulation overlapped but
-    followed the average window regulation. In libvorbis 1.1 a bit-reservoir
-    interface replaces the old windowing interface; the older windowing
-    interface is simulated and this field has no effect.*/
-  double bitrate_av_window_center;
+    int    management_active; /**< nonzero if bitrate management is active*/
+    /** hard lower limit (in kilobits per second) below which the stream bitrate
+        will never be allowed for any given bitrate_hard_window seconds of time.*/
+    long   bitrate_hard_min;
+    /** hard upper limit (in kilobits per second) above which the stream bitrate
+        will never be allowed for any given bitrate_hard_window seconds of time.*/
+    long   bitrate_hard_max;
+    /** the window period (in seconds) used to regulate the hard bitrate minimum
+        and maximum*/
+    double bitrate_hard_window;
+    /** soft lower limit (in kilobits per second) below which the average bitrate
+        tracker will start nudging the bitrate higher.*/
+    long   bitrate_av_lo;
+    /** soft upper limit (in kilobits per second) above which the average bitrate
+        tracker will start nudging the bitrate lower.*/
+    long   bitrate_av_hi;
+    /** the window period (in seconds) used to regulate the average bitrate
+        minimum and maximum.*/
+    double bitrate_av_window;
+    /** Regulates the relative centering of the average and hard windows; in
+        libvorbis 1.0 and 1.0.1, the hard window regulation overlapped but
+        followed the average window regulation. In libvorbis 1.1 a bit-reservoir
+        interface replaces the old windowing interface; the older windowing
+        interface is simulated and this field has no effect.*/
+    double bitrate_av_window_center;
 };
 
 /**
@@ -267,25 +267,25 @@ struct ovectl_ratemanage_arg {
  *
 */
 struct ovectl_ratemanage2_arg {
-  int    management_active; /**< nonzero if bitrate management is active */
-/** Lower allowed bitrate limit in kilobits per second */
-  long   bitrate_limit_min_kbps;
-/** Upper allowed bitrate limit in kilobits per second */
-  long   bitrate_limit_max_kbps;
-  long   bitrate_limit_reservoir_bits; /**<Size of the bitrate reservoir in bits */
-/** Regulates the bitrate reservoir's preferred fill level in a range from 0.0
- * to 1.0; 0.0 tries to bank bits to buffer against future bitrate spikes, 1.0
- * buffers against future sudden drops in instantaneous bitrate. Default is
- * 0.1
- */
-  double bitrate_limit_reservoir_bias;
-/** Average bitrate setting in kilobits per second */
-  long   bitrate_average_kbps;
-/** Slew rate limit setting for average bitrate adjustment; sets the minimum
- *  time in seconds the bitrate tracker may swing from one extreme to the
- *  other when boosting or damping average bitrate.
- */
-  double bitrate_average_damping;
+    int    management_active; /**< nonzero if bitrate management is active */
+    /** Lower allowed bitrate limit in kilobits per second */
+    long   bitrate_limit_min_kbps;
+    /** Upper allowed bitrate limit in kilobits per second */
+    long   bitrate_limit_max_kbps;
+    long   bitrate_limit_reservoir_bits; /**<Size of the bitrate reservoir in bits */
+    /** Regulates the bitrate reservoir's preferred fill level in a range from 0.0
+     * to 1.0; 0.0 tries to bank bits to buffer against future bitrate spikes, 1.0
+     * buffers against future sudden drops in instantaneous bitrate. Default is
+     * 0.1
+     */
+    double bitrate_limit_reservoir_bias;
+    /** Average bitrate setting in kilobits per second */
+    long   bitrate_average_kbps;
+    /** Slew rate limit setting for average bitrate adjustment; sets the minimum
+     *  time in seconds the bitrate tracker may swing from one extreme to the
+     *  other when boosting or damping average bitrate.
+     */
+    double bitrate_average_damping;
 };
 
 
@@ -377,7 +377,7 @@ struct ovectl_ratemanage2_arg {
  */
 #define OV_ECTL_COUPLING_SET         0x41
 
-  /* deprecated rate management supported only for compatibility */
+/* deprecated rate management supported only for compatibility */
 
 /**
  * Old interface to querying bitrate management settings.

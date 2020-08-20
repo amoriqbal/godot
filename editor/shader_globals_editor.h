@@ -41,27 +41,28 @@
 
 class ShaderGlobalsEditorInterface;
 
-class ShaderGlobalsEditor : public VBoxContainer {
-	GDCLASS(ShaderGlobalsEditor, VBoxContainer)
+class ShaderGlobalsEditor : public VBoxContainer
+{
+    GDCLASS ( ShaderGlobalsEditor, VBoxContainer )
 
-	ShaderGlobalsEditorInterface *interface;
-	EditorInspector *inspector;
+    ShaderGlobalsEditorInterface *interface;
+    EditorInspector *inspector;
 
-	LineEdit *variable_name;
-	OptionButton *variable_type;
-	Button *variable_add;
+    LineEdit *variable_name;
+    OptionButton *variable_type;
+    Button *variable_add;
 
-	void _variable_added();
-	void _variable_deleted(const String &p_variable);
-	void _changed();
+    void _variable_added();
+    void _variable_deleted ( const String &p_variable );
+    void _changed();
 
 protected:
-	static void _bind_methods();
-	void _notification(int p_what);
+    static void _bind_methods();
+    void _notification ( int p_what );
 
 public:
-	ShaderGlobalsEditor();
-	~ShaderGlobalsEditor();
+    ShaderGlobalsEditor();
+    ~ShaderGlobalsEditor();
 };
 
 #endif // SHADER_GLOBALS_EDITOR_H

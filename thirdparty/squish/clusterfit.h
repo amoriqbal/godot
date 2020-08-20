@@ -32,18 +32,19 @@
 #include "simd.h"
 #include "colourfit.h"
 
-namespace squish {
+namespace squish
+{
 
 class ClusterFit : public ColourFit
 {
 public:
-    ClusterFit( ColourSet const* colours, int flags, float* metric );
+    ClusterFit ( ColourSet const* colours, int flags, float* metric );
 
 private:
-    bool ConstructOrdering( Vec3 const& axis, int iteration );
+    bool ConstructOrdering ( Vec3 const& axis, int iteration );
 
-    virtual void Compress3( void* block );
-    virtual void Compress4( void* block );
+    virtual void Compress3 ( void* block );
+    virtual void Compress4 ( void* block );
 
     enum { kMaxIterations = 8 };
 

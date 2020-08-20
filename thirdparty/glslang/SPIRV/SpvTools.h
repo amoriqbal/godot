@@ -49,11 +49,12 @@
 #include "glslang/MachineIndependent/localintermediate.h"
 #include "Logger.h"
 
-namespace glslang {
+namespace glslang
+{
 
 struct SpvOptions {
-    SpvOptions() : generateDebugInfo(false), disableOptimizer(true),
-        optimizeSize(false), disassemble(false), validate(false) { }
+    SpvOptions() : generateDebugInfo ( false ), disableOptimizer ( true ),
+        optimizeSize ( false ), disassemble ( false ), validate ( false ) { }
     bool generateDebugInfo;
     bool disableOptimizer;
     bool optimizeSize;
@@ -64,16 +65,16 @@ struct SpvOptions {
 #ifdef ENABLE_OPT
 
 // Use the SPIRV-Tools disassembler to print SPIR-V.
-void SpirvToolsDisassemble(std::ostream& out, const std::vector<unsigned int>& spirv);
+void SpirvToolsDisassemble ( std::ostream& out, const std::vector<unsigned int>& spirv );
 
 // Apply the SPIRV-Tools validator to generated SPIR-V.
-void SpirvToolsValidate(const glslang::TIntermediate& intermediate, std::vector<unsigned int>& spirv,
-                        spv::SpvBuildLogger*, bool prelegalization);
+void SpirvToolsValidate ( const glslang::TIntermediate& intermediate, std::vector<unsigned int>& spirv,
+                          spv::SpvBuildLogger*, bool prelegalization );
 
 // Apply the SPIRV-Tools optimizer to generated SPIR-V, for the purpose of
 // legalizing HLSL SPIR-V.
-void SpirvToolsLegalize(const glslang::TIntermediate& intermediate, std::vector<unsigned int>& spirv,
-                        spv::SpvBuildLogger*, const SpvOptions*);
+void SpirvToolsLegalize ( const glslang::TIntermediate& intermediate, std::vector<unsigned int>& spirv,
+                          spv::SpvBuildLogger*, const SpvOptions* );
 
 #endif
 

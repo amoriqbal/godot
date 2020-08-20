@@ -38,7 +38,8 @@
 #ifndef _BASICTYPES_INCLUDED_
 #define _BASICTYPES_INCLUDED_
 
-namespace glslang {
+namespace glslang
+{
 
 //
 // Basic type.  Arrays, vectors, sampler details, etc., are orthogonal to this.
@@ -299,194 +300,385 @@ enum TPrecisionQualifier {
 };
 
 #ifdef GLSLANG_WEB
-__inline const char* GetStorageQualifierString(TStorageQualifier q) { return ""; }
-__inline const char* GetPrecisionQualifierString(TPrecisionQualifier p) { return ""; }
+__inline const char* GetStorageQualifierString ( TStorageQualifier q )
+{
+    return "";
+}
+__inline const char* GetPrecisionQualifierString ( TPrecisionQualifier p )
+{
+    return "";
+}
 #else
 // These will show up in error messages
-__inline const char* GetStorageQualifierString(TStorageQualifier q)
+__inline const char* GetStorageQualifierString ( TStorageQualifier q )
 {
-    switch (q) {
-    case EvqTemporary:      return "temp";           break;
-    case EvqGlobal:         return "global";         break;
-    case EvqConst:          return "const";          break;
-    case EvqConstReadOnly:  return "const (read only)"; break;
-    case EvqVaryingIn:      return "in";             break;
-    case EvqVaryingOut:     return "out";            break;
-    case EvqUniform:        return "uniform";        break;
-    case EvqBuffer:         return "buffer";         break;
-    case EvqShared:         return "shared";         break;
-    case EvqIn:             return "in";             break;
-    case EvqOut:            return "out";            break;
-    case EvqInOut:          return "inout";          break;
-    case EvqVertexId:       return "gl_VertexId";    break;
-    case EvqInstanceId:     return "gl_InstanceId";  break;
-    case EvqPosition:       return "gl_Position";    break;
-    case EvqPointSize:      return "gl_PointSize";   break;
-    case EvqClipVertex:     return "gl_ClipVertex";  break;
-    case EvqFace:           return "gl_FrontFacing"; break;
-    case EvqFragCoord:      return "gl_FragCoord";   break;
-    case EvqPointCoord:     return "gl_PointCoord";  break;
-    case EvqFragColor:      return "fragColor";      break;
-    case EvqFragDepth:      return "gl_FragDepth";   break;
-    case EvqPayloadNV:        return "rayPayloadNV";     break;
-    case EvqPayloadInNV:      return "rayPayloadInNV";   break;
-    case EvqHitAttrNV:        return "hitAttributeNV";   break;
-    case EvqCallableDataNV:   return "callableDataNV";   break;
-    case EvqCallableDataInNV: return "callableDataInNV"; break;
-    default:                return "unknown qualifier";
+    switch ( q ) {
+    case EvqTemporary:
+        return "temp";
+        break;
+    case EvqGlobal:
+        return "global";
+        break;
+    case EvqConst:
+        return "const";
+        break;
+    case EvqConstReadOnly:
+        return "const (read only)";
+        break;
+    case EvqVaryingIn:
+        return "in";
+        break;
+    case EvqVaryingOut:
+        return "out";
+        break;
+    case EvqUniform:
+        return "uniform";
+        break;
+    case EvqBuffer:
+        return "buffer";
+        break;
+    case EvqShared:
+        return "shared";
+        break;
+    case EvqIn:
+        return "in";
+        break;
+    case EvqOut:
+        return "out";
+        break;
+    case EvqInOut:
+        return "inout";
+        break;
+    case EvqVertexId:
+        return "gl_VertexId";
+        break;
+    case EvqInstanceId:
+        return "gl_InstanceId";
+        break;
+    case EvqPosition:
+        return "gl_Position";
+        break;
+    case EvqPointSize:
+        return "gl_PointSize";
+        break;
+    case EvqClipVertex:
+        return "gl_ClipVertex";
+        break;
+    case EvqFace:
+        return "gl_FrontFacing";
+        break;
+    case EvqFragCoord:
+        return "gl_FragCoord";
+        break;
+    case EvqPointCoord:
+        return "gl_PointCoord";
+        break;
+    case EvqFragColor:
+        return "fragColor";
+        break;
+    case EvqFragDepth:
+        return "gl_FragDepth";
+        break;
+    case EvqPayloadNV:
+        return "rayPayloadNV";
+        break;
+    case EvqPayloadInNV:
+        return "rayPayloadInNV";
+        break;
+    case EvqHitAttrNV:
+        return "hitAttributeNV";
+        break;
+    case EvqCallableDataNV:
+        return "callableDataNV";
+        break;
+    case EvqCallableDataInNV:
+        return "callableDataInNV";
+        break;
+    default:
+        return "unknown qualifier";
     }
 }
 
-__inline const char* GetBuiltInVariableString(TBuiltInVariable v)
+__inline const char* GetBuiltInVariableString ( TBuiltInVariable v )
 {
-    switch (v) {
-    case EbvNone:                 return "";
-    case EbvNumWorkGroups:        return "NumWorkGroups";
-    case EbvWorkGroupSize:        return "WorkGroupSize";
-    case EbvWorkGroupId:          return "WorkGroupID";
-    case EbvLocalInvocationId:    return "LocalInvocationID";
-    case EbvGlobalInvocationId:   return "GlobalInvocationID";
-    case EbvLocalInvocationIndex: return "LocalInvocationIndex";
-    case EbvNumSubgroups:         return "NumSubgroups";
-    case EbvSubgroupID:           return "SubgroupID";
-    case EbvSubGroupSize:         return "SubGroupSize";
-    case EbvSubGroupInvocation:   return "SubGroupInvocation";
-    case EbvSubGroupEqMask:       return "SubGroupEqMask";
-    case EbvSubGroupGeMask:       return "SubGroupGeMask";
-    case EbvSubGroupGtMask:       return "SubGroupGtMask";
-    case EbvSubGroupLeMask:       return "SubGroupLeMask";
-    case EbvSubGroupLtMask:       return "SubGroupLtMask";
-    case EbvSubgroupSize2:        return "SubgroupSize";
-    case EbvSubgroupInvocation2:  return "SubgroupInvocationID";
-    case EbvSubgroupEqMask2:      return "SubgroupEqMask";
-    case EbvSubgroupGeMask2:      return "SubgroupGeMask";
-    case EbvSubgroupGtMask2:      return "SubgroupGtMask";
-    case EbvSubgroupLeMask2:      return "SubgroupLeMask";
-    case EbvSubgroupLtMask2:      return "SubgroupLtMask";
-    case EbvVertexId:             return "VertexId";
-    case EbvInstanceId:           return "InstanceId";
-    case EbvVertexIndex:          return "VertexIndex";
-    case EbvInstanceIndex:        return "InstanceIndex";
-    case EbvBaseVertex:           return "BaseVertex";
-    case EbvBaseInstance:         return "BaseInstance";
-    case EbvDrawId:               return "DrawId";
-    case EbvPosition:             return "Position";
-    case EbvPointSize:            return "PointSize";
-    case EbvClipVertex:           return "ClipVertex";
-    case EbvClipDistance:         return "ClipDistance";
-    case EbvCullDistance:         return "CullDistance";
-    case EbvNormal:               return "Normal";
-    case EbvVertex:               return "Vertex";
-    case EbvMultiTexCoord0:       return "MultiTexCoord0";
-    case EbvMultiTexCoord1:       return "MultiTexCoord1";
-    case EbvMultiTexCoord2:       return "MultiTexCoord2";
-    case EbvMultiTexCoord3:       return "MultiTexCoord3";
-    case EbvMultiTexCoord4:       return "MultiTexCoord4";
-    case EbvMultiTexCoord5:       return "MultiTexCoord5";
-    case EbvMultiTexCoord6:       return "MultiTexCoord6";
-    case EbvMultiTexCoord7:       return "MultiTexCoord7";
-    case EbvFrontColor:           return "FrontColor";
-    case EbvBackColor:            return "BackColor";
-    case EbvFrontSecondaryColor:  return "FrontSecondaryColor";
-    case EbvBackSecondaryColor:   return "BackSecondaryColor";
-    case EbvTexCoord:             return "TexCoord";
-    case EbvFogFragCoord:         return "FogFragCoord";
-    case EbvInvocationId:         return "InvocationID";
-    case EbvPrimitiveId:          return "PrimitiveID";
-    case EbvLayer:                return "Layer";
-    case EbvViewportIndex:        return "ViewportIndex";
-    case EbvPatchVertices:        return "PatchVertices";
-    case EbvTessLevelOuter:       return "TessLevelOuter";
-    case EbvTessLevelInner:       return "TessLevelInner";
-    case EbvBoundingBox:          return "BoundingBox";
-    case EbvTessCoord:            return "TessCoord";
-    case EbvColor:                return "Color";
-    case EbvSecondaryColor:       return "SecondaryColor";
-    case EbvFace:                 return "Face";
-    case EbvFragCoord:            return "FragCoord";
-    case EbvPointCoord:           return "PointCoord";
-    case EbvFragColor:            return "FragColor";
-    case EbvFragData:             return "FragData";
-    case EbvFragDepth:            return "FragDepth";
-    case EbvFragStencilRef:       return "FragStencilRef";
-    case EbvSampleId:             return "SampleId";
-    case EbvSamplePosition:       return "SamplePosition";
-    case EbvSampleMask:           return "SampleMaskIn";
-    case EbvHelperInvocation:     return "HelperInvocation";
+    switch ( v ) {
+    case EbvNone:
+        return "";
+    case EbvNumWorkGroups:
+        return "NumWorkGroups";
+    case EbvWorkGroupSize:
+        return "WorkGroupSize";
+    case EbvWorkGroupId:
+        return "WorkGroupID";
+    case EbvLocalInvocationId:
+        return "LocalInvocationID";
+    case EbvGlobalInvocationId:
+        return "GlobalInvocationID";
+    case EbvLocalInvocationIndex:
+        return "LocalInvocationIndex";
+    case EbvNumSubgroups:
+        return "NumSubgroups";
+    case EbvSubgroupID:
+        return "SubgroupID";
+    case EbvSubGroupSize:
+        return "SubGroupSize";
+    case EbvSubGroupInvocation:
+        return "SubGroupInvocation";
+    case EbvSubGroupEqMask:
+        return "SubGroupEqMask";
+    case EbvSubGroupGeMask:
+        return "SubGroupGeMask";
+    case EbvSubGroupGtMask:
+        return "SubGroupGtMask";
+    case EbvSubGroupLeMask:
+        return "SubGroupLeMask";
+    case EbvSubGroupLtMask:
+        return "SubGroupLtMask";
+    case EbvSubgroupSize2:
+        return "SubgroupSize";
+    case EbvSubgroupInvocation2:
+        return "SubgroupInvocationID";
+    case EbvSubgroupEqMask2:
+        return "SubgroupEqMask";
+    case EbvSubgroupGeMask2:
+        return "SubgroupGeMask";
+    case EbvSubgroupGtMask2:
+        return "SubgroupGtMask";
+    case EbvSubgroupLeMask2:
+        return "SubgroupLeMask";
+    case EbvSubgroupLtMask2:
+        return "SubgroupLtMask";
+    case EbvVertexId:
+        return "VertexId";
+    case EbvInstanceId:
+        return "InstanceId";
+    case EbvVertexIndex:
+        return "VertexIndex";
+    case EbvInstanceIndex:
+        return "InstanceIndex";
+    case EbvBaseVertex:
+        return "BaseVertex";
+    case EbvBaseInstance:
+        return "BaseInstance";
+    case EbvDrawId:
+        return "DrawId";
+    case EbvPosition:
+        return "Position";
+    case EbvPointSize:
+        return "PointSize";
+    case EbvClipVertex:
+        return "ClipVertex";
+    case EbvClipDistance:
+        return "ClipDistance";
+    case EbvCullDistance:
+        return "CullDistance";
+    case EbvNormal:
+        return "Normal";
+    case EbvVertex:
+        return "Vertex";
+    case EbvMultiTexCoord0:
+        return "MultiTexCoord0";
+    case EbvMultiTexCoord1:
+        return "MultiTexCoord1";
+    case EbvMultiTexCoord2:
+        return "MultiTexCoord2";
+    case EbvMultiTexCoord3:
+        return "MultiTexCoord3";
+    case EbvMultiTexCoord4:
+        return "MultiTexCoord4";
+    case EbvMultiTexCoord5:
+        return "MultiTexCoord5";
+    case EbvMultiTexCoord6:
+        return "MultiTexCoord6";
+    case EbvMultiTexCoord7:
+        return "MultiTexCoord7";
+    case EbvFrontColor:
+        return "FrontColor";
+    case EbvBackColor:
+        return "BackColor";
+    case EbvFrontSecondaryColor:
+        return "FrontSecondaryColor";
+    case EbvBackSecondaryColor:
+        return "BackSecondaryColor";
+    case EbvTexCoord:
+        return "TexCoord";
+    case EbvFogFragCoord:
+        return "FogFragCoord";
+    case EbvInvocationId:
+        return "InvocationID";
+    case EbvPrimitiveId:
+        return "PrimitiveID";
+    case EbvLayer:
+        return "Layer";
+    case EbvViewportIndex:
+        return "ViewportIndex";
+    case EbvPatchVertices:
+        return "PatchVertices";
+    case EbvTessLevelOuter:
+        return "TessLevelOuter";
+    case EbvTessLevelInner:
+        return "TessLevelInner";
+    case EbvBoundingBox:
+        return "BoundingBox";
+    case EbvTessCoord:
+        return "TessCoord";
+    case EbvColor:
+        return "Color";
+    case EbvSecondaryColor:
+        return "SecondaryColor";
+    case EbvFace:
+        return "Face";
+    case EbvFragCoord:
+        return "FragCoord";
+    case EbvPointCoord:
+        return "PointCoord";
+    case EbvFragColor:
+        return "FragColor";
+    case EbvFragData:
+        return "FragData";
+    case EbvFragDepth:
+        return "FragDepth";
+    case EbvFragStencilRef:
+        return "FragStencilRef";
+    case EbvSampleId:
+        return "SampleId";
+    case EbvSamplePosition:
+        return "SamplePosition";
+    case EbvSampleMask:
+        return "SampleMaskIn";
+    case EbvHelperInvocation:
+        return "HelperInvocation";
 
-    case EbvBaryCoordNoPersp:           return "BaryCoordNoPersp";
-    case EbvBaryCoordNoPerspCentroid:   return "BaryCoordNoPerspCentroid";
-    case EbvBaryCoordNoPerspSample:     return "BaryCoordNoPerspSample";
-    case EbvBaryCoordSmooth:            return "BaryCoordSmooth";
-    case EbvBaryCoordSmoothCentroid:    return "BaryCoordSmoothCentroid";
-    case EbvBaryCoordSmoothSample:      return "BaryCoordSmoothSample";
-    case EbvBaryCoordPullModel:         return "BaryCoordPullModel";
+    case EbvBaryCoordNoPersp:
+        return "BaryCoordNoPersp";
+    case EbvBaryCoordNoPerspCentroid:
+        return "BaryCoordNoPerspCentroid";
+    case EbvBaryCoordNoPerspSample:
+        return "BaryCoordNoPerspSample";
+    case EbvBaryCoordSmooth:
+        return "BaryCoordSmooth";
+    case EbvBaryCoordSmoothCentroid:
+        return "BaryCoordSmoothCentroid";
+    case EbvBaryCoordSmoothSample:
+        return "BaryCoordSmoothSample";
+    case EbvBaryCoordPullModel:
+        return "BaryCoordPullModel";
 
-    case EbvViewIndex:                  return "ViewIndex";
-    case EbvDeviceIndex:                return "DeviceIndex";
+    case EbvViewIndex:
+        return "ViewIndex";
+    case EbvDeviceIndex:
+        return "DeviceIndex";
 
-    case EbvFragSizeEXT:                return "FragSizeEXT";
-    case EbvFragInvocationCountEXT:     return "FragInvocationCountEXT";
+    case EbvFragSizeEXT:
+        return "FragSizeEXT";
+    case EbvFragInvocationCountEXT:
+        return "FragInvocationCountEXT";
 
-    case EbvViewportMaskNV:             return "ViewportMaskNV";
-    case EbvSecondaryPositionNV:        return "SecondaryPositionNV";
-    case EbvSecondaryViewportMaskNV:    return "SecondaryViewportMaskNV";
-    case EbvPositionPerViewNV:          return "PositionPerViewNV";
-    case EbvViewportMaskPerViewNV:      return "ViewportMaskPerViewNV";
-    case EbvFragFullyCoveredNV:         return "FragFullyCoveredNV";
-    case EbvFragmentSizeNV:             return "FragmentSizeNV";
-    case EbvInvocationsPerPixelNV:      return "InvocationsPerPixelNV";
-    case EbvLaunchIdNV:                 return "LaunchIdNV";
-    case EbvLaunchSizeNV:               return "LaunchSizeNV";
-    case EbvInstanceCustomIndexNV:      return "InstanceCustomIndexNV";
-    case EbvWorldRayOriginNV:           return "WorldRayOriginNV";
-    case EbvWorldRayDirectionNV:        return "WorldRayDirectionNV";
-    case EbvObjectRayOriginNV:          return "ObjectRayOriginNV";
-    case EbvObjectRayDirectionNV:       return "ObjectRayDirectionNV";
-    case EbvRayTminNV:                  return "ObjectRayTminNV";
-    case EbvRayTmaxNV:                  return "ObjectRayTmaxNV";
-    case EbvHitTNV:                     return "HitTNV";
-    case EbvHitKindNV:                  return "HitKindNV";
-    case EbvIncomingRayFlagsNV:         return "IncomingRayFlagsNV";
-    case EbvObjectToWorldNV:            return "ObjectToWorldNV";
-    case EbvWorldToObjectNV:            return "WorldToObjectNV";
+    case EbvViewportMaskNV:
+        return "ViewportMaskNV";
+    case EbvSecondaryPositionNV:
+        return "SecondaryPositionNV";
+    case EbvSecondaryViewportMaskNV:
+        return "SecondaryViewportMaskNV";
+    case EbvPositionPerViewNV:
+        return "PositionPerViewNV";
+    case EbvViewportMaskPerViewNV:
+        return "ViewportMaskPerViewNV";
+    case EbvFragFullyCoveredNV:
+        return "FragFullyCoveredNV";
+    case EbvFragmentSizeNV:
+        return "FragmentSizeNV";
+    case EbvInvocationsPerPixelNV:
+        return "InvocationsPerPixelNV";
+    case EbvLaunchIdNV:
+        return "LaunchIdNV";
+    case EbvLaunchSizeNV:
+        return "LaunchSizeNV";
+    case EbvInstanceCustomIndexNV:
+        return "InstanceCustomIndexNV";
+    case EbvWorldRayOriginNV:
+        return "WorldRayOriginNV";
+    case EbvWorldRayDirectionNV:
+        return "WorldRayDirectionNV";
+    case EbvObjectRayOriginNV:
+        return "ObjectRayOriginNV";
+    case EbvObjectRayDirectionNV:
+        return "ObjectRayDirectionNV";
+    case EbvRayTminNV:
+        return "ObjectRayTminNV";
+    case EbvRayTmaxNV:
+        return "ObjectRayTmaxNV";
+    case EbvHitTNV:
+        return "HitTNV";
+    case EbvHitKindNV:
+        return "HitKindNV";
+    case EbvIncomingRayFlagsNV:
+        return "IncomingRayFlagsNV";
+    case EbvObjectToWorldNV:
+        return "ObjectToWorldNV";
+    case EbvWorldToObjectNV:
+        return "WorldToObjectNV";
 
-    case EbvBaryCoordNV:                return "BaryCoordNV";
-    case EbvBaryCoordNoPerspNV:         return "BaryCoordNoPerspNV";
+    case EbvBaryCoordNV:
+        return "BaryCoordNV";
+    case EbvBaryCoordNoPerspNV:
+        return "BaryCoordNoPerspNV";
 
-    case EbvTaskCountNV:                return "TaskCountNV";
-    case EbvPrimitiveCountNV:           return "PrimitiveCountNV";
-    case EbvPrimitiveIndicesNV:         return "PrimitiveIndicesNV";
-    case EbvClipDistancePerViewNV:      return "ClipDistancePerViewNV";
-    case EbvCullDistancePerViewNV:      return "CullDistancePerViewNV";
-    case EbvLayerPerViewNV:             return "LayerPerViewNV";
-    case EbvMeshViewCountNV:            return "MeshViewCountNV";
-    case EbvMeshViewIndicesNV:          return "MeshViewIndicesNV";
+    case EbvTaskCountNV:
+        return "TaskCountNV";
+    case EbvPrimitiveCountNV:
+        return "PrimitiveCountNV";
+    case EbvPrimitiveIndicesNV:
+        return "PrimitiveIndicesNV";
+    case EbvClipDistancePerViewNV:
+        return "ClipDistancePerViewNV";
+    case EbvCullDistancePerViewNV:
+        return "CullDistancePerViewNV";
+    case EbvLayerPerViewNV:
+        return "LayerPerViewNV";
+    case EbvMeshViewCountNV:
+        return "MeshViewCountNV";
+    case EbvMeshViewIndicesNV:
+        return "MeshViewIndicesNV";
 
-    case EbvWarpsPerSM:                 return "WarpsPerSMNV";
-    case EbvSMCount:                    return "SMCountNV";
-    case EbvWarpID:                     return "WarpIDNV";
-    case EbvSMID:                       return "SMIDNV";
+    case EbvWarpsPerSM:
+        return "WarpsPerSMNV";
+    case EbvSMCount:
+        return "SMCountNV";
+    case EbvWarpID:
+        return "WarpIDNV";
+    case EbvSMID:
+        return "SMIDNV";
 
-    default:                      return "unknown built-in variable";
+    default:
+        return "unknown built-in variable";
     }
 }
 
-__inline const char* GetPrecisionQualifierString(TPrecisionQualifier p)
+__inline const char* GetPrecisionQualifierString ( TPrecisionQualifier p )
 {
-    switch (p) {
-    case EpqNone:   return "";        break;
-    case EpqLow:    return "lowp";    break;
-    case EpqMedium: return "mediump"; break;
-    case EpqHigh:   return "highp";   break;
-    default:        return "unknown precision qualifier";
+    switch ( p ) {
+    case EpqNone:
+        return "";
+        break;
+    case EpqLow:
+        return "lowp";
+        break;
+    case EpqMedium:
+        return "mediump";
+        break;
+    case EpqHigh:
+        return "highp";
+        break;
+    default:
+        return "unknown precision qualifier";
     }
 }
 #endif
 
-__inline bool isTypeSignedInt(TBasicType type)
+__inline bool isTypeSignedInt ( TBasicType type )
 {
-    switch (type) {
+    switch ( type ) {
     case EbtInt8:
     case EbtInt16:
     case EbtInt:
@@ -497,9 +689,9 @@ __inline bool isTypeSignedInt(TBasicType type)
     }
 }
 
-__inline bool isTypeUnsignedInt(TBasicType type)
+__inline bool isTypeUnsignedInt ( TBasicType type )
 {
-    switch (type) {
+    switch ( type ) {
     case EbtUint8:
     case EbtUint16:
     case EbtUint:
@@ -510,14 +702,14 @@ __inline bool isTypeUnsignedInt(TBasicType type)
     }
 }
 
-__inline bool isTypeInt(TBasicType type)
+__inline bool isTypeInt ( TBasicType type )
 {
-    return isTypeSignedInt(type) || isTypeUnsignedInt(type);
+    return isTypeSignedInt ( type ) || isTypeUnsignedInt ( type );
 }
 
-__inline bool isTypeFloat(TBasicType type)
+__inline bool isTypeFloat ( TBasicType type )
 {
-    switch (type) {
+    switch ( type ) {
     case EbtFloat:
     case EbtDouble:
     case EbtFloat16:
@@ -527,10 +719,10 @@ __inline bool isTypeFloat(TBasicType type)
     }
 }
 
-__inline int getTypeRank(TBasicType type)
+__inline int getTypeRank ( TBasicType type )
 {
     int res = -1;
-    switch(type) {
+    switch ( type ) {
     case EbtInt8:
     case EbtUint8:
         res = 0;
@@ -548,7 +740,7 @@ __inline int getTypeRank(TBasicType type)
         res = 3;
         break;
     default:
-        assert(false);
+        assert ( false );
         break;
     }
     return res;

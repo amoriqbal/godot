@@ -32,19 +32,20 @@
 
 @interface JoypadIPhoneObserver : NSObject
 
-- (void)startObserving;
-- (void)startProcessing;
-- (void)finishObserving;
+- ( void ) startObserving;
+- ( void ) startProcessing;
+- ( void ) finishObserving;
 
 @end
 
-class JoypadIPhone {
+class JoypadIPhone
+{
 private:
-	JoypadIPhoneObserver *observer;
+    JoypadIPhoneObserver *observer;
 
 public:
-	JoypadIPhone();
-	~JoypadIPhone();
+    JoypadIPhone();
+    ~JoypadIPhone();
 
-	void start_processing();
+    void start_processing();
 };

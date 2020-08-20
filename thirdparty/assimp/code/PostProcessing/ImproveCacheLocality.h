@@ -72,15 +72,15 @@ public:
 
     // -------------------------------------------------------------------
     // Check whether the pp step is active
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
     // Executes the pp step on a given scene
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
     // -------------------------------------------------------------------
     // Configures the pp step
-    void SetupProperties(const Importer* pImp);
+    void SetupProperties ( const Importer* pImp );
 
 protected:
     // -------------------------------------------------------------------
@@ -88,7 +88,7 @@ protected:
      * @param pMesh The mesh to process.
      * @param meshNum Index of the mesh to process
      */
-    ai_real ProcessMesh( aiMesh* pMesh, unsigned int meshNum);
+    ai_real ProcessMesh ( aiMesh* pMesh, unsigned int meshNum );
 
 private:
     //! Configuration parameter: specifies the size of the cache to

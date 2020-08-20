@@ -20,33 +20,31 @@
 #include <mutex>
 #include <condition_variable>
 
-namespace oidn {
+namespace oidn
+{
 
-  class Barrier
-  {
-  private:
+class Barrier
+{
+private:
     std::mutex m;
     std::condition_variable cv;
     volatile int count;
 
-  public:
-    Barrier(int count) : count(count) {}
+public:
+    Barrier ( int count ) : count ( count ) {}
 
     void wait()
     {
-      std::unique_lock<std::mutex> lk(m);
-      count--;
+        std::unique_lock<std::mutex> lk ( m );
+        count--;
 
-      if (count == 0)
-      {
-        lk.unlock();
-        cv.notify_all();
-      }
-      else
-      {
-        cv.wait(lk, [&]{ return count == 0; });
-      }
+        if ( count == 0 ) {
+            lk.unlock();
+            cv.notify_all();
+        } else {
+            cv.wait ( lk, [&] { return count == 0; } );
+        }
     }
-  };
+};
 
 } // namespace oidn

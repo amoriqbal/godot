@@ -41,262 +41,311 @@
 
 #include <stdarg.h>
 
-class OS {
-	static OS *singleton;
-	static uint64_t target_ticks;
-	String _execpath;
-	List<String> _cmdline;
-	bool _keep_screen_on = true; // set default value to true, because this had been true before godot 2.0.
-	bool low_processor_usage_mode = false;
-	int low_processor_usage_mode_sleep_usec = 10000;
-	bool _verbose_stdout = false;
-	bool _debug_stdout = false;
-	String _local_clipboard;
-	uint64_t _msec_splash;
-	bool _no_window = false;
-	int _exit_code = 0;
-	int _orientation;
-	bool _allow_hidpi = false;
-	bool _allow_layered = false;
-	bool _use_vsync;
-	bool _vsync_via_compositor;
+class OS
+{
+    static OS *singleton;
+    static uint64_t target_ticks;
+    String _execpath;
+    List<String> _cmdline;
+    bool _keep_screen_on = true; // set default value to true, because this had been true before godot 2.0.
+    bool low_processor_usage_mode = false;
+    int low_processor_usage_mode_sleep_usec = 10000;
+    bool _verbose_stdout = false;
+    bool _debug_stdout = false;
+    String _local_clipboard;
+    uint64_t _msec_splash;
+    bool _no_window = false;
+    int _exit_code = 0;
+    int _orientation;
+    bool _allow_hidpi = false;
+    bool _allow_layered = false;
+    bool _use_vsync;
+    bool _vsync_via_compositor;
 
-	char *last_error;
+    char *last_error;
 
-	void *_stack_bottom;
+    void *_stack_bottom;
 
-	CompositeLogger *_logger = nullptr;
+    CompositeLogger *_logger = nullptr;
 
-	bool restart_on_exit = false;
-	List<String> restart_commandline;
-
-protected:
-	void _set_logger(CompositeLogger *p_logger);
-
-public:
-	typedef void (*ImeCallback)(void *p_inp, String p_text, Point2 p_selection);
-	typedef bool (*HasServerFeatureCallback)(const String &p_feature);
-
-	enum RenderThreadMode {
-
-		RENDER_THREAD_UNSAFE,
-		RENDER_THREAD_SAFE,
-		RENDER_SEPARATE_THREAD
-	};
+    bool restart_on_exit = false;
+    List<String> restart_commandline;
 
 protected:
-	friend class Main;
-
-	HasServerFeatureCallback has_server_feature_callback = nullptr;
-	RenderThreadMode _render_thread_mode = RENDER_THREAD_SAFE;
-
-	// functions used by main to initialize/deinitialize the OS
-	void add_logger(Logger *p_logger);
-
-	virtual void initialize() = 0;
-	virtual void initialize_joypads() = 0;
-
-	virtual void set_main_loop(MainLoop *p_main_loop) = 0;
-	virtual void delete_main_loop() = 0;
-
-	virtual void finalize() = 0;
-	virtual void finalize_core() = 0;
-
-	virtual void set_cmdline(const char *p_execpath, const List<String> &p_args);
-
-	virtual bool _check_internal_feature_support(const String &p_feature) = 0;
+    void _set_logger ( CompositeLogger *p_logger );
 
 public:
-	typedef int64_t ProcessID;
+    typedef void ( *ImeCallback ) ( void *p_inp, String p_text, Point2 p_selection );
+    typedef bool ( *HasServerFeatureCallback ) ( const String &p_feature );
 
-	static OS *get_singleton();
+    enum RenderThreadMode {
 
-	void print_error(const char *p_function, const char *p_file, int p_line, const char *p_code, const char *p_rationale, Logger::ErrorType p_type = Logger::ERR_ERROR);
-	void print(const char *p_format, ...) _PRINTF_FORMAT_ATTRIBUTE_2_3;
-	void printerr(const char *p_format, ...) _PRINTF_FORMAT_ATTRIBUTE_2_3;
+        RENDER_THREAD_UNSAFE,
+        RENDER_THREAD_SAFE,
+        RENDER_SEPARATE_THREAD
+    };
 
-	virtual String get_stdin_string(bool p_block = true) = 0;
+protected:
+    friend class Main;
 
-	virtual PackedStringArray get_connected_midi_inputs();
-	virtual void open_midi_inputs();
-	virtual void close_midi_inputs();
+    HasServerFeatureCallback has_server_feature_callback = nullptr;
+    RenderThreadMode _render_thread_mode = RENDER_THREAD_SAFE;
 
-	virtual Error open_dynamic_library(const String p_path, void *&p_library_handle, bool p_also_set_library_path = false) { return ERR_UNAVAILABLE; }
-	virtual Error close_dynamic_library(void *p_library_handle) { return ERR_UNAVAILABLE; }
-	virtual Error get_dynamic_library_symbol_handle(void *p_library_handle, const String p_name, void *&p_symbol_handle, bool p_optional = false) { return ERR_UNAVAILABLE; }
+    // functions used by main to initialize/deinitialize the OS
+    void add_logger ( Logger *p_logger );
 
-	virtual void set_low_processor_usage_mode(bool p_enabled);
-	virtual bool is_in_low_processor_usage_mode() const;
-	virtual void set_low_processor_usage_mode_sleep_usec(int p_usec);
-	virtual int get_low_processor_usage_mode_sleep_usec() const;
+    virtual void initialize() = 0;
+    virtual void initialize_joypads() = 0;
 
-	virtual String get_executable_path() const;
-	virtual Error execute(const String &p_path, const List<String> &p_arguments, bool p_blocking = true, ProcessID *r_child_id = nullptr, String *r_pipe = nullptr, int *r_exitcode = nullptr, bool read_stderr = false, Mutex *p_pipe_mutex = nullptr) = 0;
-	virtual Error kill(const ProcessID &p_pid) = 0;
-	virtual int get_process_id() const;
-	virtual void vibrate_handheld(int p_duration_ms = 500);
+    virtual void set_main_loop ( MainLoop *p_main_loop ) = 0;
+    virtual void delete_main_loop() = 0;
 
-	virtual Error shell_open(String p_uri);
-	virtual Error set_cwd(const String &p_cwd);
+    virtual void finalize() = 0;
+    virtual void finalize_core() = 0;
 
-	virtual bool has_environment(const String &p_var) const = 0;
-	virtual String get_environment(const String &p_var) const = 0;
-	virtual bool set_environment(const String &p_var, const String &p_value) const = 0;
+    virtual void set_cmdline ( const char *p_execpath, const List<String> &p_args );
 
-	virtual String get_name() const = 0;
-	virtual List<String> get_cmdline_args() const { return _cmdline; }
-	virtual String get_model_name() const;
+    virtual bool _check_internal_feature_support ( const String &p_feature ) = 0;
 
-	bool is_layered_allowed() const { return _allow_layered; }
-	bool is_hidpi_allowed() const { return _allow_hidpi; }
+public:
+    typedef int64_t ProcessID;
 
-	virtual int get_tablet_driver_count() const { return 0; };
-	virtual String get_tablet_driver_name(int p_driver) const { return ""; };
-	virtual String get_current_tablet_driver() const { return ""; };
-	virtual void set_current_tablet_driver(const String &p_driver){};
+    static OS *get_singleton();
 
-	void ensure_user_data_dir();
+    void print_error ( const char *p_function, const char *p_file, int p_line, const char *p_code, const char *p_rationale, Logger::ErrorType p_type = Logger::ERR_ERROR );
+    void print ( const char *p_format, ... ) _PRINTF_FORMAT_ATTRIBUTE_2_3;
+    void printerr ( const char *p_format, ... ) _PRINTF_FORMAT_ATTRIBUTE_2_3;
 
-	virtual MainLoop *get_main_loop() const = 0;
+    virtual String get_stdin_string ( bool p_block = true ) = 0;
 
-	virtual void yield();
+    virtual PackedStringArray get_connected_midi_inputs();
+    virtual void open_midi_inputs();
+    virtual void close_midi_inputs();
 
-	enum Weekday {
-		DAY_SUNDAY,
-		DAY_MONDAY,
-		DAY_TUESDAY,
-		DAY_WEDNESDAY,
-		DAY_THURSDAY,
-		DAY_FRIDAY,
-		DAY_SATURDAY
-	};
+    virtual Error open_dynamic_library ( const String p_path, void *&p_library_handle, bool p_also_set_library_path = false )
+    {
+        return ERR_UNAVAILABLE;
+    }
+    virtual Error close_dynamic_library ( void *p_library_handle )
+    {
+        return ERR_UNAVAILABLE;
+    }
+    virtual Error get_dynamic_library_symbol_handle ( void *p_library_handle, const String p_name, void *&p_symbol_handle, bool p_optional = false )
+    {
+        return ERR_UNAVAILABLE;
+    }
 
-	enum Month {
-		/// Start at 1 to follow Windows SYSTEMTIME structure
-		/// https://msdn.microsoft.com/en-us/library/windows/desktop/ms724950(v=vs.85).aspx
-		MONTH_JANUARY = 1,
-		MONTH_FEBRUARY,
-		MONTH_MARCH,
-		MONTH_APRIL,
-		MONTH_MAY,
-		MONTH_JUNE,
-		MONTH_JULY,
-		MONTH_AUGUST,
-		MONTH_SEPTEMBER,
-		MONTH_OCTOBER,
-		MONTH_NOVEMBER,
-		MONTH_DECEMBER
-	};
+    virtual void set_low_processor_usage_mode ( bool p_enabled );
+    virtual bool is_in_low_processor_usage_mode() const;
+    virtual void set_low_processor_usage_mode_sleep_usec ( int p_usec );
+    virtual int get_low_processor_usage_mode_sleep_usec() const;
 
-	struct Date {
-		int year;
-		Month month;
-		int day;
-		Weekday weekday;
-		bool dst;
-	};
+    virtual String get_executable_path() const;
+    virtual Error execute ( const String &p_path, const List<String> &p_arguments, bool p_blocking = true, ProcessID *r_child_id = nullptr, String *r_pipe = nullptr, int *r_exitcode = nullptr, bool read_stderr = false, Mutex *p_pipe_mutex = nullptr ) = 0;
+    virtual Error kill ( const ProcessID &p_pid ) = 0;
+    virtual int get_process_id() const;
+    virtual void vibrate_handheld ( int p_duration_ms = 500 );
 
-	struct Time {
-		int hour;
-		int min;
-		int sec;
-	};
+    virtual Error shell_open ( String p_uri );
+    virtual Error set_cwd ( const String &p_cwd );
 
-	struct TimeZoneInfo {
-		int bias;
-		String name;
-	};
+    virtual bool has_environment ( const String &p_var ) const = 0;
+    virtual String get_environment ( const String &p_var ) const = 0;
+    virtual bool set_environment ( const String &p_var, const String &p_value ) const = 0;
 
-	virtual Date get_date(bool local = false) const = 0;
-	virtual Time get_time(bool local = false) const = 0;
-	virtual TimeZoneInfo get_time_zone_info() const = 0;
-	virtual String get_iso_date_time(bool local = false) const;
-	virtual double get_unix_time() const;
+    virtual String get_name() const = 0;
+    virtual List<String> get_cmdline_args() const
+    {
+        return _cmdline;
+    }
+    virtual String get_model_name() const;
 
-	virtual void delay_usec(uint32_t p_usec) const = 0;
-	virtual void add_frame_delay(bool p_can_draw);
+    bool is_layered_allowed() const
+    {
+        return _allow_layered;
+    }
+    bool is_hidpi_allowed() const
+    {
+        return _allow_hidpi;
+    }
 
-	virtual uint64_t get_ticks_usec() const = 0;
-	uint32_t get_ticks_msec() const;
-	uint64_t get_splash_tick_msec() const;
+    virtual int get_tablet_driver_count() const
+    {
+        return 0;
+    };
+    virtual String get_tablet_driver_name ( int p_driver ) const
+    {
+        return "";
+    };
+    virtual String get_current_tablet_driver() const
+    {
+        return "";
+    };
+    virtual void set_current_tablet_driver ( const String &p_driver ) {};
 
-	virtual bool is_userfs_persistent() const { return true; }
+    void ensure_user_data_dir();
 
-	bool is_stdout_verbose() const;
-	bool is_stdout_debug_enabled() const;
+    virtual MainLoop *get_main_loop() const = 0;
 
-	virtual void disable_crash_handler() {}
-	virtual bool is_disable_crash_handler() const { return false; }
-	virtual void initialize_debugging() {}
+    virtual void yield();
 
-	virtual void dump_memory_to_file(const char *p_file);
-	virtual void dump_resources_to_file(const char *p_file);
-	virtual void print_resources_in_use(bool p_short = false);
-	virtual void print_all_resources(String p_to_file = "");
+    enum Weekday {
+        DAY_SUNDAY,
+        DAY_MONDAY,
+        DAY_TUESDAY,
+        DAY_WEDNESDAY,
+        DAY_THURSDAY,
+        DAY_FRIDAY,
+        DAY_SATURDAY
+    };
 
-	virtual uint64_t get_static_memory_usage() const;
-	virtual uint64_t get_static_memory_peak_usage() const;
-	virtual uint64_t get_free_static_memory() const;
+    enum Month {
+        /// Start at 1 to follow Windows SYSTEMTIME structure
+        /// https://msdn.microsoft.com/en-us/library/windows/desktop/ms724950(v=vs.85).aspx
+        MONTH_JANUARY = 1,
+        MONTH_FEBRUARY,
+        MONTH_MARCH,
+        MONTH_APRIL,
+        MONTH_MAY,
+        MONTH_JUNE,
+        MONTH_JULY,
+        MONTH_AUGUST,
+        MONTH_SEPTEMBER,
+        MONTH_OCTOBER,
+        MONTH_NOVEMBER,
+        MONTH_DECEMBER
+    };
 
-	RenderThreadMode get_render_thread_mode() const { return _render_thread_mode; }
+    struct Date {
+        int year;
+        Month month;
+        int day;
+        Weekday weekday;
+        bool dst;
+    };
 
-	virtual String get_locale() const;
+    struct Time {
+        int hour;
+        int min;
+        int sec;
+    };
 
-	String get_safe_dir_name(const String &p_dir_name, bool p_allow_dir_separator = false) const;
-	virtual String get_godot_dir_name() const;
+    struct TimeZoneInfo {
+        int bias;
+        String name;
+    };
 
-	virtual String get_data_path() const;
-	virtual String get_config_path() const;
-	virtual String get_cache_path() const;
-	virtual String get_bundle_resource_dir() const;
+    virtual Date get_date ( bool local = false ) const = 0;
+    virtual Time get_time ( bool local = false ) const = 0;
+    virtual TimeZoneInfo get_time_zone_info() const = 0;
+    virtual String get_iso_date_time ( bool local = false ) const;
+    virtual double get_unix_time() const;
 
-	virtual String get_user_data_dir() const;
-	virtual String get_resource_dir() const;
+    virtual void delay_usec ( uint32_t p_usec ) const = 0;
+    virtual void add_frame_delay ( bool p_can_draw );
 
-	enum SystemDir {
-		SYSTEM_DIR_DESKTOP,
-		SYSTEM_DIR_DCIM,
-		SYSTEM_DIR_DOCUMENTS,
-		SYSTEM_DIR_DOWNLOADS,
-		SYSTEM_DIR_MOVIES,
-		SYSTEM_DIR_MUSIC,
-		SYSTEM_DIR_PICTURES,
-		SYSTEM_DIR_RINGTONES,
-	};
+    virtual uint64_t get_ticks_usec() const = 0;
+    uint32_t get_ticks_msec() const;
+    uint64_t get_splash_tick_msec() const;
 
-	virtual String get_system_dir(SystemDir p_dir) const;
+    virtual bool is_userfs_persistent() const
+    {
+        return true;
+    }
 
-	virtual Error move_to_trash(const String &p_path) { return FAILED; }
+    bool is_stdout_verbose() const;
+    bool is_stdout_debug_enabled() const;
 
-	virtual void set_no_window_mode(bool p_enable);
-	virtual bool is_no_window_mode_enabled() const;
+    virtual void disable_crash_handler() {}
+    virtual bool is_disable_crash_handler() const
+    {
+        return false;
+    }
+    virtual void initialize_debugging() {}
 
-	virtual void debug_break();
+    virtual void dump_memory_to_file ( const char *p_file );
+    virtual void dump_resources_to_file ( const char *p_file );
+    virtual void print_resources_in_use ( bool p_short = false );
+    virtual void print_all_resources ( String p_to_file = "" );
 
-	virtual int get_exit_code() const;
-	virtual void set_exit_code(int p_code);
+    virtual uint64_t get_static_memory_usage() const;
+    virtual uint64_t get_static_memory_peak_usage() const;
+    virtual uint64_t get_free_static_memory() const;
 
-	virtual int get_processor_count() const;
+    RenderThreadMode get_render_thread_mode() const
+    {
+        return _render_thread_mode;
+    }
 
-	virtual String get_unique_id() const;
+    virtual String get_locale() const;
 
-	virtual bool can_use_threads() const;
+    String get_safe_dir_name ( const String &p_dir_name, bool p_allow_dir_separator = false ) const;
+    virtual String get_godot_dir_name() const;
 
-	bool has_feature(const String &p_feature);
+    virtual String get_data_path() const;
+    virtual String get_config_path() const;
+    virtual String get_cache_path() const;
+    virtual String get_bundle_resource_dir() const;
 
-	void set_has_server_feature_callback(HasServerFeatureCallback p_callback);
+    virtual String get_user_data_dir() const;
+    virtual String get_resource_dir() const;
 
-	void set_restart_on_exit(bool p_restart, const List<String> &p_restart_arguments);
-	bool is_restart_on_exit_set() const;
-	List<String> get_restart_on_exit_arguments() const;
+    enum SystemDir {
+        SYSTEM_DIR_DESKTOP,
+        SYSTEM_DIR_DCIM,
+        SYSTEM_DIR_DOCUMENTS,
+        SYSTEM_DIR_DOWNLOADS,
+        SYSTEM_DIR_MOVIES,
+        SYSTEM_DIR_MUSIC,
+        SYSTEM_DIR_PICTURES,
+        SYSTEM_DIR_RINGTONES,
+    };
 
-	virtual bool request_permission(const String &p_name) { return true; }
-	virtual bool request_permissions() { return true; }
-	virtual Vector<String> get_granted_permissions() const { return Vector<String>(); }
+    virtual String get_system_dir ( SystemDir p_dir ) const;
 
-	virtual void process_and_drop_events() {}
-	OS();
-	virtual ~OS();
+    virtual Error move_to_trash ( const String &p_path )
+    {
+        return FAILED;
+    }
+
+    virtual void set_no_window_mode ( bool p_enable );
+    virtual bool is_no_window_mode_enabled() const;
+
+    virtual void debug_break();
+
+    virtual int get_exit_code() const;
+    virtual void set_exit_code ( int p_code );
+
+    virtual int get_processor_count() const;
+
+    virtual String get_unique_id() const;
+
+    virtual bool can_use_threads() const;
+
+    bool has_feature ( const String &p_feature );
+
+    void set_has_server_feature_callback ( HasServerFeatureCallback p_callback );
+
+    void set_restart_on_exit ( bool p_restart, const List<String> &p_restart_arguments );
+    bool is_restart_on_exit_set() const;
+    List<String> get_restart_on_exit_arguments() const;
+
+    virtual bool request_permission ( const String &p_name )
+    {
+        return true;
+    }
+    virtual bool request_permissions()
+    {
+        return true;
+    }
+    virtual Vector<String> get_granted_permissions() const
+    {
+        return Vector<String>();
+    }
+
+    virtual void process_and_drop_events() {}
+    OS();
+    virtual ~OS();
 };
 
 #endif // OS_H

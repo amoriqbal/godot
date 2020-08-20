@@ -48,12 +48,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <assimp/mesh.h>
 
-namespace Assimp {
+namespace Assimp
+{
 
 // ---------------------------------------------------------------------------
 /** The DropFaceNormalsProcess computes face normals for all faces of all meshes
 */
-class ASSIMP_API_WINONLY DropFaceNormalsProcess : public BaseProcess {
+class ASSIMP_API_WINONLY DropFaceNormalsProcess : public BaseProcess
+{
 public:
     DropFaceNormalsProcess();
     ~DropFaceNormalsProcess();
@@ -64,18 +66,18 @@ public:
     *   combination of #aiPostProcessSteps.
     * @return true if the process is present in this flag fields, false if not.
     */
-    bool IsActive( unsigned int pFlags) const;
+    bool IsActive ( unsigned int pFlags ) const;
 
     // -------------------------------------------------------------------
     /** Executes the post processing step on the given imported data.
     * At the moment a process is not supposed to fail.
     * @param pScene The imported data to work at.
     */
-    void Execute( aiScene* pScene);
+    void Execute ( aiScene* pScene );
 
 
 private:
-    bool DropMeshFaceNormals(aiMesh* pcMesh);
+    bool DropMeshFaceNormals ( aiMesh* pcMesh );
 };
 
 } // end of namespace Assimp

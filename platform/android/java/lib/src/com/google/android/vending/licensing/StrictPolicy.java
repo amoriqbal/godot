@@ -36,14 +36,16 @@ import java.util.Map;
  * Access to the application is only allowed if a LICENSED response is.
  * received. All other responses (including RETRY) will deny access.
  */
-public class StrictPolicy implements Policy {
+public class StrictPolicy implements Policy
+{
 
     private static final String TAG = "StrictPolicy";
 
     private int mLastResponse;
     private String mLicensingUrl;
 
-    public StrictPolicy() {
+    public StrictPolicy()
+    {
         // Set default policy. This will force the application to check the policy on launch.
         mLastResponse = Policy.RETRY;
         mLicensingUrl = null;
@@ -58,12 +60,13 @@ public class StrictPolicy implements Policy {
      * @param response the result from validating the server response
      * @param rawData the raw server response data
      */
-    public void processServerResponse(int response, ResponseData rawData) {
+    public void processServerResponse ( int response, ResponseData rawData )
+    {
         mLastResponse = response;
 
-        if (response == Policy.NOT_LICENSED) {
-            Map<String, String> extras = decodeExtras(rawData);
-            mLicensingUrl = extras.get("LU");
+        if ( response == Policy.NOT_LICENSED ) {
+            Map<String, String> extras = decodeExtras ( rawData );
+            mLicensingUrl = extras.get ( "LU" );
         }
     }
 
@@ -73,26 +76,29 @@ public class StrictPolicy implements Policy {
      * This implementation allows access if and only if a LICENSED response
      * was received the last time the server was contacted.
      */
-    public boolean allowAccess() {
-        return (mLastResponse == Policy.LICENSED);
+    public boolean allowAccess()
+    {
+        return ( mLastResponse == Policy.LICENSED );
     }
 
-    public String getLicensingUrl() {
+    public String getLicensingUrl()
+    {
         return mLicensingUrl;
     }
 
-    private Map<String, String> decodeExtras(
-        com.google.android.vending.licensing.ResponseData rawData) {
+    private Map<String, String> decodeExtras (
+        com.google.android.vending.licensing.ResponseData rawData )
+    {
         Map<String, String> results = new HashMap<String, String>();
-        if (rawData == null) {
+        if ( rawData == null ) {
             return results;
         }
 
         try {
-            URI rawExtras = new URI("?" + rawData.extra);
-            URIQueryDecoder.DecodeQuery(rawExtras, results);
-        } catch (URISyntaxException e) {
-            Log.w(TAG, "Invalid syntax error while decoding extras data from server.");
+            URI rawExtras = new URI ( "?" + rawData.extra );
+            URIQueryDecoder.DecodeQuery ( rawExtras, results );
+        } catch ( URISyntaxException e ) {
+            Log.w ( TAG, "Invalid syntax error while decoding extras data from server." );
         }
         return results;
     }

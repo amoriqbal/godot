@@ -212,59 +212,59 @@ typedef struct OggOpusFile       OggOpusFile;
 /**Ogg Opus bitstream information.
    This contains the basic playback parameters for a stream, and corresponds to
     the initial ID header packet of an Ogg Opus stream.*/
-struct OpusHead{
-  /**The Ogg Opus format version, in the range 0...255.
-     The top 4 bits represent a "major" version, and the bottom four bits
-      represent backwards-compatible "minor" revisions.
-     The current specification describes version 1.
-     This library will recognize versions up through 15 as backwards compatible
-      with the current specification.
-     An earlier draft of the specification described a version 0, but the only
-      difference between version 1 and version 0 is that version 0 did
-      not specify the semantics for handling the version field.*/
-  int           version;
-  /**The number of channels, in the range 1...255.*/
-  int           channel_count;
-  /**The number of samples that should be discarded from the beginning of the
-      stream.*/
-  unsigned      pre_skip;
-  /**The sampling rate of the original input.
-     All Opus audio is coded at 48 kHz, and should also be decoded at 48 kHz
-      for playback (unless the target hardware does not support this sampling
-      rate).
-     However, this field may be used to resample the audio back to the original
-      sampling rate, for example, when saving the output to a file.*/
-  opus_uint32   input_sample_rate;
-  /**The gain to apply to the decoded output, in dB, as a Q8 value in the range
-      -32768...32767.
-     The <tt>libopusfile</tt> API will automatically apply this gain to the
-      decoded output before returning it, scaling it by
-      <code>pow(10,output_gain/(20.0*256))</code>.*/
-  int           output_gain;
-  /**The channel mapping family, in the range 0...255.
-     Channel mapping family 0 covers mono or stereo in a single stream.
-     Channel mapping family 1 covers 1 to 8 channels in one or more streams,
-      using the Vorbis speaker assignments.
-     Channel mapping family 255 covers 1 to 255 channels in one or more
-      streams, but without any defined speaker assignment.*/
-  int           mapping_family;
-  /**The number of Opus streams in each Ogg packet, in the range 1...255.*/
-  int           stream_count;
-  /**The number of coupled Opus streams in each Ogg packet, in the range
-      0...127.
-     This must satisfy <code>0 <= coupled_count <= stream_count</code> and
-      <code>coupled_count + stream_count <= 255</code>.
-     The coupled streams appear first, before all uncoupled streams, in an Ogg
-      Opus packet.*/
-  int           coupled_count;
-  /**The mapping from coded stream channels to output channels.
-     Let <code>index=mapping[k]</code> be the value for channel <code>k</code>.
-     If <code>index<2*coupled_count</code>, then it refers to the left channel
-      from stream <code>(index/2)</code> if even, and the right channel from
-      stream <code>(index/2)</code> if odd.
-     Otherwise, it refers to the output of the uncoupled stream
-      <code>(index-coupled_count)</code>.*/
-  unsigned char mapping[OPUS_CHANNEL_COUNT_MAX];
+struct OpusHead {
+    /**The Ogg Opus format version, in the range 0...255.
+       The top 4 bits represent a "major" version, and the bottom four bits
+        represent backwards-compatible "minor" revisions.
+       The current specification describes version 1.
+       This library will recognize versions up through 15 as backwards compatible
+        with the current specification.
+       An earlier draft of the specification described a version 0, but the only
+        difference between version 1 and version 0 is that version 0 did
+        not specify the semantics for handling the version field.*/
+    int           version;
+    /**The number of channels, in the range 1...255.*/
+    int           channel_count;
+    /**The number of samples that should be discarded from the beginning of the
+        stream.*/
+    unsigned      pre_skip;
+    /**The sampling rate of the original input.
+       All Opus audio is coded at 48 kHz, and should also be decoded at 48 kHz
+        for playback (unless the target hardware does not support this sampling
+        rate).
+       However, this field may be used to resample the audio back to the original
+        sampling rate, for example, when saving the output to a file.*/
+    opus_uint32   input_sample_rate;
+    /**The gain to apply to the decoded output, in dB, as a Q8 value in the range
+        -32768...32767.
+       The <tt>libopusfile</tt> API will automatically apply this gain to the
+        decoded output before returning it, scaling it by
+        <code>pow(10,output_gain/(20.0*256))</code>.*/
+    int           output_gain;
+    /**The channel mapping family, in the range 0...255.
+       Channel mapping family 0 covers mono or stereo in a single stream.
+       Channel mapping family 1 covers 1 to 8 channels in one or more streams,
+        using the Vorbis speaker assignments.
+       Channel mapping family 255 covers 1 to 255 channels in one or more
+        streams, but without any defined speaker assignment.*/
+    int           mapping_family;
+    /**The number of Opus streams in each Ogg packet, in the range 1...255.*/
+    int           stream_count;
+    /**The number of coupled Opus streams in each Ogg packet, in the range
+        0...127.
+       This must satisfy <code>0 <= coupled_count <= stream_count</code> and
+        <code>coupled_count + stream_count <= 255</code>.
+       The coupled streams appear first, before all uncoupled streams, in an Ogg
+        Opus packet.*/
+    int           coupled_count;
+    /**The mapping from coded stream channels to output channels.
+       Let <code>index=mapping[k]</code> be the value for channel <code>k</code>.
+       If <code>index<2*coupled_count</code>, then it refers to the left channel
+        from stream <code>(index/2)</code> if even, and the right channel from
+        stream <code>(index/2)</code> if odd.
+       Otherwise, it refers to the output of the uncoupled stream
+        <code>(index-coupled_count)</code>.*/
+    unsigned char mapping[OPUS_CHANNEL_COUNT_MAX];
 };
 
 /**The metadata from an Ogg Opus stream.
@@ -297,16 +297,16 @@ struct OpusHead{
     <code>vorbis_comment</code> pointers, and vice versa.
    It is provided as a separate type to avoid introducing a compile-time
     dependency on the libvorbis headers.*/
-struct OpusTags{
-  /**The array of comment string vectors.*/
-  char **user_comments;
-  /**An array of the corresponding length of each vector, in bytes.*/
-  int   *comment_lengths;
-  /**The total number of comment streams.*/
-  int    comments;
-  /**The null-terminated vendor string.
-     This identifies the software used to encode the stream.*/
-  char  *vendor;
+struct OpusTags {
+    /**The array of comment string vectors.*/
+    char **user_comments;
+    /**An array of the corresponding length of each vector, in bytes.*/
+    int   *comment_lengths;
+    /**The total number of comment streams.*/
+    int    comments;
+    /**The null-terminated vendor string.
+       This identifies the software used to encode the stream.*/
+    char  *vendor;
 };
 
 /**\name Picture tag image formats*/
@@ -327,67 +327,67 @@ struct OpusTags{
 /*@}*/
 
 /**The contents of a METADATA_BLOCK_PICTURE tag.*/
-struct OpusPictureTag{
-  /**The picture type according to the ID3v2 APIC frame:
-     <ol start="0">
-     <li>Other</li>
-     <li>32x32 pixels 'file icon' (PNG only)</li>
-     <li>Other file icon</li>
-     <li>Cover (front)</li>
-     <li>Cover (back)</li>
-     <li>Leaflet page</li>
-     <li>Media (e.g. label side of CD)</li>
-     <li>Lead artist/lead performer/soloist</li>
-     <li>Artist/performer</li>
-     <li>Conductor</li>
-     <li>Band/Orchestra</li>
-     <li>Composer</li>
-     <li>Lyricist/text writer</li>
-     <li>Recording Location</li>
-     <li>During recording</li>
-     <li>During performance</li>
-     <li>Movie/video screen capture</li>
-     <li>A bright colored fish</li>
-     <li>Illustration</li>
-     <li>Band/artist logotype</li>
-     <li>Publisher/Studio logotype</li>
-     </ol>
-     Others are reserved and should not be used.
-     There may only be one each of picture type 1 and 2 in a file.*/
-  opus_int32     type;
-  /**The MIME type of the picture, in printable ASCII characters 0x20-0x7E.
-     The MIME type may also be <code>"-->"</code> to signify that the data part
-      is a URL pointing to the picture instead of the picture data itself.
-     In this case, a terminating NUL is appended to the URL string in #data,
-      but #data_length is set to the length of the string excluding that
-      terminating NUL.*/
-  char          *mime_type;
-  /**The description of the picture, in UTF-8.*/
-  char          *description;
-  /**The width of the picture in pixels.*/
-  opus_uint32    width;
-  /**The height of the picture in pixels.*/
-  opus_uint32    height;
-  /**The color depth of the picture in bits-per-pixel (<em>not</em>
-      bits-per-channel).*/
-  opus_uint32    depth;
-  /**For indexed-color pictures (e.g., GIF), the number of colors used, or 0
-      for non-indexed pictures.*/
-  opus_uint32    colors;
-  /**The length of the picture data in bytes.*/
-  opus_uint32    data_length;
-  /**The binary picture data.*/
-  unsigned char *data;
-  /**The format of the picture data, if known.
-     One of
-     <ul>
-     <li>#OP_PIC_FORMAT_UNKNOWN,</li>
-     <li>#OP_PIC_FORMAT_URL,</li>
-     <li>#OP_PIC_FORMAT_JPEG,</li>
-     <li>#OP_PIC_FORMAT_PNG, or</li>
-     <li>#OP_PIC_FORMAT_GIF.</li>
-     </ul>*/
-  int            format;
+struct OpusPictureTag {
+    /**The picture type according to the ID3v2 APIC frame:
+       <ol start="0">
+       <li>Other</li>
+       <li>32x32 pixels 'file icon' (PNG only)</li>
+       <li>Other file icon</li>
+       <li>Cover (front)</li>
+       <li>Cover (back)</li>
+       <li>Leaflet page</li>
+       <li>Media (e.g. label side of CD)</li>
+       <li>Lead artist/lead performer/soloist</li>
+       <li>Artist/performer</li>
+       <li>Conductor</li>
+       <li>Band/Orchestra</li>
+       <li>Composer</li>
+       <li>Lyricist/text writer</li>
+       <li>Recording Location</li>
+       <li>During recording</li>
+       <li>During performance</li>
+       <li>Movie/video screen capture</li>
+       <li>A bright colored fish</li>
+       <li>Illustration</li>
+       <li>Band/artist logotype</li>
+       <li>Publisher/Studio logotype</li>
+       </ol>
+       Others are reserved and should not be used.
+       There may only be one each of picture type 1 and 2 in a file.*/
+    opus_int32     type;
+    /**The MIME type of the picture, in printable ASCII characters 0x20-0x7E.
+       The MIME type may also be <code>"-->"</code> to signify that the data part
+        is a URL pointing to the picture instead of the picture data itself.
+       In this case, a terminating NUL is appended to the URL string in #data,
+        but #data_length is set to the length of the string excluding that
+        terminating NUL.*/
+    char          *mime_type;
+    /**The description of the picture, in UTF-8.*/
+    char          *description;
+    /**The width of the picture in pixels.*/
+    opus_uint32    width;
+    /**The height of the picture in pixels.*/
+    opus_uint32    height;
+    /**The color depth of the picture in bits-per-pixel (<em>not</em>
+        bits-per-channel).*/
+    opus_uint32    depth;
+    /**For indexed-color pictures (e.g., GIF), the number of colors used, or 0
+        for non-indexed pictures.*/
+    opus_uint32    colors;
+    /**The length of the picture data in bytes.*/
+    opus_uint32    data_length;
+    /**The binary picture data.*/
+    unsigned char *data;
+    /**The format of the picture data, if known.
+       One of
+       <ul>
+       <li>#OP_PIC_FORMAT_UNKNOWN,</li>
+       <li>#OP_PIC_FORMAT_URL,</li>
+       <li>#OP_PIC_FORMAT_JPEG,</li>
+       <li>#OP_PIC_FORMAT_PNG, or</li>
+       <li>#OP_PIC_FORMAT_GIF.</li>
+       </ul>*/
+    int            format;
 };
 
 /**\name Functions for manipulating header data
@@ -424,8 +424,8 @@ struct OpusPictureTag{
                            <li>Too many coupled streams, or</li>
                            <li>An invalid channel mapping index.</li>
                           </ul>*/
-OP_WARN_UNUSED_RESULT int opus_head_parse(OpusHead *_head,
- const unsigned char *_data,size_t _len) OP_ARG_NONNULL(2);
+OP_WARN_UNUSED_RESULT int opus_head_parse ( OpusHead *_head,
+        const unsigned char *_data,size_t _len ) OP_ARG_NONNULL ( 2 );
 
 /**Converts a granule position to a sample offset for a given Ogg Opus stream.
    The sample offset is simply <code>_gp-_head->pre_skip</code>.
@@ -441,8 +441,8 @@ OP_WARN_UNUSED_RESULT int opus_head_parse(OpusHead *_head,
             (counting at a 48 kHz sampling rate), or the special value -1 on
             error (i.e., the granule position was smaller than the pre-skip
             amount).*/
-ogg_int64_t opus_granule_sample(const OpusHead *_head,ogg_int64_t _gp)
- OP_ARG_NONNULL(1);
+ogg_int64_t opus_granule_sample ( const OpusHead *_head,ogg_int64_t _gp )
+OP_ARG_NONNULL ( 1 );
 
 /**Parses the contents of the 'comment' header packet of an Ogg Opus stream.
    \param[out] _tags An uninitialized #OpusTags structure.
@@ -458,8 +458,8 @@ ogg_int64_t opus_granule_sample(const OpusHead *_head,ogg_int64_t _gp)
    \retval #OP_EBADHEADER If the contents of the packet otherwise violate the
                            Ogg Opus specification.
    \retval #OP_EFAULT     If there wasn't enough memory to store the tags.*/
-OP_WARN_UNUSED_RESULT int opus_tags_parse(OpusTags *_tags,
- const unsigned char *_data,size_t _len) OP_ARG_NONNULL(2);
+OP_WARN_UNUSED_RESULT int opus_tags_parse ( OpusTags *_tags,
+        const unsigned char *_data,size_t _len ) OP_ARG_NONNULL ( 2 );
 
 /**Performs a deep copy of an #OpusTags structure.
    \param _dst The #OpusTags structure to copy into.
@@ -468,13 +468,13 @@ OP_WARN_UNUSED_RESULT int opus_tags_parse(OpusTags *_tags,
    \param _src The #OpusTags structure to copy from.
    \retval 0          Success.
    \retval #OP_EFAULT If there wasn't enough memory to copy the tags.*/
-int opus_tags_copy(OpusTags *_dst,const OpusTags *_src) OP_ARG_NONNULL(1);
+int opus_tags_copy ( OpusTags *_dst,const OpusTags *_src ) OP_ARG_NONNULL ( 1 );
 
 /**Initializes an #OpusTags structure.
    This should be called on a freshly allocated #OpusTags structure before
     attempting to use it.
    \param _tags The #OpusTags structure to initialize.*/
-void opus_tags_init(OpusTags *_tags) OP_ARG_NONNULL(1);
+void opus_tags_init ( OpusTags *_tags ) OP_ARG_NONNULL ( 1 );
 
 /**Add a (tag, value) pair to an initialized #OpusTags structure.
    \note Neither opus_tags_add() nor opus_tags_add_comment() support values
@@ -487,8 +487,8 @@ void opus_tags_init(OpusTags *_tags) OP_ARG_NONNULL(1);
    \param _value A NUL-terminated UTF-8 containing the corresponding value.
    \return 0 on success, or a negative value on failure.
    \retval #OP_EFAULT An internal memory allocation failed.*/
-int opus_tags_add(OpusTags *_tags,const char *_tag,const char *_value)
- OP_ARG_NONNULL(1) OP_ARG_NONNULL(2) OP_ARG_NONNULL(3);
+int opus_tags_add ( OpusTags *_tags,const char *_tag,const char *_value )
+OP_ARG_NONNULL ( 1 ) OP_ARG_NONNULL ( 2 ) OP_ARG_NONNULL ( 3 );
 
 /**Add a comment to an initialized #OpusTags structure.
    \note Neither opus_tags_add_comment() nor opus_tags_add() support comments
@@ -500,8 +500,8 @@ int opus_tags_add(OpusTags *_tags,const char *_tag,const char *_value)
                     "TAG=value" form.
    \return 0 on success, or a negative value on failure.
    \retval #OP_EFAULT An internal memory allocation failed.*/
-int opus_tags_add_comment(OpusTags *_tags,const char *_comment)
- OP_ARG_NONNULL(1) OP_ARG_NONNULL(2);
+int opus_tags_add_comment ( OpusTags *_tags,const char *_comment )
+OP_ARG_NONNULL ( 1 ) OP_ARG_NONNULL ( 2 );
 
 /**Replace the binary suffix data at the end of the packet (if any).
    \param _tags An initialized #OpusTags structure.
@@ -516,8 +516,8 @@ int opus_tags_add_comment(OpusTags *_tags,const char *_comment)
                        \a _data was <code>NULL</code> or the least significant
                        bit of the first byte was not set.
    \retval #OP_EFAULT An internal memory allocation failed.*/
-int opus_tags_set_binary_suffix(OpusTags *_tags,
- const unsigned char *_data,int _len) OP_ARG_NONNULL(1);
+int opus_tags_set_binary_suffix ( OpusTags *_tags,
+                                  const unsigned char *_data,int _len ) OP_ARG_NONNULL ( 1 );
 
 /**Look up a comment value by its tag.
    \param _tags  An initialized #OpusTags structure.
@@ -534,8 +534,8 @@ int opus_tags_set_binary_suffix(OpusTags *_tags,
            It should not be modified or freed by the application, and
             modifications to the structure may invalidate the pointer.
    \retval NULL If no matching tag is found.*/
-const char *opus_tags_query(const OpusTags *_tags,const char *_tag,int _count)
- OP_ARG_NONNULL(1) OP_ARG_NONNULL(2);
+const char *opus_tags_query ( const OpusTags *_tags,const char *_tag,int _count )
+OP_ARG_NONNULL ( 1 ) OP_ARG_NONNULL ( 2 );
 
 /**Look up the number of instances of a tag.
    Call this first when querying for a specific tag and then iterate over the
@@ -544,16 +544,16 @@ const char *opus_tags_query(const OpusTags *_tags,const char *_tag,int _count)
    \param _tags An initialized #OpusTags structure.
    \param _tag  The tag to look up.
    \return The number of instances of this particular tag.*/
-int opus_tags_query_count(const OpusTags *_tags,const char *_tag)
- OP_ARG_NONNULL(1) OP_ARG_NONNULL(2);
+int opus_tags_query_count ( const OpusTags *_tags,const char *_tag )
+OP_ARG_NONNULL ( 1 ) OP_ARG_NONNULL ( 2 );
 
 /**Retrieve the binary suffix data at the end of the packet (if any).
    \param      _tags An initialized #OpusTags structure.
    \param[out] _len  Returns the number of bytes of binary suffix data returned.
    \return A pointer to the binary suffix data, or <code>NULL</code> if none
             was present.*/
-const unsigned char *opus_tags_get_binary_suffix(const OpusTags *_tags,
- int *_len) OP_ARG_NONNULL(1) OP_ARG_NONNULL(2);
+const unsigned char *opus_tags_get_binary_suffix ( const OpusTags *_tags,
+        int *_len ) OP_ARG_NONNULL ( 1 ) OP_ARG_NONNULL ( 2 );
 
 /**Get the album gain from an R128_ALBUM_GAIN tag, if one was specified.
    This searches for the first R128_ALBUM_GAIN tag with a valid signed,
@@ -570,8 +570,8 @@ const unsigned char *opus_tags_get_binary_suffix(const OpusTags *_tags,
                          contents remain unchanged.
    \return 0 on success, or a negative value on error.
    \retval #OP_FALSE There was no album gain available in the given tags.*/
-int opus_tags_get_album_gain(const OpusTags *_tags,int *_gain_q8)
- OP_ARG_NONNULL(1) OP_ARG_NONNULL(2);
+int opus_tags_get_album_gain ( const OpusTags *_tags,int *_gain_q8 )
+OP_ARG_NONNULL ( 1 ) OP_ARG_NONNULL ( 2 );
 
 /**Get the track gain from an R128_TRACK_GAIN tag, if one was specified.
    This searches for the first R128_TRACK_GAIN tag with a valid signed,
@@ -588,15 +588,15 @@ int opus_tags_get_album_gain(const OpusTags *_tags,int *_gain_q8)
                          contents remain unchanged.
    \return 0 on success, or a negative value on error.
    \retval #OP_FALSE There was no track gain available in the given tags.*/
-int opus_tags_get_track_gain(const OpusTags *_tags,int *_gain_q8)
- OP_ARG_NONNULL(1) OP_ARG_NONNULL(2);
+int opus_tags_get_track_gain ( const OpusTags *_tags,int *_gain_q8 )
+OP_ARG_NONNULL ( 1 ) OP_ARG_NONNULL ( 2 );
 
 /**Clears the #OpusTags structure.
    This should be called on an #OpusTags structure after it is no longer
     needed.
    It will free all memory used by the structure members.
    \param _tags The #OpusTags structure to clear.*/
-void opus_tags_clear(OpusTags *_tags) OP_ARG_NONNULL(1);
+void opus_tags_clear ( OpusTags *_tags ) OP_ARG_NONNULL ( 1 );
 
 /**Check if \a _comment is an instance of a \a _tag_name tag.
    \see opus_tagncompare
@@ -607,7 +607,7 @@ void opus_tags_clear(OpusTags *_tags) OP_ARG_NONNULL(1);
    \return An integer less than, equal to, or greater than zero if \a _comment
             is found respectively, to be less than, to match, or be greater
             than a "tag=value" string whose tag matches \a _tag_name.*/
-int opus_tagcompare(const char *_tag_name,const char *_comment);
+int opus_tagcompare ( const char *_tag_name,const char *_comment );
 
 /**Check if \a _comment is an instance of a \a _tag_name tag.
    This version is slightly more efficient than opus_tagcompare() if the length
@@ -622,7 +622,7 @@ int opus_tagcompare(const char *_tag_name,const char *_comment);
             is found respectively, to be less than, to match, or be greater
             than a "tag=value" string whose tag matches the first \a _tag_len
             characters of \a _tag_name.*/
-int opus_tagncompare(const char *_tag_name,int _tag_len,const char *_comment);
+int opus_tagncompare ( const char *_tag_name,int _tag_len,const char *_comment );
 
 /**Parse a single METADATA_BLOCK_PICTURE tag.
    This decodes the BASE64-encoded content of the tag and returns a structure
@@ -654,21 +654,21 @@ int opus_tagncompare(const char *_tag_name,int _tag_len,const char *_comment);
    \retval #OP_ENOTFORMAT The METADATA_BLOCK_PICTURE contents were not valid.
    \retval #OP_EFAULT     There was not enough memory to store the picture tag
                            contents.*/
-OP_WARN_UNUSED_RESULT int opus_picture_tag_parse(OpusPictureTag *_pic,
- const char *_tag) OP_ARG_NONNULL(1) OP_ARG_NONNULL(2);
+OP_WARN_UNUSED_RESULT int opus_picture_tag_parse ( OpusPictureTag *_pic,
+        const char *_tag ) OP_ARG_NONNULL ( 1 ) OP_ARG_NONNULL ( 2 );
 
 /**Initializes an #OpusPictureTag structure.
    This should be called on a freshly allocated #OpusPictureTag structure
     before attempting to use it.
    \param _pic The #OpusPictureTag structure to initialize.*/
-void opus_picture_tag_init(OpusPictureTag *_pic) OP_ARG_NONNULL(1);
+void opus_picture_tag_init ( OpusPictureTag *_pic ) OP_ARG_NONNULL ( 1 );
 
 /**Clears the #OpusPictureTag structure.
    This should be called on an #OpusPictureTag structure after it is no longer
     needed.
    It will free all memory used by the structure members.
    \param _pic The #OpusPictureTag structure to clear.*/
-void opus_picture_tag_clear(OpusPictureTag *_pic) OP_ARG_NONNULL(1);
+void opus_picture_tag_clear ( OpusPictureTag *_pic ) OP_ARG_NONNULL ( 1 );
 
 /*@}*/
 
@@ -708,51 +708,51 @@ void opus_picture_tag_clear(OpusPictureTag *_pic) OP_ARG_NONNULL(1);
 /**@endcond*/
 
 /**HTTP/Shoutcast/Icecast server information associated with a URL.*/
-struct OpusServerInfo{
-  /**The name of the server (icy-name/ice-name).
-     This is <code>NULL</code> if there was no <code>icy-name</code> or
-      <code>ice-name</code> header.*/
-  char        *name;
-  /**A short description of the server (icy-description/ice-description).
-     This is <code>NULL</code> if there was no <code>icy-description</code> or
-      <code>ice-description</code> header.*/
-  char        *description;
-  /**The genre the server falls under (icy-genre/ice-genre).
-     This is <code>NULL</code> if there was no <code>icy-genre</code> or
-      <code>ice-genre</code> header.*/
-  char        *genre;
-  /**The homepage for the server (icy-url/ice-url).
-     This is <code>NULL</code> if there was no <code>icy-url</code> or
-      <code>ice-url</code> header.*/
-  char        *url;
-  /**The software used by the origin server (Server).
-     This is <code>NULL</code> if there was no <code>Server</code> header.*/
-  char        *server;
-  /**The media type of the entity sent to the recepient (Content-Type).
-     This is <code>NULL</code> if there was no <code>Content-Type</code>
-      header.*/
-  char        *content_type;
-  /**The nominal stream bitrate in kbps (icy-br/ice-bitrate).
-     This is <code>-1</code> if there was no <code>icy-br</code> or
-      <code>ice-bitrate</code> header.*/
-  opus_int32   bitrate_kbps;
-  /**Flag indicating whether the server is public (<code>1</code>) or not
-      (<code>0</code>) (icy-pub/ice-public).
-     This is <code>-1</code> if there was no <code>icy-pub</code> or
-      <code>ice-public</code> header.*/
-  int          is_public;
-  /**Flag indicating whether the server is using HTTPS instead of HTTP.
-     This is <code>0</code> unless HTTPS is being used.
-     This may not match the protocol used in the original URL if there were
-      redirections.*/
-  int          is_ssl;
+struct OpusServerInfo {
+    /**The name of the server (icy-name/ice-name).
+       This is <code>NULL</code> if there was no <code>icy-name</code> or
+        <code>ice-name</code> header.*/
+    char        *name;
+    /**A short description of the server (icy-description/ice-description).
+       This is <code>NULL</code> if there was no <code>icy-description</code> or
+        <code>ice-description</code> header.*/
+    char        *description;
+    /**The genre the server falls under (icy-genre/ice-genre).
+       This is <code>NULL</code> if there was no <code>icy-genre</code> or
+        <code>ice-genre</code> header.*/
+    char        *genre;
+    /**The homepage for the server (icy-url/ice-url).
+       This is <code>NULL</code> if there was no <code>icy-url</code> or
+        <code>ice-url</code> header.*/
+    char        *url;
+    /**The software used by the origin server (Server).
+       This is <code>NULL</code> if there was no <code>Server</code> header.*/
+    char        *server;
+    /**The media type of the entity sent to the recepient (Content-Type).
+       This is <code>NULL</code> if there was no <code>Content-Type</code>
+        header.*/
+    char        *content_type;
+    /**The nominal stream bitrate in kbps (icy-br/ice-bitrate).
+       This is <code>-1</code> if there was no <code>icy-br</code> or
+        <code>ice-bitrate</code> header.*/
+    opus_int32   bitrate_kbps;
+    /**Flag indicating whether the server is public (<code>1</code>) or not
+        (<code>0</code>) (icy-pub/ice-public).
+       This is <code>-1</code> if there was no <code>icy-pub</code> or
+        <code>ice-public</code> header.*/
+    int          is_public;
+    /**Flag indicating whether the server is using HTTPS instead of HTTP.
+       This is <code>0</code> unless HTTPS is being used.
+       This may not match the protocol used in the original URL if there were
+        redirections.*/
+    int          is_ssl;
 };
 
 /**Initializes an #OpusServerInfo structure.
    All fields are set as if the corresponding header was not available.
    \param _info The #OpusServerInfo structure to initialize.
    \note If you use this function, you must link against <tt>libopusurl</tt>.*/
-void opus_server_info_init(OpusServerInfo *_info) OP_ARG_NONNULL(1);
+void opus_server_info_init ( OpusServerInfo *_info ) OP_ARG_NONNULL ( 1 );
 
 /**Clears the #OpusServerInfo structure.
    This should be called on an #OpusServerInfo structure after it is no longer
@@ -760,7 +760,7 @@ void opus_server_info_init(OpusServerInfo *_info) OP_ARG_NONNULL(1);
    It will free all memory used by the structure members.
    \param _info The #OpusServerInfo structure to clear.
    \note If you use this function, you must link against <tt>libopusurl</tt>.*/
-void opus_server_info_clear(OpusServerInfo *_info) OP_ARG_NONNULL(1);
+void opus_server_info_clear ( OpusServerInfo *_info ) OP_ARG_NONNULL ( 1 );
 
 /**Skip the certificate check when connecting via TLS/SSL (https).
    \param _b <code>opus_int32</code>: Whether or not to skip the certificate
@@ -865,7 +865,7 @@ void opus_server_info_clear(OpusServerInfo *_info) OP_ARG_NONNULL(1);
                         return zero unless it reaches end-of-file.
    \return The number of bytes successfully read, or a negative value on
             error.*/
-typedef int (*op_read_func)(void *_stream,unsigned char *_ptr,int _nbytes);
+typedef int ( *op_read_func ) ( void *_stream,unsigned char *_ptr,int _nbytes );
 
 /**Sets the position indicator for \a _stream.
    The new position, measured in bytes, is obtained by adding \a _offset
@@ -876,17 +876,17 @@ typedef int (*op_read_func)(void *_stream,unsigned char *_ptr,int _nbytes);
    \retval 0  Success.
    \retval -1 Seeking is not supported or an error occurred.
               <code>errno</code> need not be set.*/
-typedef int (*op_seek_func)(void *_stream,opus_int64 _offset,int _whence);
+typedef int ( *op_seek_func ) ( void *_stream,opus_int64 _offset,int _whence );
 
 /**Obtains the current value of the position indicator for \a _stream.
    \return The current position indicator.*/
-typedef opus_int64 (*op_tell_func)(void *_stream);
+typedef opus_int64 ( *op_tell_func ) ( void *_stream );
 
 /**Closes the underlying stream.
    \retval 0   Success.
    \retval EOF An error occurred.
                <code>errno</code> need not be set.*/
-typedef int (*op_close_func)(void *_stream);
+typedef int ( *op_close_func ) ( void *_stream );
 
 /**The callbacks used to access non-<code>FILE</code> stream resources.
    The function prototypes are basically the same as for the stdio functions
@@ -897,19 +897,19 @@ typedef int (*op_close_func)(void *_stream);
     whatever internal data these functions might need, that #seek and #tell
     take and return 64-bit offsets, and that #seek <em>must</em> return -1 if
     the stream is unseekable.*/
-struct OpusFileCallbacks{
-  /**Used to read data from the stream.
-     This must not be <code>NULL</code>.*/
-  op_read_func  read;
-  /**Used to seek in the stream.
-     This may be <code>NULL</code> if seeking is not implemented.*/
-  op_seek_func  seek;
-  /**Used to return the current read position in the stream.
-     This may be <code>NULL</code> if seeking is not implemented.*/
-  op_tell_func  tell;
-  /**Used to close the stream when the decoder is freed.
-     This may be <code>NULL</code> to leave the stream open.*/
-  op_close_func close;
+struct OpusFileCallbacks {
+    /**Used to read data from the stream.
+       This must not be <code>NULL</code>.*/
+    op_read_func  read;
+    /**Used to seek in the stream.
+       This may be <code>NULL</code> if seeking is not implemented.*/
+    op_seek_func  seek;
+    /**Used to return the current read position in the stream.
+       This may be <code>NULL</code> if seeking is not implemented.*/
+    op_tell_func  tell;
+    /**Used to close the stream when the decoder is freed.
+       This may be <code>NULL</code> to leave the stream open.*/
+    op_close_func close;
 };
 
 /**Opens a stream with <code>fopen()</code> and fills in a set of callbacks
@@ -929,9 +929,9 @@ struct OpusFileCallbacks{
    \param      _mode The mode to open the file in.
    \return A stream handle to use with the callbacks, or <code>NULL</code> on
             error.*/
-OP_WARN_UNUSED_RESULT void *op_fopen(OpusFileCallbacks *_cb,
- const char *_path,const char *_mode) OP_ARG_NONNULL(1) OP_ARG_NONNULL(2)
- OP_ARG_NONNULL(3);
+OP_WARN_UNUSED_RESULT void *op_fopen ( OpusFileCallbacks *_cb,
+                                       const char *_path,const char *_mode ) OP_ARG_NONNULL ( 1 ) OP_ARG_NONNULL ( 2 )
+OP_ARG_NONNULL ( 3 );
 
 /**Opens a stream with <code>fdopen()</code> and fills in a set of callbacks
     that can be used to access it.
@@ -946,8 +946,8 @@ OP_WARN_UNUSED_RESULT void *op_fopen(OpusFileCallbacks *_cb,
    \param      _mode The mode to open the file in.
    \return A stream handle to use with the callbacks, or <code>NULL</code> on
             error.*/
-OP_WARN_UNUSED_RESULT void *op_fdopen(OpusFileCallbacks *_cb,
- int _fd,const char *_mode) OP_ARG_NONNULL(1) OP_ARG_NONNULL(3);
+OP_WARN_UNUSED_RESULT void *op_fdopen ( OpusFileCallbacks *_cb,
+                                        int _fd,const char *_mode ) OP_ARG_NONNULL ( 1 ) OP_ARG_NONNULL ( 3 );
 
 /**Opens a stream with <code>freopen()</code> and fills in a set of callbacks
     that can be used to access it.
@@ -968,9 +968,9 @@ OP_WARN_UNUSED_RESULT void *op_fdopen(OpusFileCallbacks *_cb,
                         or op_freopen().
    \return A stream handle to use with the callbacks, or <code>NULL</code> on
             error.*/
-OP_WARN_UNUSED_RESULT void *op_freopen(OpusFileCallbacks *_cb,
- const char *_path,const char *_mode,void *_stream) OP_ARG_NONNULL(1)
- OP_ARG_NONNULL(2) OP_ARG_NONNULL(3) OP_ARG_NONNULL(4);
+OP_WARN_UNUSED_RESULT void *op_freopen ( OpusFileCallbacks *_cb,
+        const char *_path,const char *_mode,void *_stream ) OP_ARG_NONNULL ( 1 )
+OP_ARG_NONNULL ( 2 ) OP_ARG_NONNULL ( 3 ) OP_ARG_NONNULL ( 4 );
 
 /**Creates a stream that reads from the given block of memory.
    This block of memory must contain the complete stream to decode.
@@ -982,8 +982,8 @@ OP_WARN_UNUSED_RESULT void *op_freopen(OpusFileCallbacks *_cb,
    \param      _size The size of the block of memory.
    \return A stream handle to use with the callbacks, or <code>NULL</code> on
             error.*/
-OP_WARN_UNUSED_RESULT void *op_mem_stream_create(OpusFileCallbacks *_cb,
- const unsigned char *_data,size_t _size) OP_ARG_NONNULL(1);
+OP_WARN_UNUSED_RESULT void *op_mem_stream_create ( OpusFileCallbacks *_cb,
+        const unsigned char *_data,size_t _size ) OP_ARG_NONNULL ( 1 );
 
 /**Creates a stream that reads from the given URL.
    This function behaves identically to op_url_stream_create(), except that it
@@ -1008,8 +1008,8 @@ OP_WARN_UNUSED_RESULT void *op_mem_stream_create(OpusFileCallbacks *_cb,
                         with <code>NULL</code>.
    \return A stream handle to use with the callbacks, or <code>NULL</code> on
             error.*/
-OP_WARN_UNUSED_RESULT void *op_url_stream_vcreate(OpusFileCallbacks *_cb,
- const char *_url,va_list _ap) OP_ARG_NONNULL(1) OP_ARG_NONNULL(2);
+OP_WARN_UNUSED_RESULT void *op_url_stream_vcreate ( OpusFileCallbacks *_cb,
+        const char *_url,va_list _ap ) OP_ARG_NONNULL ( 1 ) OP_ARG_NONNULL ( 2 );
 
 /**Creates a stream that reads from the given URL.
    \note If you use this function, you must link against <tt>libopusurl</tt>.
@@ -1030,8 +1030,8 @@ OP_WARN_UNUSED_RESULT void *op_url_stream_vcreate(OpusFileCallbacks *_cb,
                      <code>NULL</code>.
    \return A stream handle to use with the callbacks, or <code>NULL</code> on
             error.*/
-OP_WARN_UNUSED_RESULT void *op_url_stream_create(OpusFileCallbacks *_cb,
- const char *_url,...) OP_ARG_NONNULL(1) OP_ARG_NONNULL(2);
+OP_WARN_UNUSED_RESULT void *op_url_stream_create ( OpusFileCallbacks *_cb,
+        const char *_url,... ) OP_ARG_NONNULL ( 1 ) OP_ARG_NONNULL ( 2 );
 
 /*@}*/
 /*@}*/
@@ -1076,8 +1076,8 @@ OP_WARN_UNUSED_RESULT void *op_url_stream_create(OpusFileCallbacks *_cb,
                            does not know how to parse.
    \retval #OP_EBADHEADER The ID header was not properly formatted or contained
                            illegal values.*/
-int op_test(OpusHead *_head,
- const unsigned char *_initial_data,size_t _initial_bytes);
+int op_test ( OpusHead *_head,
+              const unsigned char *_initial_data,size_t _initial_bytes );
 
 /**Open a stream from the given file path.
    \param      _path  The path to the file to open.
@@ -1088,8 +1088,8 @@ int op_test(OpusHead *_head,
                        be opened, or one of the other failure codes from
                        op_open_callbacks() otherwise.
    \return A freshly opened \c OggOpusFile, or <code>NULL</code> on error.*/
-OP_WARN_UNUSED_RESULT OggOpusFile *op_open_file(const char *_path,int *_error)
- OP_ARG_NONNULL(1);
+OP_WARN_UNUSED_RESULT OggOpusFile *op_open_file ( const char *_path,int *_error )
+OP_ARG_NONNULL ( 1 );
 
 /**Open a stream from a memory buffer.
    \param      _data  The memory buffer to open.
@@ -1099,8 +1099,8 @@ OP_WARN_UNUSED_RESULT OggOpusFile *op_open_file(const char *_path,int *_error)
                        failure code.
                       See op_open_callbacks() for a full list of failure codes.
    \return A freshly opened \c OggOpusFile, or <code>NULL</code> on error.*/
-OP_WARN_UNUSED_RESULT OggOpusFile *op_open_memory(const unsigned char *_data,
- size_t _size,int *_error);
+OP_WARN_UNUSED_RESULT OggOpusFile *op_open_memory ( const unsigned char *_data,
+        size_t _size,int *_error );
 
 /**Open a stream from a URL.
    This function behaves identically to op_open_url(), except that it
@@ -1128,8 +1128,8 @@ OP_WARN_UNUSED_RESULT OggOpusFile *op_open_memory(const unsigned char *_data,
                          This is a variable-length list of options terminated
                           with <code>NULL</code>.
    \return A freshly opened \c OggOpusFile, or <code>NULL</code> on error.*/
-OP_WARN_UNUSED_RESULT OggOpusFile *op_vopen_url(const char *_url,
- int *_error,va_list _ap) OP_ARG_NONNULL(1);
+OP_WARN_UNUSED_RESULT OggOpusFile *op_vopen_url ( const char *_url,
+        int *_error,va_list _ap ) OP_ARG_NONNULL ( 1 );
 
 /**Open a stream from a URL.
    \note If you use this function, you must link against <tt>libopusurl</tt>.
@@ -1150,8 +1150,8 @@ OP_WARN_UNUSED_RESULT OggOpusFile *op_vopen_url(const char *_url,
                       This is a variable-length list of options terminated with
                        <code>NULL</code>.
    \return A freshly opened \c OggOpusFile, or <code>NULL</code> on error.*/
-OP_WARN_UNUSED_RESULT OggOpusFile *op_open_url(const char *_url,
- int *_error,...) OP_ARG_NONNULL(1);
+OP_WARN_UNUSED_RESULT OggOpusFile *op_open_url ( const char *_url,
+        int *_error,... ) OP_ARG_NONNULL ( 1 );
 
 /**Open a stream using the given set of callbacks to access it.
    \param _source        The stream to read from (e.g., a <code>FILE *</code>).
@@ -1230,9 +1230,9 @@ OP_WARN_UNUSED_RESULT OggOpusFile *op_open_url(const char *_url,
             if the call fails.
            The calling application is responsible for closing the source if
             this call returns an error.*/
-OP_WARN_UNUSED_RESULT OggOpusFile *op_open_callbacks(void *_source,
- const OpusFileCallbacks *_cb,const unsigned char *_initial_data,
- size_t _initial_bytes,int *_error) OP_ARG_NONNULL(2);
+OP_WARN_UNUSED_RESULT OggOpusFile *op_open_callbacks ( void *_source,
+        const OpusFileCallbacks *_cb,const unsigned char *_initial_data,
+        size_t _initial_bytes,int *_error ) OP_ARG_NONNULL ( 2 );
 
 /**Partially open a stream from the given file path.
    \see op_test_callbacks
@@ -1244,8 +1244,8 @@ OP_WARN_UNUSED_RESULT OggOpusFile *op_open_callbacks(void *_source,
                        be opened, or one of the other failure codes from
                        op_open_callbacks() otherwise.
    \return A partially opened \c OggOpusFile, or <code>NULL</code> on error.*/
-OP_WARN_UNUSED_RESULT OggOpusFile *op_test_file(const char *_path,int *_error)
- OP_ARG_NONNULL(1);
+OP_WARN_UNUSED_RESULT OggOpusFile *op_test_file ( const char *_path,int *_error )
+OP_ARG_NONNULL ( 1 );
 
 /**Partially open a stream from a memory buffer.
    \see op_test_callbacks
@@ -1256,8 +1256,8 @@ OP_WARN_UNUSED_RESULT OggOpusFile *op_test_file(const char *_path,int *_error)
                        failure code.
                       See op_open_callbacks() for a full list of failure codes.
    \return A partially opened \c OggOpusFile, or <code>NULL</code> on error.*/
-OP_WARN_UNUSED_RESULT OggOpusFile *op_test_memory(const unsigned char *_data,
- size_t _size,int *_error);
+OP_WARN_UNUSED_RESULT OggOpusFile *op_test_memory ( const unsigned char *_data,
+        size_t _size,int *_error );
 
 /**Partially open a stream from a URL.
    This function behaves identically to op_test_url(), except that it
@@ -1287,8 +1287,8 @@ OP_WARN_UNUSED_RESULT OggOpusFile *op_test_memory(const unsigned char *_data,
                           This is a variable-length list of options terminated
                            with <code>NULL</code>.
    \return A partially opened \c OggOpusFile, or <code>NULL</code> on error.*/
-OP_WARN_UNUSED_RESULT OggOpusFile *op_vtest_url(const char *_url,
- int *_error,va_list _ap) OP_ARG_NONNULL(1);
+OP_WARN_UNUSED_RESULT OggOpusFile *op_vtest_url ( const char *_url,
+        int *_error,va_list _ap ) OP_ARG_NONNULL ( 1 );
 
 /**Partially open a stream from a URL.
    \note If you use this function, you must link against <tt>libopusurl</tt>.
@@ -1311,8 +1311,8 @@ OP_WARN_UNUSED_RESULT OggOpusFile *op_vtest_url(const char *_url,
                        This is a variable-length list of options terminated
                         with <code>NULL</code>.
    \return A partially opened \c OggOpusFile, or <code>NULL</code> on error.*/
-OP_WARN_UNUSED_RESULT OggOpusFile *op_test_url(const char *_url,
- int *_error,...) OP_ARG_NONNULL(1);
+OP_WARN_UNUSED_RESULT OggOpusFile *op_test_url ( const char *_url,
+        int *_error,... ) OP_ARG_NONNULL ( 1 );
 
 /**Partially open a stream using the given set of callbacks to access it.
    This tests for Opusness and loads the headers for the first link.
@@ -1377,9 +1377,9 @@ OP_WARN_UNUSED_RESULT OggOpusFile *op_test_url(const char *_url,
             if the call fails.
            The calling application is responsible for closing the source if
             this call returns an error.*/
-OP_WARN_UNUSED_RESULT OggOpusFile *op_test_callbacks(void *_source,
- const OpusFileCallbacks *_cb,const unsigned char *_initial_data,
- size_t _initial_bytes,int *_error) OP_ARG_NONNULL(2);
+OP_WARN_UNUSED_RESULT OggOpusFile *op_test_callbacks ( void *_source,
+        const OpusFileCallbacks *_cb,const unsigned char *_initial_data,
+        size_t _initial_bytes,int *_error ) OP_ARG_NONNULL ( 2 );
 
 /**Finish opening a stream partially opened with op_test_callbacks() or one of
     the associated convenience functions.
@@ -1407,11 +1407,11 @@ OP_WARN_UNUSED_RESULT OggOpusFile *op_test_callbacks(void *_source,
                               seeking.
    \retval #OP_EBADTIMESTAMP The first or last timestamp in a link failed basic
                               validity checks.*/
-int op_test_open(OggOpusFile *_of) OP_ARG_NONNULL(1);
+int op_test_open ( OggOpusFile *_of ) OP_ARG_NONNULL ( 1 );
 
 /**Release all memory used by an \c OggOpusFile.
    \param _of The \c OggOpusFile to free.*/
-void op_free(OggOpusFile *_of);
+void op_free ( OggOpusFile *_of );
 
 /*@}*/
 /*@}*/
@@ -1448,7 +1448,7 @@ void op_free(OggOpusFile *_of);
    This function may be called on partially-opened streams.
    \param _of The \c OggOpusFile whose seekable status is to be returned.
    \return A non-zero value if seekable, and 0 if unseekable.*/
-int op_seekable(const OggOpusFile *_of) OP_ARG_NONNULL(1);
+int op_seekable ( const OggOpusFile *_of ) OP_ARG_NONNULL ( 1 );
 
 /**Returns the number of links in this chained stream.
    This function may be called on partially-opened streams, but it will always
@@ -1458,7 +1458,7 @@ int op_seekable(const OggOpusFile *_of) OP_ARG_NONNULL(1);
    \return For fully-open seekable sources, this returns the total number of
             links in the whole stream, which will be at least 1.
            For partially-open or unseekable sources, this always returns 1.*/
-int op_link_count(const OggOpusFile *_of) OP_ARG_NONNULL(1);
+int op_link_count ( const OggOpusFile *_of ) OP_ARG_NONNULL ( 1 );
 
 /**Get the serial number of the given link in a (possibly-chained) Ogg Opus
     stream.
@@ -1473,7 +1473,7 @@ int op_link_count(const OggOpusFile *_of) OP_ARG_NONNULL(1);
             the serial number of the last link.
            If the source is not seekable, this always returns the serial number
             of the current link.*/
-opus_uint32 op_serialno(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
+opus_uint32 op_serialno ( const OggOpusFile *_of,int _li ) OP_ARG_NONNULL ( 1 );
 
 /**Get the channel count of the given link in a (possibly-chained) Ogg Opus
     stream.
@@ -1490,7 +1490,7 @@ opus_uint32 op_serialno(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
             the channel count of the last link.
            If the source is not seekable, this always returns the channel count
             of the current link.*/
-int op_channel_count(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
+int op_channel_count ( const OggOpusFile *_of,int _li ) OP_ARG_NONNULL ( 1 );
 
 /**Get the total (compressed) size of the stream, or of an individual link in
     a (possibly-chained) Ogg Opus stream, including all headers and Ogg muxing
@@ -1512,7 +1512,7 @@ int op_channel_count(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
    \retval #OP_EINVAL The source is not seekable (so we can't know the length),
                        \a _li wasn't less than the total number of links in
                        the stream, or the stream was only partially open.*/
-opus_int64 op_raw_total(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
+opus_int64 op_raw_total ( const OggOpusFile *_of,int _li ) OP_ARG_NONNULL ( 1 );
 
 /**Get the total PCM length (number of samples at 48 kHz) of the stream, or of
     an individual link in a (possibly-chained) Ogg Opus stream.
@@ -1530,7 +1530,7 @@ opus_int64 op_raw_total(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
    \retval #OP_EINVAL The source is not seekable (so we can't know the length),
                        \a _li wasn't less than the total number of links in
                        the stream, or the stream was only partially open.*/
-ogg_int64_t op_pcm_total(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
+ogg_int64_t op_pcm_total ( const OggOpusFile *_of,int _li ) OP_ARG_NONNULL ( 1 );
 
 /**Get the ID header information for the given link in a (possibly chained) Ogg
     Opus stream.
@@ -1546,7 +1546,7 @@ ogg_int64_t op_pcm_total(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
                information for the current link is always returned, if
                available.
    \return The contents of the ID header for the given link.*/
-const OpusHead *op_head(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
+const OpusHead *op_head ( const OggOpusFile *_of,int _li ) OP_ARG_NONNULL ( 1 );
 
 /**Get the comment header information for the given link in a (possibly
     chained) Ogg Opus stream.
@@ -1564,7 +1564,7 @@ const OpusHead *op_head(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
    \return The contents of the comment header for the given link, or
             <code>NULL</code> if this is an unseekable stream that encountered
             an invalid link.*/
-const OpusTags *op_tags(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
+const OpusTags *op_tags ( const OggOpusFile *_of,int _li ) OP_ARG_NONNULL ( 1 );
 
 /**Retrieve the index of the current link.
    This is the link that produced the data most recently read by
@@ -1581,7 +1581,7 @@ const OpusTags *op_tags(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
             each time a new link is encountered (even though op_link_count()
             always returns 1).
    \retval #OP_EINVAL The stream was only partially open.*/
-int op_current_link(const OggOpusFile *_of) OP_ARG_NONNULL(1);
+int op_current_link ( const OggOpusFile *_of ) OP_ARG_NONNULL ( 1 );
 
 /**Computes the bitrate of the stream, or of an individual link in a
     (possibly-chained) Ogg Opus stream.
@@ -1603,7 +1603,7 @@ int op_current_link(const OggOpusFile *_of) OP_ARG_NONNULL(1);
    \retval #OP_EINVAL The stream was only partially open, the stream was not
                        seekable, or \a _li was larger than the number of
                        links.*/
-opus_int32 op_bitrate(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
+opus_int32 op_bitrate ( const OggOpusFile *_of,int _li ) OP_ARG_NONNULL ( 1 );
 
 /**Compute the instantaneous bitrate, measured as the ratio of bits to playable
     samples decoded since a) the last call to op_bitrate_instant(), b) the last
@@ -1616,13 +1616,13 @@ opus_int32 op_bitrate(const OggOpusFile *_of,int _li) OP_ARG_NONNULL(1);
    \retval #OP_FALSE  No data has been decoded since any of the events
                        described above.
    \retval #OP_EINVAL The stream was only partially open.*/
-opus_int32 op_bitrate_instant(OggOpusFile *_of) OP_ARG_NONNULL(1);
+opus_int32 op_bitrate_instant ( OggOpusFile *_of ) OP_ARG_NONNULL ( 1 );
 
 /**Obtain the current value of the position indicator for \a _of.
    \param _of The \c OggOpusFile from which to retrieve the position indicator.
    \return The byte position that is currently being read from.
    \retval #OP_EINVAL The stream was only partially open.*/
-opus_int64 op_raw_tell(const OggOpusFile *_of) OP_ARG_NONNULL(1);
+opus_int64 op_raw_tell ( const OggOpusFile *_of ) OP_ARG_NONNULL ( 1 );
 
 /**Obtain the PCM offset of the next sample to be read.
    If the stream is not properly timestamped, this might not increment by the
@@ -1631,7 +1631,7 @@ opus_int64 op_raw_tell(const OggOpusFile *_of) OP_ARG_NONNULL(1);
    \param _of The \c OggOpusFile from which to retrieve the PCM offset.
    \return The PCM offset of the next sample to be read.
    \retval #OP_EINVAL The stream was only partially open.*/
-ogg_int64_t op_pcm_tell(const OggOpusFile *_of) OP_ARG_NONNULL(1);
+ogg_int64_t op_pcm_tell ( const OggOpusFile *_of ) OP_ARG_NONNULL ( 1 );
 
 /*@}*/
 /*@}*/
@@ -1677,7 +1677,7 @@ ogg_int64_t op_pcm_tell(const OggOpusFile *_of) OP_ARG_NONNULL(1);
    \retval #OP_ENOSEEK  This stream is not seekable.
    \retval #OP_EBADLINK Failed to initialize a decoder for a stream for an
                          unknown reason.*/
-int op_raw_seek(OggOpusFile *_of,opus_int64 _byte_offset) OP_ARG_NONNULL(1);
+int op_raw_seek ( OggOpusFile *_of,opus_int64 _byte_offset ) OP_ARG_NONNULL ( 1 );
 
 /**Seek to the specified PCM offset, such that decoding will begin at exactly
     the requested position.
@@ -1693,7 +1693,7 @@ int op_raw_seek(OggOpusFile *_of,opus_int64 _byte_offset) OP_ARG_NONNULL(1);
    \retval #OP_EBADLINK We failed to find data we had seen before, or the
                          bitstream structure was sufficiently malformed that
                          seeking to the target destination was impossible.*/
-int op_pcm_seek(OggOpusFile *_of,ogg_int64_t _pcm_offset) OP_ARG_NONNULL(1);
+int op_pcm_seek ( OggOpusFile *_of,ogg_int64_t _pcm_offset ) OP_ARG_NONNULL ( 1 );
 
 /*@}*/
 /*@}*/
@@ -1781,8 +1781,8 @@ int op_pcm_seek(OggOpusFile *_of,ogg_int64_t _pcm_offset) OP_ARG_NONNULL(1);
    \retval #OP_DEC_USE_DEFAULT No decoding was done.
                                <tt>libopusfile</tt> should do the decoding
                                 by itself instead.*/
-typedef int (*op_decode_cb_func)(void *_ctx,OpusMSDecoder *_decoder,void *_pcm,
- const ogg_packet *_op,int _nsamples,int _nchannels,int _format,int _li);
+typedef int ( *op_decode_cb_func ) ( void *_ctx,OpusMSDecoder *_decoder,void *_pcm,
+                                     const ogg_packet *_op,int _nsamples,int _nchannels,int _format,int _li );
 
 /**Sets the packet decode callback function.
    If set, this is called once for each packet that needs to be decoded.
@@ -1805,8 +1805,8 @@ typedef int (*op_decode_cb_func)(void *_ctx,OpusMSDecoder *_decoder,void *_pcm,
                       callback.
    \param _ctx       The application-provided context pointer to pass to the
                       callback on each call.*/
-void op_set_decode_callback(OggOpusFile *_of,
- op_decode_cb_func _decode_cb,void *_ctx) OP_ARG_NONNULL(1);
+void op_set_decode_callback ( OggOpusFile *_of,
+                              op_decode_cb_func _decode_cb,void *_ctx ) OP_ARG_NONNULL ( 1 );
 
 /**Gain offset type that indicates that the provided offset is relative to the
     header gain.
@@ -1842,8 +1842,8 @@ void op_set_decode_callback(OggOpusFile *_of,
    \param _gain_offset_q8 The gain offset to apply, in 1/256ths of a dB.
    \return 0 on success or a negative value on error.
    \retval #OP_EINVAL The \a _gain_type was unrecognized.*/
-int op_set_gain_offset(OggOpusFile *_of,
- int _gain_type,opus_int32 _gain_offset_q8) OP_ARG_NONNULL(1);
+int op_set_gain_offset ( OggOpusFile *_of,
+                         int _gain_type,opus_int32 _gain_offset_q8 ) OP_ARG_NONNULL ( 1 );
 
 /**Sets whether or not dithering is enabled for 16-bit decoding.
    By default, when <tt>libopusfile</tt> is compiled to use floating-point
@@ -1855,7 +1855,7 @@ int op_set_gain_offset(OggOpusFile *_of,
     has no effect.
    \param _of      The \c OggOpusFile on which to enable or disable dithering.
    \param _enabled A non-zero value to enable dithering, or 0 to disable it.*/
-void op_set_dither_enabled(OggOpusFile *_of,int _enabled) OP_ARG_NONNULL(1);
+void op_set_dither_enabled ( OggOpusFile *_of,int _enabled ) OP_ARG_NONNULL ( 1 );
 
 /**Reads more samples from the stream.
    \note Although \a _buf_size must indicate the total number of values that
@@ -1937,8 +1937,8 @@ void op_set_dither_enabled(OggOpusFile *_of,int _enabled) OP_ARG_NONNULL(1);
    \retval #OP_EBADTIMESTAMP An unseekable stream encountered a new link with
                               a starting timestamp that failed basic validity
                               checks.*/
-OP_WARN_UNUSED_RESULT int op_read(OggOpusFile *_of,
- opus_int16 *_pcm,int _buf_size,int *_li) OP_ARG_NONNULL(1);
+OP_WARN_UNUSED_RESULT int op_read ( OggOpusFile *_of,
+                                    opus_int16 *_pcm,int _buf_size,int *_li ) OP_ARG_NONNULL ( 1 );
 
 /**Reads more samples from the stream.
    \note Although \a _buf_size must indicate the total number of values that
@@ -2018,8 +2018,8 @@ OP_WARN_UNUSED_RESULT int op_read(OggOpusFile *_of,
    \retval #OP_EBADTIMESTAMP An unseekable stream encountered a new link with
                               a starting timestamp that failed basic validity
                               checks.*/
-OP_WARN_UNUSED_RESULT int op_read_float(OggOpusFile *_of,
- float *_pcm,int _buf_size,int *_li) OP_ARG_NONNULL(1);
+OP_WARN_UNUSED_RESULT int op_read_float ( OggOpusFile *_of,
+        float *_pcm,int _buf_size,int *_li ) OP_ARG_NONNULL ( 1 );
 
 /**Reads more samples from the stream and downmixes to stereo, if necessary.
    This function is intended for simple players that want a uniform output
@@ -2079,8 +2079,8 @@ OP_WARN_UNUSED_RESULT int op_read_float(OggOpusFile *_of,
    \retval #OP_EBADTIMESTAMP An unseekable stream encountered a new link with
                               a starting timestamp that failed basic validity
                               checks.*/
-OP_WARN_UNUSED_RESULT int op_read_stereo(OggOpusFile *_of,
- opus_int16 *_pcm,int _buf_size) OP_ARG_NONNULL(1);
+OP_WARN_UNUSED_RESULT int op_read_stereo ( OggOpusFile *_of,
+        opus_int16 *_pcm,int _buf_size ) OP_ARG_NONNULL ( 1 );
 
 /**Reads more samples from the stream and downmixes to stereo, if necessary.
    This function is intended for simple players that want a uniform output
@@ -2140,8 +2140,8 @@ OP_WARN_UNUSED_RESULT int op_read_stereo(OggOpusFile *_of,
    \retval #OP_EBADTIMESTAMP An unseekable stream encountered a new link with
                               a starting timestamp that failed basic validity
                               checks.*/
-OP_WARN_UNUSED_RESULT int op_read_float_stereo(OggOpusFile *_of,
- float *_pcm,int _buf_size) OP_ARG_NONNULL(1);
+OP_WARN_UNUSED_RESULT int op_read_float_stereo ( OggOpusFile *_of,
+        float *_pcm,int _buf_size ) OP_ARG_NONNULL ( 1 );
 
 /*@}*/
 /*@}*/
