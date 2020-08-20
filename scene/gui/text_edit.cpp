@@ -1664,9 +1664,12 @@ void TextEdit::_notification(int p_what) {
 void TextEdit::_consume_pair_symbol(CharType ch) {
 	int cursor_position_to_move = cursor_get_column() + 1;
 
-	CharType ch_single[2] = { ch, 0 };
-	CharType ch_single_pair[2] = { _get_right_pair_symbol(ch), 0 };
-	CharType ch_pair[3] = { ch, _get_right_pair_symbol(ch), 0 };
+	CharType ch_single[2]= { ch, 0};//Left half of the symbol pair
+	CharType ch_single_pair[4]={ _get_right_pair_symbol(ch), 0,0,0 };//Right half of the symbol pair
+	CharType ch_pair[5] = { ch, _get_right_pair_symbol(ch), 0,0,0 };//Complete symbol pair
+	
+	
+	
 
 	if (is_selection_active()) {
 		int new_column, new_line;
@@ -1762,6 +1765,28 @@ void TextEdit::_consume_pair_symbol(CharType ch) {
 
 		return;
 	}
+
+
+	//detect if its the case of """ <text> """ ie. multiline string...
+	//otherwise dont change the initial values of ch_single, ch_single_pair and ch_pair
+	if(ch=='"' && cursor_get_column()>=2){
+		// if(preceeding_chars == {'"','"'}) then its the case of """ <text> """ ie. multiline string
+		if(text[cursor_get_line()][cursor_get_column()-1]=='"' && text[cursor_get_line()][cursor_get_column()-2]=='"')		
+		{
+			//set ch_single='"' because the first two '"'s  of \"\"\" are already given by the user 
+			ch_single[0]='"';
+			ch_single[1]=0;
+
+			//set ch_single_pair=\"\"\"
+			ch_single_pair[0]=ch_single_pair[1]=ch_single_pair[2]='"';
+			ch_single_pair[3]=0;
+
+			//set ch_pair=\"\"\"\"
+			ch_pair[0]=ch_pair[1]=ch_pair[2]=ch_pair[3]='"';
+			ch_pair[4]=0;
+		}
+	}
+
 
 	insert_text_at_cursor(ch_pair);
 	cursor_set_column(cursor_position_to_move);
