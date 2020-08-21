@@ -1662,18 +1662,18 @@ void TextEdit::_notification(int p_what) {
 }
 
 //returns respective quotes if inside quotes, '#' if inside comments, returns "" otherwise
-String TextEdit::_get_running_quotes(int line_no, int col_no) {	
+String TextEdit::_get_running_quotes(int line_no, int col_no) {
 	String running_quotes = "";
 	bool found_comment = false;
 
 	for (int j = 0; j < text.size() && j <= line_no; j++) {
 		String line = text[j];
-		int line_size = line.size(); 
-		if(j==line_no){
+		int line_size = line.size();
+		if (j == line_no) {
 			//while parsing the last line, stop at column_number == col_no, so truncate line_size accordingly.
-			line_size = col_no + 1;			
+			line_size = col_no + 1;
 		}
-		
+
 		//Reset flags from scanning last line
 		found_comment = false;
 		//Triple quotes flag should be carried on to next line, as it is 'multiline string'. Clear out orhers like \' , \" , etc
@@ -1711,7 +1711,7 @@ String TextEdit::_get_running_quotes(int line_no, int col_no) {
 			}
 		}
 	}
-	
+
 	if (found_comment) {
 		return ("#");
 	}
