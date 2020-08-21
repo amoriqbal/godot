@@ -1661,15 +1661,70 @@ void TextEdit::_notification(int p_what) {
 	}
 }
 
-void TextEdit::_consume_pair_symbol(CharType ch) {
-	int cursor_position_to_move = cursor_get_column() + 1;
+String TextEdit::_get_running_quotes(int line_no,int col_no){
+	String running_quotes = "";
+	bool found_comment=false;
+	for (int j = 0; j < text.size() && j<=line_no; j++){
+		String line = text[j];
+        int line_size = (j<line_no?line.size():col_no+1);
+        found_comment = false;
 
+		if(running_quotes!="\"\"\""){
+			running_quotes="";
+		}
+
+		for (int i = 0; i < line_size; i++){
+			if (line[i] == '\\')
+            {
+                i++;
+                continue;
+            }
+			if(running_quotes==""){
+				if (i < (line_size - 2) && line[i] == '"' && line[i + 1] == '"' && line[i + 2] == '"')
+                {
+                    running_quotes = "\"\"\"";
+                    i += 2;
+                }
+				else if (line[i] == '"' || line[i] == '\''){
+					running_quotes = vformat("%c",line.get(i));
+				}
+				else if (line[i] == '#')
+                {
+                    found_comment = true;
+                    break;
+                }
+                continue;
+			}
+			if(running_quotes=="\'" || running_quotes=="\""){
+				if(running_quotes==vformat("%c",line.get(i))){
+					running_quotes="";
+				}
+			}
+			else if (i < (line_size - 2) && running_quotes == "\"\"\"")
+            {
+                if (line[i] == '"' && line[i + 1] == '"' && line[i + 2] == '"')
+                {
+                    running_quotes = "";
+                    i += 2;
+                }
+            }
+		}
+		
+	}
+	if(found_comment){
+		return("#");
+	}
+	return running_quotes;
+}
+
+void TextEdit::_consume_pair_symbol(CharType ch) {
+	int line_no=cursor_get_line();
+	int col_no=cursor_get_column();
+	int cursor_position_to_move = col_no + 1;
+	
 	CharType ch_single[2]= { ch, 0};//Left half of the symbol pair
 	CharType ch_single_pair[4]={ _get_right_pair_symbol(ch), 0,0,0 };//Right half of the symbol pair
-	CharType ch_pair[5] = { ch, _get_right_pair_symbol(ch), 0,0,0 };//Complete symbol pair
-	
-	
-	
+	CharType ch_pair[5] = { ch, _get_right_pair_symbol(ch), 0,0,0 };//Complete symbol pair	
 
 	if (is_selection_active()) {
 		int new_column, new_line;
@@ -1699,13 +1754,13 @@ void TextEdit::_consume_pair_symbol(CharType ch) {
 	}
 
 	if ((ch == '\'' || ch == '"') &&
-			cursor_get_column() > 0 && _is_text_char(text[cursor.line][cursor_get_column() - 1]) && !_is_pair_right_symbol(text[cursor.line][cursor_get_column()])) {
+			col_no > 0 && _is_text_char(text[cursor.line][col_no - 1]) && !_is_pair_right_symbol(text[cursor.line][col_no])) {
 		insert_text_at_cursor(ch_single);
 		cursor_set_column(cursor_position_to_move);
 		return;
 	}
 
-	if (cursor_get_column() < text[cursor.line].length()) {
+	if (col_no < text[cursor.line].length()) {
 		if (_is_text_char(text[cursor.line][cursor_get_column()])) {
 			insert_text_at_cursor(ch_single);
 			cursor_set_column(cursor_position_to_move);
@@ -1723,6 +1778,8 @@ void TextEdit::_consume_pair_symbol(CharType ch) {
 	bool in_single_quote = false;
 	bool in_double_quote = false;
 	bool found_comment = false;
+	
+	
 
 	int c = 0;
 	while (c < line.length()) {
@@ -1758,7 +1815,7 @@ void TextEdit::_consume_pair_symbol(CharType ch) {
 		return;
 	}
 
-	// Disallow inserting duplicated quotes while already in string
+	// Disallow inserting duplicate quotes while already in string
 	if ((in_single_quote || in_double_quote) && (ch == '"' || ch == '\'')) {
 		insert_text_at_cursor(ch_single);
 		cursor_set_column(cursor_position_to_move);
@@ -1766,13 +1823,16 @@ void TextEdit::_consume_pair_symbol(CharType ch) {
 		return;
 	}
 
-
 	//detect if its the case of """ <text> """ ie. multiline string...
 	//otherwise dont change the initial values of ch_single, ch_single_pair and ch_pair
-	if(ch=='"' && cursor_get_column()>=2){
-		// if(preceeding_chars == {'"','"'}) then its the case of """ <text> """ ie. multiline string
-		if(text[cursor_get_line()][cursor_get_column()-1]=='"' && text[cursor_get_line()][cursor_get_column()-2]=='"')		
-		{
+	if(col_no>=2 && ch=='"' && text[line_no][col_no-1]=='"' && text[line_no][col_no-2]=='"'){
+		// Disallow inserting duplicate triple-quotes while already in multiline string
+		if( _get_running_quotes(line_no,col_no-1)!="" || _get_running_quotes(line_no,col_no-2)!="\""){
+			insert_text_at_cursor(ch_single);
+			cursor_set_column(cursor_position_to_move);
+
+			return;
+		}else{
 			//set ch_single='"' because the first two '"'s  of \"\"\" are already given by the user 
 			ch_single[0]='"';
 			ch_single[1]=0;
